@@ -1,0 +1,48 @@
+\begin{tikzpicture}[
+  scale=0.8,
+  node distance = 3.1cm,
+  block_cl/.style={rectangle, text centered, rounded corners, thick, fill=orange!50,
+    minimum height = 5em, minimum width = 3em},
+  block_compiler/.style={rectangle, text centered, rounded corners, thick, fill=pink!50,
+    minimum height = 5em, minimum width = 3em, text width = 5em},
+  block_symex/.style={rectangle, text centered, rounded corners, thick, fill=yellow!50,
+    minimum height = 5em, minimum width = 3em, text width = 5em},
+  block_fa/.style={rectangle, text centered, rounded corners, thick, fill=blue!50,
+    minimum height = 5em, minimum width = 3em, text width = 5em},
+  block_ta/.style={rectangle, text centered, rounded corners, thick, fill=green!50,
+    minimum height = 5em, minimum width = 3em, text width = 5em},
+  line/.style={draw, -}
+  ]
+
+\node [block_cl] (cl) {Code Listener};
+\node [block_compiler, right of=cl] (compiler) {Compiler};
+\node [block_symex, above of=compiler] (microcode) {Microcode Instructions};
+\node [block_symex, right of=compiler] (symex) {Symbolic Execution};
+\node [block_symex, above of=symex] (symstate) {Symbolic State};
+\node [block_symex, below of=symex] (symcnt) {Symbolic Context};
+
+\node [block_fa, right of=symex] (fa) {Forest Automata};
+\node [block_fa, above of=fa] (faop) {Operations over Forest Automata};
+
+\node [block_ta, right of=fa] (ta) {VATA};
+
+\path [line] (cl) -- (compiler);
+\path [line] (microcode) -- (compiler);
+\path [line] (symex) -- (compiler);
+\path [line] (symex) -- (symstate);
+\path [line] (symex) -- (symcnt);
+\path [line] (symex) -- (fa);
+\path [line] (symstate) -- (fa);
+\path [line] (microcode) -- (symex);
+\path [line] (fa) -- (faop);
+\path [line] (fa) -- (ta);
+\path [line] (symstate) -- (faop);
+\path [line] (faop) -- (ta);
+\path [line] (microcode) -- (symstate);
+
+\node (LeftFAStart) at(2,-6) {};
+\node (RightFAStart) at(2,6) {};
+\draw [dashed, line width = 1pt] (LeftFAStart) -- (RightFAStart);
+\node (Input) at(3.3,-2) {\textcolor{green}{\textbf{Forester}}};
+
+\end{tikzpicture}

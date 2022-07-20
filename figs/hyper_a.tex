@@ -1,0 +1,41 @@
+\begin{tikzpicture}[level distance=15mm, level/.style={sibling distance=27mm/#1}, node distance=1cm,>=stealth',bend angle=45,scale=0.9,auto
+, every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=4.5mm]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=4.5mm]
+  \tikzstyle{data}=[rectangle,thick,draw=black!75,
+  			  fill=black!20,minimum size=3mm]
+
+  \tikzstyle{every label}=[red]
+
+    \node [red cell] (c1)                             {}
+      child{ node [red cell] (c11)               {}
+        child{ node [red cell] (c111)          {} }
+        child{ node [red cell] (c112)          {} }
+      }
+      child{ node [red cell] (c12)              {}
+        child{ node [red cell] (c121)          {} }
+        child{ node [red cell] (c122)          {} }
+      };
+
+    \path (c1)  edge [swap,->,inner sep=1pt]  node  {\figtext{left}} (c11);
+    \path (c1)  edge [->,inner sep=1pt]  node  {\figtext{right}} (c12);
+
+    \path (c11)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c12);
+    \path (c12)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c11);
+
+    \path (c11)  edge [swap,->,inner sep=1pt]  node [near end] {\figtext{left}} (c111);
+    \path (c11)  edge [->,inner sep=1pt]  node [near end] {\figtext{right}} (c112);
+
+    \path (c111)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c112);
+    \path (c112)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c111);
+
+    \path (c12)  edge [swap,->,inner sep=1pt]  node [near end] {\figtext{left}} (c121);
+    \path (c12)  edge [->,inner sep=1pt]  node [near end] {\figtext{right}} (c122);
+
+    \path (c121)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c122);
+    \path (c122)  edge [bend left=15,->,inner sep=1pt]  node  {\figtext{next}} (c121);
+
+\end{tikzpicture}
+

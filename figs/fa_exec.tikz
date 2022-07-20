@@ -1,0 +1,50 @@
+\begin{tikzpicture}[
+  scale=0.9,
+  cl/.style={thick,fill=orange!50},
+  red/.style={thick,fill=red},
+  detection/.style={thick,fill=blue!50},
+  compiler/.style={thick,fill=pink!50},
+  symexec/.style={thick,fill=yellow!50},
+  success/.style={thick,fill=green!50},
+  arrow/.style={->,line width=1pt}
+  ]
+
+\node (InputNode) at(1.3,10.9) {};
+\node (InputDown) at(1.3,10.8) {};
+
+\draw (4,11) rectangle +(4, 1) [cl] node[midway] {\codelistener};
+\node (CLDown) at(6,11) {};
+
+\draw (4,8) rectangle +(4, 1) [compiler] node[midway] {\textit{Microcode Compiler}};
+\node (CompUp) at(6,9) {};
+\node (CompDown) at(6,8) {};
+
+\draw (4,6) rectangle +(4, 1) [symexec] node[midway] {\textit{Symbolic Execution}};
+\node (SymexUp) at(6,7) {};
+\node (SymexDown) at(6,6) {};
+\node (SymexRight) at(8,6.5) {};
+
+\draw (10,6) rectangle +(3, 1) [red] node[midway] {\textit{Error Detected}};
+\node (ErrLeft) at(10,6.5) {};
+
+\draw (4,4) rectangle +(4, 1) [success] node[midway] {\textit{Correct Program}};
+\node (CPUp) at(6,5) {};
+
+\draw [arrow] (CLDown) -- (CompUp);
+\draw [arrow] (CompDown) -- (SymexUp);
+\draw [arrow] (SymexRight) -- (ErrLeft);
+\draw [arrow] (SymexDown) -- (CPUp);
+
+\node (LeftFAStart) at(2,9.9) {};
+\node (RightFAStart) at(10,9.9) {};
+\draw [dashed, line width = 1pt] (LeftFAStart) -- (RightFAStart);
+
+\node (Input) at(7.6,10.5) {\textcolor{black}{\scriptsize{\textit{Intermediate Code}}}};
+% \node (Input) at(8.5,10.5) {\textcolor{black}{\scriptsize{\codelistener \textit{Intermediate Code}}}};
+\node (Input) at(7,7.5) {\textcolor{black}{\footnotesize{\textit{Microcode}}}};
+\node (Input) at(9,6.7) {\textcolor{black}{\footnotesize{\textit{Error}}}};
+\node (Input) at(7.4,5.5) {\textcolor{black}{\footnotesize{\textit{Shape Invariant}}}};
+
+\node (Input) at(3,9.7) {\textcolor{black}{\forester}};
+
+\end{tikzpicture}

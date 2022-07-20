@@ -1,0 +1,76 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[node distance=1.2cm,>=stealth',bend angle=45,auto
+,shorten >=1pt,shorten <=0.5pt,thin,->
+,scale=0.9, every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=5mm]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=5mm]
+  \tikzstyle{empty red cell}=[circle,draw=red!75,minimum size=5mm]
+  \tikzstyle{data}=[rectangle,thick,draw=black!75,
+  			  fill=black!20,minimum size=3mm]
+  \tikzstyle{mylabel}=[inner sep=1.5pt]
+
+%  \tikzstyle{every label}=[red]
+
+  \begin{scope}%[mylabel/.style={scale=0.8}]%[every label/.style={scale=0.8}]
+	
+    % First net
+    \node [red cell,label={[red,inner sep=1]above right:\figtext{1}},inner
+    sep=0pt] (c1) {\texttt{x}};
+    \node [cell] (c2) [below of=c1]               {};
+    \node [empty red cell,label={[red,inner sep=1]above right:\figtext{2}}] (c3) [below of=c2]           {};
+    \node [data] (d1) [below left of=c1]          {};
+    \node [data] (d2) [below left of=c2]          {};
+
+    \node [red cell,label={[red,inner sep=1]above right:\figtext{2}}] (c4) [right=16mm of c1] {};
+    \node [empty red cell,label={[red,inner sep=1]above right:\figtext{3}}] (c5) [below of=c4]               {};
+    \node [data] (d4) [below left of=c4]          {};
+
+    \node [red cell,label={[red,inner sep=1]above right:\figtext{3}}] (c6) [right=16mm of c4] {};
+    \node [cell] (c7) [below of=c6]               {};
+    \node [cell] (c8) [below of=c7]               {};
+    \node [empty red cell,label={[red,inner sep=1]above right:\figtext{3}}] (c9) [below of=c8]               {};
+    \node [data] (d6) [below left of=c6]          {};
+    \node [data] (d7) [below left of=c7]          {};
+    \node [data] (d8) [below left of=c8]          {};
+
+    \node [red cell,label={[red,inner sep=1]above right:\figtext{4}},inner
+    sep=0pt] (c10) [below of=c5,yshift=-8mm] {\texttt{y}};
+    \node [cell] (c11) [below of=c10]               {};
+    \node [empty red cell,label={[red,inner sep=1]above right:\figtext{2}}] (c12) [below of=c11]           {};
+    \node [data] (d10) [below left of=c10]          {};
+    \node [data] (d11) [below left of=c11]          {};
+
+	\path (c1)  edge node [mylabel] {\figtext{next}} (c2)
+		  (c2) edge  node [mylabel] {\figtext{next}} (c3)
+%		  (c3) edge  node [mylabel] {\figtext{next}} (c4)
+		  (c4) edge  node [mylabel] {\figtext{next}} (c5)
+		  (c6) edge  node [mylabel] {\figtext{next}} (c7)
+		  (c7) edge  node [mylabel] {\figtext{next}} (c8)
+		  (c8) edge  node [mylabel] {\figtext{next}} (c9)
+		  (c10) edge  node [mylabel] {\figtext{next}} (c11)
+		  (c11) edge  node [mylabel] {\figtext{next}} (c12)
+
+		  (c1) edge  node [mylabel,swap] {\figtext{data}} (d1)
+		  (c2) edge  node [mylabel,swap] {\figtext{data}} (d2)
+%		  (c3) edge  node [mylabel,swap] {\figtext{data}} (d3)
+		  (c4) edge  node [mylabel,swap] {\figtext{data}} (d4)
+%		  (c5) edge  node [mylabel,swap] {\figtext{data}} (d5)
+		  (c6) edge  node [mylabel,swap] {\figtext{data}} (d6)
+		  (c7) edge  node [mylabel,swap] {\figtext{data}} (d7)
+		  (c8) edge  node [mylabel,swap] {\figtext{data}} (d8)
+		  (c10) edge  node [mylabel,swap] {\figtext{data}} (d10)
+		  (c11) edge  node [mylabel,swap] {\figtext{data}} (d11)
+
+%		  (c7) edge [bend left=40] node  {\figtext{next}} (c3)
+%		  (c8) edge [bend right=40] node [mylabel,swap] {\figtext{next}} (c4)
+%		  (c5) edge node [mylabel,swap] {\figtext{next}} (c8)
+;
+
+%		  \draw [->] (c8) .. controls +(up:13mm) and +(right:17.5mm) .. node [mylabel,swap,inner sep=1pt]  {\figtext{next}} (c4) ;
+%		  \draw [->] (c7) .. controls +(down:13mm) and +(right:17.5mm) .. node [mylabel,inner sep=1pt]  {\figtext{next}} (c3) ;
+  \end{scope}
+
+\end{tikzpicture}

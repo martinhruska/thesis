@@ -1,0 +1,51 @@
+\begin{tikzpicture}[level distance=15mm, level/.style={sibling distance=27mm/#1}, node distance=1cm,>=stealth',bend angle=45,scale=0.9,auto
+, every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=4.5mm]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=4.5mm]
+
+  \tikzstyle{every label}=[red]
+
+    \node [red cell] (c1)                             {}
+      child{ node [cell] (c11)               {}
+        child{ node [cell] (c111)          {} }
+        child{ node [cell] (c112)          {} }
+      }
+      child{ node [cell] (c12)              {}
+        child{ node [cell] (c121)          {} }
+        child{ node [cell] (c122)          {} }
+      };
+
+%    \path (c1)  edge [swap,->] coordinate [midway] (f1)  node  {\figtext{left}} (c11);
+%    \path (c1)  edge [->]  coordinate [midway] (f2) node  {\figtext{right}} (c12);
+    \path (c1)  edge [swap,->] coordinate [midway] (f1)  node  {} (c11);
+    \path (c1)  edge [->]  coordinate [midway] (f2) node  {} (c12);
+
+	\path [draw,black] (f1) to[out=-45,in=-135] node [midway,inner sep=5pt] {$B$} (f2);
+
+%    \path (c11)  edge [bend left=9,->]  node  {\figtext{next}} (c12);
+%    \path (c12)  edge [bend left=9,->]  node  {\figtext{next}} (c11);
+
+%    \path (c11)  edge [swap,->]  coordinate [midway] (f3) node [yshift=-2mm]  {\figtext{left}} (c111);
+%    \path (c11)  edge [->]  coordinate [midway] (f4) node [yshift=-2mm]  {\figtext{right}} (c112);
+    \path (c11)  edge [swap,->]  coordinate [midway] (f3) node [yshift=-2mm]  {} (c111);
+    \path (c11)  edge [->]  coordinate [midway] (f4) node [yshift=-2mm]  {} (c112);
+
+	\draw [black] (f3) to[out=-45,in=-135] node [midway,inner sep=5pt] {$B$} (f4);
+
+%    \path (c111)  edge [bend left=9,->]  node  {\figtext{next}} (c112);
+%    \path (c112)  edge [bend left=9,->]  node  {\figtext{next}} (c111);
+
+%    \path (c12)  edge [swap,->]  coordinate [midway] (f5) node [yshift=-2mm]  {\figtext{left}} (c121);
+%    \path (c12)  edge [->] coordinate [midway] (f6) node [yshift=-2mm]  {\figtext{right}} (c122);
+    \path (c12)  edge [swap,->]  coordinate [midway] (f5) node [yshift=-2mm]  {} (c121);
+    \path (c12)  edge [->] coordinate [midway] (f6) node [yshift=-2mm]  {} (c122);
+
+	\draw [black] (f5) to[out=-45,in=-135] node [midway,inner sep=5pt] {$B$} (f6);
+
+%    \path (c121)  edge [bend left=9,->]  node  {\figtext{next}} (c122);
+%    \path (c122)  edge [bend left=9,->]  node  {\figtext{next}} (c121);
+
+\end{tikzpicture}
+

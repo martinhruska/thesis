@@ -1,0 +1,166 @@
+\begin{tikzpicture}
+[
+  scale=0.85,
+  transform shape,
+	gen/.style={thick,fill=gray!10},
+	expl/.style={thick,fill=orange!50},
+	bu/.style={thick,fill=green!40},
+	td/.style={thick,fill=blue!30},
+	other/.style={fill=yellow!10,dashed}
+]
+
+\node at(10,2) {Automata};
+
+\node[expl,circle,draw] (aA) at(1.25,2) {\textit{$A$}};
+\node[expl,circle,draw] (aB) at(3.75,2) {\textit{$B$}};
+\node[expl,circle,draw] (aC) at(6.25,2) {\textit{$C$}};
+
+
+\node at(10,0) {\shortstack{Top-level\\ Lookup Tables}};
+
+\node[minimum size=40pt](table1) at (2.75,0) {};
+\draw (2,0) rectangle +(0.5, .5) [td] node[midway] {\textit{$q_1$}};
+\draw (2,-.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (2.5,0) rectangle +(0.5, .5) [td] node[midway] {\textit{$q_2$}};
+\draw (2.5,-.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (3,0) rectangle +(0.5, .5) [td] node[midway] {\textit{$q_3$}};
+\draw (3,-.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=40pt](table2) at (5,0) {};
+\draw (4.5,0) rectangle +(0.5, .5) [td] node[midway] {\textit{$q_1$}};
+\draw (4.5,-.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (5,0) rectangle +(0.5, .5) [td] node[midway] {\textit{$q_2$}};
+\draw (5,-.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+
+\draw[->,thick,dashed] (aA) -- (table1);
+\draw[->,thick,dashed] (aB) -- (table2);
+\draw[->,thick,dashed] (aC) -- (table2);
+
+
+\node at(10,-2) {Transition Clusters};
+
+\node[minimum size=35](cluster1) at (1.5,-2) {};
+\draw (0.75,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$a$}};
+\draw (0.75,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (1.25,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$b$}};
+\draw (1.25,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=35pt](cluster2) at (3.25,-2) {};
+\draw (2.75,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$c$}};
+\draw (2.75,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (3.25,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$e$}};
+\draw (3.25,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=35pt](cluster3) at (5.25,-2) {};
+\draw (4.75,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$b$}};
+\draw (4.75,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (5.25,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$c$}};
+\draw (5.25,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=35pt](cluster4) at (6.5,-2) {};
+\draw (6.25,-2) rectangle +(0.5, .5) [td] node[midway] {\textit{$e$}};
+\draw (6.25,-2.5) rectangle +(0.5, .5) [td] node[midway] {};
+
+
+\draw[thick,fill=black] (2.25,-0.25) circle (0.5mm);
+\draw[->,thick,dashed] (2.25,-.25) -- (cluster2);
+
+\draw[thick,fill=black] (2.75,-0.25) circle (0.5mm);
+\draw[->,thick,dashed] (2.75,-.25) -- (cluster1);
+
+\draw[thick,fill=black] (3.25,-0.25) circle (0.5mm);
+\draw[->,thick,dashed] (3.25,-.25) -- (cluster3);
+
+\draw[thick,fill=black] (4.75,-0.25) circle (0.5mm);
+\draw[->,thick,dashed] (4.75,-.25) -- (cluster2);
+
+\draw[thick,fill=black] (5.25,-0.25) circle (0.5mm);
+\draw[->,thick,dashed] (5.25,-.25) -- (cluster4);
+
+
+\node at(10,-3.75) {\shortstack{Sets of\\ Pointers to Tuples}};
+
+\node[minimum size=25pt](set1) at (0.25,-3.75) {};
+\draw (0,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set2) at (1.5,-3.75) {};
+\draw (1,-4) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (1.5,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set3) at (2.75,-3.75) {};
+\draw (2.5,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set4) at (3.75,-3.75) {};
+\draw (3.5,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set5) at (4.75,-3.75) {};
+\draw (4.5,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set6) at (6,-3.75) {};
+\draw (5.5,-4) rectangle +(0.5, .5) [td] node[midway] {};
+\draw (6,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+\node[minimum size=25pt](set7) at (7.25,-3.75) {};
+\draw (7,-4) rectangle +(0.5, .5) [td] node[midway] {};
+
+
+\draw[thick,fill=black] (1,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (1,-2.25) -- (set1);
+
+\draw[thick,fill=black] (1.5,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (1.5,-2.25) -- (set2);
+
+\draw[thick,fill=black] (3,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (3,-2.25) -- (set3);
+
+\draw[thick,fill=black] (3.5,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (3.5,-2.25) -- (set4);
+
+\draw[thick,fill=black] (5,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (5,-2.25) -- (set5);
+
+\draw[thick,fill=black] (5.5,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (5.5,-2.25) -- (set6);
+
+\draw[thick,fill=black] (6.5,-2.25) circle (0.5mm);
+\draw[->,thick,dashed] (6.5,-2.25) -- (set7);
+
+
+\node at(10,-5.5) {Tuples of States};
+
+\node(tup1) at (0.75,-5.5) {$(q_1, q_1)$};
+\node(tup2) at (2.5,-5.5) {$(q_1, q_2)$};
+\node(tup3) at (4.25,-5.5) {$(q_2, q_2)$};
+\node(tup4) at (7,-5.5) {$(q_3, q_2)$};
+\node(tup5) at (5.5,-5.5) {$()$};
+
+\draw[thick,fill=black] (0.25,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (0.25,-3.75) -- (tup1);
+
+\draw[thick,fill=black] (1.25,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (1.25,-3.75) -- (tup1);
+
+\draw[thick,fill=black] (1.75,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (1.75,-3.75) -- (tup2);
+
+\draw[thick,fill=black] (2.75,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (2.75,-3.75) -- (tup2);
+
+\draw[thick,fill=black] (3.75,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (3.75,-3.75) -- (tup5);
+
+\draw[thick,fill=black] (4.75,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (4.75,-3.75) -- (tup2);
+
+\draw[thick,fill=black] (5.75,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (5.75,-3.75) -- (tup3);
+
+\draw[thick,fill=black] (6.25,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (6.25,-3.75) -- (tup4);
+
+\draw[thick,fill=black] (7.25,-3.75) circle (0.5mm);
+\draw[->,thick,dashed] (7.25,-3.75) -- (tup5);
+
+
+\end{tikzpicture}

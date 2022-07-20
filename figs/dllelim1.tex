@@ -1,0 +1,70 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[
+node distance=1.8cm,
+>=stealth',
+bend angle=45,
+auto,
+level distance=1.2cm,
+level 1/.style={sibling distance=1cm},
+level 2/.style={sibling distance=0.7cm},
+level 3/.style={sibling distance=0.4cm},
+edge from parent path=,
+shorten >=1pt,
+shorten <=0.5pt,
+%thin,
+%->,
+scale=0.9,
+every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=5mm,inner sep=0pt]
+  \tikzstyle{mylabel}=[sloped,inner sep=2pt]
+  \tikzstyle{mypoint}=[inner sep=0pt,outer sep=0pt,midway]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=5mm,inner sep=0pt]
+
+%  \tikzstyle{every label}=[red]
+
+  \begin{scope}%[mylabel/.style={scale=0.8}]%[every label/.style={scale=0.8}]
+	
+    % First net
+    \node [red cell,label={above:\figtext{$i$}}] (c1) {}
+		child { node [cell,red,label={below:\figtext{$\overline{i-1}$}}] (c11) {} }
+		child { node [cell,red,label={[red]below:\figtext{$\overline{i+1}$}}] (c12) {} };
+    \node [red cell,label={[red] above:\figtext{$i+1$}},right=of c1] (c2) {}
+		child { node [cell,red,label={below:\figtext{$\overline{i}$}}] (c21) {} }
+		child { node [cell,red,label={below:\figtext{$\overline{i+2}$}}] (c22) {} };
+
+    \node [red cell,label={above:\figtext{$i+2$}},right=of c2] (c3) {}
+		child { node [cell,red,label={[red]below:\figtext{$\overline{i+1}$}}] (c31) {} }
+		child { node [cell,red,label={below:\figtext{$\overline{i+3}$}}] (c32) {} };
+
+	\path 
+		(c1) edge [->,inner sep=0pt] node [mypoint,outer sep=-0.5pt,label={[mylabel]
+    above right:\figtext{next}}] (p2) {} (c12)
+		(c1) edge [swap,->,inner sep=0pt] node [mypoint,outer
+    sep=-0.5pt,label={[mylabel] above left:\figtext{prev}}] (p1) {} (c11)
+		(c2) edge [->,inner sep=0pt] node [mypoint,outer sep=-0.5pt,label={[mylabel]
+    above right:\figtext{next}}] (p4) {} (c22)
+		(c2) edge [swap,->,inner sep=0pt] node [mypoint,outer
+    sep=-0.5pt,label={[mylabel] above left:\figtext{prev}}] (p3) {} (c21)
+		(c3) edge [->,inner sep=0pt] node [mypoint,label={[mylabel] above right:\figtext{next}}] (p6) {} (c32)
+		(c3) edge [swap,->,inner sep=0pt] node [mypoint,label={[mylabel] above left:\figtext{prev}}] (p5) {} (c31)
+    ;
+
+	\node [node distance=1.3cm,left=of c1.south,label={below:\figtext{$\dots$}}] {};
+	\node [node distance=1.3cm,right=of c3.south,label={below:\figtext{$\dots$}}] {};
+
+	\node [dashed,draw=black!50,fit=(c1.north east) (c12) (c21) (c2.north west),rounded corners=4pt,inner sep=2pt] {};
+
+	\node [dashed,draw=black!50,fit=(c2.north east) (c22) (c31) (c3.north west),rounded corners=4pt,inner sep=2pt] {};
+
+	\draw
+		(p2.center) to[out=-135,in=-45] (p1.center)
+		(p4.center) to[out=-135,in=-45] (p3.center)
+		(p6.center) to[out=-135,in=-45] (p5.center)
+	;
+
+  \end{scope}
+
+\end{tikzpicture}

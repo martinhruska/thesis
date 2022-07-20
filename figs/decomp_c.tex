@@ -1,0 +1,40 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[node distance=1.8cm,>=stealth',bend angle=45,auto
+,shorten >=1pt,shorten <=0.5pt,thin,->
+,scale=0.9, every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=5mm]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=5mm]
+
+%  \tikzstyle{every label}=[red]
+
+  \begin{scope}%[mylabel/.style={scale=0.8}]%[every label/.style={scale=0.8}]
+	
+    % First net
+    \node (c0) {};
+    \node [red cell,right of=c0,node distance=1cm] (c1) {};
+    \node [red cell,right of=c1] (c2) {};
+    \node [red cell,right of=c2] (c3) {};
+    \node [red cell,right of=c3] (c4) {};
+    \node [right of=c4,node distance=1cm](c5) {};
+
+	\path 
+         (c0) edge [dotted,thick,-] (c1)
+
+         (c1) edge [bend left=20] node  {\figtext{next}} (c2)
+         (c2) edge [bend left=20] node  {\figtext{prev}} (c1)
+
+         (c2) edge [bend left=20] node  {\figtext{next}} (c3)
+         (c3) edge [bend left=20] node  {\figtext{prev}} (c2)
+
+         (c3) edge [bend left=20] node  {\figtext{next}} (c4)
+         (c4) edge [bend left=20] node  {\figtext{prev}} (c3)
+
+         (c4) edge [dotted,thick,-] (c5)
+
+    ;
+  \end{scope}
+
+\end{tikzpicture}

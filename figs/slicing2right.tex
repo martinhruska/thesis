@@ -1,0 +1,35 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[
+%edge from parent path=,
+level distance=1.5cm,
+level 1/.style={sibling distance=2.5cm},
+level 2/.style={sibling distance=0.66cm},
+every node/.style={transform shape},
+edge from parent path=,
+>=stealth',
+,bend angle=45,
+auto
+%,scale=1, every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[draw=black,circle,minimum size=4.5mm,inner sep=0.3em]
+  \tikzstyle{mysnake}=[decorate,decoration={snake,amplitude=0.4mm,segment length=0.75cm}]
+
+  \node (c2) [cell] {$q$}
+    child { node [inner sep=1pt] (c22) {} 
+		child { node (c221) {} }
+		child { node (c222) {} }
+		child { node (c223) {} }
+	};
+
+	\path (c2) edge [->,inner sep=3pt] node [midway] {\figtext{right}} (c22);
+
+	\draw [join=round] (c22.center) -- (c221.center) to [bend right] (c222.center) to [bend left] (c223.center) -- cycle;
+
+	\begin{pgfonlayer}{background}
+	\path [left color=white,right color=black!40,shading=axis]
+		(c22.center) -- (c221.center) to [bend right] (c222.center) to [bend left]	(c223.center) -- cycle;
+	\end{pgfonlayer}
+
+\end{tikzpicture}

@@ -1,0 +1,33 @@
+\begin{tikzpicture}[level distance=15mm, level/.style={sibling distance=17mm/#1}, node distance=1cm,>=stealth',bend angle=45,scale=0.9,auto
+%,scale=2
+%,every node/.style={transform shape}
+]
+
+  \tikzstyle{cell}=[circle,thick,draw=black,minimum size=4.5mm]
+  \tikzstyle{red cell}=[circle,draw=red!75,fill=red!20,minimum size=4.5mm]
+  \tikzstyle{data}=[rectangle,thick,draw=black!75,
+  			  fill=black!20,minimum size=3mm]
+
+  \tikzstyle{every label}=[red]
+
+    \node [red cell,inner sep=0pt] (c1)                             {$i$}
+      child{ node [red cell,inner sep=0pt] (c11)               {$o_1$} }
+      child{ node [red cell,inner sep=0pt] (c12)              {$o_2$} };
+
+    \node [left of=c1,yshift=4pt,xshift=2pt] {$B$};
+
+    \path (c1)  edge [swap,->] coordinate [midway] (f1)  node [inner sep=2pt] (bla1)  {\figtext{left}} (c11);
+    \path (c1)  edge [->]   coordinate [midway] (f2)  node [inner sep=2pt] (bla2) {\figtext{right}} (c12);
+
+    \path (c11)  edge [bend left=15,->]  node [inner sep=2pt] {\figtext{next}} (c12);
+    \path (c12)  edge [bend left=15,->]  node [inner sep=2pt] (bla3) {\figtext{next}} (c11);
+	
+%	\draw [black] (f1) to[out=-30,in=-150] (f2) node [midway,anchor=north,inner sep=8pt] {\figtext{B}};
+
+	\begin{pgfonlayer}{background}
+	\node [draw=green!60!black!80!blue,fill=black!5,fit=(c1) (c11) (c12) (bla3),rounded corners=4pt,inner sep=4pt] {};
+	\end{pgfonlayer}
+	
+
+\end{tikzpicture}
+

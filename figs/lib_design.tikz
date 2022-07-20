@@ -1,0 +1,70 @@
+\begin{tikzpicture}
+[
+  scale=1,
+  transform shape,
+	gen/.style={thick,fill=gray!10},
+	expl/.style={thick,fill=orange!50},
+	bu/.style={thick,fill=green!40},
+	td/.style={thick,fill=blue!30},
+	other/.style={fill=yellow!10,dashed}
+]
+
+% encodings
+\draw[dashed] (0,1) -- (-1.7,2.5);
+\draw[dashed] (0,0) -- (-1.7,1.5);
+\draw[dashed] (3,1) -- (1.3,2.5);
+
+\draw (0,0.5) rectangle +(3, 0.5) [gen] node[midway] {\textit{\scriptsize{Encoding}}};
+\draw (0,0) rectangle +(1.3, 0.5) [gen] node[midway] {\textit{\scriptsize{Core}}};
+\draw (1.3,0) rectangle +(1.7, 0.5) [gen] node[midway] {\textit{\scriptsize{Operations}}};
+
+\draw (-5.1,2) rectangle +(3, 0.5) [expl] node[midway] {\scriptsize{Explicit}};
+\draw (-5.1,1.5) rectangle +(1.3, 0.5) [expl] node[midway] {\scriptsize{Core}};
+\draw (-3.8,1.5) rectangle +(1.7, 0.5) [expl] node[midway] {\scriptsize{Operations}};
+
+\draw (-1.7,2) rectangle +(3, 0.5) [bu] node[midway] {\scriptsize{MTBDD Bottom-Up}};
+\draw (-1.7,1.5) rectangle +(1.3, 0.5) [bu] node[midway] {\scriptsize{Core}};
+\draw (-0.4,1.5) rectangle +(1.7, 0.5) [bu] node[midway] {\scriptsize{Operations}};
+
+\draw (1.7,2) rectangle +(3, 0.5) [td] node[midway] {\scriptsize{MTBDD Top-Down}};
+\draw (1.7,1.5) rectangle +(1.3, 0.5) [td] node[midway] {\scriptsize{Core}};
+\draw (3.0,1.5) rectangle +(1.7, 0.5) [td] node[midway] {\scriptsize{Operations}};
+
+\draw (5.1,2) rectangle +(3, 0.5) [other] node[midway] {\scriptsize{$<$other$>$}};
+\draw (5.1,1.5) rectangle +(1.3, 0.5) [other] node[midway] {\scriptsize{Core}};
+\draw (6.4,1.5) rectangle +(1.7, 0.5) [other] node[midway] {\scriptsize{Operations}};
+
+\draw[dashed] (3,0) -- (1.3,1.5);
+
+\draw[rounded corners=9,dash pattern=on 3pt off 2pt on 1pt off 2pt] (-5.5,-0.5) rectangle +(14,3.4);
+
+\draw (6.6,0) node {\textit{Automata encodings}};
+
+
+% parsers
+\draw (-5,-2) rectangle +(3, 1) [gen,fill=brown!40] node[midway] (parser1) {\textit{Parser1}};
+\draw (-5,-3.5) rectangle +(3, 1) [gen,fill=brown!40] node[midway] {\textit{Parser2}};
+\draw (-3.5,-4) node {$\vdots$};
+
+\draw[rounded corners=9,dash pattern=on 3pt off 2pt on 1pt off 2pt] (-5.5,-0.7) rectangle +(4.1,-4);
+\draw (-2.3,-4.2) node {\textit{Parsers}};
+
+% serializers
+\draw (5,-2) rectangle +(3, 1) [gen,fill=brown!40] node[midway] {\textit{Serializer1}};
+\draw (5,-3.5) rectangle +(3, 1) [gen,fill=brown!40] node[midway] {\textit{Serializer2}};
+\draw (6.4,-4) node {$\vdots$};
+
+\draw[rounded corners=9,dash pattern=on 3pt off 2pt on 1pt off 2pt] (4.4,-0.7) rectangle +(4.1,-4);
+\draw (7.5,-4.2) node {\textit{Serializers}};
+
+% program
+\draw[rounded corners=9,dash pattern=on 3pt off 2pt on 1pt off 2pt] (-1.2,-0.7) rectangle +(5.4,-4);
+
+\draw[fill=olive!60] (-0.6,-1.5) rectangle (3.6,-3.5) node[midway] {\textit{Program}};
+
+\draw[very thick,dashed,->,black!70] (-0.6,-1.7) -- (-2,-1.7);
+\draw[very thick,dashed,->,black!70] (3.6,-3) -- (5,-3);
+\draw[very thick,dashed,->,black!70] (0.8,-1.5) -- (0.8,0);
+\draw[very thick,dashed,->,black!70] (2.2,-1.5) -- (2.2,0);
+
+\end{tikzpicture}

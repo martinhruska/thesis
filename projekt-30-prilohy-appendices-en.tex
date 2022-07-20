@@ -1,0 +1,733 @@
+% This file should be replaced with your file with an appendices (headings below are examples only)
+
+% Placing of table of contents of the memory media here should be consulted with a supervisor
+%\chapter{Contents of the included storage media}
+
+%\chapter{Manual}
+
+%\chapter{Configuration file}
+
+%\chapter{Scheme of RelaxNG configuration file}
+
+%\chapter{Poster}
+
+\chapter{SV-COMP Adventures}
+\label{app:svcomp}
+\section{Forester: Shape Analysis Using Tree Automata}\label{sec:verif_approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Verification Approach}\label{sec:verif_approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Forester is a tool for (sound) shape analysis of programs with complex dynamic
+data structures, such as various flavours of lists (including singly/doubly linked
+lists, nested lists, or skip lists) as well as trees and other complex data
+structures.
+The used abstract domain contains \emph{forest automata}, a generalization of
+finite tree automata, described in~\cite{habermehl:forest,holik:forest-boxes}.
+The approach attempts to combine the strong points of two other approaches:
+\begin{inparaenum}[(i)]
+\item  the scalability of \emph{separation logic}~\cite{seplog}, which is due
+  to the concept of separation allowing local reasoning about disjoint parts
+  of the program heap, and
+  \item  the flexibility of \emph{abstract regular tree model checking} (ARTMC)~\cite{artmc},
+  which uses finite tree automata for symbolic representation of the sets of
+  reachable heap graphs.
+\end{inparaenum}
+
+The heap representation is based on the \emph{forest decomposition} of the heap.
+This is a~representation of the heap by a tuple of trees such that the roots of
+the trees correspond to the \emph{cut-points} of the graph.
+A cut-point is a node that is either referenced from a~program variable or that
+has more than one incoming edge.
+The trees in the tuple are free of cut-points and their leaves contain either
+non-pointer values or explicit references to roots of other trees.
+To represent \emph{sets} of heaps---the elements of the concrete
+domain---instead of a~tuple of trees Forester uses a~tuple of tree automata,
+the so-called forest automaton.
+Each tree automaton represents a~set of cut-point-free trees; the heap graphs
+represented by a forest automaton can be constructed from the forest automaton
+by taking a tree from the language of every tree automaton and connecting the
+references in the leaves of the trees to the roots of the referenced trees.
+
+We associate an abstract transformer manipulating forest automata with
+every concrete operation.
+Joins are handled precisely (we split the execution and proceed in the
+verification run for each branch independently).
+The abstraction operator, called on loop points, is based on the
+\emph{finite height abstraction} from ARTMC~\cite{artmc}, and its main idea is to introduce
+loops in the tree automata to allow for a representation of infinite sets of
+trees with regular structure.
+
+In order to be able to verify programs manipulating heaps where the number of
+cut-points is unbounded, we use \emph{hierarchical} forest automata.
+These are forest automata that can use other (lower-level) forest automata as
+symbols, in a~hierarchy of a~finite height.
+These lower-level forest automata are called \emph{boxes}.
+A~box is essentially used to represent a repeated structure of the heap graph
+that contains some cut-points.
+The boxes to be used in a verification run are devised using the learning
+algorithm from~\cite{holik:forest-boxes}.
+
+In order to use Forester, it is necessary to properly model all external
+functions; Forester itself implements models of the two basic functions for memory
+allocation, \texttt{malloc} and \texttt{free}.
+
+
+% \td{OL: 
+% A short overview of the theory that the tool is based on. Description of the
+% abstract domains and algorithms that are used. Reference to the concept papers
+% that describe the technical details.
+% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Architecture}\label{sec:architecture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Forester is implemented in \CCP{} as a GCC plugin that uses the Code
+Listener~\cite{codelistener} infrastructure as the front-end for preprocessing the intermediate
+representation used in GCC (called GIMPLE) into a compiler-independent
+representation.
+Further, it uses the VATA library~\cite{VATA} as the back-end for manipulating
+tree automata.
+Forester translates the input program obtained from Code Listener into its
+internal representation, in which every program statement is represented by a
+sequence of abstract transformers that manipulate the symbolic representation of
+the program.
+The translated program is then subject to symbolic execution, during which
+Forester detects memory errors (invalid dereferences or frees, occurrence of
+garbage) and reachability of an error line.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Strengths and Weaknesses}\label{sec:strengths}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The main strong point of Forester is that it gives sound results on all
+verification tasks that we run.
+In particular, Forester was able to find shape invariants for the most difficult programs
+in the Memory Safety category, i.e.~programs manipulating 2 and 3 level skip
+lists, trees (including the Deutsch-Schorr-Waite tree traversal algorithm), and
+(nested) singly/doubly linked lists.
+% These are mostly programs submitted to the competition benchmark from our test
+% suite.
+
+However, the overall performance of Forester on the benchmarks of SV-COMP'15 was
+significantly hindered by the following two causes.
+The first cause is the still quite high degree of immaturity of Forester
+in dealing with real-life C code with all its caveats---in
+the case Forester encounters some unsupported feature of C (such as the
+\texttt{union} data type, function pointers, or the use of arrays), it returns
+the \textsf{UNKNOWN} answer.
+The other cause is the incompleteness of the verification procedure and the
+current inability of the tool to distinguish spurious counterexamples from real
+ones; if a~potentially spurious counterexample is found by Forester, it again returns
+\textsf{UNKNOWN}.
+However, it is possible to use the option \texttt{--false} to switch Forester into a mode in which it reports all
+found counterexamples and allows their subsequent analysis, either by a user or
+by e.g.~a bug hunter.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Setup and Configuration}\label{sec:tool_setup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+An archive with the source code of the Forester competition
+release\footnote{\href{http://www.fit.vutbr.cz/research/groups/verifit/tools/forester/download/forester-2014-10-31-9d3ad64.tar.gz}{\texttt{http://www.fit.vutbr.cz/research/groups/verifit/tools/}
+\texttt{forester/download/forester-2014-10-31-9d3ad64.tar.gz}}}
+% release\footnote{\texttt{http://www.fit.vutbr.cz/research/groups/verifit/tools/}
+% \texttt{forester/download/forester-2014-10-31-9d3ad64.tar.gz}}
+can be downloaded from the project web page.
+The file \texttt{README-FORESTER-SVCOMP-2015} in the root directory of the
+archive contains information about how to build and run the tool.
+After Forester is successfully built, the \texttt{fa\_build} directory contains
+a Python script \texttt{sv\_comp\_run.py} that executes the tool and transforms
+its output to the format expected by SV-COMP.
+The script expects the path to the file with the program under verification as an
+argument; further, the path to a file with a description of the properties to be
+verified can be specified using the \texttt{--properties} option.
+For the case the answer of Forester is \textsf{FALSE} (i.e.~a real error is
+encountered in the program under verification), Forester returns the name of the
+property that has been violated.
+Moreover, a~mandatory \texttt{--trace} option is required to specify the path to the file where the
+witness leading from the entry point to the statement that caused
+the violation is to be saved.
+On the other hand, if Forester finds a shape invariant of the program without
+encountering a property violation, it returns \textsf{TRUE}.
+
+Furthermore, if the \texttt{--time} option is given, Forester also writes to the standard output the
+CPU time that the verification run took.
+It is also possible to generate graphical representations of abstract
+program configurations at some line of code into a sequence of files named
+according to the template \texttt{filename-XXXX.dot} by inserting the statement
+\texttt{\_\_VERIFIER\_plot("filename")} to the desired line of code in the
+processed program.
+
+Forester participates in the following two categories of SV-COMP'15: Heap
+Manipulation and Memory Safety.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Software Project and Conclusion}\label{sec:project_contributors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Forester is developed by the VeriFIT group at Brno University of Technology and distributed under the
+GNU General Public License version 3.
+The source code of Forester is in a \texttt{git} repository shared with Predator
+(a memory analyzer based on symbolic memory graphs~\cite{predator}), which is
+developed in the same group.
+
+This is the first submission of Forester to SV-COMP.
+In the future, we wish to focus on the following two points:
+\begin{inparaenum}[(a)]
+\item  extending the set of the supported features of C, and
+\item  developing the ability to properly identify spurious counterexamples and
+  to use them to refine the abstraction used.
+\end{inparaenum}
+
+\newpage
+\section{Run Forester, Run Backwards}
+\subsection{Verification Approach}\label{sec:verif_approach}
+%===============================================================================
+\subsection{Forest Automata.}
+%===============================================================================
+
+Forester implements a fully automated and sound \emph{shape analysis} based on
+the notion of \emph{forest automata} (FAs)~\cite{fmsd12}. FAs can represent sets
+of reachable configurations of programs with complex dynamic linked data
+structures (such as various kinds of lists, trees, skip lists, as well as
+combinations of such data structures). They have a form of tuples of \emph{tree
+automata} (TAs). These tuples of TAs encode sets of heap graphs decomposed into
+tuples of \emph{tree components}, whose leaves may refer back to the roots of the
+components (including roots of other components). The decomposition is based on cutting a heap graph at each
+\emph{cut-point}, i.e., a node which is either pointed by some pointer variable
+or which has multiple incoming pointer edges. 
+
+In order to encode complex heap graphs, FAs may be \emph{hierarchically
+structured} in such a way that a higher-level FA may use other, lower-level FAs
+as alphabet symbols. These nested automata, called \emph{boxes}, encode
+\emph{repetitive graph patterns} and can be automatically learned using the
+approach proposed in \cite{cav13}.
+
+In order to be as efficient as possible, Forester never determinises the TAs
+it works with. All needed operations, including inclusion checking and size
+reduction, are therefore implemented on \emph{non-deterministic TAs}. For that,
+techniques such as antichain-based inclusion checking and simulation-based
+reduction are used.
+
+%===============================================================================
+\subsubsection{Counterexample Analysis and Refinement.}
+%===============================================================================
+
+In Forester, FAs are used within the framework of \emph{abstract regular tree
+model checking} (ARTMC) \cite{sttt12}. ARTMC accelerates the computation of sets
+of reachable program configurations, represented by FAs, by abstracting their
+component TAs, which is done by collapsing some of their states. 
+
+For deciding which TA states should be collapsed when performing ARTMC, multiple
+approaches have been proposed in the literature \cite{sttt12}.  When Forester
+first participated in SV-COMP in 2015, it supported the simplest of these
+approaches based on collapsing states accepting the same \emph{languages of
+trees up to some height} only.
+% (slightly modified to reflect some special features of the TAs used in FAs to
+% represent heap graphs).
+No checking of validity of counterexamples and no abstraction refinement was
+implemented then.
+
+In the version of Forester participating in SV-COMP'16, an approach for checking
+validity of counterexamples was added. It is based on a \emph{backward
+execution} of the program being verified along the suspected counterexample. For
+that, it was needed to add a support for \emph{reverse execution} of all program
+statements over FAs. Moreover, a support for \emph{intersection of FAs}, not
+needed before, had to be added. Intersection of FAs is a~feature needed to
+either derive a~concrete program trace from the forward and backward 
+% (abstract) 
+symbolic executions, or determine that no such a~trace exists since the
+intersection gets empty at some point in the traces.
+% Moreover, a support for \emph{intersection of FAs} had to be added, which was
+% not needed before, but which is needed for checking whether the forward
+% abstract execution and the backward concrete execution have something in
+% common.
+It turns out that intersecting FAs is a quite complex task, which has to, e.g.,
+deal with the fact that the two FAs being intersected may use a different
+decomposition of the heap graphs they represent.
+
+Moreover, Forester has also been extended with the most advanced abstraction
+mechanism known in the context of ARTMC, namely \emph{predicate language
+abstraction}. In its case, one collapses those TA states whose languages
+intersect the same predicate languages (represented also by TAs). The predicate
+languages to be used are learned in a \emph{counterexample guided refinement}
+(CEGAR) loop from the TAs that are generated within backward executions
+of the program along spurious counterexample traces.
+Currently, the first
+execution of Forester uses the finite height abstraction, which is then refined
+in the further runs by combining it with the predicate
+language abstraction.
+
+More details on the mentioned checking of validity of counterexamples and the
+refinable predicate language abstraction used in the context of FAs are still to
+be published, but a preliminary description can be found in \cite{mt:hruska}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Architecture}\label{sec:architecture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Forester is implemented as a \emph{GCC plugin} using the interface over GCC
+provided by the Code Listener infrastructure \cite{codelistener}. GIMPLE
+instructions used in the intermediate GCC code are translated to instructions of
+a specialised register machine that Forester uses to symbolically execute
+programs
+%being verified
+in the abstract domain of FAs. Forester uses the VATA~\cite{VATA} library to
+handle non-deterministic TAs from which FAs are built. Both Forester and VATA
+are implemented in C++.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Strengths and Weaknesses}\label{sec:strengths}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The strengths of Forester are the following: (1) Forester is based on a sound
+verification approach, (2) its abstract domain allows one to analyse a large
+variety of classes of shape graphs, ranging from various kinds of (nested)
+lists, trees, to skip lists, and their combinations, (3) it can provide the user
+with error witnesses, (4) it newly analyses the counterexamples and refines the
+abstraction based one them, and (5) its internals (e.g., entailment checking)
+are built upon a~well-understood automata theory and technology, which is
+constantly being developed by a~wide community of researchers.
+% Among the tools
+% participating in SV-COMP'16, Forester is one of the very few tools (or it may be
+% the only tool) that can handle programs on trees and skip lists in a
+% \emph{sound} way.
+Compared to the previous participation of Forester in SV-COMP in 2015, due to
+our enhancements, we were able to correctly mark 4 new bug-free benchmarks and
+12 new erroneous benchmarks from the challenging Heap Data Structures category.
+
+Among the main weaknesses of Forester is its weak support of handling
+non-pointer data such as integers or arrays. Therefore it participates in the
+Heap Data Structures category only, but even in this category it still loses
+some points due to not handling non-pointer features %of the programs in this category
+properly. Another weakness of Forester is that it does
+not support some advanced C language constructions.
+In particular, Forester currently loses
+the most points in the Heap Data Structures category by not implementing any
+support for pointers to functions. Due to this, Forester cannot analyse nearly
+80~test cases.
+Another feature of C not fully supported by Forester are pointers to
+unstructured memory.
+Although a basic support for handling them is in place, Forester still has
+problems in tracking the size of an allocated unstructured memory block.
+% Another feature of C not fully supported by Forester are void pointers.
+% Although a basic support for handling them is in place, Forester still has
+% problems in tracking the size of memory pointed by a void pointer. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Setup and
+Configuration}\label{sec:tool_setup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+An archive with the SV-COMP'16 version of Forester is available at the web page
+of
+Forester\footnote{\href{http://www.fit.vutbr.cz/research/groups/verifit/tools/forester}{\texttt{http://www.fit.vutbr.cz/research/groups/verifit/tools/forester}}}.
+The archive contains the source code of Forester and VATA. Instructions for
+compiling and running Forester are in the file
+\texttt{README-FORESTER-SVCOMP-2016} in the root directory of the archive.
+After compilation, the directory \texttt{fa\_build} with scripts for running
+Forester is created. The script for running Forester in SV-COMP is named
+\texttt{sv\_comp\_run.py}. It is also used in the BenchExec wrapper script of
+Forester.
+
+The parameters of \texttt{sv\_comp\_run.py} are the following. The mandatory
+parameter of the script is the path to the file with the program under
+verification. The file for storing the witness leading to a counterexample is
+specified by the parameter \texttt{--trace}.
+% The parameter \texttt{--false}
+% enables reporting of counterexample discovery.
+% \td{OL: do we still need it?}
+The path to the property file
+is defined by the parameter \texttt{--properties}.
+%Moreover, one can also use the parameter \texttt{--time} to print
+%the CPU time needed for verification.
+
+When Forester is run within the BenchExec framework, most of the parameters are set
+automatically by its wrapper script. The only exception is the parameter
+\texttt{--trace}, which must be defined manually in the
+\href{https://github.com/sosy-lab/sv-comp/tree/svcomp16/benchmark-defs-2016/forester.xml}{\texttt{forester.xml}}
+file used as the
+input of BenchExec.
+% An example of such an XML~file~is 
+% in the repository of SV-COMP'16 benchmark definitions.
+The wrapper script of Forester for BenchExec is called \href{https://github.com/sosy-lab/benchexec/tree/1.7/benchexec/tools/forester.py}{\texttt{forester.py}}.
+% is in the official git repository of Bench\-Exec.
+Both files are available from the official page for SV-COMP'16 results reproduction (\url{http://sv-comp.sosy-lab.org/2016/systems.php}).
+
+The output of Forester printed to the standard output has a similar format to
+the specification given by the rules of SV-COMP'16,
+specified in detail
+% A detailed specification of output format is
+in the mentioned \texttt{README} file.
+%When a test case is correct,
+%\texttt{TRUE} is printed out. \texttt{UNKNOWN} is printed for programs not
+%analysable by Forester. A reachability error is announced by printing out
+%\texttt{FALSE}, and a memory-manipulation-related error is reported by
+%\texttt{FALSE(p)} where \texttt{p} is one of \texttt{valid-free, valid-deref,
+%valid-memtrack} according to the error found.
+%
+Forester participates only in %both the subcategories HeapReach and HeapMemSafety of
+the Heap Data Structures category.
+% We opt-out Forester from other categories.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Software Project and Contributors}\label{sec:project_contributors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Forester has been developed at Brno University of Technology since 2010.  The authors
+of this paper are currently the only people involved to development of Forester.
+%
+Forester and the VATA library are both licensed under GPL.
+
+\newpage
+\section{\texorpdfstring{\forester{}}{Forester}: From Heap Shapes to Automata Predicates}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Verification Approach} \label{sec:verif_approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\forester{} implements an automated shape analysis that uses forest automata (FAs)
+to represent sets of reachable shapes of the heap of the analysed program. In
+particular, heap configurations are viewed as (directed) graphs, decomposed into
+tuples of trees, and sets of such decompositions are encoded by FAs that
+themselves have the form of tuples of tree automata (TAs). The tree
+decomposition is based on detecting the so-called \emph{cut-points} of the heap
+graphs, which are nodes either pointed by a variable or having more than one
+incoming edge. The tree decomposition is then obtained by cutting a heap graph
+at the cut-points and redirecting each incoming edge of a cut-point to a new
+leaf node labelled by a reference to the tree with the cut-point as the root.
+
+% Because an FA is a tuple of (non-deterministic) tree automata (TAs), it
+% accepts a language of tuples of trees which is indeed a Cartesian product of
+% the languages of the involved TAs.
+
+In order to allow for representing data structures with an unbounded number of
+cut-points, a notion of \emph{hierarchical FAs} (HFAs) is introduced. An example
+of a structure for whose representation plain FAs are insufficient and HFAs are needed is the doubly-linked
+list (DLL). Indeed, each internal DLL node is a cut-point since it is pointed to by its
+predecessor and successor nodes. An HFA can use other HFAs, called \emph{nested
+HFAs} or \emph{boxes}, as symbols of its alphabet. Boxes can represent
+(repeating) sub-graphs of heap graphs, possibly encapsulating (hiding) an
+unbounded number of cut-points. A special \emph{folding} operation is then used
+to pack a part of an HFA into a box and add the box to the alphabet of the
+resulting HFA. On the contrary, when an analysed program accesses a~part of a
+heap folded into a box, the box is \emph{unfolded} by plugging its content
+back to the wrapping HFA. A more detailed description of these operations
+can be found in~\cite{fmsd12,cav13}.
+
+The verification procedure implemented in \forester{} symbolically executes the
+program in the abstract domain of HFAs.
+% The forest automaton is updated by abstract instructions during the execution
+% which model the modifications of heap by concrete instructions of a program.
+% E.g. when a new node is allocated on a heap a new state of tree automaton (or
+% a whole new tree automaton if needed) is created.
+At loop points, HFAs are abstracted, implementing the idea of \emph{abstract
+regular model checking}~\cite{sttt12}. The abstraction is applied
+component-wise, i.e., to individual TAs, collapsing some of their states, which
+over-approximates the set of reachable heap configurations. The abstraction
+speeds up the reachability analysis and enables termination on infinite state
+spaces, but can also yield spurious counterexamples. To recognize them,
+\forester{} was, in the previous SV-COMP~\cite{svcomp16}, modified to run
+backwards (not using any abstraction) along a suspected
+error trace. Together with using predicate language
+abstraction of TAs---which collapses TA states intersecting with the same predicate
+languages, and which can be refined by adding more predicate
+languages---a~\emph{counterexample-guided abstraction refinement} (CEGAR)~\cite{clarke:CEGAR} loop is obtained.
+
+The backward run is performed over a trace consisting of micro-instructions used
+by \forester{}. The trace leads from the beginning of the analysed program to a
+line where the given specification was found broken. \forester{} then
+precisely reverts all micro-instructions along the trace starting from its end.
+For example, when a new state of an FA was created in the forward run, \forester{}
+removes it in the backward run. The abstraction is reverted by intersecting FAs
+from the forward and backward run. If the intersection is empty, \forester{}
+reports a spurious counterexample, derives new predicates to refine the
+abstraction, and restarts the analysis. The new predicate languages are encoded
+by TAs selected from the FA obtained in the backward run at the point where the
+empty intersection with the forward run was detected. Otherwise, if the backward run reaches the beginning of the
+trace, the counterexample is reported as real.
+
+% After a refinement the predicate abstraction does not collapse states of a
+% forest automaton having a non-empty intersection with the different sets of
+% the (so far derived) predicate languages.
+
+For SV-COMP 2017, we extended the backward run and predicate language abstraction from
+plain FAs (done in~\cite{svcomp16}) to HFAs, which requires one to take
+into account boxes.
+In particular, if the original algorithms were used, it may happen that some
+subgraphs would be folded into a~box in the forward run, while they would not be
+folded into this box in the backward run, meaning that the general structure of the FAs would be
+different.
+The intersection operation (which does not
+consider the semantics of boxes) would then determine that languages of the
+corresponding HFAs do not intersect.
+This would significantly decrease the precision of the operation.
+One option how to address this issue and increase the precision would be to
+modify the intersection operation to take into account the semantics of boxes
+and make it try to unfold them on the fly.
+We take a~different approach, which enables us to successfully a~larger class
+of programs.
+
+%Our way of dealing with the issue is to keep the HFAs obtained during the
+%backward run in the so-called \emph{compatible form} with the HFAs in the
+%forward run.
+%The compatible form intuitively means that the two HFAs partition the same heaps
+%in the same way, in other words, if a~heap is accepted by both HFAs, it is decomposed into
+%the same components and the same boxes in both HFAs.
+%When the compatible form is used, we can 
+%(i)~avoid inner inspection of boxes during the intersection operation,
+%(ii)~enable precise reversion of
+%% abstraction.
+%micro-instructions, and, as a side-effect,
+%(iii)~use a~simple standard TA intersection operation performed component-wise on the HFAs.
+%To maintain the HFAs in the backward run in the compatible form, we needed to
+%significantly alter instructions used therein (previously, no
+%structural constraints were imposed on the FAs; in order to deal with their different
+%interconnection structure, a~more complex intersection operation was~needed).
+
+Our way of dealing with the issue is to keep the HFAs obtained during the
+backward run \emph{compatible} with the HFAs in the
+forward run.
+The compatibility intuitively means that the two HFAs partition the same heaps
+in the same way, in other words, if a~heap is accepted by both HFAs, it is decomposed into
+the same components and the same boxes in both HFAs.
+When compatibility is enforced, we can 
+(i)~avoid inner inspection of boxes during the intersection operation,
+(ii)~enable precise reversion of
+% abstraction.
+micro-instructions, and, as a side-effect,
+(iii)~use a~simple standard TA intersection operation performed component-wise on the HFAs.
+To maintain the HFAs in the backward compatible, we needed to
+significantly alter instructions used therein (previously, no
+structural constraints were imposed on the FAs; in order to deal with their different
+interconnection structure, a~more complex \mbox{intersection operation was~needed).}
+
+The operations that are the most challenging to revert in the backward run are the following:
+folding (which is, in fact, performed together with abstraction in a
+loop of the form fold, abstract, fold, abstract, and so on until a fixpoint is
+reached), unfolding, and normalization.
+The normalization removes cut-points that are no longer needed, glues together TAs that stop
+being separated by cut-points, and orders component TAs in an FA in order to
+transforms the given HFA into a so-called \emph{canonicity-respecting form} needed for
+testing inclusion.
+The reversion of folding then needs to guarantee that the sub-graphs in the folded
+box will appear in the correct components after the operation (taking into
+account that folding can be done multiple times during a~single abstraction).
+On the other hand, the reversion of unfolding needs to guarantee that the unfolded
+box will be folded back into a~box within the correct component.
+Lastly,
+the reversion of normalization needs to cut and re-order components into correct places.
+A more precise description of the described methods can be found in \cite{vmcai17}.
+
+% \td{OL: OLD follows:}
+
+
+% hierarchical forest
+% automata which brings a need to deal with the boxes. We address this problem
+% by so called \emph{compatible form} of hierarchical forest automata.
+% The compatibility
+% intuitively means that boxes are folding the same sub-heaps of represented heaps
+% and that the TA components are partitioning them in the same way. We need the form for two reasons:
+% (i) to avoid an inner inspection of the boxes during the intersection
+% and (ii) to enable a precise reversion of the abstract instructions.
+
+% When we keep the compatibility form we can threat the boxes as standard symbols
+% and use the bottom-up intersection of tree automata. This straightforward approach
+% can be implemented efficiently and works well in our test cases. But it is not
+% the most precise one since it can lead to an empty intersection although the two forest
+% automata may represent a same heap graph. Theoretically, the precision could be increased
+% by an implementation of an intersection which is recursively called to the boxes in the transitions
+% of the both automata. The compatible form enables a use of bottom-up intersection either for the reversion of
+% abstraction and for the predicate abstraction in forward run which is done by
+% intersection of tree automata predicates with tree automata forming
+% an actual forest automaton in a given abstract state.
+%
+% The compatible form of forest automata is achieved by a reversion of folding and unfolding,
+% and reversion of a forest automaton transformation to a cannonical form.
+% In the case of non-empty intersection, a precise reversion of the folding and unfolding guarantees that a box will appear
+% in the same part of forest automata from forward and backward run.
+% Therefore it is safe to treat boxes as standards symbols.
+% The transformation of a forest automaton to the cannonical formal is done in forward run before
+% the folding to ensure that the same part of heaps will be folded to the same boxes.
+% The transformation may merge some tree automata of a forest automaton or it may change
+% the order of tree automata in a tuple. The reversion of the transformation consists
+% of splitting the merged tree automata and then reordering tree automata in the tuple
+% to the original order. A precise reversion of abstract instructions, folding,
+% or unfolding would not be possible if the transformation was not reverted because the abstract
+% instructions often assume a specific order and number of tree automata in tuples.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Architecture}\label{sec:architecture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\forester{} is implemented in C++11 as a~GCC plugin
+using the Code Listener framework~\cite{codelistener}.
+% providing interface over the GCC intermediate code
+% called GIMPLE.
+The representation of a program obtained through Code Listener is translated
+into \forester{}'s own internal microcode, which is symbolically executed.
+% A symbolic execution is performed over
+% microcode as described in the previous section.
+\forester{} uses the \vata{} library~\cite{VATA} for representation and
+manipulation with \emph{nondeterministic TAs} (NTAs).
+% The library provides an explicit and semi-symbolic encoding of tree automata.
+% \forester{} employs the first one.
+\vata{} contains an optimized implementation of efficient algorithms for dealing
+with TAs, including operations such as state reduction of NTAs and testing their language inclusion, which is a~crucial operation in \forester{} for
+determining whether an~execution branch has reached a~fixpoint.
+% VATA is highly-optimized and contains implementation
+% of the state-of-the-art algorithms for checking language inclusion of two forest
+% automata which is a crucial operation verifying whether a fixpoint was reached
+% during symbolic execution. The VATA library is also implemented in C++11.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Strengths and Weaknesses}\label{sec:strengths}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+One of the most important features of Forester is that it is sound
+(wrt~the intermediate code obtained from GCC, which may have already
+removed some possible behaviours of the original code; e.g.,
+GCC already fixes the order of evaluation of a~function's parameters),
+% sizes of data types and field offsets are fixed by gcc,
+% possibly masking errors arising for other data type sizes or field offsets.
+i.e., if it answers \emph{TRUE}, there is indeed no bug in the program.
+Moreover, due to the recent improvements in \forester{} regarding counterexample-based
+abstraction refinement~\cite{vmcai17}, the number of false positives (i.e.,
+wrong answers \emph{FALSE}) on the benchmark of SV-COMP 2017 is
+significantly reduced.
+% much smaller than
+% for the version of \forester{} that participated in SV-COMP'16
+Concretely, the new version gets no false positives, which gives us
+approximately 40\,\% more points than we would have obtained with the version
+of \forester{} from SV-COMP 2016, in particular on examples that contain
+DLLs and need to perform abstraction refinement.
+\forester{} can also output \emph{UNKNOWN} if it
+%establishes that it cannot give a~correct answer (such as when the use of some
+%unsupported feature of~C---e.g.~function pointers heavily used in the LDV
+%benchmark---is detected, or when the tool times out, which may happen, e.g.,
+%when searching for an invariant of a data structure whose invariant
+%is not expressible using HFAs).
+%
+establishes that it cannot give a~correct answer. 
+This happens when the tool exceeds the time given by the SV-COMP rules---e.g.,
+when searching for a shape invariant not expressible using HFAs---or upon detection of an
+unsupported feature of~C. 
+\forester{} specialises almost exclusively in pointer manipulations and inference of complex shape properties of pointer structures.
+It does not implement advanced syntactic features such as function pointers, heavily used in the LDV
+benchmark, but also more basic features such as arrays, unions, recursion, arithmetic, or bit operations.
+
+The formalism of HFAs allows \forester{} to represent in a~quite precise way the
+invariant of rather complex data structures, such as skip lists of 2 or 3
+levels, various flavours of nested lists, or trees with parent and root
+pointers.  The used representation is, moreover, quite compact, and kept small
+via simulation-based reduction of NTAs.
+
+% Forest automata-based shape analysis is sound which we regard as the main strength
+% of the tool. It is also flexible enough to verify complex data structures
+% such as skip-list of 2 and 3 levels, nested lists, and trees with root
+% or parent pointers. \forester{} can verify these complex data structures
+% thanks to the expressive power of hierarchical forest automata.
+
+% Forest automata are a quite compact representation and a number of states of
+% an automaton is not big during an analysis of a program which makes the procedure efficient.
+% The overapproximation of reachable heap configurations (guaranteeing soundness
+% of approach) speeds up computation too.
+
+% One of the weaknesses of \forester{} is that its support 
+
+% On the negative side, use of abstraction can lead to the spurious counterexamples.
+% We address this problem using backward run and abstraction refinement
+% to avoid false alarm reports. A successful application of the methods
+% is confirmed by an absence of false alarms in the \forester{}'s results.
+%
+% The used predicate abstraction can be refined fully automatically
+% by predicates learnt from spurious counterexamples. The automatic refinement
+% enables analysis of the whole new classes of data structures having nontrivial
+% properties. For example, consider a list where two kind of nodes
+% alternates or a list assuming an order of elements. TODO more examples
+%
+% Since no false positives and negatives are reported by \forester{} we consider
+% as a strength an ability of the tool to detect the cases which it is not able to analyse
+% correctly and to report the \emph{UNKNOWN} answer.
+
+% The main weakness of our tool is a lack of support of all
+% C language constructions. An example of such feature is a function pointer
+% heavily used in the LDV benchmark. Since we use \forester{} mainly as a platform
+% for prototyping of new algorithms for shape analysis we currently do not
+% plan to cover the whole C language syntax since it would bring no benefits
+% for our purposes.
+
+% Another problem of our method is that it timed out on a few test cases.
+% This is partially because of the refinement since our method does not guarantee
+% an exclusion of a spurious counterexample after a refinement.
+% The progress guarantee is a little bit weaker and claims that the counterexample
+% will not be reached again by the same trace which can lead to more refinements
+% needed to exclude a particular counterexample.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tool Setup, Configuration, and Witnesses}\label{sec:tool_setup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The distribution of \forester{} for SV-COMP 2017 is available from the web page
+of \forester{}\footnote{\href{http://www.fit.vutbr.cz/research/groups/verifit/tools/forester}
+{\texttt{http://www.fit.vutbr.cz/research/groups/verifit/tools/forester}}} from the
+link highlighted as the SV-COMP 2017 binary version.
+The tool is provided in the form of a shared object
+library \texttt{libfa.so} together with a Python wrapper
+\texttt{sv\_comp\_run.py}.
+The file \texttt{README-FORESTER-SVCOMP-2017} describes
+the dependencies of \forester{} and parameters of the Python script.
+
+%\pagebreak
+The \texttt{sv\_comp\_run.py} script is run as follows: %script has the following parameters.
+
+\begin{center}
+  \vspace{-1.2mm}
+  \begin{minipage}{8cm}
+  \texttt{sv\_comp\_run.py [--help] <source>\\
+  \hspace*{5.5mm}--properties <prp> --trace <trace> \\}
+  \end{minipage}
+  \vspace{-4.2mm}
+\end{center}
+
+\noindent
+where \texttt{<trace>} is the output file for a~(violation/correctness)
+witness, \texttt{<prp>} is the path to the property file, and \texttt{<source>}
+is the verified program.
+% The path to a program under verification is specified as a parameter without flag.
+% The output file of trace can be set by the \texttt{--trace} parameter.
+% These two parameters are mandatory. The path to the property file can be
+% defined by the \texttt{--properties} parameter. The \texttt{--help} parameter
+% will print out a help message describing usage of the script.
+% The output of the execution script is the same as it is described in the SV-COMP rules.
+When \forester{} is run within the BenchExec framework, most of the parameters are set
+automatically by its BenchExec wrapper script. The only exception is the parameter
+\texttt{--trace}, which must be defined manually in an option node of the XML
+input file of BenchExec.
+
+The format of a~violation witness is an~automaton, represented using
+GraphML (an XML schema), that represents a buggy trace through the program,
+while the format of a~correctness witness is (again) a GraphML automaton whose
+states correspond to loop points in the program, and are further annotated
+(using an XML node with the key \texttt{automaton}) by
+a~representation of the set of FAs over-approximating the set of
+reachable program configurations at the given state.
+\forester{} participates only in the MemSafety-Heap and ReachSafety-Heap categories
+and opts out from the rest.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Software Project and Contributors}\label{sec:project_contributors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\forester{} has been under development at Brno University of Technology since 2010.
+\forester{} and the \vata{} library are both licensed under GPLv3.
+The source code of \forester{} is available at {\footnotesize\href{https://github.com/martinhruska/forester/}
+{\texttt{https://github.com/martinhruska/forester/}}}.
+The~authors of this paper are currently the only people involved in its
+development.
