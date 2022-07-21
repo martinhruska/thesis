@@ -8252,10 +8252,34 @@ therefore this chapter is going to rather focuse how the improvements were imple
 to the tool.
 It will also briefly discuss technical improvements done during the preparations for different editions of competition.
 
+Software verification competition (SV-COMP) is annual competition of verification tools including
+sound abstract interpreters or formal verifiers, various static analysers and also unsoud tools
+like bounded model checkes.
+The competition is based on its own benchmark of the C programs.
+The length of programs are usually from tens to hundreds lines of code.
+
+The tools compete in differents categories (chosen by authors of a tool), e.g., reachability,
+termination, or memory safety category.
+Each category consist of some programs from benchmark and specification defining invariants which are
+checked.
+E.g., in reachability category there is checked a whether a certain line of program is reached.
+
+A verification tool is supposed for a given program and specification answer whether
+the program fullfill specification (tool answers true), break specification (tool answers
+false), or tool cannot decided and answers unknown.
+The tools are rewarded by 2 points for a corret answer true, 1 point for a false answer false,
+or penalized by 32 points for a incorrect answer true, 16 points for an incorrect answer false.
+As one can see, since SV-COMP is a verification compeition, not a testing competition, it favours
+sound tools over unsound ones by its scoring scheme.
+
+Forester traditionally competed in the categorie related to heap manipulation.
+It was a reachability subcategory containing programs working with dynamic
+allocated and memory safety categories.
+In memory safety categories, it was checked that there are no invalid memory dereferences,
+invalid memory deallocations or memory leaks.  
+
 For each edition of competition a short paper describing a yearly progress was written.
 The full text of paper is given in Appendix \ref{app:svcomp}.
-
-TODO: DESCRIBE SVCOMP briefly
 
 \section{Preparing Forester for SV-COMP}
 In the first edition (year 2015) \cite{svcomp15-forester} of competition where Forester participated it was not
@@ -8288,6 +8312,36 @@ In our case, the invariants are forest automata representing a shape invariant (
 allocated on the heap) for each line of program visited during verification procedure.
 
 \section{Improvements over the editions of competition}
+The first edition in which Forester participated (2015) consists of mainly of technical improvements of the tool.
+The main one was replacement of ad-hoc implemented tree automata library by the VATA library \cite{libvata}.
+This improved overall architecture of Forester (and therefore maintability) and make possible
+to benefit from improvents in the VATA library which is specialized to an efficient implementation of
+algorithms for tree automata.
+
+The main bottlneck of Forester in competition, an inability to distinguish between false and real bugs in program
+was fixed to the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
+automata as was described in the previous chapters).
+It was achieved by implementation of backward run from the point where a violation of specification was detected.
+Backward run starts with forest automaton representing state of heap in state where the violation was found.
+It goes back through visited states during forward symbolic execution and reverts an effect of the operation done
+the given state on forest automaton.
+It checks whether an intersection of forest automaton from forward run and backward run in given state is empty or not.
+If it is empty the found violation is not real.
+The intersection of forest automata was also newly implemented for this edition.
+After a detection of spurious conterexample, a refinement of abstraction after a detection of spurious counterexample is implemented.
+We use predicate abstraction and refinement is done by adding tree automata from forest automaton of backward run to set of predicates.
+This makes possible to recover from a detection of a spurious counterexample and subsequently correctly analyse program.
+
+Finally, for edition 2017 we extended backward run and abstraction refinement to hierarchical forest automata.
+That are forest automata with another forest automata (called boxes) used as symbols in their transitions.
+This complicates intersection of rest automata since the intersection needs to take semantics of symbols to accout.
+One possible solution would be on fly unfolding of boxes which would make the intersection algorithm really complicated.
+Therefore we take another approach which is keep automata in forward and backward run in so called compatible form.
+That is for assuring that the same heaps are represented in the same way.
+The more technical description of this concept was given in the previous chapter.
+From technical point of view the most challengins operations to revert in backward run
+w.r.t. compatible form are fold (creating box from forest automaton), unfold (reverting unfold),
+and normalization (i.e., operation of removing redundant cut-points and connecting associated tree automata).
 
 \section{Strengths and Weaknesses}
 
