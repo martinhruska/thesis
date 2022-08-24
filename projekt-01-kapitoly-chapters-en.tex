@@ -1461,7 +1461,6 @@ its cut-points.
 This allows a very fast refutation of their entailment in case the reachability
 relation is incompatible. 
 
-\newcommand{\rig}[1]{\bigstar(#1)}
 The \emph{root interconnection graph} of a forest $f = \tuple{t_1\cdots t_n,\sigma}$
  is a~(directed) graph $G = (V,E)$ in which the nodes $V=\{t_1,\dots,t_n\}$
 represent the roots of the trees $t_1,\ldots,t_n$, and the edges $E \subseteq V \times (\mathbb{N} \times \{1,2\}) \times V$
@@ -3684,8 +3683,6 @@ in the order 3, 2, and 1.
 %knots to larger knots}
 
 {
-\newcommand{\cut}{\rhd}
-\newcommand{\filter}[1]{\mathord\Phi_{#1}}
 Before we explain how to deal with the particular types of cut-points, we introduce the so-called \emph{component slicing}.
 %
 On the level of a single forest $\tuple{t_1,\ldots,t_n,\sigma}$, 
@@ -4185,8 +4182,6 @@ boxes that are required, and thus substantially increase the performance.
 \section{Architecture of \forester}
 \label{sub:forestervata}
 %*******************************************************************************
-
-\newcommand{\cpp}{C\nolinebreak\hspace{-.03em}\raisebox{.3ex}{+}\nolinebreak\hspace{-.07em}\raisebox{.3ex}{+}}
 
 \forester is an open source tool (written in \cpp) for verification of programs
 manipulating complex dynamic data structures.
@@ -8245,43 +8240,40 @@ individual ones as the symbolic representation of sets of heaps.
 \chapter{Developing Shape Analyser for Software Verification Competition}
 \label{chap:svcomp}
 The following chapter describes development of the Forester tool \cite{foresterweb}
-for software verification competition \cite{svcompweb} which is anually held on TACAS conference.
-Forester is a shape analyser implementing analysis based on forest automata.
-The main concepts of this approach were described in detail in the previous chapters
-therefore this chapter is going to rather focuse how the improvements were implemented
-to the tool.
-It will also briefly discuss technical improvements done during the preparations for different editions of competition.
-
-Software verification competition (SV-COMP) is annual competition of verification tools including
-sound abstract interpreters or formal verifiers, various static analysers and also unsoud tools
-like bounded model checkes.
-The competition is based on its own benchmark of the C programs.
+for Software verification competition \cite{svcompweb} (SV-COMP) which is anually held within TACAS conference.
+The tools competing in SV-COMP varies from sound abstract interpreters or formal verifiers over static analysers
+to unsoud tools like bounded model checkers.
+The tools compete in verification of C programs from the competition benchmark.
 The length of programs are usually from tens to hundreds lines of code.
-
-The tools compete in differents categories (chosen by authors of a tool), e.g., reachability,
+The verification tasks are separated to differents categories (chosen by authors of a tool), e.g., reachability,
 termination, or memory safety category.
-Each category consist of some programs from benchmark and specification defining invariants which are
-checked.
+Each category has its own specification of program invariants which are checked.
 E.g., in reachability category there is checked a whether a certain line of program is reached.
 
-A verification tool is supposed for a given program and specification answer whether
+A verification tool is supposed to answer for a given program and specification whether
 the program fullfill specification (tool answers true), break specification (tool answers
-false), or tool cannot decided and answers unknown.
+false), or tool cannot decide and answers unknown.
 The tools are rewarded by 2 points for a corret answer true, 1 point for a false answer false,
 or penalized by 32 points for a incorrect answer true, 16 points for an incorrect answer false.
 As one can see, since SV-COMP is a verification compeition, not a testing competition, it favours
 sound tools over unsound ones by its scoring scheme.
 
-Forester traditionally competed in the categorie related to heap manipulation.
-It was a reachability subcategory containing programs working with dynamic
-allocated and memory safety categories.
-In memory safety categories, it was checked that there are no invalid memory dereferences,
-invalid memory deallocations or memory leaks.  
+Forester traditionally competed in the categories related to heap manipulation.
+There were two main categories:
+\begin{enumerate*}
+  \item a reachability subcategory containing programs working with dynamically allocated data structures,
+  \item memory safety categories.
+\end{enumerate*}
+In memory safety categories, the checked invariants were absence of invalid memory dereferences,
+invalid memory deallocations, and memory leaks.
 
 For each edition of competition a short paper describing a yearly progress was written.
-The full text of paper is given in Appendix \ref{app:svcomp}.
+The full text of papers is given in Appendix \ref{app:svcomp}.
 
-\section{Preparing Forester for SV-COMP}
+The main concepts of the verification approach used by Forester were described in detail in the previous parts of thesis
+therefore the rest of the chapter is going to mainly discuss technical improvements done during the preparations for different editions of competition.
+
+\section{Technical preparation of Forester for SV-COMP}
 In the first edition (year 2015) \cite{svcomp15-forester} of competition where Forester participated it was not
 needed to make any special adjustments and Forester was submitted in archive containing its binary together
 with scripts wrapping execution for competition.
@@ -8289,20 +8281,22 @@ The scripts, e.g., translates outputs of Forester to predefined outputs by compe
 
 However, it was needed to add to Forester a support for printing out a path leading to a found bug in a program,
 so called witness.
-The witness format is dialect of GraphML (which is based on XML) defined by competition rules and more detaily described in \cite{fse15-winess}.
+The witness format is dialect of GraphML (which is based on XML) defined by competition rules and more detaily described in \cite{fse15-witness}.
 Since Forester performs a symbolic execution and creates symbolic states containing link to a previous state
-we travel a path from an erroneous state to the beginning of program and gradually generated needed witness in GraphML.
+we travel a path from an erroneous state to the beginning of program and gradually generate needed witness in GraphML.
+The witnesses are later used by so called witness checkers which perform precise model checking (i.e., without abstraction)
+navigated by the input witness to check that a found error is really in program.
 
 In the following edition, it was needed to adapt Forester to a new competition enviroment.
-Particulary, the competition started using Benchexec \cite{benchexec-sttt}, a platform
-making easy execution of benchmark over different tools and reporting structured results.
-Adaption of Forester meant to implement script called by Benchexec to exece Forester over a given 
+Particulary, the competition started using Benchexec \cite{sttt-benchexec}, a platform
+making easy execution of the different tools over a given benchmark and reporting structured results.
+Adaption of Forester meant to implement script called by Benchexec to execute Forester over a given 
 verification task.
-This scripts another scipt directly encapsulating Forester and translating ouputs to the predefined
+This script calls another script directly encapsulating Forester and translating ouputs to the predefined
 one by competition.
-It was also needed to create a specification in XML format later uploaded to SV-COMP repository.
+It was also needed to create a specification in XML format and to uploade it to SV-COMP repository.
 The specification defines in which categories Forester participates and which parameters should be used
-for a specific category.
+for a particular category.
 
 Finally, since edition 2017 of SV-COMP Forester supports printing so called correctness witness.
 I.e., a description of state space explored during a verification of error-free task together with
@@ -8314,27 +8308,27 @@ allocated on the heap) for each line of program visited during verification proc
 \section{Improvements over the editions of competition}
 The first edition in which Forester participated (2015) consists of mainly of technical improvements of the tool.
 The main one was replacement of ad-hoc implemented tree automata library by the VATA library \cite{libvata}.
-This improved overall architecture of Forester (and therefore maintability) and make possible
+It improved overall architecture of Forester (and therefore maintability) and made possible
 to benefit from improvents in the VATA library which is specialized to an efficient implementation of
 algorithms for tree automata.
 
 The main bottlneck of Forester in competition, an inability to distinguish between false and real bugs in program
-was fixed to the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
+was fixed, for the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
 automata as was described in the previous chapters).
 It was achieved by implementation of backward run from the point where a violation of specification was detected.
 Backward run starts with forest automaton representing state of heap in state where the violation was found.
 It goes back through visited states during forward symbolic execution and reverts an effect of the operation done
-the given state on forest automaton.
-It checks whether an intersection of forest automaton from forward run and backward run in given state is empty or not.
+in the given state.
+Then it checks whether an intersection of forest automaton from forward run and backward run in given state is empty or not.
 If it is empty the found violation is not real.
-The intersection of forest automata was also newly implemented for this edition.
-After a detection of spurious conterexample, a refinement of abstraction after a detection of spurious counterexample is implemented.
-We use predicate abstraction and refinement is done by adding tree automata from forest automaton of backward run to set of predicates.
-This makes possible to recover from a detection of a spurious counterexample and subsequently correctly analyse program.
+When such a spurious counterexamples is detected, a refinement of abstraction is done.
+We use predicate abstraction where the refinement is done by adding forest automaton from backward run to set of predicates.
+It makes possible a recoverovery from a detection of a spurious counterexample.
+The intersection of forest automata needed for backward run was also newly implemented for this edition.
 
 Finally, for edition 2017 we extended backward run and abstraction refinement to hierarchical forest automata.
 That are forest automata with another forest automata (called boxes) used as symbols in their transitions.
-This complicates intersection of rest automata since the intersection needs to take semantics of symbols to accout.
+It complicates intersection of forest automata since the intersection needs to take semantics of symbols into account.
 One possible solution would be on fly unfolding of boxes which would make the intersection algorithm really complicated.
 Therefore we take another approach which is keep automata in forward and backward run in so called compatible form.
 That is for assuring that the same heaps are represented in the same way.
@@ -8344,6 +8338,25 @@ w.r.t. compatible form are fold (creating box from forest automaton), unfold (re
 and normalization (i.e., operation of removing redundant cut-points and connecting associated tree automata).
 
 \section{Strengths and Weaknesses}
+
+The main strength of the tool in competition came from the generality of the underlying
+verification procedure.
+Forest automata as a domain are able to represent many different data structures,
+ranging from doubly linked list to different kinds of trees.
+E.g., Forester was the only tool able to soundly verify correctness of implementation of skip lists
+of the second and the third level.
+The newly implemented backward run and abstraction refinement moreover gave Forester
+an ability to learn invariants of data structures.
+An example of such invariant is alternation of two kinds of nodes in single or double linked list.
+This class of data structure were also tasks which only Forester verified soundly.
+
+The weaknesses came from technical immaturity of the tool.
+It did not support the whole C syntax and therefore it reported
+unknown on many tasks from SV-COMP benchmark.
+The examples of features occuring ofter in memory safety related categories are function  
+pointers, alloca function, or arrays.
+We lack manpower to add these features to Forester which was still prototype and
+would need a majore refactoring to reach a state where an easy maintability and extensibility would be possible.
 
 \chapter{NETYS}
 

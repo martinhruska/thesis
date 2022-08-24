@@ -16,12 +16,12 @@ $(CO).ps: $(CO).dvi
 	dvips $(CO)
 
 $(CO).pdf: clean $(CO).tex
-	# pdflatex $(CO)
-	# -bibtex $(CO)
-	# pdflatex $(CO)
-	rubber --unsafe -v --pdf $(CO).tex
-	rubber-info --errors $(CO).tex
-	# pdflatex $(CO)
+	#rubber --unsafe -v --pdf $(CO).tex
+	#rubber-info --errors $(CO).tex
+	pdflatex $(CO).tex
+	-bibtex $(CO)
+	pdflatex $(CO).tex
+	pdflatex $(CO).tex
 
 $(CO).dvi: $(CO).tex $(CO).bib
 	latex $(CO)
