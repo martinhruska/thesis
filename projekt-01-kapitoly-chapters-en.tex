@@ -63,12 +63,12 @@ of selector names.
 	  The framework is general, it can found some basic predicates describing shapes in the analysed
 	  program automatically but it needs to be parametrized manually by predicates to
 	  represent more complex data structures.
-	  The precision of the used abstraction by refinement was addressed in \cite{cav05, beyer:lazy_shape_analysis}.
+	  The precision of the used abstraction by refinement was addressed in \cite{cav05:mcpeak_necula,, beyer:lazy_shape_analysis}.
 	  Scalability of the method has not been studied.
 
 	  \subsection{Separation Logic}
 
-	  \emph{Separation logic} was first introduced by Reynolds \cite{reynolds02} as an extension
+	  \emph{Separation logic} was first introduced by Reynolds \cite{Reynolds:SepLogic:02} as an extension
 	  of \emph{Hoare logic} for reasoning about programs manipulating dynamic data structures.
 	  Hoare logic builds on so-called \emph{Hoare triple}. A triple has form $\{P\}C\{Q\}$ where
 	  $P,Q$ are assertions in predicate logic and $C$ is a command in an imperative programming language.
@@ -88,11 +88,11 @@ of selector names.
 	  An interest in separation logic has started raising with an introduction of the automated,
 	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}.
 	  Separation logic has also been extended to a concurrent version \cite{brookes16}.
-	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{popl09}.
+	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction09}.
 	  Further, the second-order bi-abduction provided ability to learn some predicates automatically and so made possible analysis
-	  of more complex data structures such as skiplists \cite{cav14}.
+	  of more complex data structures such as skiplists \cite{locle:secondorder}.
 	  The principles similar to second-ordered bi-abduction enabling analysis of complex data structures
-	  were used in~\cite{pldi07}.
+	  were used in~\cite{soa-pldi07synthesis}.
 	  The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
 	  the given specification.
 	  The separation-logic-based approa\-ches also often suffer from the need to manually provide inductive predicates
@@ -100,6 +100,36 @@ of selector names.
 
 	  Separation logic has found its way to practice which is demonstrated by its application
 	  in Facebook \cite{www:fbinfer}.
+
+	  \subsection{Automated Decision Procedure}
+          There is also a huge body of work on \emph{automated decision
+          procedures} for various fragments of separation logic and problems such as
+          satisfiability and entailment---see, e.g., \cite{soa-EneaLSV14, soa-IRV14,
+          soa-JensFlorian:BeyondSymHeap:20, soa-LocLe:VMCAI21, soa-Radu:CADE21}.
+          %
+          However, it is not immediate how to apply these logics inside a program analysis
+          tool.
+          For example, the results on the cited separation logics cannot be directly
+          applied to the \mbox{(bi-)abduction} problem, which is the central operation
+          needed for a compositional program analysis.
+          %
+          This is because the best (i.e., logically weakest) solution to the abduction
+          problem $\phi * [?] \models \psi$, which is a central problem for compositional
+          program analyses, with $*$ being the separating conjunction, is given by the
+          formula $\phi \mw \psi$, which makes use of the magic wand operator $\mw$, and
+          the cited logics do not provide support for the magic wand.
+          %
+          This is for principle reasons: it has been observed in the literature that magic
+          wand operators are ``difficult to eliminate''~\cite{soa-books/daglib/0034962};
+          further, it has been shown that adding only the singly-linked list-segment
+          predicate to a propositional separation logic that includes the magic wand
+          already leads to undecidability of the satisfiability
+          problem~\cite{soa-conf/fossacs/DemriLM18}.
+          %
+          A notable exception is the recent work~\cite{soa-conf/esop/PagelZ21} on a new
+          semantics for separation logic, which enables decidability of a propositional
+          separation logic that includes the magic wand and the singly-linked list-segment
+          predicate (and also discusses applications to the abduction problem.
 
 	  \subsection{Symbolic Memory Graphs}
 
@@ -110,7 +140,7 @@ of selector names.
 	  accelerate analysis and enable representation of infinite state spaces.
 	  Since the representation is quite straightforward it is easy to model
 	  semantics of the concrete program operations in the abstract domain.
-	  These practical advantages are confirmed by the repeated wins of the tool in the competition on software verification SV-COMP \cite{www:svcomp}.
+	  These practical advantages are confirmed by the repeated wins of the tool in the competition on software verification SV-COMP \cite{svcomopweb}.
 
 	  The formalism was designed mainly for list structures aiming at verification
 	  of the system level programs (e.g. Linux kernel) using such structures.
@@ -144,14 +174,14 @@ of selector names.
 	  Otherwise the real counterexample is reported to a user.
 
 	  Abstract regular model checking is a general verification method was applied to various kinds of systems
-	  including pointer programs \cite{sas06, cav11, boxes13} where automata are used as a domain
+	  including pointer programs \cite{bhrv06b, forester11, boxes13} where automata are used as a domain
 	  for representation of the allocated data structures on the heap.
-	  In \cite{sas06}, the whole heap is encoded in one tree automaton and semantics of
+	  In \cite{bhrv06b}, the whole heap is encoded in one tree automaton and semantics of
 	  programs is represented by a tree transducer.
 	  The approach is able to verify complex tree structures but since it encodes the whole
 	  heap in one automaton, even a small change in one part of a heap may
 	  be propagated over the whole model which negatively effects the scalability of the method.
-	  The scalability problem was improved in \cite{cav11} where the heap is represented by a tuple of 
+	  The scalability problem was improved in \cite{forester11} where the heap is represented by a tuple of 
 	  tree automata, so called forest automata, which localize a change in one part of heap
 	  to a change in a particular tree automaton.
 	  The approach needed forest automata representing the repeating sub-graphs of a heap
@@ -162,7 +192,7 @@ of selector names.
 	  The approach was applied to verification of the C programs with dynamic data structures in
 	  the work on forest automata-based shape analysis \cite{forester12}.
 	  The \forester{} tool implementing the methods is able to verify complex data structures
-	  such as various tree and skiplists of the second and third level \cite{boxes13, holik:2017} which
+	  such as various tree and skiplists of the second and third level \cite{boxes13, vmcai17} which
 	  are not analysable by any other tool fully automatically.
 
 	  \subsection{Bounded Model Checking}
@@ -172,7 +202,7 @@ of selector names.
 	  However, when the requirement on soundness is relaxed we will obtain a bug hunting method
 	  still able to detect many errors in program.
 	  One of such methods is \emph{bounded model checking (BMC)} which achieved many achievements
-	  in the various editions of the SV-COMP competition \cite{www:svcomp}.
+	  in the various editions of the SV-COMP competition \cite{svcompweb}.
 
 	  An exploration of state space is limited up to some bound in BMC.
 	  The bound can be given, e.g., on a number of interleavings in a parallel program,
@@ -297,7 +327,7 @@ of selector names.
 	Unfortunately, the logic is undecidable.
 	This implies that automata accepting such graphs would have undecidable
 	crucial properties, e.g., emptiness of the automata language.
-	This is exactly what happens in works by \cite{thomas91, reiter15} where the designed automata
+	This is exactly what happens in works by \cite{Thomas:automata, soa-reiter15} where the designed automata
 	suffer from the undecidability of some properties.
 
 	The undecidability does not necessarily imply that formalism is not usable (since sufficient
@@ -309,13 +339,13 @@ of selector names.
 	This is a difference compared to the classical word or tree automata where an automaton runs over
 	a given input in a particular direction.
 	Contrarily, remembering the so far processed parts of the graphs is more complicated for graph automata.
-	In \cite{thomas91}, the path through a processed graph is encoded in symbols.
-	In \cite{reiter15}, there is a special automaton for each node of the graph, the automata
+	In \cite{Thomas:automata}, the path through a processed graph is encoded in symbols.
+	In \cite{soa-reiter15}, there is a special automaton for each node of the graph, the automata
 	communicate in rounds and the computation continues until all automata reach their stable state.
 
 	However, when the domain is restricted to a special class of graphs, it is possible to design
 	automata with much more useful properties.
-	It has been shown~by Courcelle \cite{courcelle12} that when we restrict MSO to graphs 
+	It has been shown~by Courcelle \cite{courcell_graph_2012} that when we restrict MSO to graphs 
 	with bounded tree width, it is possible to decide satisfiability of MSO formulas.
 	A decision procedure is then implemented by encoding the formula to a tree automaton
 	and checking its emptiness.
@@ -323,7 +353,7 @@ of selector names.
 	compared to the size of the formula which makes the manipulation with it inefficient.
 
 	Another approach to the definition of graph automata is from an algebraic point of view.
-	In the work \cite{blume:2012}, the automata were defined using concepts
+	In the work \cite{soa-blume:2012}, the automata were defined using concepts
 	of \emph{cospans} from category theory.
 	Intuitively, the automata have as symbols the basic graph operations which can create
 	an arbitrary graph with a bounded tree width.
@@ -337,13 +367,13 @@ of selector names.
 	Grammars are a standard counterpart to automata in the formal language theory.
 	For instance, context-free grammars characterize the class of context-free languages just
 	as pushdown automata.
-	The paper \cite{brandenburg05} explores the relation between automata working over
+	The paper \cite{soa-brandenburg05} explores the relation between automata working over
 	graphs and graph grammars and shows that they describe the same class of graph languages as
 	the NCE graph grammars.
 	
 	The natural comparison of graph grammars is also to the separation logic which was originally designed
 	for reasoning about programs with dynamic data structures.
-	The relation has been shown in Jansen et. all \cite{matheja2015}.
+	The relation has been shown in Jansen et. all \cite{matheja_treelike_2015}.
 	They show that so-called \emph{tree-like separation logic} can describe the same graphs
 	as those that can be generated by the so-called \emph{tree-like grammars (TLG)}.
 	Both formalisms are meant to describe tree-like data structures (i.e., data structures
@@ -359,13 +389,13 @@ of selector names.
 
 	Graph automata on graphs with bounded tree width can be applied for shape analysis
 	indirectly as a decision procedure for separation logic.
-	This is illustrated by \cite{iosif2013} where a variation of automata
+	This is illustrated by \cite{iosif_treewidth_2013} where a variation of automata
 	accepting graphs with bounded tree width are used to encode graphs represented
 	by a fragment of separation logic.
 
 	The notion of graph automata on graphs with bounded tree width has also been used
 	for proving properties of other abstract machines.
-	An example is emptiness of automata with auxiliary storage in \cite{popl11}.
+	An example is emptiness of automata with auxiliary storage in \cite{soa-popl11tw}.
 
 \part{Automata in Shape Analysis}
 
@@ -8377,7 +8407,7 @@ The existing approaches are mainly distinguished by the formalism used to descri
 %
 The dominant position, previously held by frameworks such as \cite{pale,tvla},
 is currently occupied by more automated and scalable approaches based on separation
-logic (SL)~\cite{reynolds02sl,berdine07cav,rival07} such as symbolic memory
+logic (SL)~\cite{Reynolds:SepLogic:02,berdine07cav,rival07} such as symbolic memory
 graphs~\cite{dudka13sas}, on forest automata~\cite{habermehl_forest_2012}, and on graph
 grammars~\cite{Juggrnaut2015}.
 These approaches clearly identified the importance of local reasoning and modularity in reasoning about memory configurations as the key to scalability.
