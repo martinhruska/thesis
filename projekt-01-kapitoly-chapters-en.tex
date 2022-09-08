@@ -18,9 +18,9 @@ Finally, an existing work on automata for graph languages is presented.
 \emph{Shape analysis} deals with analysis of shapes allocated on the heap by a program.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
-\cite{pale97,Sagiv02,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
+\cite{jensen,pale,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
 \cite{bhrv06b,deg06,forester12,boxes13,lists-counters}, graphs with summary nodes and edges
-\cite{sas07:chang_rival_necula,dudka13}, or graph grammars \cite{juggrnaut10}.
+\cite{sas07:chang_rival_necula,dudka13sas}, or graph grammars \cite{juggrnaut10}.
 % Apart from the underlying formalisms, the approaches differ in their degree of
 % automation, in the heap structures they can handle, and in their scalability.
 
@@ -47,7 +47,7 @@ of selector names.
 
 	  \subsection{Three-valued Predicate Logic with Transitive Closure}
 	  \label{subsec:tvl}
-	  The approach of \cite{Sagiv02} uses predicates to express relations between nodes of heap graphs.
+	  The approach of \cite{pale} uses predicates to express relations between nodes of heap graphs.
 	  Moreover, it introduces the third logical value (\emph{unknown}) to the standard
 	  boolean values \emph{true, false}. The \emph{unknown} value is used when
 	  more items from a given universe may but need not to be in a relation.
@@ -58,12 +58,12 @@ of selector names.
 	  and there exists $w \in V$ such that $\emph{NEXT}(u,w) = \emph{true} \wedge
 	  \emph{NEXT}(v,w) = \emph{false}$, then $\emph{NEXT}(s,w) = \emph{unknown}$.
 
-	  The work of \cite{Sagiv02} that build the TVLA shape analyser on the top of 3-valued
+	  The work of \cite{pale} that build the TVLA shape analyser on the top of 3-valued
 	  predicate logic with transitive closure was one of the first works on shape analysis.
 	  The framework is general, it can found some basic predicates describing shapes in the analysed
 	  program automatically but it needs to be parametrized manually by predicates to
 	  represent more complex data structures.
-	  The precision of the used abstraction by refinement was addressed in \cite{cav05:mcpeak_necula,, beyer:lazy_shape_analysis}.
+	  The precision of the used abstraction by refinement was addressed in \cite{cav05:mcpeak_necula, beyer:lazy_shape_analysis}.
 	  Scalability of the method has not been studied.
 
 	  \subsection{Separation Logic}
@@ -88,11 +88,11 @@ of selector names.
 	  An interest in separation logic has started raising with an introduction of the automated,
 	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}.
 	  Separation logic has also been extended to a concurrent version \cite{brookes16}.
-	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction09}.
+	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction11}.
 	  Further, the second-order bi-abduction provided ability to learn some predicates automatically and so made possible analysis
 	  of more complex data structures such as skiplists \cite{locle:secondorder}.
 	  The principles similar to second-ordered bi-abduction enabling analysis of complex data structures
-	  were used in~\cite{soa-pldi07synthesis}.
+	  were used in~\cite{indPrSynt07}.
 	  The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
 	  the given specification.
 	  The separation-logic-based approa\-ches also often suffer from the need to manually provide inductive predicates
@@ -104,7 +104,7 @@ of selector names.
 	  \subsection{Automated Decision Procedure}
           There is also a huge body of work on \emph{automated decision
           procedures} for various fragments of separation logic and problems such as
-          satisfiability and entailment---see, e.g., \cite{soa-EneaLSV14, soa-IRV14,
+          satisfiability and entailment---see, e.g., \cite{enea_compositional_2014, iosif_deciding_2014,
           soa-JensFlorian:BeyondSymHeap:20, soa-LocLe:VMCAI21, soa-Radu:CADE21}.
           %
           However, it is not immediate how to apply these logics inside a program analysis
@@ -133,7 +133,7 @@ of selector names.
 
 	  \subsection{Symbolic Memory Graphs}
 
-	  \emph{Symbolic Memory Graphs (SMG)} \cite{dudka13} were designed as
+	  \emph{Symbolic Memory Graphs (SMG)} \cite{dudka13sas} were designed as
 	  an abstract domain for the framework of abstract interpretation \cite{cousot:popl77}.
 	  They model a state of heap precisely but can perform \emph{widening} by introducing
 	  summary nodes in the form of singly/doubly-linked lists nodes to
@@ -144,14 +144,14 @@ of selector names.
 
 	  The formalism was designed mainly for list structures aiming at verification
 	  of the system level programs (e.g. Linux kernel) using such structures.
-	  Therefore it can also handle low level memory operations with byte precision~\cite{dudka13}.
+	  Therefore it can also handle low level memory operations with byte precision~\cite{dudka13sas}.
 	  However, the domain has not been yet generalized to the tree structures.
 	  The scalability of the method has not been studied yet and but the principles of bi-abduction
 	  should be applicable to the domain just as for the separation logic-based methods.
 
 	  \subsection{Abstract Regular Model Checking}
 	  \label{subsection:armc}
-	  The \emph{abstract regular model checking} \cite{artmc12} is an automata based method for verification of parametrized and infinite state systems.
+	  The \emph{abstract regular model checking} \cite{artmc} is an automata based method for verification of parametrized and infinite state systems.
 	  It employs automata over words and trees to represent the reachable configurations of system being verified
 	  and a regular transition relation (represented by transducer or operations over automata) to model the semantics of an analysed system.
 	  An (e.g., height or predicate language) abstraction is used to
@@ -252,12 +252,12 @@ of selector names.
 
 	  As we briefly mentioned in Section \ref{subsec:tvl},
 	  the work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
-	  analyzer \cite{Sagiv02}, which is based on \emph{3-valued predicate logic with
+	  analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
 	  transitive closure}. The refinement is, however, restricted to adding more
 	  pointer variables and/or data fields of allocated memory cells to be tracked
 	  only (together with combining the ana\-ly\-sis with classic predicate analysis on
 	  data values). The analysis assumes the other necessary heap predicates (i.e.,
-	  the so-called core and instrumentation relations in terms of \cite{Sagiv02}) to
+	  the so-called core and instrumentation relations in terms of \cite{pale}) to
 	  be fixed in advance and not refined.
 	  The work \cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
 	  further by learning more complex instrumentation relations using
@@ -474,7 +474,7 @@ automata and separation logic. Automata provide higher generality and
 flexibility of the abstraction 
 and allow us to leverage the
 recent advances of efficient use of non-deterministic
-automata~\cite{tacas08,tacas10}.
+automata~\cite{abdulla_computing_2008,tacas10}.
 As~further discussed below, the use of
 separation allows for a~further increase in efficiency compared to a~monolithic
 automata-based encoding proposed in~\cite{bhrv06b}.
@@ -1314,7 +1314,7 @@ there is a heap $\heap$ in~$\langof{\fa}$ such that $\heap \unfold^{*}
 The \emph{entailment}, or semantic inclusion, test of forest automata is needed when
 testing convergence of our program analysis.
 %
-In this section, we give an overview of the techniques described in detail in~\cite{habermehl:forest,simacek:thesis}. 
+In this section, we give an overview of the techniques described in detail in~\cite{habermehl:forest,jiri:diza}. 
 %
 
 The starting point is a~component-wise language inclusion test.
@@ -1365,7 +1365,7 @@ has at most one successor for every selector).
 Hence, there is indeed exactly one canonic forest representation for every heap.
 %
 An FA is \emph{canonicity-respecting} if it accepts only canonical forests.
-The transformation into the canonicity-respecting form is discussed in detail in~\cite{habermehl:forest,simacek:thesis}. 
+The transformation into the canonicity-respecting form is discussed in detail in~\cite{habermehl:forest,jiri:diza}. 
 %
 It may transform a single FA into a~set of canonicity-respecting FAs such that
 the semantics of FAs in the set form a~partition of the semantics of the
@@ -1414,7 +1414,7 @@ hide parts of heaps into boxes in an arbitrary way.
 We believe (though have not proved yet) that
 the problem is decidable, considering that the expressive power of
 hierarchical FAs is close to the decidable fragments of separation logic with
-inductive predicates studied within~\cite{iosif:treewidth,zulleger:entailment}.
+inductive predicates studied within~\cite{iosif_treewidth_2013,Katelaan:seplog}.
 %
 %Instead of trying to come up with a~complete algorithm that would take into account the semantics of the boxes in full,
 %
@@ -1450,7 +1450,7 @@ Hence, when boxes are viewed as plain selectors, $u$~is not reachable but only
 \emph{backward}-reachable from a~variable.
 %
 The notion of canonicity and the canonicity-respecting form for hierarchical FAs
-is hence in~\cite{habermehl:forest,simacek:thesis} modified to take into account
+is hence in~\cite{forester12,jiri:diza} modified to take into account
 such paths as well.
 %
 Essentially, we pre-compute the so-called \emph{port interconnection} of boxes,
@@ -1461,7 +1461,7 @@ the tree components.
 This way, we~can still have a precise language inclusion test of canonicity-respecting hierarchical FA,
 but since the full semantics of boxes is not taken into account, it is only a sound approximation of the semantic entailment.
 
-In~\cite{habermehl:forest,simacek:thesis} we go one step further and define
+In~\cite{habermehl:forest,jiri:diza} we go one step further and define
 a~sub-class of nested FAs for which the generalised canonicity with the
 component-wise test is a~complete semantic entailment test.
 In short, for the test of the entailment of FAs~$\fa$ and~$\fa'$ to be complete, it must hold that
@@ -1833,7 +1833,7 @@ the program is safe.
 %	\centering
 %	\includegraphics[width=\textwidth]{figs/artmc.png}
 %	\caption{
-%		Illustration (borrowed from \cite{artmc12}) of the principles of the forward and the backward run and
+%		Illustration (borrowed from \cite{artmc}) of the principles of the forward and the backward run and
 %		the detection of a spurious counterexample.
 %		}
 %	\label{fig:bwrun}
@@ -2274,8 +2274,8 @@ manipulations with transitions and states of FAs.
 %We mostly omit their detailed implementation on the level of manipulations with
 %rules and states of FAs. 
 %since it is not important for this paper; instead,
-%we refer the reader to~\cite{forester12,jiridiza} for details.
-We refer the reader to~\cite{habermehl:forest,simacek:thesis,martin:dp} for the
+%we refer the reader to~\cite{forester12,jiri:diza} for details.
+We refer the reader to~\cite{habermehl:forest,jiri:diza,martin:dp} for the
 details.
 
 We note that when we talk about removing a~component or inserting a~component
@@ -2768,7 +2768,7 @@ well.
 The analysis of spurious counterexamples is further used to refine the abstraction. 
 %
 Particularly, we use a modification of the so-called \emph{predicate
-language abstraction} on TAs~\cite{artmc12}, which 
+language abstraction} on TAs~\cite{artmc}, which 
 collapses those states of component TAs that
 have non-empty intersection with the same predicate languages, which are
 obtained from the backward run.
@@ -3198,7 +3198,7 @@ and every operation of connecting, cutting, and swapping of components.
 
 Our abstraction over FAs is based on automata abstraction
 from the framework of \emph{abstract regular tree model checking}
-(ARTMC)~\cite{artmc12}.
+(ARTMC)~\cite{artmc}.
 This framework comes with two abstractions for tree automata, 
 \emph{finite height abstraction} and \emph{predicate language abstraction}.
 Both of them are based on merging states of a tree automaton that are in the
@@ -3382,7 +3382,7 @@ The interpolant is then used to refine the abstraction so that the spurious run 
 %It represents a set of configurations introduced by abstraction due to which an error is reached by a spurious forward run. The refinement is then used to exclude the spurious run. 
 
 %Specifically, 
-The guarantees shown to hold in \cite{artmc12} on the level of TAs are 
+The guarantees shown to hold in \cite{artmc} on the level of TAs are 
 the following.  
 Let $\ta$ and $\interp = (Q,q_0,\Delta)$ be two TAs and 
 let $\predset(\interp) = \{\langof{\interp,q}\mid q\in Q\}$ denote the set of languages of states of $\interp$.
@@ -3395,7 +3395,7 @@ exclude $\langof{\interp}$---unless applied on a~TA whose language is already
 intersecting~$\langof{\interp}$. 
 
 
-We can generalize the result of \cite{artmc12} to forest automata in the
+We can generalize the result of \cite{artmc} to forest automata in the
 following way,
 implying the progress guarantees of CEGAR described in \secref{sec:CEXanalysis}.
 For a~forest automaton $\fa = \tuple{\tas,\valuation}$, let $\predset(\fa) =  \ourbigcup_{i=1}^n\predset({A_i})$.
@@ -3460,7 +3460,7 @@ $\predset({A_i})$ only where $A_i$ is the $i$-th component of $\interp$ and $\la
 %% $\semof{F_i} \cap \semof{I_i} = \emptyset$ implies that there exists some $0<i\leq n$ such that
 %% $\mathcal{L}(A_i) \cap \mathcal{L}(B_i) = \emptyset$. And adding $\predset_i = \{(Q_i,q,\Delta_i)
 %% \mid B_i=(Q_i,q_i^0,\Delta_i)\ \wedge\ q\in Q_i\}$  to any set of predicates $\predset'$ guarantee that
-%% $\mathcal{L}(\alpha^{TA}[\predset_i \cup \predset'](A_i)) \cap \mathcal{L}(B_n) = \emptyset$ (see \cite{artmc12} for
+%% $\mathcal{L}(\alpha^{TA}[\predset_i \cup \predset'](A_i)) \cap \mathcal{L}(B_n) = \emptyset$ (see \cite{artmc} for
 %% proof). Therefore the intersection of $\alpha[\predset_i \cup \predset'](F_i)$ with $I_i$ will stay
 %% empty for any $\predset'$, becaurse there is empty intersection of  their $i^{th}$ components.
 %% }
@@ -4568,7 +4568,7 @@ The benchmark set consists of the tasks from~\cite{boxes13} and~\cite{vmcai17}.
 We selected the programs in order to illustrate the two crucial features
 of~\forester: the ability to learn boxes
 automatically and counterexample analysis with abstraction refinement.
-We also compare with \predator~\cite{predator11,dudka13}, a~many-times winner of
+We also compare with \predator~\cite{predator11,dudka13sas}, a~many-times winner of
 heap-manipulation-related categories of SV-COMP.
 
 The benchmarks are C~programs manipulating singly and doubly-linked list, trees, skip lists, and their combinations.
@@ -4675,7 +4675,7 @@ arise from some finite data abstraction; or they are also sometimes used to
 mark some selected nodes of the data structure when checking the way the data
 structure is changed by a given algorithm (e.g., one can check whether an
 arbitrarily chosen successive pair of nodes of a~list marked red and green is
-swapped when the list is reversed---see e.g.~\cite{artmc12}).
+swapped when the list is reversed---see e.g.~\cite{artmc}).
 
 %As the results show, some of our test cases do not need the abstraction to be refined.
 As the results show, some of our test cases do not need refinement.
@@ -4967,8 +4967,8 @@ Building a more robust tool on top of our experience with \forester is one of ou
 The area of verifying programs with dynamic linked
 data structures has been a subject of intense research for quite some time. Many
 different approaches based on logics, e.g.,
-\cite{pale01,Sagiv02,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction09,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula},
-automata \cite{bhrv06b,lists-counters,deg06}, graph grammars \cite{juggrnaut10,juggrnaut-learning12}, upward closed sets \cite{upwclosure08},
+\cite{pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula},
+automata \cite{bhrv06b,lists-counters,deg06}, graph grammars \cite{juggrnaut10,juggrnaut-learning12}, upward closed sets \cite{paroshBackward},
 and other formalisms have been proposed. These approaches differ in their
 generality, efficiency, and degree of automation.  
 %
@@ -5075,7 +5075,7 @@ manually.
 A number of works have attempted to remedy this weakness.
 %%%%%%%%%%%%%%%%%%%%%%%%%
 The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
-analyzer \cite{Sagiv02}, which is based on \emph{3-valued predicate logic with
+analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
 transitive closure}. 
 %
 The work
@@ -5123,12 +5123,12 @@ refinement was used in \cite{bhrv06b} (and also in some related less general
 approaches like~\cite{bhmv05}). In that case, however, a single tree automaton
 was used to encode sets of memory configurations, which allowed standard
 abstraction refinement from abstract regular (tree) model checking
-\cite{artmc12} to be used. On the other hand, due to using a single automaton,
+\cite{artmc} to be used. On the other hand, due to using a single automaton,
 the approach did not scale well and had problems with some heap transformations.
  
 % This paper is based on earlier published works on forest automata \cite{habermehl:forest} and SVComp contributions \cite{},
-% mainly on \cite{habermehl:forest} for the overall overview and on \cite{holik:cexfa,simacek:thesis} for the technical part.
-% It does not comprise the works on verification of properties of data stored in forest automata \cite{abdulla:data} and 
+% mainly on \cite{habermehl:forest} for the overall overview and on \cite{holik:cexfa,jiri:diza} for the technical part.
+% It does not comprise the works on verification of properties of data stored in forest automata \cite{forester-data-acta} and 
 % an advanced algorithms for learning boxes \cite{holik:automated}.
 
 \chapter{Forester VMCAI}
@@ -5202,7 +5202,7 @@ and instead have to perform the intersection \emph{recursively} on the boxes as
 well.
 
 Our abstraction on FAs is a modification of the so-called \emph{predicate
-language abstraction} \cite{artmc12}.
+language abstraction} \cite{artmc}.
 This particular abstraction collapses those states of component TAs that
 have non-empty intersection with the same predicate languages, which are
 obtained from the backward execution.
@@ -5246,9 +5246,9 @@ such as sortedness, reordering, etc.).
 
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
-\cite{pale97,Sagiv02,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
+\cite{jensen,pale,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
 \cite{bhrv06b,deg06,forester12,boxes13,lists-counters}, graphs
-\cite{sas07:chang_rival_necula,dudka13}, or graph grammars \cite{juggrnaut10}.
+\cite{sas07:chang_rival_necula,dudka13sas}, or graph grammars \cite{juggrnaut10}.
 Apart from the underlying formalisms, the approaches differ in their degree of
 automation, in the heap structures they can handle, and in their scalability.
 The shape analysis based on forest automata proposed in \cite{boxes13} that we
@@ -5263,12 +5263,12 @@ paper. Below, we characterize previous attempts on the problem and compare our
 approach with them. 
 
 The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
-analyzer \cite{Sagiv02}, which is based on \emph{3-valued predicate logic with
+analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
 transitive closure}. The refinement is, however, restricted to adding more
 pointer variables and/or data fields of allocated memory cells to be tracked
 only (together with combining the ana\-ly\-sis with classic predicate analysis on
 data values). The analysis assumes the other necessary heap predicates (i.e.,
-the so-called core and instrumentation relations in terms of \cite{Sagiv02}) to
+the so-called core and instrumentation relations in terms of \cite{pale}) to
 be fixed in advance and not refined. The work
 \cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
 further by learning more complex instrumentation relations using
@@ -5332,7 +5332,7 @@ refinement was used in \cite{bhrv06b} (and also in some related, less general
 approaches like \cite{bhmv05}). In that case, however, a single tree automaton
 was used to encode sets of memory configurations, which allowed standard
 abstraction refinement from abstract regular (tree) model checking
-\cite{artmc12} to be used. On the other hand, due to using a single automaton,
+\cite{artmc} to be used. On the other hand, due to using a single automaton,
 the approach did not scale well and had problems with some heap transformations.
 
 % Finally, the Predator analyzer \cite{php15} avoids spurious errors by running a
@@ -5352,7 +5352,7 @@ from an unbounded domain.
 In \cite{forester12,boxes13}, we conjectured that counterexample validation and
 abstraction refinement should be possible in the context of forest
 automata too. However, only now, do we show that this is indeed the case, but also that much
-more involved methods than those of \cite{artmc12} are needed.
+more involved methods than those of \cite{artmc} are needed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Forest Automata and Heaps}
@@ -6284,7 +6284,7 @@ Sec.~\ref{sec:bwd_run} and~Sec.~\ref{sec:abstraction}.
 %	\centering
 %	\includegraphics[width=\textwidth]{figs/artmc.png}
 %	\caption{
-%		Illustration (borrowed from \cite{artmc12}) of the principles of the forward and the backward run and
+%		Illustration (borrowed from \cite{artmc}) of the principles of the forward and the backward run and
 %		the detection of a spurious counterexample.
 %		}
 %	\label{fig:bwrun}
@@ -6973,8 +6973,8 @@ We omit most details of the way the operations are implementated on the level of
 %We mostly omit their detailed implementation on the level of manipulations with
 %rules and states of FAs. 
 %since it is not important for this paper; instead,
-%we refer the reader to~\cite{forester12,jiridiza} for details.
-We refer the reader to~\cite{forester12,jiridiza} for the details.
+%we refer the reader to~\cite{forester12,jiri:diza} for details.
+We refer the reader to~\cite{forester12,jiri:diza} for the details.
 %
 We note that when we talk about removing a~component or inserting a component
 in an FA, this also includes renaming references and updating
@@ -7796,7 +7796,7 @@ and every operation of connecting, cutting, and swapping of components.
 
 Our abstraction over FAs is based on automata abstraction
 from the framework of \emph{abstract regular tree model checking}
-(ARTMC)~\cite{artmc12}.
+(ARTMC)~\cite{artmc}.
 This framework comes with two abstractions for tree automata, 
 \emph{finite height abstraction} and \emph{predicate abstraction}.
 Both of them are based on merging states of a tree automaton that are equivalent
@@ -7961,7 +7961,7 @@ The interpolant is then used to refine the abstraction so that the spurious run 
 %It represents a set of configurations introduced by abstraction due to which an error is reached by a spurious forward run. The refinement is then used to exclude the spurious run. 
 
 %Specifically, 
-The guarantees shown to hold in \cite{artmc12} on the level of TAs are 
+The guarantees shown to hold in \cite{artmc} on the level of TAs are 
 the following.  
 Let $\ta$ and $\interp = (Q,q_0,\Delta)$ be two TAs and 
 let $\predset(\interp) = \{\langof{\interp,q}\mid q\in Q\}$ denote the set of languages of states of $\interp$.
@@ -7977,7 +7977,7 @@ intersecting~$\langof{\interp}$.
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-We can generalize the result of \cite{artmc12} to forest automata in the
+We can generalize the result of \cite{artmc} to forest automata in the
 following way,
 implying the progress guarantees of CEGAR described in Section~\ref{sec:CEXanalysis}.
 For a~forest automaton $\fa = \tuple{\tas,\valuation}$, let $\predset(\fa) =  \ourbigcup_{i=1}^n\predset({A_i})$.
@@ -8041,7 +8041,7 @@ $\predset({A_i})$ only where $A_i$ is the $i$-th component of $\interp$ and $\la
 %% $\semof{F_i} \cap \semof{I_i} = \emptyset$ implies that there exists some $0<i\leq n$ such that
 %% $\mathcal{L}(A_i) \cap \mathcal{L}(B_i) = \emptyset$. And adding $\predset_i = \{(Q_i,q,\Delta_i)
 %% \mid B_i=(Q_i,q_i^0,\Delta_i)\ \wedge\ q\in Q_i\}$  to any set of predicates $\predset'$ guarantee that
-%% $\mathcal{L}(\alpha^{TA}[\predset_i \cup \predset'](A_i)) \cap \mathcal{L}(B_n) = \emptyset$ (see \cite{artmc12} for
+%% $\mathcal{L}(\alpha^{TA}[\predset_i \cup \predset'](A_i)) \cap \mathcal{L}(B_n) = \emptyset$ (see \cite{artmc} for
 %% proof). Therefore the intersection of $\alpha[\predset_i \cup \predset'](F_i)$ with $I_i$ will stay
 %% empty for any $\predset'$, becaurse there is empty intersection of  their $i^{th}$ components.
 %% }
@@ -8165,7 +8165,7 @@ arise from some finite data abstraction, or they are also sometimes used to
 mark some selected nodes of the data structure when checking the way the data
 structure is changed by a given algorithm (e.g., one can check whether an
 arbitrarily chosen successive pair of nodes of a~list marked red and green is
-swapped when the list is reversed---see e.g.~\cite{artmc12}).
+swapped when the list is reversed---see e.g.~\cite{artmc}).
 
 %As the results show, some of our test cases do not need the abstraction to be refined.
 As the results show, some of our test cases do not need refinement.
@@ -8401,14 +8401,14 @@ would need a majore refactoring to reach a state where an easy maintability and 
 %Verification of pointer manipulating programs (shape analysis) is challenging.  
 %State spaces of pointer programs are infinite and complex: the entire dynamic memory is a program state. It is usually understood as a graph whose nodes are memory locations and edges are pointers. 
 %
-The recent 20 years have seen a rise of many approaches to verification of pointer programs, aka shape analysis, up to their industrial deployment (e.g. the technique of \cite{distefano_biabduction_2011} in Facebook's Infer). 
+The recent 20 years have seen a rise of many approaches to verification of pointer programs, aka shape analysis, up to their industrial deployment (e.g. the technique of \cite{abduction11} in Facebook's Infer). 
 %
 The existing approaches are mainly distinguished by the formalism used to describe sets of memory configurations (shape graphs), which are essentially graphs with nodes being memory locations and edges being pointers.
 %
-The dominant position, previously held by frameworks such as \cite{pale,tvla},
+The dominant position, previously held by frameworks such as \cite{pale,pale01},
 is currently occupied by more automated and scalable approaches based on separation
-logic (SL)~\cite{Reynolds:SepLogic:02,berdine07cav,rival07} such as symbolic memory
-graphs~\cite{dudka13sas}, on forest automata~\cite{habermehl_forest_2012}, and on graph
+logic (SL)~\cite{Reynolds:SepLogic:02,InvaderCAV07,sas07:chang_rival_necula} such as symbolic memory
+graphs~\cite{dudka13sas}, on forest automata~\cite{forester12}, and on graph
 grammars~\cite{Juggrnaut2015}.
 These approaches clearly identified the importance of local reasoning and modularity in reasoning about memory configurations as the key to scalability.
 
@@ -8428,7 +8428,7 @@ None of the existing formalisms for describing shape graphs have all the followi
 \emph{Effectiveness}: 
 %\mh{Wouldn't be Efficiency better word?}%
 %\lh{myslel jsem effectiveness jako rozhodnutelnost}%
- satisfiability and entailment should be efficiently decidable, as well as additional graph operations needed, e.g., in (higher-order) bi-abduction \cite{distefano_biabduction_2011,loc_shape_2014}.
+ satisfiability and entailment should be efficiently decidable, as well as additional graph operations needed, e.g., in (higher-order) bi-abduction \cite{abduction11,locle:secondorder}.
 \item
 \emph{Abstraction and generalization learning mechanisms}: the ability to learn abstractions of inductive invariants with controlled precision.
 %\end{enumerate}
@@ -8445,22 +8445,22 @@ The recent works \cite{Katelaan:seplog,pagel,Iosif:CSL,Iosif:LPAR} finally came 
 
 SL approaches so far lack ways to automatically learning shape invariants without a help of user-predefined patterns. 
 %
-The higher-order bi-abduction \cite{loc_shape_2014} is a notable exception: it is capable of learning extremely complex shape invariants such as B+ trees, skip-lists, or threaded trees. 
+The higher-order bi-abduction \cite{locle:secondorder} is a notable exception: it is capable of learning extremely complex shape invariants such as B+ trees, skip-lists, or threaded trees. 
 %
 It is, however, very sensitive to how the code is written (since it is, in a sense, transforming the recursive code to inductive shape predicates) and hence quite fragile, easily failing on seemingly easy examples such as natural implementations of a doubly-linked list reversal. 
-%Turning \cite{loc_shape_2014} into a more robust method would require a decidable formalism for reasoning about sets of graphs
+%Turning \cite{locle:secondorder} into a more robust method would require a decidable formalism for reasoning about sets of graphs
 %that would support standard as well as some special graph operations
 %together with abstraction/generalization methods capable of inferring inductive predicates.
 
-Outside separation logic, especially the approach based on Forest automata \cite{habermehl_forest_2011,habermehl_forest_2012,holik_boxes_2013,holik_counterexample_17} has been shown viable \cite{baier_forester_2015,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning, it is efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{baier_forester_2015} with counterexample guided refinement loop. The formalism however suffers from some deficiencies, such as that expressible classes shape graphs are limited and that it is not closed under union.
+Outside separation logic, especially the approach based on Forest automata \cite{forester11,forester12,holik_boxes_2013,vmcai17} has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning, it is efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{svcomp15-forester} with counterexample guided refinement loop. The formalism however suffers from some deficiencies, such as that expressible classes shape graphs are limited and that it is not closed under union.
 
 We discuss here our ongoing work on developing a new graph formalism in the spirit of Forest automata that would remedy their weaknesses.
 %
 We present main ideas on which such formalism can be built. 
-First, we explain how graphs can be encoded into trees and tree automata (as a variation on tree decomposition of graphs \cite{Courcelle} and also the formalism used in \cite{CADE24,IosifRogalewiczVojnar:deciding}).
+First, we explain how graphs can be encoded into trees and tree automata (as a variation on tree decomposition of graphs \cite{Courcelle} and also the formalism used in \cite{iosif_treewidth_2013,iosif_deciding_2014}).
 We then discuss basic ideas for an entailment procedure for the formalism.
 %
-We believe that this new formalism can eventually combine local reasoning of separation logic and forest automata, strong entailment procedures of \cite{Katelaan:seplog,pagel,Iosif:CSL,Iosif:LPAR}, efficiency of tree automata \cite{abdulla_when_2010,almeida_reduction_2016,abdulla_computing_2008,TACAS12}, and powerful abstraction schemes of regular model checking.
+We believe that this new formalism can eventually combine local reasoning of separation logic and forest automata, strong entailment procedures of \cite{Katelaan:seplog,pagel,Iosif:CSL,Iosif:LPAR}, efficiency of tree automata \cite{tacas10,almeida_reduction_2016,abdulla_computing_2008,libvata}, and powerful abstraction schemes of regular model checking.
 
 %Our approach to entailment checking will generalize that of \cite{}.
 %
@@ -8563,7 +8563,7 @@ We believe that this new formalism can eventually combine local reasoning of sep
 \end{center}
 \end{figure}
 
-We will first discuss encoding of graphs as variations on tree decompositions, similar to that used in \cite{CADE24} and also \cite{IosifRogalewiczVojnar:deciding}.
+We will first discuss encoding of graphs as variations on tree decompositions, similar to that used in \cite{iosif_treewidth_2013} and also \cite{IosifRogalewiczVojnar:deciding}.
 %The description should make it obvious that sets of such tree decompositions can be represented as finite tree automata.
 % Our encoding of graphs into trees is based on the its treedecomposition.
 
@@ -8660,7 +8660,7 @@ Intuitively, a node of a tree represents a node in the tree decomposition, and t
 %
 
 \section{Towards Entailment}
-The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{abdulla_when_2010,almeida_reduction_2016,abdulla_computing_2008,TACAS12}) over tree automata encodings of tree decompositions.
+The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{tacas2010,almeida_reduction_2016,abdulla_computing_2008,libvata}) over tree automata encodings of tree decompositions.
 The difficulty here is that a single graph has multiple decompositions and the tree automata may accept only some of them, hence simple language inclusion check may underapproximate the inclusion of sets of represented graphs (entailment).
 %
 We therefore propose means of saturating the tree automata languages with all possible tree decompositions of the represented graphs.
@@ -8877,7 +8877,7 @@ Since language inclusion of tree automata is EXPTIME-complete, Conjectures 1 and
 We have presented basic outline of a formalism for representing shape graphs based on tree automata. The ideas should lead to an entailment algorithm, and conjectures that, if true, would imply that the algorithm is relatively fast assuming fixed maximum tree-width of the graph representations.
 
 We plan to perfect these ideas and to prove Conjectures 1 and 2. The conjectures are somewhat optimistic, but not in a direct contradiction with the recent 2-EXPTIME-hardness result of \cite{Iosif:LPAR}. If the conjectures turn out to be false, we wish to search for (1) restrictions under which they are true, and/or (2) to prove termination of the described entailment algorithm regardless its complexity.
-Our long term plan is to develop a shape analysis framework based on this formalism and entailment check in the spirit of \cite{holik_boxes_2013} and also \cite{loc_shape_2014}.
+Our long term plan is to develop a shape analysis framework based on this formalism and entailment check in the spirit of \cite{holik_boxes_2013} and also \cite{locle:secondorder}.
 
 %their saturation is polynomial with a fixed maximum tree-width. Since tree automata inclusion is EXPTIME-complete, the entailment would be fixed parameter EXPTIME-complete with the parameter being the maximum tree-width. 
 %
@@ -8987,7 +8987,7 @@ Our long term plan is to develop a shape analysis framework based on this formal
 %    \begin{description}
 %      \item \emph{What?} The original Courcelle theorem claiming that any graph property definable in MSO can be decided in linear time on graphs of bounded treewidth.
 %    \end{description}
-%  \item \cite{CADE24} CADE Adam, Jirka, Radu
+%  \item \cite{iosif_treewidth_2013} Adam, Jirka, Radu
 %    \begin{description}
 %      \item \emph{What?} They prove decidability of satisiability and entailment for separation logic capable to describle recursive data structures such as SLL, DLL, tree.
 %       The proof is done by reduction to MSO over bounded tree width. 
@@ -9017,9 +9017,9 @@ Our long term plan is to develop a shape analysis framework based on this formal
 %    \end{description}
 %      \item Separation logic overview
 %    \begin{description}
-%      \item \emph{What?} Seperation logic (SL) was introduced as an extension of Hoare logic for reasoning about mutable data structures by John Reynolds \cite{Reynolds:SL}.
+%      \item \emph{What?} Seperation logic (SL) was introduced as an extension of Hoare logic for reasoning about mutable data structures by John Reynolds \cite{Reynolds:SepLogic:02}.
 %        Later, it was shown that entailment of SL formulas is generally undecidable \cite{SL-overview} (an overview paper).
-%      \item However, there are decidable fragments of SLL. One of them is restriction of SL to reason only about SLL \cite{Ohearn-SLL} (Ohearn paper on SLL) which the paper proved to be
+%      \item However, there are decidable fragments of SLL. One of them is restriction of SL to reason only about SLL \cite{berdine} (Ohearn paper on SLL) which the paper proved to be
 %        in co-NP. This work later lead to a development of industry used tool \cite{infer} (infer).
 %      \item The previous work was further refined by \cite{CONCUR11} (Cook et al.) providing algorithm for entailment in PTIME which works by a reduction of entailment to graph
 %        homomorphism.
