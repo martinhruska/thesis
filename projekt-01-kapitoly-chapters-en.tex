@@ -4,6 +4,121 @@
 \chapter{Introduction}
 \label{intro}
 
+Software quality is one of crucial parts of software development cycles
+regardless of type of software.
+It is important in low level code often deployed in the highly critical
+applications where one bug can have exepnsive consequences or even threaten
+human lifes.
+As well as it is important in high level software where bugs can destroy
+user experience and ruin the whole process of development and selling a new software.
+
+There are different approaches at different parts of software development cycle
+with diffrent qualirt warranties.
+The most rigorous one is based on formal specification of requiraments and invariants
+of a program followed by deriving program from the specificaton or proving program
+against specification manully.
+This approach is present from the beggining of computer and although it provides
+the highest level of quarantee it does not became mainstream.
+The main negatives are the high demenads on developers and inability to scale
+to larger sofware.
+
+An relaxed version of the previous are automated formal methods such as
+model checking or abstract interpretation (generally called formal verification)
+which strive to verify
+a program according to given specification. They are easier to use,
+however problem with scaling and applicability to real world software. 
+
+Another apporoach comes from programming language communinity claiming
+that programming language itself should guide a programmer to writing
+software without bugs.
+This is mostly achieved by static strong type systems which makes possible to
+encode different program properties to a given type system.
+The advantage of this approach that it comes with an element part of development
+enviroment which is programming language and one does not need another technology.
+On the other hand, the programming lanuages of this kind have slow learning curve
+and only limited set of properties is encodable to type systems.
+
+The third approach to software quality is based are lightweight automated methods
+such as automated testing, or basic static analysis based on patter matching, or bounded model checking.
+Methods like this tries to hit sweet spot between mathematical rigorosity and plain bug hunting.
+They are easy to use, scale well but detect many false alarms which cause
+that they are ignored by developers completely.
+
+The last approach is based on traditional testing by humans. It may be developers
+writing unit tests or the whole tester teams implementing the complex tests.
+It is mostly known and time-tested approach, but it costs a lot of human resources and
+does not usually find all bugs.
+
+In practice, the different approaches are combined and complement each other.
+This thesis focuse on combination of automated formal methods (the first part of thesis)
+which we later relaxed to achieve scalability of lightweight automated methods.
+
+The main uniting theme of the thesis is application of finite automata.
+Finite automata are (syntactically) simple but powerful tool for regular
+languages. In more practical terms, they can represent regular structures
+such as actually alocated data structures on heap or many communication protocols.
+
+Since their introduction in 50s by Rabin and Scott CITE they have been used in
+various domains such as compilers, modelling od different kinds of systems,
+design of digital circuiots, natural language proceeding, speech recoqnition,
+and in verification or testing of software and hardware.
+Moreover, finite automata and their variations are widely studied in theoretical computer science either
+from perspective of decidable properties, or complexity of algorithms for their manipulation.
+
+Finite automata have good decidibility properties since the crucial properties (at least for formal vefication)
+such as language inclusion, equivalence, complement, or emptiness are decidable.
+On the other hand, their computational complexity is high
+TODO: defined.
+Fortunately, there are heuristics working good in practically interesting test cases.
+TODO: name some examples.
+
+In formal verification, there are used various variations of finite automata
+accepting different regular structures than finit words.
+For example, buchi automata accepts regular infinite words and are used
+for verification of properties described in linear temporal logic.
+Tree automata accept tree structures and are used in shape analysis
+for representing tree structures allocated on heap.
+
+In this thesis we focuse on application of automata to two different fields.
+The first one is shape analysis, i.e., static analysis of programs manipulating
+dynamic data structures.
+The properties mostly verified in these programs are absence of invalid memory
+dereference, invalid memory free, or memory leaks.
+Especially error prone progams to the mentiond bugs are written in programming
+languages with manual memory managment as C or C++.
+At the same time, these programs are used in critical softwares such as controlling
+systems in airplanes or cars, or in kernel of operating system.
+Any bugs in them may affect many users and lead to the expensive losses.
+Therefore they are an ideal fit for application of formal verification which
+brings strong quarantees about software correctness.
+
+Our approach to shape analysis is used forest automata and automata over graphs
+(both extensions of tree automata) with bouded tree width to represent
+actual state of heap\,---\,dynamic data structures actually allocated on heap.
+Once we are able to represent heap we employ different algorithms for given automata empowered by
+various heuristics to plug this representation to a verification procedure.
+Such a procedure usually travels over source code of an analysed program and perform
+operations in automata domain.
+Then we check whether the represented heap fulfil specification (usually checking
+absence of invalid dereference, invalid free or memory leaks).
+
+The second field of application of automata in this thesis is for automated software testing.
+Particulary, we focuse on testing of manifacturing system in enviroment of digital twin.
+We analyse behaviour of software used in a manufacturing system, build its models and then
+generate test of digital twin of manufacturing system, e.g., where a new version of software
+is deployed.
+The domain of manufacturing system contains critical controlling system where bugs may stop
+manufactory process or even damage a manufactoring machines.
+They are again very expensive and it is important to find as many of them as possible
+before they are deployed to a real manufacturing system.
+
+\section{Goals of the Thesis}
+What was develope for shape analysis
+
+\section{Overview of the Achieved Results}
+
+\section{Plan of the Thesis}
+
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
 This section provides a summary of the state-of-the-art methods for shape analysis.
@@ -9210,6 +9325,35 @@ hence, no probabilistic transitions are created in derived automaton.
 Finally, we can mention approaches of~\cite{prospex,icpn08,wcre09} which are
 research prototypes only and possible not mature enough for use case in
 real-world distributed systems.
+
+Beside modelling communication we need also to model and generate new messages.
+In our use case, the messages are in JSON and XML format.
+There are several tools which can generate testing data in the formats.
+One of them is \emph{DTM Data Generator for JSON} \cite{ref_dtm} which can
+generate testing JSON data having structure defined manually by user
+or derived from an example input document.
+It supports deriving relations in JSON document and contains domain
+specific built-in data generator (e.g., address, phones, or URLs).
+Moreover it can also combine more structures to new test cases.
+However, the software is proprietary, it is not clear how other
+formats than XML would be supported and it does not provide
+strong abstraction over the input data which would allow
+extrapolation for generating testing data.
+Another example of tool for generating input data in JSON is \emph{JSON Schema TestData Generator} \cite{ref_stg}.
+The tool is open source but quite simple.
+It generates test data based on a given JSON scheme and does not provide
+any functionality for deriving relations between data in JSON document
+or ability to learn and abstract from a given set of JSON documents.
+
+For generating XML, there two class of approaches.
+The first one is based on generating XML according to a given XPath query
+(so called category-partition based) \cite{xpath1, xpath2}.
+The advantage is ability to change specification easily and so generated data.
+However, it is not suitable for our purposes since we want learn syntactic structure
+of logged messages, not to write their specification manually.
+The second one is based on generating XML documents based on a given XML schema \cite{xmlscheme} instance
+which is more close to our needs.
+But it does not solve generalization of the same class of message to one generic syntactic structure. 
 
 \section{Modelling Messages} \label{sec:messages} 
 
