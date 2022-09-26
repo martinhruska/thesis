@@ -113,11 +113,122 @@ They are again very expensive and it is important to find as many of them as pos
 before they are deployed to a real manufacturing system.
 
 \section{Goals of the Thesis}
-What was develope for shape analysis
+The first goal of this thesis is to improve the current state of the art of shape analysis.
+The first one is principal conceptual improvement and development of the new algorithms
+which will enable analysis of wider spectrum of computer programs.
+That means improving precision of the current methods (particulary of shape analysis based on forest automatama)
+and also a developoment of new formalism which will be able to represent
+more general classes of data structures.
+We aim to introduce a formalism which will be based on Courcelle theorem \cite{Courcelle}
+will be able to represent graph with bound tree width as its language.
+
+The second part of the first goal is systematical devolopment of a tool for shape analysis.
+We choose Forester \cite{svcompweb} which implements shape analysis for forest automata.
+Our goal is to make Forester able to compete on international field although we are
+aware of fact that due lack of human power we cannot enhace tool from research prototype
+to something applicable to real world software.
+
+The second goal of thesis is to apply automata to field of testing, particulary
+to testing of manufacturing execution systems.
+These systems are used to control operations in manufactories therefore it is
+important to test them properly before deployment to real enviroment.
+One of promising approaches to their testing is based on digital twin where
+the systems are run in enviroment of a digital copy of manufactury.
+We want to automatically create tests suites simulating behaviour of an original
+manufactory and extrapolate them to create new tests.
 
 \section{Overview of the Achieved Results}
+\subparagraph{Shape anaylysis}
+The first result is an extension of forest automata based shape analysis by
+spurious counterexample detection and predicate abstraction refinement published in \cite{vmcai17}.
+An abstraction is generally used in formal verification to overapproximate
+represented state space of a program and so enabeling representation of infinite
+state spaces.
+On the other hand, a violation of specification can be detected in the overapproximated
+part of state space which is not in a program under verification.
+We call such fake violations of specification spurious counterexamples.
+Forest automata based shape analysis used a abstraction overapproximating
+state of heap.
+However it did not contain any algorithm to check whether a found counterxample
+to given specification is real or spurious.
+We develope a detection of spurious counterexamples based on so called backward run.
+It will be described in more technical way in the rest of thesis but intuitivelly it
+reverts all actions over forest automata done forward run, i.e., a path to counterexample.
+When forest automata representing heap in a corresponding state of forward and
+backward run have an empty intersection, it means that a found counterexample is spurious.
+
+Once we are able to detect spurious counterexamples we need an abstraction which is refinable. 
+In other words, we want to make abstraction more precise so when we restart analysis
+we will no reach the same counterexample again.
+Therefore we developed a version of predicate abstraction for forest automata.
+We are able to derive new predicates from a spurious counterexample which
+guarantee that after a restart of verification methods we exclude it
+from represented state space.
+
+Another part of this results is a participation of the tool Forester
+implementing forest automata based shape analysis
+in software verification competition in edition for years 2015, 2016, 2017, and 2018.
+The participations was accompanied with publicatons \cite{svcomp16-forester,holik_run_2016,holik_forester_2017}
+describing crucial improvements for the given year.
+The improvements corresponds to the progress done in forest automata described above.
+Although Forester didn't win any medal in any major category,
+we managed to support non trivial subset of C language needed for a reasonable
+participation in competition and made tool mature enough to be competetive with
+other tools, often devoleped by large teams.
+Forester stayed at state of prototype and a lot of engineering work would be needed to make
+it a mature tool, but we were able to show that a shape analysis based on automata is
+can compete with other approaches and that it is a meaningful path of research.
+
+
+The second results in shape analysis is introduction of automata over graphs
+with bounded tree width which was published in \cite{netys21}.
+The automata are directly influenced by Courcelle's theorem \cite{courcell_graph_2012}
+stating that any graph property definable in monadic second-ordred logic can be decided
+in a linear time on graphs with bounded tree width.
+We sketch automata using principles from this theorem and together with complexity
+of algorithm for entailment over these automata which is singly exponential.
+Automata over graphs with bounded tree width would be able to represent
+more general class of graphs than forest automata but still having feasible computational
+properties which would make them a suitable domain for shape analysis.
+
+\subparagraph{Automated testing}
+The result of this part of thesis is a system for orchestrating a digital twin to
+test a manufacturing execution system (MES).
+Our approach is based on learning a model of communication protocol used in a real manufactory between
+MES, machines, enterprise resource planning (ERP) system.
+We also learn models of messages communicated in a monitored system.
+Once we learn model of communication and models of sent messages we are able
+to generate testing scenario for a digital twin.
+A digital twin contains emulated parts of manufactory such machines, ERP, or human workers and
+natively ran MES.
+Such setup can be used e.g., for testing a new version of MES, when the models were derived
+from logs from manufactory where an older version of MES was deployed.
+
+Moreover, we are able to make an abstraction over learnt models and extrapolate new test
+cases which can be used for more robust testing of MES in digital twin than just a reproduction
+of the previously seen runs.
+
+The results of this part of thesis is the tool Tyrant \cite{ref_tyrant} for creating tests (i.e., digital twin scenarios) for
+industrial software applications.
+Our paper describing the method was accepted to proceeding of the conference EUROCAST'22 and will be published
+in Lecture Notest on Computer Science during the next year.
 
 \section{Plan of the Thesis}
+
+The plan of the thesis is following.
+In Chapter \ref{ch:state-of-the-art} a state of the art in shape analysis is described.
+Then in Chapter \ref{ch:asv} we provide with a description of forest automata based
+shape analysis.
+In Chapter \ref{ch:vmcai}, a more detailed description of backward run and predicate abstraction
+over forest automata is given.
+Chapter \ref{ch:svcomp} summarizes Forester participation in the various editions
+of software verification competition SV-COMP.
+Chapter \ref{ch:netys} introduces automata over graphs with bounded tree width together
+with their crucial properties.
+
+Finally, Chapter \ref{ch:eurocast} describes our methods for testing MES in enviroment
+of digital twin.
+
 
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
@@ -515,7 +626,7 @@ of selector names.
 \part{Automata in Shape Analysis}
 
 \chapter{Forester ASV}
-
+\label{ch:asv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:label}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5247,6 +5358,7 @@ the approach did not scale well and had problems with some heap transformations.
 % an advanced algorithms for learning boxes \cite{holik:automated}.
 
 \chapter{Forester VMCAI}
+\label{ch:vmcai}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:label}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8383,7 +8495,7 @@ individual ones as the symbolic representation of sets of heaps.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SV-COMP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Developing Shape Analyser for Software Verification Competition}
-\label{chap:svcomp}
+\label{ch:svcomp}
 The following chapter describes development of the Forester tool \cite{foresterweb}
 for Software verification competition \cite{svcompweb} (SV-COMP) which is anually held within TACAS conference.
 The tools competing in SV-COMP varies from sound abstract interpreters or formal verifiers over static analysers
@@ -8504,7 +8616,7 @@ We lack manpower to add these features to Forester which was still prototype and
 would need a majore refactoring to reach a state where an easy maintability and extensibility would be possible.
 
 \chapter{NETYS}
-
+\label{ch:netys}
 \section{Introduction}
 
 %Pointers and low-level memory manipulation are commonly used programming
@@ -9145,6 +9257,7 @@ Our long term plan is to develop a shape analysis framework based on this formal
 \part{Automata in software testing}
 
 \chapter{Orchestrating Digital Twins for Distributed Manufacturing Execution Systems}
+\label{ch:eurocast}
 \section{Introduction}
 
 One of the main challenges of the Industry 4.0 is to develop secure and
