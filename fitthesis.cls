@@ -263,6 +263,7 @@
 % \ifEqString{#1}{DR}{Školiteľ}{\@supervisor@SK}%
  \ifEqString{#1}{DR}{Školitel}{\@supervisor@SK}%
  \ifEqString{#1}{DR}{Supervisor}{\@supervisor@EN}%
+ \ifEqString{#1}{DR}{Cosupervisor}{\@cosupervisor@EN}%
  \ifEqString{#1}{DA}{Teze disertační práce -- autoreferát}{\@projecttype@CS}%
 % \ifEqString{#1}{DA}{Tézy dizertačnej práce -- autoreferát}{\@projecttype@SK}%
  \ifEqString{#1}{DA}{Teze disertační práce -- autoreferát}{\@projecttype@SK}%
@@ -271,6 +272,7 @@
 % \ifEqString{#1}{DA}{Školiteľ}{\@supervisor@SK}%
  \ifEqString{#1}{DA}{Školitel}{\@supervisor@SK}%
  \ifEqString{#1}{DA}{Supervisor}{\@supervisor@EN}%
+ \ifEqString{#1}{DA}{Cosupervisor}{\@cosupervisor@EN}%
  \ifEqString{#1}{DT}{Pojednání k tématu disertační práce}{\@projecttype@CS}%
 % \ifEqString{#1}{DT}{Teze disertační práce}{\@projecttype@CS}%
 % \ifEqString{#1}{DT}{Pojednanie k téme dizertačnej práce}{\@projecttype@SK}%
@@ -280,6 +282,7 @@
 % \ifEqString{#1}{DT}{Školiteľ}{\@supervisor@SK}%
  \ifEqString{#1}{DT}{Školitel}{\@supervisor@SK}%
  \ifEqString{#1}{DT}{Supervisor}{\@supervisor@EN}%
+ \ifEqString{#1}{DT}{Cosupervisor}{\@cosupervisor@EN}%
  \ifnasel
  \else
    \typeout{Spatny typ projektu! Moznosti: BP, SP, DP, DR, DT, DA}\set@project{BP}
@@ -374,6 +377,8 @@ Management}{\@fit@EN}%
 %Jmeno, prijmeni, tituly vedouciho / name surname and the titles of the supervisor
 \def\get@supervisor{\ifx\undefined\@supervisor@tp\else%
 \@supervisor@tp~\fi\MakeUppercase{\@supervisor}\ifx\undefined\@supervisor@ta\else,~\@supervisor@ta\fi}
+\def\get@cosupervisor{\ifx\undefined\@cosupervisor@tp\else%
+\@cosupervisor@tp~\fi\MakeUppercase{\@cosupervisor}\ifx\undefined\@cosupervisor@ta\else,~\@cosupervisor@ta\fi}
 
 %-----------------------------------------------------------------------------
 % Projectinfo - parametrizace sablony / template parameters
@@ -399,6 +404,10 @@ Management}{\@fit@EN}%
 \define@key{projinfo}{supervisor.surname}{\def\@supervisor@s{#1}}
 \define@key{projinfo}{supervisor.title.a}{\def\@supervisor@ta{#1}}
 \define@key{projinfo}{supervisor.title.p}{\def\@supervisor@tp{#1}}
+\define@key{projinfo}{cosupervisor.name}{\def\@cosupervisor@n{#1}}
+\define@key{projinfo}{cosupervisor.surname}{\def\@cosupervisor@s{#1}}
+\define@key{projinfo}{cosupervisor.title.a}{\def\@cosupervisor@ta{#1}}
+\define@key{projinfo}{cosupervisor.title.p}{\def\@cosupervisor@tp{#1}}
 \define@key{projinfo}{keywords.cs}{\def\@tkeywords@CS{#1}}
 \define@key{projinfo}{keywords.en}{\def\@tkeywords@EN{#1}}
 \define@key{projinfo}{abstract.cs}{\def\@tabstract@CS{#1}}
@@ -427,6 +436,7 @@ Management}{\@fit@EN}%
 
 \def\@author{\@author@n\ \@author@s}
 \def\@supervisor{\@supervisor@n\ \@supervisor@s}
+\def\@cosupervisor{\@cosupervisor@n\ \@cosupervisor@s}
 
 %Prohlaseni / Declaration
 \newcommand{\declaration}[1]{\def\@declaration{#1}}
@@ -1008,6 +1018,15 @@ Management}{\@fit@EN}%
   }{
     \mkuctxtt{10}{\ifenslovak\@supervisor@SK\else\ifczech\@supervisor@EN\else\@supervisor@CS\fi\fi}
   }
+  \vspace{5mm}
+
+ \mktxtt{14}{\MakeUppercase{\ifslovak\@supervisor@SK\else\ifczech\@supervisor@CS\else\@cosupervisor@EN\fi\fi} \hfill \get@cosupervisor}
+  \iftoggle{slovak_used}{
+    \mkuctxtt{10}{\@cosupervisor@EN}
+  }{
+    \mkuctxtt{10}{\ifenslovak\@supervisor@SK\else\ifczech\@cosupervisor@EN\else\@supervisor@CS\fi\fi}
+  }
+
 
   \vspace{10mm}
 
