@@ -9827,7 +9827,89 @@ environment.
 Hence, extending our solution to a more broader class of manufacturing
 environments is our future work.
 
-\chapter{Conclusion}
-\label{zaver}
+\chapter{Conclusion and Further Directions}
+\label{ch:concl}
+The main achieved result in shape analysis based on automata is
+application of counterexample-guided refinement (CEGAR) with backward run to shape
+analysis based forest automata.
+Backward run enabled to distinguish between real counterexamples to a given
+specification and counterexamples caused by abstraction, so called spurious
+counterexamples.
+It makes reporting of found bugs program more reliable and avoid unnecessary
+false alarms.
+The ability to detect spurious counterexamples is the first building block
+for CEGAR.
+The second we developed is application of predicate abstraction to domain of forest automata.
+Althought the originally used height abstraction can be applied too, it does not guarantee
+exclusion of spurious counterexample after a refinement and therefore does not guarantee
+termination of verification procedure.
+Then once a spurious counterexample is detected we find a point a program where abstraction
+introducing it was used and derive the new predicates for abstraction which prevent
+reaching spurious counterexample again.
+This enables verification of new class of data structures where set of predicates
+is needed to describe their invariants.
+The concrete examples were described in Chapter \ref{ch:vmcai}.
 
+The second result in shape analysis is repeated participation of the Forester
+tool in software verification competition (SV-COMP).
+Although we didn't win a medail in any major category we shown that our approach
+is able to compete and often superior to the other tools.
+Forester where able to soundly verify as the only tool in competition test cases
+such as skip list of 2nd and 3rd level, various trees (which Forester managed to
+verify in the original works \cite{boxes13} but not in competition settings),
+and also data structures where invariants described by predicates were needed to derive
+(which was achieved due to the results mentioned in the previous paragraph).
+
+The final result in shape analysis is introduction of automata over graphs
+with bounded tree width which are inspired by Courcelle's theorem \cite{courcell_graph_2012}.
+These automata have expressivity higher than forest automata while keeping
+feasable algorithmic properties.
+Complexity of entailment between automata is singly exponential which we believe
+is suitable for application in practical tests cases once some heuristics will be introduced.
+
+The second field of focus of the thesis was automated testing.
+We developed automated testing procedure for manufacturing execution systems (MES)
+in enviroment of digital twins.
+We learn a model communication protocol and messages sent between software components
+of a manufactory where MES is deployed.
+We can automatically create test scenarios for digital twins where manufactory is emulated
+and MES deployed natively.
+In this way, we can test e.g., a new version of MES before it is deployed to a real manufactory.
+The results of this part of the thesis are mainly applied.
+We implemented the procedure in the tool Tyrant \cite{ref_tyrant} which was later applied
+in Unis company.
+
+\section{Future directions}
+The main potential in field of automata based shape analysis is in further development
+of graph automata over graphs with bounded tree width.
+We only sketched basic concepts and it is needed to design and proved the algorithm
+for entailment betwee automata.
+Then one can think about using the formalism in a verification procedure such as
+regular model checking or abstract interpretation.
+Finally, it is needed to implement the concepts and evaluate it e.g., on SV-COMP
+benchmark.
+Eventually, design of heuristic for algorithm manipulating these automata may be
+an interesting research direction to make the verification procedure work for
+difficult test cases.
+
+In the field of automated testing, one may consider more domain specific abstractions
+over model of communcation to enable generating usefull test automatically.
+There are often domain dependent particularities such as order of message sent
+in system during initialization or a special restriction of parameters of some
+messages.
+In current settings, we do not take that in consideration which may lead to
+generating scenarios for digital twin which fail early not due to a found bug
+in system under testing but because of e.g, wrong initialization of MES.\
+
+\section{Publications Related to this Thesis}
 %=========================================================================
+The work described in this thesis was published in the following papers.
+The backward run and counterexample-guided refinement was published in \cite{vmcai17}.
+A paper describing the whole verification procedure based on forest automata
+was accepted for publication in book about state-of-the-art verification tool which
+should be published in year 2023.
+The papers related to Forester participation in SV-COMP are \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}.
+Graphs over automata with bounded tree width was sketeched in NETYS'21.
+
+The work on automated testing is accepted for publication in the proceedings of the conference EUROCAST 2022
+which should be published during year 2023.
