@@ -142,16 +142,34 @@
   keywords.en={static analysis, formal verification, shape analysis, testing, automata}, % klíčová slova v anglickém jazyce / keywords in english
   %keywords.en={Here, individual keywords separated by commas will be written in English.},
   % Abstrakt / Abstract
-  abstract.cs={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v českém (slovenském) jazyce.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
-  abstract.en={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickém jazyce / abstract in english
+  abstract.cs={Tato práce se zabývá aplikací teorie automatů v zajištění kvality software.
+V první části se zabývá aplikací automatů v tzv. analýze tvaru, což je formální verifikace programů pracujících s dynamickými datovými strukturami.
+Konkrétně představuje rozšíření analýzy tvaru založené na lesních automatech o zpětný běh a zjemnění abstrakce založené protipříkladech.
+Dále je v práci představena nová doména pro analýzu tvaru a to automaty nad grafy s omezenou stromovou šířkou. Ty jsou obecnější
+než lesní automaty, ale zároveň vypočetní složitost algoritmů s nimi pracujících je použitelná.
+
+V druhé části se zabýváme automatizovaným testováním výrobních informačních systémů v prostředí digitálního dvojčete.
+Představujeme metodu, která dokáže orchestrovat digitální dvojče tak, aby reprodukovalo reálné prostředí, v němž bývají zmíněné systémy nasazeny.
+To poskytuje bezpečné prostředí testování výrobních informačních systémů.
+Navíc jsme metodu rozšířili o možnost tvorby nových testovacích scénářu nad rámec pouhé reprodukce již pozorovaného chování reálného prostředí,
+a tak zvýšili kvalitu testovacího procesu.
+Tato metoda je založena na použití teorie automatů, konkrétně na použití abstrakce nad konečnými automaty.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
+  abstract.en={This thesis focuses on application of automata theory to software qaulity. In the first part, we focuse on shape analysis which is formal verification
+of programs manipulating dynamic data structures. Particulary, we develope backward run and counterexample-guided refinement for forest automata based shape analysis.
+We also introduce a new approach based on automata over graphs with bounded tree width which should be more general than forest automata but still have feasable computation
+properties.
+
+In the second part, we introduce a method for automated testing of manufacturing execution systems (MES) in digital twin.
+We are able to orchestrate a digital twin to reproduce behaviour of a real world settings in which MES is deployed and so provide a safe enviroment for testing.
+Moreover, we can generate the new test cases by applying automata and abstraction over them.}, % abstrakt v anglickém jazyce / abstract in english
   %abstract.en={An abstract of the work in English will be written in this paragraph.},
   % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
-  declaration={Prohlašuji, že jsem tuto disertační práci vypracoval samostatně pod vedením pana X...
-Další informace mi poskytli...
-Uvedl jsem všechny literární prameny, publikace a další zdroje, ze kterých jsem čerpal.},
-  %declaration={I hereby declare that this Bachelor's thesis was prepared as an original work by the author under the supervision of Mr. X
-% The supplementary information was provided by Mr. Y
-% I have listed all the literary sources, publications and other sources, which were used during the preparation of this thesis.},
+  %declaration={Prohlašuji, že jsem tuto disertační práci vypracoval samostatně pod vedením pana X...
+%Další informace mi poskytli...
+%Uvedl jsem všechny literární prameny, publikace a další zdroje, ze kterých jsem čerpal.},
+  declaration={I hereby declare that this PhD thesis was prepared as an original work by the author under the supervision of prof. Ing. Tomáš Vojnar, Ph.D., and
+doc. Mgr. Lukáš Holík, Ph.D.
+ I have listed all the literary sources, publications and other sources, which were used during the preparation of this thesis.},
   % Poděkování (nepovinné, nejlépe v jazyce práce) / Acknowledgement (optional, ideally in the language of the thesis)
   acknowledgment={V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
 (externí zadavatel, konzultant apod.).},
