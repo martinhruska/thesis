@@ -12,6 +12,7 @@ human lives.
 As well as it is important in high level software where bugs can destroy
 user experience and ruin the whole process of development and selling a new software.
 
+\subparagraph{Approaches to Software Quality}
 There are different approaches at different parts of software development cycle
 with different quality warranties.
 The most rigorous one is based on formal specification of requirements and invariants
@@ -22,7 +23,7 @@ the highest level of guarantee it does not became mainstream.
 The main negatives are the high demands on developers and inability to scale
 to larger software.
 
-An relaxed version of the previous are automated formal methods such as
+A relaxed version of the previous are automated formal methods such as
 model checking or abstract interpretation (generally called formal verification)
 which strive to verify
 a program according to given specification. They are easier to use,
@@ -53,6 +54,7 @@ In practice, the different approaches are combined and complement each other.
 This thesis focuses on combination of automated formal methods (the first part of thesis)
 which we later relaxed to achieve scalability of lightweight automated methods.
 
+\subparagraph{Finite Automata}
 The main uniting theme of the thesis is application of finite automata.
 Finite automata are (syntactically) simple but powerful tool for regular
 languages. In more practical terms, they can represent regular structures
@@ -9828,6 +9830,7 @@ environments is our future work.
 
 \chapter{Conclusion and Further Directions}
 \label{ch:concl}
+\subparagraph{Shape Analysis}
 The main achieved result in shape analysis based on automata is
 application of counterexample-guided refinement (CEGAR) with backward run to shape
 analysis based forest automata.
@@ -9838,13 +9841,13 @@ It makes reporting of found bugs program more reliable and avoid unnecessary
 false alarms.
 The ability to detect spurious counterexamples is the first building block
 for CEGAR.
-The second we developed is application of predicate abstraction to domain of forest automata.
+The second one is an application of predicate abstraction to domain of forest automata.
 Although the originally used height abstraction can be applied too, it does not guarantee
 exclusion of spurious counterexample after a refinement and therefore does not guarantee
 termination of verification procedure.
 Then once a spurious counterexample is detected we find a point a program where abstraction
-introducing it was used and derive the new predicates for abstraction which prevent
-reaching spurious counterexample again.
+introducing it was used and derive the new predicates preventing
+reaching the spurious counterexample again.
 This enables verification of new class of data structures where set of predicates
 is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:vmcai}.
@@ -9866,6 +9869,40 @@ feasible algorithmic properties.
 Complexity of entailment between automata is singly exponential which we believe
 is suitable for application in practical tests cases once some heuristics will be introduced.
 
+During work on this thesis we participated also on two other projects related to the shape
+analysis which were not included in the thesis.
+The first is development of a new kind of shape analysis based on SMT solving \cite{fmcad18, svcomp-2ls}.
+The possible shapes of data structures allocated on heap are described by logic formulae over bit
+vectors.
+Basically, it computes points-to relation between pointers used in program and abstract memory
+objects used by analyses to represent heap.
+The relation is then computed by a SMT solver.
+This approach is more straightforward than the automata based ones and enables combination of
+shape analysis with other domains such as termination other analysis, or domains for integer variables.
+On the other, it lacks generality of automata based approaches and currently supports
+only analysis of linked list data structures.
+
+The second project was connecting Symbiotic, a static analyser based on symbolic execution, with
+Predator, a sucessfull shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
+Predator won multiple editions of SV-COMP in memory safety related categories and was
+therefore a good candidate for providing information about memory safety invariants
+for each line of an analysed program.
+The information was further used by Symbiotic which realies heavily on slicing of program
+over which a symbolic execution is run.
+Particulary, Symbiotic does not need to analyse lines of code which were detoned as memory
+safe by Predator executed in overapproaximating (sound) mode.
+If Predator find a bug in program, Symbiotic takes bug report and combines it with the
+results of its static pointer analysis to filter out some spurious counterexamples.
+The viability of the approach was shown by the second place of Symbiotic and Predator
+combination in the memory safety category of SV-COMP 2018.
+However, the first place was taken by Predator Hunting Party,
+a tool suite of different versions of Predator (one in sound mode, several instances in
+bug hunting mode) running on GCC frontend which was a more matured than LLVM fronted
+used in integration with Symbiotic.
+In the next editions of competition, the developers of both tools managed to make LLVM fronted
+for Predator as matured as GCC one which resulted in win of Symbiotic in the Memory Safety category.
+
+\subparagraph{Automated Testing}
 The second field of focus of the thesis was automated testing.
 We developed automated testing procedure for manufacturing execution systems (MES)
 in environment of digital twins.
