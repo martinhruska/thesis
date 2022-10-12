@@ -9830,7 +9830,6 @@ environments is our future work.
 
 \chapter{Conclusion and Further Directions}
 \label{ch:concl}
-\subparagraph{Shape Analysis}
 The main achieved result in shape analysis based on automata is
 application of counterexample-guided refinement (CEGAR) with backward run to shape
 analysis based forest automata.
@@ -9869,40 +9868,6 @@ feasible algorithmic properties.
 Complexity of entailment between automata is singly exponential which we believe
 is suitable for application in practical tests cases once some heuristics will be introduced.
 
-During work on this thesis we participated also on two other projects related to the shape
-analysis which were not included in the thesis.
-The first is development of a new kind of shape analysis based on SMT solving \cite{fmcad18, svcomp-2ls}.
-The possible shapes of data structures allocated on heap are described by logic formulae over bit
-vectors.
-Basically, it computes points-to relation between pointers used in program and abstract memory
-objects used by analyses to represent heap.
-The relation is then computed by a SMT solver.
-This approach is more straightforward than the automata based ones and enables combination of
-shape analysis with other domains such as termination other analysis, or domains for integer variables.
-On the other, it lacks generality of automata based approaches and currently supports
-only analysis of linked list data structures.
-
-The second project was connecting Symbiotic, a static analyser based on symbolic execution, with
-Predator, a sucessfull shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
-Predator won multiple editions of SV-COMP in memory safety related categories and was
-therefore a good candidate for providing information about memory safety invariants
-for each line of an analysed program.
-The information was further used by Symbiotic which realies heavily on slicing of program
-over which a symbolic execution is run.
-Particulary, Symbiotic does not need to analyse lines of code which were detoned as memory
-safe by Predator executed in overapproaximating (sound) mode.
-If Predator find a bug in program, Symbiotic takes bug report and combines it with the
-results of its static pointer analysis to filter out some spurious counterexamples.
-The viability of the approach was shown by the second place of Symbiotic and Predator
-combination in the memory safety category of SV-COMP 2018.
-However, the first place was taken by Predator Hunting Party,
-a tool suite of different versions of Predator (one in sound mode, several instances in
-bug hunting mode) running on GCC frontend which was a more matured than LLVM fronted
-used in integration with Symbiotic.
-In the next editions of competition, the developers of both tools managed to make LLVM fronted
-for Predator as matured as GCC one which resulted in win of Symbiotic in the Memory Safety category.
-
-\subparagraph{Automated Testing}
 The second field of focus of the thesis was automated testing.
 We developed automated testing procedure for manufacturing execution systems (MES)
 in environment of digital twins.
@@ -9946,6 +9911,39 @@ was accepted for publication in book about state-of-the-art verification tool wh
 should be published in year 2023.
 The papers related to Forester participation in SV-COMP are \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}.
 Graphs over automata with bounded tree width was sketched in NETYS'21.
+
+During work on this thesis we participated also on two other results related to the shape
+analysis which were not included in the thesis.
+The first is development of a new kind of shape analysis based on SMT solving \cite{fmcad18, svcomp-2ls}.
+The possible shapes of data structures allocated on heap are described by logic formulae over bit
+vectors.
+Basically, it computes points-to relation between pointers used in program and abstract memory
+objects used by analyses to represent heap.
+The relation is then computed by a SMT solver.
+This approach is more straightforward than the automata based ones and enables combination of
+shape analysis with other domains such as termination other analysis, or domains for integer variables.
+On the other, it lacks generality of automata based approaches and currently supports
+only analysis of linked list data structures.
+
+The second project was connecting Symbiotic, a static analyser based on symbolic execution, with
+Predator, a sucessfull shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
+Predator won multiple editions of SV-COMP in memory safety related categories and was
+therefore a good candidate for providing information about memory safety invariants
+for each line of an analysed program.
+The information was further used by Symbiotic which realies heavily on slicing of program
+over which a symbolic execution is run.
+Particulary, Symbiotic does not need to analyse lines of code which were detoned as memory
+safe by Predator executed in overapproaximating (sound) mode.
+If Predator find a bug in program, Symbiotic takes bug report and combines it with the
+results of its static pointer analysis to filter out some spurious counterexamples.
+The viability of the approach was shown by the second place of Symbiotic and Predator
+combination in the memory safety category of SV-COMP 2018.
+However, the first place was taken by Predator Hunting Party,
+a tool suite of different versions of Predator (one in sound mode, several instances in
+bug hunting mode) running on GCC frontend which was a more matured than LLVM fronted
+used in integration with Symbiotic.
+In the next editions of competition, the developers of both tools managed to make LLVM fronted
+for Predator as matured as GCC one which resulted in win of Symbiotic in the Memory Safety category.
 
 The work on automated testing is accepted for publication in the proceedings of the conference EUROCAST 2022
 which should be published during year 2023.
