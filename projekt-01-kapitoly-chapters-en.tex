@@ -9893,6 +9893,34 @@ Eventually, design of heuristic for algorithm manipulating these automata may be
 an interesting research direction to make the verification procedure work for
 difficult test cases.
 
+We would also like to apply collected experience in work in with automata
+in a development of a new automata library.
+The library should provide an efficient, yet user friendly methods for
+manipulation with finite automata.
+The crucial algorithms for formal verification and automated reasoning
+such as emptiness check or language inclusion checking will be implemented
+with various heuristics to make them computationally feasible.
+We want to keep library user friendly.
+The interface should be simple enough to be usable by anyone with basic
+programming skills and knowledge of automata theory.
+The source code should hide complicated heuristics and optimizations
+and keep basic data structures simple and so easily extensible.
+The implemntation should be in efficient language such as C++ and provide
+an interface to a high level programming language.
+
+So far, we implemented the first prototype of library.
+It is in C++ and contains efficient representation of finite automata
+together with the algorithms over them such as union, intersection,
+complementation, determinisation, simulation based reduction, or language inclusion checking.
+An interface for Python was implemented over the efficient implementation in C++.
+We design a text based format for description of various version of finite automata.
+The format supporta finite automata and alternating finite automata with explicit, symbolic,
+or bitvector alphabet as well as transducers with mentioned alphabets.
+Currently, we work on extension of library by finite alternating automata representation
+which would support parsing from the designed format.
+The library was already used for development of a new decision procedure for string solving.
+
+
 In the field of automated testing, one may consider more domain specific abstractions
 over model of communication to enable generating useful test automatically.
 There are often domain dependent particularities such as order of message sent
