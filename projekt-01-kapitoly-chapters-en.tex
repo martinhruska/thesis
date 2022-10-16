@@ -327,38 +327,51 @@ of selector names.
 	  The separation-logic-based approa\-ches also often suffer from the need to manually provide inductive predicates
 	  describing the heaps shapes (even for some list structures).
 
-	  Separation logic has found its way to practice which is demonstrated by its application
-	  in Facebook \cite{www:fbinfer}.
+	  Separation logic has found its way to practice which is demonstrated by its implementation
+	  in the Infer tool widely used in Facebook \cite{www:fbinfer}.
+
+          Separation logic was further modified to \emph{incorrectness separation logic} \cite{soa-isl} which
+          combines local reasoning of separation logic with the newly introduced \emph{incorrectness logic} \cite{soa-il}.
+          An interprodcedural analysis based on incorrectness separation logic has no false positives by construction
+          and is aimed to rigorous bug hunting.
+          Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
+          of Hoara triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has bee deallocated
+          and to reallocated. The operator was needed to distinguish between a dangling pointer and pointer which do not
+          know anything about. The distinguishing was needed for combination of separation logic with frame rule
+          for underapproximating reasoning.
+          The methods was implemented in the Pulse tool insined Facebookk infer.
+
 
 	  \subsection{Automated Decision Procedure}
-          There is also a huge body of work on \emph{automated decision
-          procedures} for various fragments of separation logic and problems such as
-          satisfiability and entailment---see, e.g., \cite{enea_compositional_2014, iosif_deciding_2014,
+          It is not straightforward how to apply separation logic to a framework for verification of programs
+          since we need to decide problems such as satisfiability and entailment for separation logic.
+          In the recent years, there are many results on \emph{automated decision
+          procedures} for various fragments of separation logic addressing these problems
+          \cite{enea_compositional_2014, iosif_deciding_2014,
           soa-JensFlorian:BeyondSymHeap:20, soa-LocLe:VMCAI21, soa-Radu:CADE21}.
           %
-          However, it is not immediate how to apply these logics inside a program analysis
-          tool.
-          For example, the results on the cited separation logics cannot be directly
-          applied to the \mbox{(bi-)abduction} problem, which is the central operation
-          needed for a compositional program analysis.
+          Unfortunately, the cited works cannot be used to the bi-abduction problem described in
+          the previous section, which is the crucial for a compositional (scalable) program analysis.
+          In bi-abduction, one needs to solve the abduction problem $\phi * [?] \models \psi$,
+          where $*$ is the separating conjunction.
+          The best solution (i.e., th logically weakest) is given by the formula $\phi \mw \psi$
+          where one needs to use the magic wand operator $\mw$.
           %
-          This is because the best (i.e., logically weakest) solution to the abduction
-          problem $\phi * [?] \models \psi$, which is a central problem for compositional
-          program analyses, with $*$ being the separating conjunction, is given by the
-          formula $\phi \mw \psi$, which makes use of the magic wand operator $\mw$, and
-          the cited logics do not provide support for the magic wand.
+          The cited works do not support magic wand since it has been shown
+          that adding even the singly-linked list-segment predicate to a propositional separation
+          logic that includes magic wand causes undecidability of the satisfiability
+          problem~\cite{soa-conf/fossacs/DemriLM18}, \cite{soa-books/daglib/0034962}.
           %
-          This is for principle reasons: it has been observed in the literature that magic
-          wand operators are ``difficult to eliminate''~\cite{soa-books/daglib/0034962};
-          further, it has been shown that adding only the singly-linked list-segment
-          predicate to a propositional separation logic that includes the magic wand
-          already leads to undecidability of the satisfiability
-          problem~\cite{soa-conf/fossacs/DemriLM18}.
-          %
-          A notable exception is the recent work~\cite{soa-conf/esop/PagelZ21} on a new
-          semantics for separation logic, which enables decidability of a propositional
-          separation logic that includes the magic wand and the singly-linked list-segment
-          predicate (and also discusses applications to the abduction problem.
+          The mentioned problem was recently addressed by ~\cite{soa-conf/esop/PagelZ21}
+          which defined new semantics for separation logic.
+          The new semantics make possible to use magic wand and the singly-linked list-segment
+          predicate.
+          The work also discuss their application to the abduction problem.
+
+          This approach was further extended by the low-level features of data structures
+          manipulation such as pointer arithmetic, bit-masking on pointers,
+          block operations with blocks of variable size, their splitting to fields of in-advance-not-fixed size,
+          merging such fields back, and reinterpreting them differently, etc., by \cite{soa-biabduction}. 
 
 	  \subsection{Symbolic Memory Graphs}
 
