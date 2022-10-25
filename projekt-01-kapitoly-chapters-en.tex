@@ -247,9 +247,11 @@ Finally, an existing work on automata for graph languages is presented.
 \emph{Shape analysis} deals with analysis of shapes allocated on the heap by a program.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
-\cite{jensen,pale,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
-\cite{bhrv06b,deg06,forester12,boxes13,lists-counters}, graphs with summary nodes and edges
-\cite{sas07:chang_rival_necula,dudka13sas}, or graph grammars \cite{juggrnaut10}.
+\cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13}
+automata \cite{bhrv06b,deg06,forester12,boxes13,lists-counters},
+graphs with summary nodes and edges \cite{sas07:chang_rival_necula,dudka13sas},
+graph grammars \cite{juggrnaut10,juggrnaut-learning12}, or upward closed sets \cite{paroshBackward}.
+
 % Apart from the underlying formalisms, the approaches differ in their degree of
 % automation, in the heap structures they can handle, and in their scalability.
 
@@ -315,7 +317,16 @@ of selector names.
 	  satisfy the assertion $Q$).
 
 	  An interest in separation logic has started raising with an introduction of the automated,
-	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}.
+	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}, or \slayer \cite{slayer11}.
+          These approaches are, however, much less general than
+          our approach since they are restricted to programs over certain classes of
+          linked lists (and cannot handle even structures such as linked lists with data
+          pointers pointing either inside the list nodes or optionally outside of them,
+          which we can easily handle, as discussed later on). 
+          The work \cite{overlaid11} concerning overlaid data
+          structures mentions an extension of \spaceinvader to trees, but this extension
+          is of a limited generality and requires some manual help.
+
 	  Separation logic has also been extended to a concurrent version \cite{brookes16}.
 	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction11}.
 	  Further, the second-order bi-abduction provided ability to learn some predicates automatically and so made possible analysis
@@ -324,8 +335,16 @@ of selector names.
 	  were used in~\cite{indPrSynt07}.
 	  The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
 	  the given specification.
-	  The separation-logic-based approa\-ches also often suffer from the need to manually provide inductive predicates
+	  The separation-logic-based approa\-ches often suffer from the need to manually provide inductive predicates
 	  describing the heaps shapes (even for some list structures).
+          These approaches are rather fragile. Especially~\cite{indPrSynt07}
+          seems quite dependent on the fact that the encountered
+          data structures are built in a ``nice'' way conforming to the structure of the
+          predicate to be learnt (meaning, e.g., that lists are built by adding elements
+          at the end only), which is close to providing an inductive definition of the
+          data structure, and, similarly, \cite{locle:secondorder}~fails on examples that
+          might seem easy (such as certain rather straightforward variants of creations
+          and deletions of a~doubly-linked list).
 
 	  Separation logic has found its way to practice which is demonstrated by its implementation
 	  in the Infer tool widely used in Facebook \cite{www:fbinfer}.
@@ -340,6 +359,21 @@ of selector names.
           know anything about. The distinguishing was needed for combination of separation logic with frame rule
           for underapproximating reasoning.
           The methods was implemented in the Pulse tool insined Facebookk infer.
+
+          We note that there
+          are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
+          manipulation, but these are usually semi-automated only. 
+          %
+          The work \cite{thor10} proposes an approach that uses separation logic for
+          generating numerical abstractions of heap manipulating programs allowing for
+          checking both their safety as well as termination. The described experiments
+          include even verification of programs with 2-level skip lists.
+          The work, however,
+          still expects the user to manually provide an inductive definition of skip lists
+          in advance. Likewise, the work \cite{sas07:chang_rival_necula} based on the so-called separating
+          shape graphs reports on verification of programs with 2-level skip lists, but it
+          also requires the user to come up with summary edges to be used for summarizing
+          skip list segments, hence basically with an inductive definition of skip lists.
 
 
 	  \subsection{Automated Decision Procedure}
@@ -554,6 +588,29 @@ of selector names.
 	  properties. The basic heap predicates are again fixed. The approach does not
 	  guarantee recognition of spurious and real counterexamples nor progress of the
 	  refinement.
+
+          None of the so-far presented works is based on automata,
+          and all of the works require some fixed set of shape predicates to be provided
+          in advance. Among \emph{automata-based approaches}, counterexample analysis and
+          refinement was used in \cite{bhrv06b} (and also in some related, less general
+          approaches like \cite{bhmv05}). In that case, however, a single tree automaton
+          was used to encode sets of memory configurations, which allowed standard
+          abstraction refinement from abstract regular (tree) model checking
+          \cite{artmc} to be used. On the other hand, due to using a single automaton,
+          the approach did not scale well and had problems with some heap transformations.
+
+          The basic formalism of forest automata using fixed abstraction and
+          user-provided database of boxes was introduced in~\cite{forester12}.
+          It was later extended the basic framework with automatic learning of boxes
+          in~\cite{boxes13}.
+          The work~\cite{forester-data-acta} added ordering relations into forest
+          automata to allow verification of
+          programs whose safety depends on relations among data values
+          from an unbounded domain.
+          In \cite{forester12,boxes13}, it was conjectured that counterexample validation and
+          abstraction refinement should be possible in the context of forest
+          automata too. This thesis will show that this is indeed the case, however that much
+          more involved methods than those of \cite{artmc} are needed.
 
 	\section{Work on Graph Automata}
 
@@ -4449,6 +4506,118 @@ boxes that are required, and thus substantially increase the performance.
 %\comment[ar]{We may add a figure of folding and unfolding}
 
 %*******************************************************************************
+\section{Running Example}
+\label{sec:running_example}
+%*******************************************************************************
+
+
+\input{figs/running/circular.tikz}
+% include the \circulardlltreeabstr{n} command
+\input{figs/running/circular_tree_abstr.tikz}
+% include the \circulardlltreefold{n} command
+\input{figs/running/circular_tree_fold.tikz}
+% include the \circulardlltreefolded{n} command
+\input{figs/running/circular_tree_folded.tikz}
+% include the \circulardlldllfold{n} command
+\input{figs/running/circular_dll_fold.tikz}
+% include the \circulardlldllfolded{n} command
+\input{figs/running/circular_dll_folded.tikz}
+% include the \circulardlldllabstr{n} command
+\input{figs/running/circular_dll_abstr.tikz}
+% include the \circulardlllistfold{n} command
+\input{figs/running/circular_dll_list_fold.tikz}
+% include the \circulardlllistfolded{n} command
+\input{figs/running/circular_dll_list_folded.tikz}
+
+ %   \begin{tikzpicture}[overlay,baseline]
+      %\only<3>{
+      %  \node[black!60,anchor=north west] (note) at (65mm, 8mm) {tree with root ptrs of any height};
+      %  \draw[black!60,->,>=stealth'] (note.west) -- (60mm,10mm);
+      %}
+%    \end{tikzpicture}
+\begin{figure}
+\label{ref:fig-re1}
+\begin{center}
+  \begin{subfigure}[b]{0.45\linewidth}
+      \circulardll{5}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+      \circulardlltreeabstr{5}
+  \end{subfigure}
+\end{center}
+\caption{On the left-handed side is a data structure allocated on heap by a program. On the right-handed side is the same structure after the first abstraction.}
+\end{figure}
+
+\begin{figure}
+\label{ref:fig-re2}
+\begin{center}
+  \begin{subfigure}[b]{0.47\linewidth}
+      \circulardlltreefold{5}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.47\linewidth}
+      \circulardlltreefolded{5}
+  \end{subfigure}
+\end{center}
+\caption{On the left-handed side is the studied data structure with highlighted parts which are goind to be folded to a box. On~the right-handed side is after the folding
+which folded the highlited parts of graph to box \emph{tree-rootptr}.}
+\end{figure}
+
+\begin{figure}
+\label{ref:fig-re3}
+\begin{center}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlldllfold{5}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlldllfolded{5}
+  \end{subfigure}
+\end{center}
+\caption{On the left-handed side is the data structure before another folding with highlighted part of graph for folding.
+On the right-handed side is resulting graph after folding which folded the highlited parts to box \emph{DLS}.}
+\end{figure}
+
+\begin{figure}
+\label{ref:fig-re4}
+\begin{center}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlldllfolded{5}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlldllabstr{5}
+  \end{subfigure}
+\end{center}
+\caption{On the left-handed side is the data structure before abstraction.
+On the right-handed side is abstracted resulting graph after abstraction.}
+\end{figure}
+
+\begin{figure}
+\label{ref:fig-re5}
+\begin{center}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlllistfold{5}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \circulardlllistfolded{5}
+  \end{subfigure}
+\end{center}
+\caption{On the left-handed side there is the data structure before final folding with the highlighted part to be folded.
+On the right-handed side is the data structure after folding the highlighted part to box \emph{circular-DLL-of-trees-rootptr}.
+Now, the fixpoint is reached.}
+\end{figure}
+
+
+  %\begin{minipage}{3.1cm}
+  %  \incmargin{7mm}
+    % \begin{tikzpicture}{baseline,overlay}
+    %   \path[use as bounding box] (0,0) rectangle (0,0);
+    %   \only<2>{\fill[green!60,rounded corners] (0mm,-6mm) rectangle +(32mm,5mm);}
+    %   \only<3,6,9>{\fill[red!30,rounded corners] (5mm,-15.5mm) rectangle +(18mm,5mm);}
+    %   \only<4-5,7-8,10-11>{\fill[blue!30,rounded corners] (5mm,-20.5mm) rectangle +(10mm,5mm);}
+    % \end{tikzpicture}
+  %  \decmargin{7mm}
+  %\end{minipage}
+
+%*******************************************************************************
 \section{Architecture of \forester}
 \label{sub:forestervata}
 %*******************************************************************************
@@ -5203,21 +5372,20 @@ Building a more robust tool on top of our experience with \forester is one of ou
 %\section{conclusions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Related Work} 
-The area of verifying programs with dynamic linked
-data structures has been a subject of intense research for quite some time. Many
-different approaches based on logics, e.g.,
-\cite{pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula},
-automata \cite{bhrv06b,lists-counters,deg06}, graph grammars \cite{juggrnaut10,juggrnaut-learning12}, upward closed sets \cite{paroshBackward},
-and other formalisms have been proposed. These approaches differ in their
-generality, efficiency, and degree of automation.  
-%
-What makes our approach based on forest automata stand out is the combination of
-1) high efficiency,
-2) automation,
-3) generality and complexity of the class of the shape graphs that the approach can handle in practice, and
-4) the ability to analyse counterexamples and learn abstraction refinements from them.
-
+% \section{Related Work} 
+% The area of verifying programs with dynamic linked
+% data structures has been a subject of intense research for quite some time. Many
+% different approaches based on logics, e.g.,
+% \cite{pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula},
+% automata \cite{bhrv06b,lists-counters,deg06}, graph grammars \cite{juggrnaut10,juggrnaut-learning12}, upward closed sets \cite{paroshBackward},
+% and other formalisms have been proposed. These approaches differ in their
+% generality, efficiency, and degree of automation.  
+% %
+% What makes our approach based on forest automata stand out is the combination of
+% 1) high efficiency,
+% 2) automation,
+% 3) generality and complexity of the class of the shape graphs that the approach can handle in practice, and
+% 4) the ability to analyse counterexamples and learn abstraction refinements from them.
 %The closest lines of work to forest automata are \cite{bhrv06b}, that also uses automata, 
 %the use of separation logic in the works \cite{InvaderCAV07,InvaderCAV08} linked with the Space Invader tool. 
 %
@@ -5225,120 +5393,113 @@ What makes our approach based on forest automata stand out is the combination of
 %In fact, as
 %is clear from the above, the approach we propose combines some features from
 %these two lines of research.
-
-From the point of view of efficiency and degree of automation, the main
-alternative to our approach is the fully-automated use of separation logic with
-inductive list predicates as implemented in \spaceinvader~\cite{InvaderCAV08} or
-\slayer~\cite{slayer11}. These approaches are, however, much less general than
-our approach since they are restricted to programs over certain classes of
-linked lists (and cannot handle even structures such as linked lists with data
-pointers pointing either inside the list nodes or optionally outside of them,
-which we can easily handle, as discussed later on). 
-The work \cite{overlaid11} concerning overlaid data
-structures mentions an extension of \spaceinvader to trees, but this extension
-is of a limited generality and requires some manual help.
-A similar comparison applies
-to the \predator tool, which uses a~graph-based
-formalism~\cite{predator11} based on separation logic.
-
-
-In terms of generality of the handled class of shape graphs and automation,
-\cite{indPrSynt07}~and~\cite{locle:secondorder} are close to our work. 
-They can both handle some impressively complex data structures, even tree-like structures
-with additional pointers.
-For instance, the so-called mcf
-trees of~\cite{indPrSynt07}, which are trees whose nodes have an arbitrary number of successors
-linked in a~DLL, is even more general than what can in principle
-be described by hierarchically nested FAs (to describe mcf trees, recursively
-nested FAs or FAs based on hedge automata would be needed).
-On the other hand, both of these approaches are rather fragile. Especially~\cite{indPrSynt07}
-seems quite dependent on the fact that the encountered
-data structures are built in a ``nice'' way conforming to the structure of the
-predicate to be learnt (meaning, e.g., that lists are built by adding elements
-at the end only), which is close to providing an inductive definition of the
-data structure, and, similarly, \cite{locle:secondorder}~fails on examples that
-might seem easy (such as certain rather straightforward variants of creations
-and deletions of a~doubly-linked list).
-%
-Counterexample analysis is also problematic for both of them and it is not clear
-whether they would be amenable for some kind of abstraction refinement.
-%
-
-The grammar-based encoding of heaps from~\cite{juggrnaut10} is conceptually close to forest automata and separation logic, and has a similar potential.
-A concept of inferring graph grammar rules for the heap abstraction proposed
-in~\cite{juggrnaut10} has appeared in~\cite{juggrnaut-learning12}.
-%
-The proposed technique can so far only handle less general structures than our
-approach though.
-
-We note that there
-are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
-manipulation, but these are usually semi-automated only. 
-%
-The work \cite{thor10} proposes an approach that uses separation logic for
-generating numerical abstractions of heap manipulating programs allowing for
-checking both their safety as well as termination. The described experiments
-include even verification of programs with 2-level skip lists.
-The work, however,
-still expects the user to manually provide an inductive definition of skip lists
-in advance. Likewise, the work \cite{sas07:chang_rival_necula} based on the so-called separating
-shape graphs reports on verification of programs with 2-level skip lists, but it
-also requires the user to come up with summary edges to be used for summarizing
-skip list segments, hence basically with an inductive definition of skip lists.
+% From the point of view of efficiency and degree of automation, the main
+% alternative to our approach is the fully-automated use of separation logic with
+% inductive list predicates as implemented in \spaceinvader~\cite{InvaderCAV08} or
+% \slayer~\cite{slayer11}. These approaches are, however, much less general than
+% our approach since they are restricted to programs over certain classes of
+% linked lists (and cannot handle even structures such as linked lists with data
+% pointers pointing either inside the list nodes or optionally outside of them,
+% which we can easily handle, as discussed later on). 
+% The work \cite{overlaid11} concerning overlaid data
+% structures mentions an extension of \spaceinvader to trees, but this extension
+% is of a limited generality and requires some manual help.
+% A similar comparison applies
+% to the \predator tool, which uses a~graph-based
+% formalism~\cite{predator11} based on separation logic.
+% In terms of generality of the handled class of shape graphs and automation,
+% \cite{indPrSynt07}~and~\cite{locle:secondorder} are close to our work. 
+% They can both handle some impressively complex data structures, even tree-like structures
+% with additional pointers.
+% For instance, the so-called mcf
+% trees of~\cite{indPrSynt07}, which are trees whose nodes have an arbitrary number of successors
+% linked in a~DLL, is even more general than what can in principle
+% be described by hierarchically nested FAs (to describe mcf trees, recursively
+% nested FAs or FAs based on hedge automata would be needed).
+% On the other hand, both of these approaches are rather fragile. Especially~\cite{indPrSynt07}
+% seems quite dependent on the fact that the encountered
+% data structures are built in a ``nice'' way conforming to the structure of the
+% predicate to be learnt (meaning, e.g., that lists are built by adding elements
+% at the end only), which is close to providing an inductive definition of the
+% data structure, and, similarly, \cite{locle:secondorder}~fails on examples that
+% might seem easy (such as certain rather straightforward variants of creations
+% and deletions of a~doubly-linked list).
+% %
+% Counterexample analysis is also problematic for both of them and it is not clear
+% whether they would be amenable for some kind of abstraction refinement.
+% %
+% The grammar-based encoding of heaps from~\cite{juggrnaut10} is conceptually close to forest automata and separation logic, and has a similar potential.
+% A concept of inferring graph grammar rules for the heap abstraction proposed
+% in~\cite{juggrnaut10} has appeared in~\cite{juggrnaut-learning12}.
+% %
+% The proposed technique can so far only handle less general structures than our
+% approach though.
+% 
+% We note that there
+% are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
+% manipulation, but these are usually semi-automated only. 
+% %
+% The work \cite{thor10} proposes an approach that uses separation logic for
+% generating numerical abstractions of heap manipulating programs allowing for
+% checking both their safety as well as termination. The described experiments
+% include even verification of programs with 2-level skip lists.
+% The work, however,
+% still expects the user to manually provide an inductive definition of skip lists
+% in advance. Likewise, the work \cite{sas07:chang_rival_necula} based on the so-called separating
+% shape graphs reports on verification of programs with 2-level skip lists, but it
+% also requires the user to come up with summary edges to be used for summarizing
+% skip list segments, hence basically with an inductive definition of skip lists.
 %Compared to \cite{thor10,sas07:chang_rival_necula}, we did not have to provide any manual aid
 %whatsoever to our technique when dealing with 2-level as well as 3-level
 %skip lists in our experiments.
-
-
-A common weakness of the
-current approaches to shape analysis such as \cite{InvaderCAV07,InvaderCAV08,indPrSynt07,locle:secondorder,predator11,slayer11,juggrnaut10,juggrnaut-learning12} is a lack of proper support for checking
-spuriousness of counterexample traces and automated refinement
-of the employed abstraction (as noted also in~\cite{splinter15}).
+% 
+% A common weakness of the
+% current approaches to shape analysis such as \cite{InvaderCAV07,InvaderCAV08,indPrSynt07,locle:secondorder,predator11,slayer11,juggrnaut10,juggrnaut-learning12} is a lack of proper support for checking
+% spuriousness of counterexample traces and automated refinement
+% of the employed abstraction (as noted also in~\cite{splinter15}).
+% %
+% An example of a~program that the mentioned approaches cannot handle is a~program
+% dealing with lists of lists where the sub-lists are of
+% length 0 or 1, which is a quite practical situation~\cite{InvaderTR07}. In such
+% cases, the abstraction used in \cite{InvaderCAV07,InvaderCAV08} can fail,
+% leading to an infinite computation (e.g., when, by chance, a list of regularly
+% interleaved lists of length 0 or 1 appears) or generate false alarms (when
+% modified to abstract even pointer links of length 1 to a list segment). For us,
+% such a~situation is easy to handle without any need to fine-tune the abstraction
+% manually. 
+% %
+% %
+% %Our approach combines a use of our nested FA with an  automatically
+% %refinable abstraction on the TA that appear in our representation. Thus our
+% %analysis can more easily adjust to various cases arising in the programs being
+% %verified.
+% %
+% %
+% A number of works have attempted to remedy this weakness.
+% %%%%%%%%%%%%%%%%%%%%%%%%%
+% The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
+% analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
+% transitive closure}. 
+% %
+% The work
+% \cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
+% further by learning more complex instrumentation relations using
+% inductive logic programming.
+% %
+% In \cite{podelski:popl10}, a CEGAR-based approach was proposed for automated
+% refinement of the so-called \emph{Boolean heap abstraction} using disjunctions
+% of universally quantified Boolean combinations of first-order predicates with
+% free variables and transitive closure.
+% %
+% Among separation-logic-based approaches, the works~\cite{slayer12,splinter15,botincan15} 
+% also feature different kinds of counterexample analysis and/or abstraction refinement.
+% %
+% None of these works, however, achieves the degree of automation, generality, or
+% precision of the counterexample analysis and flexibility of the abstraction
+% learning mechanism as our forest-automata-based approach.
 %
-An example of a~program that the mentioned approaches cannot handle is a~program
-dealing with lists of lists where the sub-lists are of
-length 0 or 1, which is a quite practical situation~\cite{InvaderTR07}. In such
-cases, the abstraction used in \cite{InvaderCAV07,InvaderCAV08} can fail,
-leading to an infinite computation (e.g., when, by chance, a list of regularly
-interleaved lists of length 0 or 1 appears) or generate false alarms (when
-modified to abstract even pointer links of length 1 to a list segment). For us,
-such a~situation is easy to handle without any need to fine-tune the abstraction
-manually. 
-%
-%
-%Our approach combines a use of our nested FA with an  automatically
-%refinable abstraction on the TA that appear in our representation. Thus our
-%analysis can more easily adjust to various cases arising in the programs being
-%verified.
-%
-%
-A number of works have attempted to remedy this weakness.
-%%%%%%%%%%%%%%%%%%%%%%%%%
-The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
-analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
-transitive closure}. 
-%
-The work
-\cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
-further by learning more complex instrumentation relations using
-inductive logic programming.
-%
-In \cite{podelski:popl10}, a CEGAR-based approach was proposed for automated
-refinement of the so-called \emph{Boolean heap abstraction} using disjunctions
-of universally quantified Boolean combinations of first-order predicates with
-free variables and transitive closure.
-%
-Among separation-logic-based approaches, the works~\cite{slayer12,splinter15,botincan15} 
-also feature different kinds of counterexample analysis and/or abstraction refinement.
-%
-None of these works, however, achieves the degree of automation, generality, or
-precision of the counterexample analysis and flexibility of the abstraction
-learning mechanism as our forest-automata-based approach.
-%
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%
 %Finally, compared with~\cite{bhrv06b}, our newly proposed approach is a~bit less
 %general. We cannot handle structures such as, e.g., trees with linked leaves. To
 %handle these structures, we would have to introduce into our approach FA nested
@@ -5357,15 +5518,15 @@ learning mechanism as our forest-automata-based approach.
 %always kept, just marked as deleted). Moreover, the encoding of~\cite{bhrv06b}
 %has troubles with detection of memory leakage, which is in theory possible, but
 %it is so complex that it has never been implemented. 
-
-Lastly, among \emph{automata-based approaches}, counterexample analysis and
-refinement was used in \cite{bhrv06b} (and also in some related less general
-approaches like~\cite{bhmv05}). In that case, however, a single tree automaton
-was used to encode sets of memory configurations, which allowed standard
-abstraction refinement from abstract regular (tree) model checking
-\cite{artmc} to be used. On the other hand, due to using a single automaton,
-the approach did not scale well and had problems with some heap transformations.
- 
+%
+%Lastly, among \emph{automata-based approaches}, counterexample analysis and
+%refinement was used in \cite{bhrv06b} (and also in some related less general
+%approaches like~\cite{bhmv05}). In that case, however, a single tree automaton
+%was used to encode sets of memory configurations, which allowed standard
+%abstraction refinement from abstract regular (tree) model checking
+%\cite{artmc} to be used. On the other hand, due to using a single automaton,
+%the approach did not scale well and had problems with some heap transformations.
+% 
 % This paper is based on earlier published works on forest automata \cite{habermehl:forest} and SVComp contributions \cite{},
 % mainly on \cite{habermehl:forest} for the overall overview and on \cite{holik:cexfa,jiri:diza} for the technical part.
 % It does not comprise the works on verification of properties of data stored in forest automata \cite{forester-data-acta} and 
@@ -5482,119 +5643,119 @@ such as sortedness, reordering, etc.).
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related Work}
+%\section{Related Work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Many different approaches to shape analysis have been proposed, using various
-underlying formalisms, such as logics
-\cite{jensen,pale,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
-\cite{bhrv06b,deg06,forester12,boxes13,lists-counters}, graphs
-\cite{sas07:chang_rival_necula,dudka13sas}, or graph grammars \cite{juggrnaut10}.
-Apart from the underlying formalisms, the approaches differ in their degree of
-automation, in the heap structures they can handle, and in their scalability.
-The shape analysis based on forest automata proposed in \cite{boxes13} that we
-build on in this paper belongs among the most general, fully automated
-approaches, still having decent scalability.
-
-As noted also in the recent work \cite{splinter15}, a common weakness of the
-current approaches to shape analysis is a lack of proper support for checking
-spuriousness of counterexample traces, possibly followed by automated refinement
-of the employed abstraction. This is exactly the problem that we tackle in this
-paper. Below, we characterize previous attempts on the problem and compare our
-approach with them. 
-
-The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
-analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
-transitive closure}. The refinement is, however, restricted to adding more
-pointer variables and/or data fields of allocated memory cells to be tracked
-only (together with combining the ana\-ly\-sis with classic predicate analysis on
-data values). The analysis assumes the other necessary heap predicates (i.e.,
-the so-called core and instrumentation relations in terms of \cite{pale}) to
-be fixed in advance and not refined. The work
-\cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
-further by learning more complex instrumentation relations using
-inductive logic programming. The core relations are still fixed in
-% further by allowing more complex instrumentation relations to be learnt using
-% inductive logic programming. The core relations are, however, still fixed in
-advance though. Compared with both of these works, we do not assume any predefined
-fixed predicates. Moreover, the approach of
-\cite{Loginov:AbstrRefViaInductLearning:05} is not CEGAR-based---it refines the
-% abstraction whenever it hits a~possible counterexample trace in whose analysis
-abstraction whenever it hits a~possible counterexample in which
-some loss of precision happened, regardless of whether the counterexample is
-real or not.
-
-In \cite{podelski:popl10}, a CEGAR-based approach was proposed for automated
-refinement of the so-called \emph{Boolean heap abstraction} using disjunctions
-of universally quantified Boolean combinations of first-order predicates with
-free variables and transitive closure.
 %
-% The work uses CEGAR to both add new predicates and to refine the abstract post
-% operator. 
+%Many different approaches to shape analysis have been proposed, using various
+%underlying formalisms, such as logics
+%\cite{jensen,pale,InvaderCAV08,thor10,dragoi:atva12,sleek13}, automata
+%\cite{bhrv06b,deg06,forester12,boxes13,lists-counters}, graphs
+%\cite{sas07:chang_rival_necula,dudka13sas}, or graph grammars \cite{juggrnaut10}.
+%Apart from the underlying formalisms, the approaches differ in their degree of
+%automation, in the heap structures they can handle, and in their scalability.
+%The shape analysis based on forest automata proposed in \cite{boxes13} that we
+%build on in this paper belongs among the most general, fully automated
+%approaches, still having decent scalability.
 %
-Unlike our work, the approach assumes the analyzed programs to be annotated by
-procedure contracts and representation invariants of data structures. New
-predicates are inferred using finite-trace weakest preconditions on the
-annotations, and hence new predicates with reachability constraints can only be
-inferred via additional heuristic widening on the inferred predicates. Moreover,
-the approach is not appropriate for handling nested data structures, such as
-lists of lists, requiring nested reachability predicates.
-
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-In the context of approaches based on \emph{separation logic}, several attempts
-to provide counterexample validation and automated abstraction refinement have
-appeared. In \cite{slayer12}, the \textsc{SLAyer} analyzer was extended by a method to
-check spuriousness of counterexample traces via bounded model checking and SMT.
-Unlike our work, the approach may, however, fail in recognising that a given
-trace represents a real counterexample. Moreover, the associated refinement can
-only add more predicates to be tracked from a pre-defined set of such
-predicates. In \cite{splinter15}, another counterexample analysis for the
-context of separation logic was proposed within a computation loop based on the
-Impact algorithm \cite{impact06}. The approach uses bounded backwards abduction
-to derive so-called spatial interpolants and to distinguish between real and
-spurious counterexample traces. It allows for refinement of the predicates used
-but only by extending them by data-related properties. The basic predicates
-describing heap shapes are provided in advance and fixed. Another work based on
-backwards abduction is \cite{botincan15}. The work assumes working with a
-parametrized family of predicates, and the refinement is based on refining the
-parameter. Three concrete families of this kind are provided, namely,
-singly-linked lists in which one can remember bigger and bigger multisets of
-chosen data values, remember nodes with certain addresses, or track ordering
-properties. The basic heap predicates are again fixed. The approach does not
-guarantee recognition of spurious and real counterexamples nor progress of the
-refinement.
-
-Unlike our approach, none of the so-far presented works is based on automata,
-and all of the works require some fixed set of shape predicates to be provided
-in advance. Among \emph{automata-based approaches}, counterexample analysis and
-refinement was used in \cite{bhrv06b} (and also in some related, less general
-approaches like \cite{bhmv05}). In that case, however, a single tree automaton
-was used to encode sets of memory configurations, which allowed standard
-abstraction refinement from abstract regular (tree) model checking
-\cite{artmc} to be used. On the other hand, due to using a single automaton,
-the approach did not scale well and had problems with some heap transformations.
-
-% Finally, the Predator analyzer \cite{php15} avoids spurious errors by running a
-% sound, over-approximating analysis together with a precise one, allowing only
-% the latter to report counterexamples. This does not, however, allow the
-% abstraction used to be refined, possibly preventing correct programs from being
-% verified.
-
-The basic formalism of forest automata using fixed abstraction and
-user-provided database of boxes was introduced in~\cite{forester12}.
-We later extended the basic framework with automatic learning of boxes
-in~\cite{boxes13}.
-The work~\cite{forester-data-acta} added ordering relations into forest
-automata to allow verification of
-programs whose safety depends on relations among data values
-from an unbounded domain.
-In \cite{forester12,boxes13}, we conjectured that counterexample validation and
-abstraction refinement should be possible in the context of forest
-automata too. However, only now, do we show that this is indeed the case, but also that much
-more involved methods than those of \cite{artmc} are needed.
-
+%As noted also in the recent work \cite{splinter15}, a common weakness of the
+%current approaches to shape analysis is a lack of proper support for checking
+%spuriousness of counterexample traces, possibly followed by automated refinement
+%of the employed abstraction. This is exactly the problem that we tackle in this
+%paper. Below, we characterize previous attempts on the problem and compare our
+%approach with them. 
+%
+%The work \cite{beyer:lazy_shape_analysis} adds a CEGAR loop on top of the TVLA
+%analyzer \cite{pale}, which is based on \emph{3-valued predicate logic with
+%transitive closure}. The refinement is, however, restricted to adding more
+%pointer variables and/or data fields of allocated memory cells to be tracked
+%only (together with combining the ana\-ly\-sis with classic predicate analysis on
+%data values). The analysis assumes the other necessary heap predicates (i.e.,
+%the so-called core and instrumentation relations in terms of \cite{pale}) to
+%be fixed in advance and not refined. The work
+%\cite{Loginov:AbstrRefViaInductLearning:05} also builds on TVLA but goes
+%further by learning more complex instrumentation relations using
+%inductive logic programming. The core relations are still fixed in
+%% further by allowing more complex instrumentation relations to be learnt using
+%% inductive logic programming. The core relations are, however, still fixed in
+%advance though. Compared with both of these works, we do not assume any predefined
+%fixed predicates. Moreover, the approach of
+%\cite{Loginov:AbstrRefViaInductLearning:05} is not CEGAR-based---it refines the
+%% abstraction whenever it hits a~possible counterexample trace in whose analysis
+%abstraction whenever it hits a~possible counterexample in which
+%some loss of precision happened, regardless of whether the counterexample is
+%real or not.
+%
+%In \cite{podelski:popl10}, a CEGAR-based approach was proposed for automated
+%refinement of the so-called \emph{Boolean heap abstraction} using disjunctions
+%of universally quantified Boolean combinations of first-order predicates with
+%free variables and transitive closure.
+%%
+%% The work uses CEGAR to both add new predicates and to refine the abstract post
+%% operator. 
+%%
+%Unlike our work, the approach assumes the analyzed programs to be annotated by
+%procedure contracts and representation invariants of data structures. New
+%predicates are inferred using finite-trace weakest preconditions on the
+%annotations, and hence new predicates with reachability constraints can only be
+%inferred via additional heuristic widening on the inferred predicates. Moreover,
+%the approach is not appropriate for handling nested data structures, such as
+%lists of lists, requiring nested reachability predicates.
+%
+%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+%
+%In the context of approaches based on \emph{separation logic}, several attempts
+%to provide counterexample validation and automated abstraction refinement have
+%appeared. In \cite{slayer12}, the \textsc{SLAyer} analyzer was extended by a method to
+%check spuriousness of counterexample traces via bounded model checking and SMT.
+%Unlike our work, the approach may, however, fail in recognising that a given
+%trace represents a real counterexample. Moreover, the associated refinement can
+%only add more predicates to be tracked from a pre-defined set of such
+%predicates. In \cite{splinter15}, another counterexample analysis for the
+%context of separation logic was proposed within a computation loop based on the
+%Impact algorithm \cite{impact06}. The approach uses bounded backwards abduction
+%to derive so-called spatial interpolants and to distinguish between real and
+%spurious counterexample traces. It allows for refinement of the predicates used
+%but only by extending them by data-related properties. The basic predicates
+%describing heap shapes are provided in advance and fixed. Another work based on
+%backwards abduction is \cite{botincan15}. The work assumes working with a
+%parametrized family of predicates, and the refinement is based on refining the
+%parameter. Three concrete families of this kind are provided, namely,
+%singly-linked lists in which one can remember bigger and bigger multisets of
+%chosen data values, remember nodes with certain addresses, or track ordering
+%properties. The basic heap predicates are again fixed. The approach does not
+%guarantee recognition of spurious and real counterexamples nor progress of the
+%refinement.
+%
+%Unlike our approach, none of the so-far presented works is based on automata,
+%and all of the works require some fixed set of shape predicates to be provided
+%in advance. Among \emph{automata-based approaches}, counterexample analysis and
+%refinement was used in \cite{bhrv06b} (and also in some related, less general
+%approaches like \cite{bhmv05}). In that case, however, a single tree automaton
+%was used to encode sets of memory configurations, which allowed standard
+%abstraction refinement from abstract regular (tree) model checking
+%\cite{artmc} to be used. On the other hand, due to using a single automaton,
+%the approach did not scale well and had problems with some heap transformations.
+%
+%% Finally, the Predator analyzer \cite{php15} avoids spurious errors by running a
+%% sound, over-approximating analysis together with a precise one, allowing only
+%% the latter to report counterexamples. This does not, however, allow the
+%% abstraction used to be refined, possibly preventing correct programs from being
+%% verified.
+%
+%The basic formalism of forest automata using fixed abstraction and
+%user-provided database of boxes was introduced in~\cite{forester12}.
+%We later extended the basic framework with automatic learning of boxes
+%in~\cite{boxes13}.
+%The work~\cite{forester-data-acta} added ordering relations into forest
+%automata to allow verification of
+%programs whose safety depends on relations among data values
+%from an unbounded domain.
+%In \cite{forester12,boxes13}, we conjectured that counterexample validation and
+%abstraction refinement should be possible in the context of forest
+%automata too. However, only now, do we show that this is indeed the case, but also that much
+%more involved methods than those of \cite{artmc} are needed.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Forest Automata and Heaps}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8292,189 +8453,189 @@ $\predset({A_i})$ only where $A_i$ is the $i$-th component of $\interp$ and $\la
 %intersection inside the predicate labeling by the nested intersection defined in  Sec.
 %\ref{sec:isect_alg}. The lemma \ref{lemma:pred-refinement} will stay valid for nested FAs.
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiments}\label{sec:exps}
+%\section{Experiments}\label{sec:exps}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We have implemented our counterexample analysis and abstraction refinement as an
-extension of~\forester{} and evaluated it on a~set of C programs manipulating
-singly- and doubly-linked list, trees, skip-lists, and their combinations. We
-were able to analyse all of them fully automatically without any need to supply
-manually crafted predicates nor any other manual aid. The test cases are described in
-detail in~\cite{forester17techrep}.
-
-
-%\begin{table}[bt]
-%=======
-%We implemented our method in \forester{}. The experiments were
-%performed on a~PC with Intel Core i5@2.50 GHz CPU,
-%8 GiB of memory, with Debian \texttt{sid} installed.
-%Our benchmarks consist of programs manipulating singly- and
-%doubly-linked list, and tree structures.
-%We are able to analyse all the mentioned data
-%structures fully automatically without the need to supply any manually crafted predicates.
-%The benchmarks are in detail described in App.~\ref{sec:testcases}.
-
-\begin{table}[t]
-  % \vspace*{-2mm}
-	\centering
-	\scriptsize
-	\caption{Results of experiments.}
-	\begin{tabular}{| l | l | r | r | r | r || l | l | r | r | r | r | r |}
-        \hline
-		Program & Status & LoC & Time [s] & Refnm& Preds & Program & Status & LoC & Time [s] & Refnm & Preds \\
-        \hline
-        \hline
-		SLL (delete) & \safe & $33$ & $0.02$ &  $0$ & $0$ & DLL (rev) & \safe & $39$ &  $0.70$ & $0$  & $0$ \\
-        \hline
-		SLL (bubblesort) & \safe & $42$ & $0.02$ &  $0$ & $0$ & CDLL & \safe & $32$ &  $0.02$  & $0$  & $0$ \\
-        \hline
-		SLL (insersort) & \safe & $36$ & $0.04$ & $0$ & $0$ & DLL (insersort) & \safe & $42$ &  $0.56$  & $0$  & $0$ \\
-        \hline
-		SLLOfCSLL & \safe & $47$ & $0.02$ & $0$ & $0$ & DLLOfCDLL & \safe & $54$ &  $1.76$  & $0$  & $0$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{SLL01}    & \safe & $70$ & $1.20$   &  $1$ & $1$ & \textbf{DLL01} & \safe & $73$ &  $0.65$  & $2$  & $2$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{CircularSLL} & \safe & $49$ & $3.57$   &  $3$  & $3$ & \textbf{CircularDLL} & \safe  & $52$ &  $37.22$ & $18$ & $24$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{OptPtrSLL}   & \safe & $59$ & $1.90$ & $3$ & $3$ & \textbf{OptPtrDLL} & \safe & $62$ &  $1.87$  & $5$ & $5$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{QueueSLL}    & \safe & $71$ & $11.32$  &  $10$ & $10$ & \textbf{QueueDLL} & \safe  & $74$ &  $44.68$ & $14$ & $14$ \\
-		\rowcolor{rowgray}
-        \hline
-		\textbf{GBSLL}       & \safe & $64$ & $0.84$   &  $3$ & $3$ & \textbf{GBDLL} & \safe & $71$ &  $1.89$  & $4$ & $4$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{GBSLLSent}   & \safe  & $68$ & $0.85$   &  $3$ & $3$ & \textbf{GBDLLSent} & \safe & $75$ &  $2.19$  & $4$ & $4$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{RGSLL}       & \safe & $72$ & $14.41$  &  $22$  & $38$ & \textbf{RGDLL} & \safe & $76$ &  $78.76$ & $26$ & $26$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{WBSLL}       & \safe & $62$ & $0.84$   &  $5$  & $5$ & \textbf{WBDLL} & \safe & $71$ &  $1.37$  & $7$ & $7$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{SortedSLL}   & \safe & $76$ & $227.12$ &  $15$ & $15$ & \textbf{SortedDLL} & \safe & $82$ &  $36.67$ & $11$ & $11$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{EndSLL}      & \safe  & $45$ & $0.07$   &  $2$  & $2$ & \textbf{EndDLL} & \safe & $49$ &  $0.10$  & $3$ & $3$ \\
-        \hline
-		\rowcolor{rowgray}
-		\textbf{TreeRB} & \unsafe & $130$ &  $0.08$  & $0$  & $0$ & \textbf{TreeWB} & \unsafe & $125$ &  $0.05$  & $0$ & $0$ \\
-        \hline
-		TreeCnstr & \safe & $52$ & $0.31$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeCnstr} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $52$ & \cellcolor{rowgray} $0.03$  & \cellcolor{rowgray} $0$ & \cellcolor{rowgray} $0$ \\
-        \hline
-		TreeOfCSLL & \safe & $109$ &  $0.57$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeOfCSLL}  & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $109$ & \cellcolor{rowgray} $0.56$  & \cellcolor{rowgray} $1$ & \cellcolor{rowgray} $3$ \\
-        \hline
-		TreeStack & \safe & $58$ &  $0.20$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeStack} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $58$ & \cellcolor{rowgray} $0.01$  & \cellcolor{rowgray} $0$ & \cellcolor{rowgray} $0$ \\
-        \hline
-		TreeDsw   & \safe & $72$ & $1.87$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeDsw} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $72$ & \cellcolor{rowgray} $0.02$  & \cellcolor{rowgray} $0$ &  \cellcolor{rowgray} $0$ \\
-		\hline
-		TreeRootPtr & \safe & $62$ &  $1.43$  & $0$  &  $0$ & \cellcolor{rowgray}\textbf{TreeRootPtr} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $62$ & \cellcolor{rowgray} $0.17$  & \cellcolor{rowgray} $2$ & \cellcolor{rowgray} $6$\\
-        \hline
-		SkipList    & \safe & $84$ & $3.36$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{SkipList} & \cellcolor{rowgray}\unsafe & $\cellcolor{rowgray} 84$ & \cellcolor{rowgray} $0.08$  & \cellcolor{rowgray} $1$  & \cellcolor{rowgray} $1$ \\
-        \hline
-		% SkipList-3nd    & $97$ & $0.17$  & $1$  & N & x & $1$ & & & & & & & \\
-        % \hline
-	\end{tabular}
-	\label{tab:times}
-  \vspace{-5mm}
-  % \vspace{-8mm}
-\end{table}
-
-We present our experimental results in Table~\ref{tab:times}.
-% The times in the table are averages of ten measurements (\forester{} chooses its path through ART nondeterministicaly, which can result in slightly variable execution times).
-The table gives for each test case its name, information whether the program is safe or
-contains an error, the number of lines of code, the time needed for the analysis,
-the number of refinements, and, finally, the number of predicates learnt during
-the abstraction refinement.
 %
- The experiments were
-performed on a~computer with Intel Core i5@2.50\,GHz CPU and
-8\,GiB of memory running the Debian Sid OS with the Linux kernel.
-
-Some of the test cases consider dynamic data structures without any data stored
-in them, some of them data structures storing finite-domain data. Such data can
-be a~part of the data structure itself, as, e.g., in red-black trees, they can
-arise from some finite data abstraction, or they are also sometimes used to
-mark some selected nodes of the data structure when checking the way the data
-structure is changed by a given algorithm (e.g., one can check whether an
-arbitrarily chosen successive pair of nodes of a~list marked red and green is
-swapped when the list is reversed---see e.g.~\cite{artmc}).
-
-%As the results show, some of our test cases do not need the abstraction to be refined.
-As the results show, some of our test cases do not need refinement.
-This is because the predicate abstraction is \emph{a priori} restricted in order to preserve the forest automata ``interconnection graph''~\cite{boxes13},
-which roughly corresponds to the reachability relation among variables and
-cut-points in the heaps represented by a~forest automaton (an approach used
-already with the finite height abstraction in former versions of \forester).
-
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-Table~\ref{tab:times} also provides a comparison with the version of \forester{} from~\cite{boxes13}.
-In particular, the highlighted cases are not manageable by that versions of \forester{}.
-These cases can be split into two classes.
-In the first class there are safe programs where the initial abstraction is too
-coarse and introduces spurious counterexamples, and the abstraction thus needs
-to be refined.
-The other class consists of programs 
-containing a~real error (which could not be confirmed without the backward run).
-The times needed for analysis are comparable in both versions of \forester.
-
-To illustrate a typical learnt predicate, let us consider the test case \emph{GBSLL}.
-This program manipulates a list with nodes storing two data values, green and blue, for which it holds
-that a green node is always followed by a blue one. The program also contains a tester code to test this property.
-\forester{} first learns two predicates describing particular violations of the property:
-(1)~a~green node is at the end of the list and
-(2)~there are two green nodes in a~row.
-After that, \forester{} derives a~general predicate representing all lists with the needed invariant, i.e, a~green node is followed by a~blue one.
-The program is then successfully verified. 
-%The ability to learn shape as well as data properties (as well as properties
-%relating shape with data) using a uniform mechanism is one the features of our
-%method which distinguishes it from most of the related work.
-
-Another example comes from the analysis of the program \emph{TreeCSLL}, which
-creates and deletes a tree where every tree node is also the head of a circular
-list.
-%
-It contains an undefined pointer dereference error in the deletion of the
-circular lists. 
-%
-\forester{} first finds a spurious error (an undefined pointer dereference too)
-in the code that creates the circular lists.
-%
-In particular, the abstraction introduces a case in which a tree node that is
-also the head of a list needs not be allocated, and an attempt of accessing its
-next selector causes an undefined pointer dereference error. 
-%
-This situation is excluded by the first refinement, after which the error within
-the list deletion is correctly reported.
-%
-Notice that, in this case, the refinement learns a property of the shape, not a
-property over the stored data values. 
-%
+% We have implemented our counterexample analysis and abstraction refinement as an
+% extension of~\forester{} and evaluated it on a~set of C programs manipulating
+% singly- and doubly-linked list, trees, skip-lists, and their combinations. We
+% were able to analyse all of them fully automatically without any need to supply
+% manually crafted predicates nor any other manual aid. The test cases are described in
+% detail in~\cite{forester17techrep}.
+% 
+% 
+% %\begin{table}[bt]
+% %=======
+% %We implemented our method in \forester{}. The experiments were
+% %performed on a~PC with Intel Core i5@2.50 GHz CPU,
+% %8 GiB of memory, with Debian \texttt{sid} installed.
+% %Our benchmarks consist of programs manipulating singly- and
+% %doubly-linked list, and tree structures.
+% %We are able to analyse all the mentioned data
+% %structures fully automatically without the need to supply any manually crafted predicates.
+% %The benchmarks are in detail described in App.~\ref{sec:testcases}.
+% 
+% \begin{table}[t]
+%   % \vspace*{-2mm}
+% 	\centering
+% 	\scriptsize
+% 	\caption{Results of experiments.}
+% 	\begin{tabular}{| l | l | r | r | r | r || l | l | r | r | r | r | r |}
+%         \hline
+% 		Program & Status & LoC & Time [s] & Refnm& Preds & Program & Status & LoC & Time [s] & Refnm & Preds \\
+%         \hline
+%         \hline
+% 		SLL (delete) & \safe & $33$ & $0.02$ &  $0$ & $0$ & DLL (rev) & \safe & $39$ &  $0.70$ & $0$  & $0$ \\
+%         \hline
+% 		SLL (bubblesort) & \safe & $42$ & $0.02$ &  $0$ & $0$ & CDLL & \safe & $32$ &  $0.02$  & $0$  & $0$ \\
+%         \hline
+% 		SLL (insersort) & \safe & $36$ & $0.04$ & $0$ & $0$ & DLL (insersort) & \safe & $42$ &  $0.56$  & $0$  & $0$ \\
+%         \hline
+% 		SLLOfCSLL & \safe & $47$ & $0.02$ & $0$ & $0$ & DLLOfCDLL & \safe & $54$ &  $1.76$  & $0$  & $0$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{SLL01}    & \safe & $70$ & $1.20$   &  $1$ & $1$ & \textbf{DLL01} & \safe & $73$ &  $0.65$  & $2$  & $2$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{CircularSLL} & \safe & $49$ & $3.57$   &  $3$  & $3$ & \textbf{CircularDLL} & \safe  & $52$ &  $37.22$ & $18$ & $24$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{OptPtrSLL}   & \safe & $59$ & $1.90$ & $3$ & $3$ & \textbf{OptPtrDLL} & \safe & $62$ &  $1.87$  & $5$ & $5$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{QueueSLL}    & \safe & $71$ & $11.32$  &  $10$ & $10$ & \textbf{QueueDLL} & \safe  & $74$ &  $44.68$ & $14$ & $14$ \\
+% 		\rowcolor{rowgray}
+%         \hline
+% 		\textbf{GBSLL}       & \safe & $64$ & $0.84$   &  $3$ & $3$ & \textbf{GBDLL} & \safe & $71$ &  $1.89$  & $4$ & $4$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{GBSLLSent}   & \safe  & $68$ & $0.85$   &  $3$ & $3$ & \textbf{GBDLLSent} & \safe & $75$ &  $2.19$  & $4$ & $4$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{RGSLL}       & \safe & $72$ & $14.41$  &  $22$  & $38$ & \textbf{RGDLL} & \safe & $76$ &  $78.76$ & $26$ & $26$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{WBSLL}       & \safe & $62$ & $0.84$   &  $5$  & $5$ & \textbf{WBDLL} & \safe & $71$ &  $1.37$  & $7$ & $7$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{SortedSLL}   & \safe & $76$ & $227.12$ &  $15$ & $15$ & \textbf{SortedDLL} & \safe & $82$ &  $36.67$ & $11$ & $11$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{EndSLL}      & \safe  & $45$ & $0.07$   &  $2$  & $2$ & \textbf{EndDLL} & \safe & $49$ &  $0.10$  & $3$ & $3$ \\
+%         \hline
+% 		\rowcolor{rowgray}
+% 		\textbf{TreeRB} & \unsafe & $130$ &  $0.08$  & $0$  & $0$ & \textbf{TreeWB} & \unsafe & $125$ &  $0.05$  & $0$ & $0$ \\
+%         \hline
+% 		TreeCnstr & \safe & $52$ & $0.31$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeCnstr} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $52$ & \cellcolor{rowgray} $0.03$  & \cellcolor{rowgray} $0$ & \cellcolor{rowgray} $0$ \\
+%         \hline
+% 		TreeOfCSLL & \safe & $109$ &  $0.57$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeOfCSLL}  & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $109$ & \cellcolor{rowgray} $0.56$  & \cellcolor{rowgray} $1$ & \cellcolor{rowgray} $3$ \\
+%         \hline
+% 		TreeStack & \safe & $58$ &  $0.20$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeStack} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $58$ & \cellcolor{rowgray} $0.01$  & \cellcolor{rowgray} $0$ & \cellcolor{rowgray} $0$ \\
+%         \hline
+% 		TreeDsw   & \safe & $72$ & $1.87$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{TreeDsw} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $72$ & \cellcolor{rowgray} $0.02$  & \cellcolor{rowgray} $0$ &  \cellcolor{rowgray} $0$ \\
+% 		\hline
+% 		TreeRootPtr & \safe & $62$ &  $1.43$  & $0$  &  $0$ & \cellcolor{rowgray}\textbf{TreeRootPtr} & \cellcolor{rowgray}\unsafe & \cellcolor{rowgray} $62$ & \cellcolor{rowgray} $0.17$  & \cellcolor{rowgray} $2$ & \cellcolor{rowgray} $6$\\
+%         \hline
+% 		SkipList    & \safe & $84$ & $3.36$  & $0$  & $0$ & \cellcolor{rowgray}\textbf{SkipList} & \cellcolor{rowgray}\unsafe & $\cellcolor{rowgray} 84$ & \cellcolor{rowgray} $0.08$  & \cellcolor{rowgray} $1$  & \cellcolor{rowgray} $1$ \\
+%         \hline
+% 		% SkipList-3nd    & $97$ & $0.17$  & $1$  & N & x & $1$ & & & & & & & \\
+%         % \hline
+% 	\end{tabular}
+% 	\label{tab:times}
+%   \vspace{-5mm}
+%   % \vspace{-8mm}
+% \end{table}
+% 
+% We present our experimental results in Table~\ref{tab:times}.
+% % The times in the table are averages of ten measurements (\forester{} chooses its path through ART nondeterministicaly, which can result in slightly variable execution times).
+% The table gives for each test case its name, information whether the program is safe or
+% contains an error, the number of lines of code, the time needed for the analysis,
+% the number of refinements, and, finally, the number of predicates learnt during
+% the abstraction refinement.
+% %
+%  The experiments were
+% performed on a~computer with Intel Core i5@2.50\,GHz CPU and
+% 8\,GiB of memory running the Debian Sid OS with the Linux kernel.
+% 
+% Some of the test cases consider dynamic data structures without any data stored
+% in them, some of them data structures storing finite-domain data. Such data can
+% be a~part of the data structure itself, as, e.g., in red-black trees, they can
+% arise from some finite data abstraction, or they are also sometimes used to
+% mark some selected nodes of the data structure when checking the way the data
+% structure is changed by a given algorithm (e.g., one can check whether an
+% arbitrarily chosen successive pair of nodes of a~list marked red and green is
+% swapped when the list is reversed---see e.g.~\cite{artmc}).
+% 
+% %As the results show, some of our test cases do not need the abstraction to be refined.
+% As the results show, some of our test cases do not need refinement.
+% This is because the predicate abstraction is \emph{a priori} restricted in order to preserve the forest automata ``interconnection graph''~\cite{boxes13},
+% which roughly corresponds to the reachability relation among variables and
+% cut-points in the heaps represented by a~forest automaton (an approach used
+% already with the finite height abstraction in former versions of \forester).
+% 
+% %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+% %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+% 
+% Table~\ref{tab:times} also provides a comparison with the version of \forester{} from~\cite{boxes13}.
+% In particular, the highlighted cases are not manageable by that versions of \forester{}.
+% These cases can be split into two classes.
+% In the first class there are safe programs where the initial abstraction is too
+% coarse and introduces spurious counterexamples, and the abstraction thus needs
+% to be refined.
+% The other class consists of programs 
+% containing a~real error (which could not be confirmed without the backward run).
+% The times needed for analysis are comparable in both versions of \forester.
+% 
+% To illustrate a typical learnt predicate, let us consider the test case \emph{GBSLL}.
+% This program manipulates a list with nodes storing two data values, green and blue, for which it holds
+% that a green node is always followed by a blue one. The program also contains a tester code to test this property.
+% \forester{} first learns two predicates describing particular violations of the property:
+% (1)~a~green node is at the end of the list and
+% (2)~there are two green nodes in a~row.
+% After that, \forester{} derives a~general predicate representing all lists with the needed invariant, i.e, a~green node is followed by a~blue one.
+% The program is then successfully verified. 
+% %The ability to learn shape as well as data properties (as well as properties
+% %relating shape with data) using a uniform mechanism is one the features of our
+% %method which distinguishes it from most of the related work.
+% 
+% Another example comes from the analysis of the program \emph{TreeCSLL}, which
+% creates and deletes a tree where every tree node is also the head of a circular
+% list.
+% %
+% It contains an undefined pointer dereference error in the deletion of the
+% circular lists. 
+% %
+% \forester{} first finds a spurious error (an undefined pointer dereference too)
+% in the code that creates the circular lists.
+% %
+% In particular, the abstraction introduces a case in which a tree node that is
+% also the head of a list needs not be allocated, and an attempt of accessing its
+% next selector causes an undefined pointer dereference error. 
+% %
+% This situation is excluded by the first refinement, after which the error within
+% the list deletion is correctly reported.
+% %
+% Notice that, in this case, the refinement learns a property of the shape, not a
+% property over the stored data values. 
+% %
+% % The ability to learn shape as well as data properties (as well as properties
+% % relating shape with data) using a uniform mechanism is one the features of our
+% % method which distinguishes it from most of the related work.
+% %
 % The ability to learn shape as well as data properties (as well as properties
 % relating shape with data) using a uniform mechanism is one the features of our
 % method which distinguishes it from most of the related work.
 %
-The ability to learn shape as well as data properties (as well as properties
-relating shape with data) using a uniform mechanism is one the features of our
-method which distinguishes it from most of the related work.
-
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+%
 %------------------------------------------------------------------------------
 \section{Discussion and Future Work}
 %------------------------------------------------------------------------------
 
+The experiments with Forester were presented in the Section \ref{sec:exps} of the previous section and
+we discuss them here from perspective of backward run and abstraction refinement.
 Both the described forward and backward symbolic execution are quite fast.
 % , and \forester{} scales well. 
 We believe that the efficiency of the backward run (despite the need of computing expensive automata products) is to a large degree because it inverts unfolding (by folding). 
