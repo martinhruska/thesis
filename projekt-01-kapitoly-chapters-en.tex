@@ -4512,8 +4512,6 @@ boxes that are required, and thus substantially increase the performance.
 
 
 \input{figs/running/circular.tikz}
-% include the \circulardlltreeabstr{n} command
-\input{figs/running/circular_tree_abstr.tikz}
 % include the \circulardlltreefold{n} command
 \input{figs/running/circular_tree_fold.tikz}
 % include the \circulardlltreefolded{n} command
@@ -4528,6 +4526,8 @@ boxes that are required, and thus substantially increase the performance.
 \input{figs/running/circular_dll_list_fold.tikz}
 % include the \circulardlllistfolded{n} command
 \input{figs/running/circular_dll_list_folded.tikz}
+% include the \circulardlltreeabstr{n} command
+\input{figs/running/circular_tree_abstr.tikz}
 
  %   \begin{tikzpicture}[overlay,baseline]
       %\only<3>{
@@ -4535,8 +4535,7 @@ boxes that are required, and thus substantially increase the performance.
       %  \draw[black!60,->,>=stealth'] (note.west) -- (60mm,10mm);
       %}
 %    \end{tikzpicture}
-\begin{figure}
-\label{ref:fig-re1}
+\begin{figure}[bth!]
 \begin{center}
   \begin{subfigure}[b]{0.45\linewidth}
       \circulardll{5}
@@ -4546,10 +4545,24 @@ boxes that are required, and thus substantially increase the performance.
   \end{subfigure}
 \end{center}
 \caption{On the left-handed side is a data structure allocated on heap by a program. On the right-handed side is the same structure after the first abstraction.}
+\label{ref:fig-re1}
 \end{figure}
 
-\begin{figure}
-\label{ref:fig-re2}
+Since theory of forest automata and its application to shape analysis
+may be too abstract we provide with an running example in the following section.
+We are going to show computation of fixpoint in abstraction loop where
+abstraction and folding are performed alternately until a fixpoint is reached.
+For a sake of clarity we show the main principle on the concrete heap graph,
+not on forest automata where it would not be possible keep clarity because
+of need to visualize the sets of heap graphs represented by automaton.
+
+Consider a data stucture allocated on a heap shown on the left-handed side of
+Figure \ref{ref:fig-re1}.
+It is a doubly-linked list which nodes are also roots of tree with root pointers.
+At first, all solo boxes are unfolded before the abstraction loop is executed.
+This is illustrated by colored nodes in the figure which were unfolded from boxes.
+
+\begin{figure}[bth!]
 \begin{center}
   \begin{subfigure}[b]{0.47\linewidth}
       \circulardlltreefold{5}
@@ -4560,10 +4573,26 @@ boxes that are required, and thus substantially increase the performance.
 \end{center}
 \caption{On the left-handed side is the studied data structure with highlighted parts which are goind to be folded to a box. On~the right-handed side is after the folding
 which folded the highlited parts of graph to box \emph{tree-rootptr}.}
+\label{ref:fig-re2}
 \end{figure}
 
-\begin{figure}
-\label{ref:fig-re3}
+The first abstraction is performed which result is shown on the right-handed side
+of Figure \ref{ref:fig-re1}.
+The dotted lines represent a loop in corresponding automaton created by abstraction.
+In our example, we use height abstraction with height two.
+Therefore in this step, abstraction merges all states in corresponding automaton
+that represents tree sub-graphs with depths higher than one.
+The resulting automaton automaton now represents doubly linked list which nodes are
+trees with depth at least one.
+
+After the first abstraction a folding is performed.
+Folding alogirthm finds suitable parts of heap graph to be folded.
+In our case that are tree parts of shown data structures as it is highlighted on the left-handed side of
+Figure \ref{ref:fig-re2}.
+These parts of graphs are folded to boxes called \emph{tree-rootprt} which are
+added to edges leading from doubly-linked as shown on the right-handed side of Figure \ref{ref:fig-re2}.
+
+\begin{figure}[bt]
 \begin{center}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllfold{5}
@@ -4574,10 +4603,17 @@ which folded the highlited parts of graph to box \emph{tree-rootptr}.}
 \end{center}
 \caption{On the left-handed side is the data structure before another folding with highlighted part of graph for folding.
 On the right-handed side is resulting graph after folding which folded the highlited parts to box \emph{DLS}.}
+\label{ref:fig-re3}
 \end{figure}
 
-\begin{figure}
-\label{ref:fig-re4}
+The second abstraction is performed now however the abstraction algorithm finds nothing what could be abstracted.
+Then the second folding follows. Folding algorithm finds the suitable sub-graphs for folding which are highlighted by
+blue color on the left-handed side of Figure \ref{ref:fig-re4}.
+These sub-graps are segment of doubly-linked list, i.e., part of graph between two DLL nodes.
+It foldes the sub-graphs to the boxes called \emph{DLS}.
+The resulting graph after folding is show on the right-handed side of Figure \ref{ref:fig-re5}.
+
+\begin{figure}[bt]
 \begin{center}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllfolded{5}
@@ -4588,10 +4624,14 @@ On the right-handed side is resulting graph after folding which folded the highl
 \end{center}
 \caption{On the left-handed side is the data structure before abstraction.
 On the right-handed side is abstracted resulting graph after abstraction.}
+\label{ref:fig-re4}
 \end{figure}
 
-\begin{figure}
-\label{ref:fig-re5}
+Now, another abstraction is performed over the corresponding automaton
+and it merges its states in such way that the automaton now represents
+artbirtary doubly-linked list of length at least two.
+
+\begin{figure}[bt]
 \begin{center}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlllistfold{5}
@@ -4603,8 +4643,16 @@ On the right-handed side is abstracted resulting graph after abstraction.}
 \caption{On the left-handed side there is the data structure before final folding with the highlighted part to be folded.
 On the right-handed side is the data structure after folding the highlighted part to box \emph{circular-DLL-of-trees-rootptr}.
 Now, the fixpoint is reached.}
+\label{ref:fig-re5}
 \end{figure}
 
+Another folding is performed now.
+It finds that the whole heap graph could be folded to a box which is shown
+by the left-handed side of Figure \ref{ref:fig-re5}.
+As the result, we obtain the box \emph{circular-DLL-of-trees-rootptr} shown on the right-handed side
+of Figure \ref{ref:fig-re5}.
+The fixpoint is reached in this step and verification procedure proceed with an automaton containing
+just one transition with the mentioned box.
 
   %\begin{minipage}{3.1cm}
   %  \incmargin{7mm}
