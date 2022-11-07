@@ -351,14 +351,14 @@ of selector names.
 
           Separation logic was further modified to \emph{incorrectness separation logic} \cite{soa-isl} which
           combines local reasoning of separation logic with the newly introduced \emph{incorrectness logic} \cite{soa-il}.
-          An interprodcedural analysis based on incorrectness separation logic has no false positives by construction
+          An interprocedural analysis based on incorrectness separation logic has no false positives by construction
           and is aimed to rigorous bug hunting.
           Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
-          of Hoara triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has bee deallocated
+          of Hoare triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has bee deallocated
           and to reallocated. The operator was needed to distinguish between a dangling pointer and pointer which do not
           know anything about. The distinguishing was needed for combination of separation logic with frame rule
           for underapproximating reasoning.
-          The methods was implemented in the Pulse tool insined Facebookk infer.
+          The methods was implemented in the Pulse tool inside Facebook infer.
 
           We note that there
           are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
@@ -388,7 +388,7 @@ of selector names.
           the previous section, which is the crucial for a compositional (scalable) program analysis.
           In bi-abduction, one needs to solve the abduction problem $\phi * [?] \models \psi$,
           where $*$ is the separating conjunction.
-          The best solution (i.e., th logically weakest) is given by the formula $\phi \mw \psi$
+          The best solution (i.e., the logically weakest) is given by the formula $\phi \mw \psi$
           where one needs to use the magic wand operator $\mw$.
           %
           The cited works do not support magic wand since it has been shown
@@ -4556,7 +4556,7 @@ For a sake of clarity we show the main principle on the concrete heap graph,
 not on forest automata where it would not be possible keep clarity because
 of need to visualize the sets of heap graphs represented by automaton.
 
-Consider a data stucture allocated on a heap shown on the left-handed side of
+Consider a data structure allocated on a heap shown on the left-handed side of
 Figure \ref{ref:fig-re1}.
 It is a doubly-linked list which nodes are also roots of tree with root pointers.
 At first, all solo boxes are unfolded before the abstraction loop is executed.
@@ -4571,8 +4571,8 @@ This is illustrated by colored nodes in the figure which were unfolded from boxe
       \circulardlltreefolded{5}
   \end{subfigure}
 \end{center}
-\caption{On the left-handed side is the studied data structure with highlighted parts which are goind to be folded to a box. On~the right-handed side is after the folding
-which folded the highlited parts of graph to box \emph{tree-rootptr}.}
+\caption{On the left-handed side is the studied data structure with highlighted parts which are going to be folded to a box. On~the right-handed side is after the folding
+which folded the highlighted parts of graph to box \emph{tree-rootptr}.}
 \label{ref:fig-re2}
 \end{figure}
 
@@ -4586,7 +4586,7 @@ The resulting automaton automaton now represents doubly linked list which nodes 
 trees with depth at least one.
 
 After the first abstraction a folding is performed.
-Folding alogirthm finds suitable parts of heap graph to be folded.
+Folding algorithm finds suitable parts of heap graph to be folded.
 In our case that are tree parts of shown data structures as it is highlighted on the left-handed side of
 Figure \ref{ref:fig-re2}.
 These parts of graphs are folded to boxes called \emph{tree-rootprt} which are
@@ -4602,15 +4602,15 @@ added to edges leading from doubly-linked as shown on the right-handed side of F
   \end{subfigure}
 \end{center}
 \caption{On the left-handed side is the data structure before another folding with highlighted part of graph for folding.
-On the right-handed side is resulting graph after folding which folded the highlited parts to box \emph{DLS}.}
+On the right-handed side is resulting graph after folding which folded the highlighted parts to box \emph{DLS}.}
 \label{ref:fig-re3}
 \end{figure}
 
 The second abstraction is performed now however the abstraction algorithm finds nothing what could be abstracted.
 Then the second folding follows. Folding algorithm finds the suitable sub-graphs for folding which are highlighted by
 blue color on the left-handed side of Figure \ref{ref:fig-re4}.
-These sub-graps are segment of doubly-linked list, i.e., part of graph between two DLL nodes.
-It foldes the sub-graphs to the boxes called \emph{DLS}.
+These sub-graphs are segment of doubly-linked list, i.e., part of graph between two DLL nodes.
+It folds the sub-graphs to the boxes called \emph{DLS}.
 The resulting graph after folding is show on the right-handed side of Figure \ref{ref:fig-re5}.
 
 \begin{figure}[bt]
@@ -4629,7 +4629,7 @@ On the right-handed side is abstracted resulting graph after abstraction.}
 
 Now, another abstraction is performed over the corresponding automaton
 and it merges its states in such way that the automaton now represents
-artbirtary doubly-linked list of length at least two.
+arbitrary doubly-linked list of length at least two.
 
 \begin{figure}[bt]
 \begin{center}
@@ -5125,7 +5125,7 @@ which was set to 900\,s, the same as in SV-COMP).
 %8\,GiB of memory running the Debian Sid OS with the Linux kernel.
 
 Some of the test cases consider dynamic data structures without any data stored
-in them, while some of them consdier data structures storing finite-domain data.
+in them, while some of them consider data structures storing finite-domain data.
 Such data can
 be a~part of the data structure itself, as, e.g., in red-black trees; they can
 arise from some finite data abstraction; or they are also sometimes used to
@@ -9571,9 +9571,9 @@ As usual, we use a fresh copy~$x_i$ of each variable~$x$ for each program locati
 where the value of~$x$ is modified.
 In this encoding, special variables called \emph{guards} are used to track the control flow of the program
 in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ which value
-encondes whether the program location is reachable.
+encodes whether the program location is reachable.
 
-Wachieve acyclicity of the SSA, we cut the path coming from the end of the loop.
+We achive acyclicity of the SSA, we cut the path coming from the end of the loop.
 We then represent the value of each variable $x$ at the loop head using a
 \emph{phi variable} $x^{phi}$ whose value is defined by a non-deterministic
 choice between the value coming from before the loop, say $x_0$, and the
@@ -9586,8 +9586,8 @@ The effect of the loop is overapproximated and
 the value of the loop-back variable $x^{lb}$ is initially unconstrained
 and later constrained by the derived candidate loop invariants
 
-\section{Temaple domain for Shape Analysis}
-We design a temaplate domain which are used in the described framework to
+\section{Template domain for Shape Analysis}
+We design a template domain which are used in the described framework to
 derive \emph{loop invariants} of the analysed programs.
 Templates are also used to constrain values of the \emph{loop-back variables} that are
 used in the SSA-based program encoding to over-approximate values returning from
@@ -9680,14 +9680,14 @@ The row guard $G_{\ssaplb{i}}$ is a conjunction of the following guards:
 \end{itemize}
 
 \section{Conclusion}
-This chapter provided a very brief and dense introduction how we extended the templated-based
-approach to static analys by shape analysis.
+This chapter provided a very brief and dense introduction how we extended the template-based
+approach to static analysis by shape analysis.
 
 Beyond the described aspects we needed to design operations \emph{dynamic memory allocation}
 (\texttt{malloc}), \emph{reading through dereferenced pointers}, \emph{memory free} in
 our shape analysis to be able to compute shape invariants.
 As we mentioned above, we also designed combination of the described abstract domain
-for shape analysi with others already existing domains.
+for shape analysis with others already existing domains.
 
 Finally, we specified how to check properties such as \emph{absence of null pointer dereference},
 \emph{free safety}, and \emph{absence of memory leaks}.
@@ -10352,7 +10352,7 @@ The interface should be simple enough to be usable by anyone with basic
 programming skills and knowledge of automata theory.
 The source code should hide complicated heuristics and optimizations
 and keep basic data structures simple and so easily extensible.
-The implemntation should be in efficient language such as C++ and provide
+The implementation should be in efficient language such as C++ and provide
 an interface to a high level programming language.
 
 So far, we implemented the first prototype of library.
@@ -10361,7 +10361,7 @@ together with the algorithms over them such as union, intersection,
 complementation, determinisation, simulation based reduction, or language inclusion checking.
 An interface for Python was implemented over the efficient implementation in C++.
 We design a text based format for description of various version of finite automata.
-The format supporta finite automata and alternating finite automata with explicit, symbolic,
+The format support a finite automata and alternating finite automata with explicit, symbolic,
 or bitvector alphabet as well as transducers with mentioned alphabets.
 Currently, we work on extension of library by finite alternating automata representation
 which would support parsing from the designed format.
@@ -10401,13 +10401,13 @@ On the other, it lacks generality of automata based approaches and currently sup
 only analysis of linked list data structures.
 
 The second project was connecting Symbiotic, a static analyser based on symbolic execution, with
-Predator, a sucessfull shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
+Predator, a successful shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
 Predator won multiple editions of SV-COMP in memory safety related categories and was
 therefore a good candidate for providing information about memory safety invariants
 for each line of an analysed program.
-The information was further used by Symbiotic which realies heavily on slicing of program
+The information was further used by Symbiotic which relies heavily on slicing of program
 over which a symbolic execution is run.
-Particulary, Symbiotic does not need to analyse lines of code which were detoned as memory
+Particularly, Symbiotic does not need to analyse lines of code which were denoted as memory
 safe by Predator executed in overapproaximating (sound) mode.
 If Predator find a bug in program, Symbiotic takes bug report and combines it with the
 results of its static pointer analysis to filter out some spurious counterexamples.
