@@ -7,86 +7,102 @@
 Software quality is a crucial part of software development cycles
 regardless of type of software.
 It is important in low level code often deployed in the highly critical
-applications where one bug can have expensive consequences or even threaten
+applications where one bug can have expensive consequences or even threat
 human lives.
-As well as it is important in high level software where bugs can destroy
+It is crucial also in high level software where bugs can destroy
 user experience and ruin the whole process of development and selling a new software.
 
 \subparagraph{Approaches to Software Quality}
-There are different approaches at different parts of software development cycle
+There are different approaches to software quality at different stages of development cycle
 with different quality warranties.
-The most rigorous one is based on formal specification of requirements and invariants
-of a program followed by deriving program from the specification or proving program
-against specification manually.
+The most rigorous one is based on a formal specification of requirements
+followed by deriving program from the specification or proving program
+against the specification manually.
 This approach is present from the beginning of computer and although it provides
 the highest level of guarantee it does not became mainstream.
 The main negatives are the high demands on developers and inability to scale
 to larger software.
 
-A relaxed version of the previous are automated formal methods such as
-model checking or abstract interpretation (generally called formal verification)
-which strive to verify
-a program according to given specification. They are easier to use,
-however problem with scaling and applicability to real world software. 
+There are also automated approaches to proving correctness of program such as
+model checking or automated theorem proving (generally called formal verification)
+which strive to verify a program according to given specification.
+They are easier to use, however problem with scaling and applicability to real world software.
+The lightweighted versions of this kind of methods are different sound static analysis or
+abstract intepretation which are specialized to a certain program properties
+(e.g., different analyses for values of integer variables and different analyses
+for termination properties).
+These methods scale better and can work out of the box.
+However, they are less precise and often tuned for a particular program property. 
+
 
 Another approach comes from programming language community claiming
 that programming language itself should guide a programmer to writing
 software without bugs.
 This is mostly achieved by static strong type systems which makes possible to
-encode different program properties to a given type system.
-The advantage of this approach that it comes with an element part of development
-environment which is programming language and one does not need another technology.
-On the other hand, the programming languages of this kind have slow learning curve
+encode different program properties to type system.
+The advantage of this approach is that one does not need another technology and forces
+programmers to write correct code.
+On the other hand, the programming languages of this kind have slow learning curve,
+or can be even unusable for certain programmers
 and only limited set of properties is encodable to type systems.
 
-The third approach to software quality is based are lightweight automated methods
-such as automated testing, or basic static analysis based on patter matching, or bounded model checking.
-Methods like this tries to hit sweet spot between mathematical rigorous and plain bug hunting.
-They are easy to use, scale well but detect many false alarms which cause
-that they are ignored by developers completely.
+The third approach to software quality are lightweight automated methods
+such as automated testing, unsound static analysis based on patter matching, or bounded model checking.
+The methods try to hit sweet spot between mathematical rigorous and plain bug hunting.
+They are easy to use, straightforward, scale well but detect many false alarms which may cause
+that at the end they are ignored by developers completely.
 
-The last approach is based on traditional testing by humans. It may be developers
+The last of the main approach is based on traditional testing by humans. It may be developers
 writing unit tests or the whole tester teams implementing the complex tests.
 It is mostly known and time-tested approach, but it costs a lot of human resources and
-does not usually find all bugs.
+does not given any guarantees about correctness.
 
-In practice, the different approaches are combined and complement each other.
-This thesis focuses on combination of automated formal methods (the first part of thesis)
-which we later relaxed to achieve scalability of lightweight automated methods.
+The presented dychotomy does not pretend to be complete or exhaustive.
+It tries to summary the main approaches and give an overview of them.
+In practice, the different approaches are combined, complement each other and may
+fall to different categories.
+The proposed thesis focuses on automated formal methods (the first part of thesis)
+and lightweight automated methods which we used in domain where scalability was required.
 
 \subparagraph{Finite Automata}
-The main uniting theme of the thesis is application of finite automata.
-Finite automata are (syntactically) simple but powerful tool for regular
-languages. In more practical terms, they can represent regular structures
-such as actually allocated data structures on heap or many communication protocols.
-
-Since their introduction in 50s by Rabin and Scott CITE they have been used in
+The main uniting theme of the thesis is application of finite automata to
+the fields of formal verification and automated testing.
+Finite automata are (syntactically) simple but powerful tool for representing regular languages. 
+%Particulary, such languages may consists of e.g., regular strings (used in pattern matching applications
+%such as lexical analysis in compilers or detection of malicious strings in security domains),
+%regular structures such as list or trees (used in verification of programs manipulating
+%dynamic data strucutre), or regular sequences of messages (used in modelling communication
+%protocols).
+Since their introduction in 50s by Rabin and Scott \cite{rabin-scott} they have been used in
 various domains such as compilers, modelling of different kinds of systems,
 design of digital circuits, natural language proceeding, speech recognition,
 and in verification or testing of software and hardware.
 Moreover, finite automata and their variations are widely studied in theoretical computer science either
 from perspective of decidable properties, or complexity of algorithms for their manipulation.
 
-Finite automata have good decidability properties since the crucial properties (at least for formal verification)
-such as language inclusion, equivalence, complement, or emptiness are decidable.
-On the other hand, their computational complexity is high
-TODO: defined.
-Fortunately, there are heuristics working good in practically interesting test cases.
-TODO: name some examples.
+A regular language represented by automaton may contain different regular structures.
+A classical example is language consiting of regular strings (used in pattern matching applications
+such as lexical analysis in compilers or detection of malicious strings in security domains).
+Another possibility is language containing regular sequences of messages (used in modelling communication
+protocols).
+In formal verification we are intereseted also in representing regular infinite strings (by so called Buchi automata)
+what is used used for verification of properties described in linear temporal logic, or in represantation of
+regular tree structures (by so called tree automata) what is used to represent tree data structures allocated
+on heap by a program.
 
-In formal verification, there are used various variations of finite automata
-accepting different regular structures than finite words.
-For example, Buchi automata accepts regular infinite words and are used
-for verification of properties described in linear temporal logic.
-Tree automata accept tree structures and are used in shape analysis
-for representing tree structures allocated on heap.
+In the applications of automata in this thesis we are interested in properties such as language inclusion and equivalence
+of two finite automata, emptiness or complement of language of finite automaton.
+All these properties are decidable but some of them have high complexity complexity,
+i.e., complement is NP-complete, language inclusion and equivalence are even PSACE-complete.
+Fortunately, there were introduced heuristics for the mentioned operations making
+them computationally feasable in many practical cases.
 
-In this thesis we focus on application of automata to two different fields.
+As we mentioned above we focus on application of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
 dynamic data structures.
 The properties mostly verified in these programs are absence of invalid memory
 dereference, invalid memory free, or memory leaks.
-Especially error prone programs to the mentioned bugs are written in programming
+The error prone programs to the mentioned bugs are written especially in programming
 languages with manual memory management as C or C++.
 At the same time, these programs are used in critical software such as controlling
 systems in airplanes or cars, or in kernel of operating system.
@@ -94,50 +110,41 @@ Any bugs in them may affect many users and lead to the expensive losses.
 Therefore they are an ideal fit for application of formal verification which
 brings strong guarantees about software correctness.
 
-Our approach to shape analysis is used forest automata and automata over graphs
-(both extensions of tree automata) with bounded tree width to represent
-actual state of heap\,---\,dynamic data structures actually allocated on heap.
-Once we are able to represent heap we employ different algorithms for given automata empowered by
-various heuristics to plug this representation to a verification procedure.
-Such a procedure usually travels over source code of an analysed program and perform
-operations in automata domain.
-Then we check whether the represented heap fulfill specification (usually checking
-absence of invalid dereference, invalid free or memory leaks).
+Our approach to shape analysis is based on forest automata and automata over graphs
+(both extensions of tree automata) with bounded tree width.
+We use the both formalisms to represent actual state of heap, i.e., dynamic data structures actually allocated on heap.
+Then we employ a verification procedure to compute shape invariants for each program logcation.
+In our case, shape invariant is an automaton representing all possible states of heap.
+Finally, we check that shape invariants implies that a given specification is fullfiled by program
+(usually checking absence of invalid dereference, invalid free or memory leaks).
 
-The second field of application of automata in this thesis is for automated software testing.
-Particularly, we focus on testing of manufacturing system in environment of digital twin.
-We analyse behavior of software used in a manufacturing system, build its models and then
-generate test of digital twin of manufacturing system, e.g., where a new version of software
-is deployed.
-The domain of manufacturing system contains critical controlling system where bugs may stop
-manufactory process or even damage a manufacturing machines.
-They are again very expensive and it is important to find as many of them as possible
-before they are deployed to a real manufacturing system.
+The second field of application of automata in this thesis is automated software testing.
+Particularly, we focus on testing of manufacturing execution system (MES) in environment of digital twin.
+MES is critical software in controlling manufactory where bugs may stop
+production or even damage manufacturing machines.
+Such bugs may be very expensive and it is important to find as many of them as possible
+in MES before it is deployed to a real manufactory.
+Our approach analyses behavior of software used in a real manufactury, builds its models and then
+generates tests for digital twin of manufactory where, e.g., a new version of software is deployed.
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current state of the art of shape analysis.
-The first one is principal conceptual improvement and development of the new algorithms
-which will enable analysis of wider spectrum of computer programs.
-That means improving precision of the current methods (particularly of shape analysis based on forest automata)
-and also a development of new formalism which will be able to represent
-more general classes of data structures.
-We aim to introduce a formalism which will be based on Courcelle theorem \cite{Courcelle}
-will be able to represent graph with bound tree width as its language.
+We aim to development of existing approach to shape analysis based on forest automata
+and its improvement to enable verification of largel class of programs.
+We also want to propose a new formalism which will be based on Courcelle theorem \cite{Courcelle}
+and will be able to represent graph with bound tree width as its language.
 
 The second part of the first goal is systematical development of a tool for shape analysis.
-We choose Forester \cite{svcompweb} which implements shape analysis for forest automata.
-Our goal is to make Forester able to compete on international field although we are
+Particulary, we focuse on Forester \cite{svcompweb} which implements shape analysis for forest automata.
+Our goal is to make Forester able to compete on international level although we are
 aware of fact that due lack of human power we cannot enhance tool from research prototype
 to something applicable to real world software.
 
 The second goal of thesis is to apply automata to field of testing, particularly
-to testing of manufacturing execution systems.
-These systems are used to control operations in manufactories therefore it is
-important to test them properly before deployment to real environment.
-One of promising approaches to their testing is based on digital twin where
-the systems are run in environment of a digital copy of manufactory.
-We want to automatically create tests suites simulating behavior of an original
-manufactory and extrapolate them to create new tests.
+to testing manufacturing execution systems.
+We want to create a novel approach combining automated test generation from
+observed behaviour of a manufactory with testing in enviroment of digital twin
+which will be orchestrated according to the tests we create.
 
 \section{Overview of the Achieved Results}
 \subparagraph{Shape analysis}
@@ -220,13 +227,14 @@ in Lecture Notes on Computer Science during the next year.
 The plan of the thesis is following.
 In Chapter \ref{ch:state-of-the-art} a state of the art in shape analysis is described.
 Then in Chapter \ref{ch:asv} we provide with a description of forest automata based
-shape analysis.
-In Chapter \ref{ch:vmcai}, a more detailed description of backward run and predicate abstraction
-over forest automata is given.
+shape analysis including a detailed description of backward run and predicate abstraction
+over forest automata which was developed as part of the thesis.
 Chapter \ref{ch:svcomp} summarizes Forester participation in the various editions
 of software verification competition SV-COMP.
 Chapter \ref{ch:netys} introduces automata over graphs with bounded tree width together
 with their crucial properties.
+Chapter \ref{ch:fmcad} describes an alternative approach to shape analysis based on SMT
+solving which we participated to develop.
 
 Finally, Chapter \ref{ch:eurocast} describes our methods for testing MES in environment
 of digital twin.
@@ -4535,14 +4543,16 @@ boxes that are required, and thus substantially increase the performance.
       %  \draw[black!60,->,>=stealth'] (note.west) -- (60mm,10mm);
       %}
 %    \end{tikzpicture}
-\begin{figure}[bth!]
+\begin{figure}[bt]
 \begin{center}
-  \begin{subfigure}[b]{0.45\linewidth}
+\scalebox{.7} {
+  \begin{subfigure}[b]{0.49\linewidth}
       \circulardll{5}
   \end{subfigure}
-  \begin{subfigure}[b]{0.45\linewidth}
+  \begin{subfigure}[b]{0.49\linewidth}
       \circulardlltreeabstr{5}
   \end{subfigure}
+}
 \end{center}
 \caption{On the left-handed side is a data structure allocated on heap by a program. On the right-handed side is the same structure after the first abstraction.}
 \label{ref:fig-re1}
@@ -4562,14 +4572,16 @@ It is a doubly-linked list which nodes are also roots of tree with root pointers
 At first, all solo boxes are unfolded before the abstraction loop is executed.
 This is illustrated by colored nodes in the figure which were unfolded from boxes.
 
-\begin{figure}[bth!]
+\begin{figure}[bt]
 \begin{center}
-  \begin{subfigure}[b]{0.47\linewidth}
+\scalebox{.7} {
+  \begin{subfigure}[b]{0.49\linewidth}
       \circulardlltreefold{5}
   \end{subfigure}
-  \begin{subfigure}[b]{0.47\linewidth}
+  \begin{subfigure}[b]{0.49\linewidth}
       \circulardlltreefolded{5}
   \end{subfigure}
+}
 \end{center}
 \caption{On the left-handed side is the studied data structure with highlighted parts which are going to be folded to a box. On~the right-handed side is after the folding
 which folded the highlighted parts of graph to box \emph{tree-rootptr}.}
@@ -4594,12 +4606,14 @@ added to edges leading from doubly-linked as shown on the right-handed side of F
 
 \begin{figure}[bt]
 \begin{center}
+\scalebox{.7} {
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllfold{5}
   \end{subfigure}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllfolded{5}
   \end{subfigure}
+}
 \end{center}
 \caption{On the left-handed side is the data structure before another folding with highlighted part of graph for folding.
 On the right-handed side is resulting graph after folding which folded the highlighted parts to box \emph{DLS}.}
@@ -4615,12 +4629,14 @@ The resulting graph after folding is show on the right-handed side of Figure \re
 
 \begin{figure}[bt]
 \begin{center}
+\scalebox{.7} {
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllfolded{5}
   \end{subfigure}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlldllabstr{5}
   \end{subfigure}
+}
 \end{center}
 \caption{On the left-handed side is the data structure before abstraction.
 On the right-handed side is abstracted resulting graph after abstraction.}
@@ -4633,12 +4649,14 @@ arbitrary doubly-linked list of length at least two.
 
 \begin{figure}[bt]
 \begin{center}
+\scalebox{.7} {
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlllistfold{5}
   \end{subfigure}
   \begin{subfigure}[b]{0.49\linewidth}
       \circulardlllistfolded{5}
   \end{subfigure}
+}
 \end{center}
 \caption{On the left-handed side there is the data structure before final folding with the highlighted part to be folded.
 On the right-handed side is the data structure after folding the highlighted part to box \emph{circular-DLL-of-trees-rootptr}.
@@ -5579,7 +5597,7 @@ Building a more robust tool on top of our experience with \forester is one of ou
 % mainly on \cite{habermehl:forest} for the overall overview and on \cite{holik:cexfa,jiri:diza} for the technical part.
 % It does not comprise the works on verification of properties of data stored in forest automata \cite{forester-data-acta} and 
 % an advanced algorithms for learning boxes \cite{holik:automated}.
-
+\begin{comment}
 \chapter{Forester VMCAI}
 \label{ch:vmcai}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8713,6 +8731,7 @@ relation between them (instead of taking all elements of the Cartesian product).
 Another possibility would be to use sets of forest automata instead of
 individual ones as the symbolic representation of sets of heaps.  
 
+\end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SV-COMP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -9486,18 +9505,21 @@ we add it here to give another perspective on shape analysis.
 We provide with an overview of the approach. For full technical description one should check \cite{fmcad18}.
 
 The verification method is based on describing state space of a program w.r.t. to a property of interest
-using logic formula and so called templates.
-The invariant of program under analysis are synthesised using SMT solver.
-We designed a new template domain for describing shapes of heap.
-Since our domain is designed in template based verification framework we can combine
-with already existing templates, e.g., for analysis of integer variables.
+using logic formulae and so called templates.
+The templates are speacial logic formulae and conceptually they are similar to abstract domain
+in abstract interpretation since they are manually crafted to capture only certain aspects of analysed program
+and so they make analyses computationally feasable.
+Therefore we call templates (abstract) domains in the of the chapter.
+The invariant of program under analysis are synthesised from system of logic formulae and templates
+describing state space of program using SMT solver.
 
 The main contributions of this work are:
 \begin{compactenum}
 \item We propose a novel abstract template domain for reasoning over
   heap-allocated data structures such as singly and doubly linked
   lists using a template-based parameter synthesis engine.
-\item We show how we can build product and power domain combinations
+\item Since we designed our domain in existing framework for template-based
+  verification how we can build product and power domain combinations
   of our heap domain with structural domains (e.g.\ trace partitioning) and
   value domains such as template polyhedra that capture the content of
   data structures.
@@ -9508,12 +9530,13 @@ The main contributions of this work are:
   performed well in SV-COMP, cannot handle these examples.
 \end{compactenum}
 
-In this Chapter, we firstly describe the verification method and the domain for shape
+In this chapter, we firstly describe the verification method and then the domain for shape
 analysis which we designed.
 
 \section{Template-based Program Verification}
 
-A state of a program is a logical interpretation of logical variables
+In template-based program verification, 
+a state of a program is a logical interpretation of logical variables
 corresponding to each program variable. A set of states can be described using
 a formula---states in the set are defined by models of the formula. Given a
 vector of variables $\vx$, the predicate $\fminit(\vx)$ describes
@@ -9565,15 +9588,15 @@ we iteratively search for the negated formula:
 \end{split}
 \end{equation}
 
-We encode the program into a
-formula representing a specific \emph{static single assignment form} (SSA).
+\subsection{Program Encoding}
+We encode the program into a formula representing a specific \emph{static single assignment form} (SSA).
 As usual, we use a fresh copy~$x_i$ of each variable~$x$ for each program location~$i$
 where the value of~$x$ is modified.
 In this encoding, special variables called \emph{guards} are used to track the control flow of the program
 in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ which value
 encodes whether the program location is reachable.
 
-We achive acyclicity of the SSA, we cut the path coming from the end of the loop.
+To achive acyclicity of the SSA, we cut the path coming from the end of the loop.
 We then represent the value of each variable $x$ at the loop head using a
 \emph{phi variable} $x^{phi}$ whose value is defined by a non-deterministic
 choice between the value coming from before the loop, say $x_0$, and the
@@ -9609,7 +9632,7 @@ pointer $p$ coming from the end of the body of the loop $l$.
 %
 The property that our base shape domain describes is the
 \emph{may-point-to} relation between the set $\ptrlb$ and the set
-$\addr$.
+$\addr$ of memory addresses.
 
 The template of our base shape domain has the form of the formula $\templ^S
 \equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
@@ -9665,12 +9688,12 @@ The row guard $G_{\ssaplb{i}}$ is a conjunction of the following guards:
 
   \item The guard $\ssagls{i}$ linked with the use of $\ssaplb{i}$. The value of
   $\ssagls{i}$ is true if $\ssaplb{i}$ is chosen as the value of the
-  corresponding \emph{phi} variable at the head of $l$ (see
-  Section~\ref{sec:ssa}).
+  corresponding \emph{phi} variable at the head of $l$.
 
   \item If $\ssaplb{i}$ describes a pointer field of some abstract
     dynamic object (i.e.\ it has the form $\ssalb{\dynobj{j}{k}.f}{i}$
-    for some $\dynobj{j}{k} \in \dobj, f \in \fld$), we also use the
+    for some $\dynobj{j}{k} \in \dobj, f \in \fld$ where $\dobj$ is a set of all abstract dynamic object
+    and $\fld$ a set of all fields of abstract objects), we also use the
     guard $\ssavar{g}{\dynobj{j}{k}}{}$ linked with the allocation of
     $\dynobj{j}{k}$ at program location~$j$. This guard conjoins the
     guard expressing reachability of program location~$j$ with the
@@ -9679,28 +9702,31 @@ The row guard $G_{\ssaplb{i}}$ is a conjunction of the following guards:
     object allocated at~$j$.
 \end{itemize}
 
+Once we assemble a set of templates describing possible we derive shape invariants
+using SMT solver (since shape invariants are models of the logic formulae put into
+SMT solver).
+
 \section{Conclusion}
-This chapter provided a very brief and dense introduction how we extended the template-based
+The previous sections provided a very brief and dense introduction how we extended the template-based
 approach to static analysis by shape analysis.
 
 Beyond the described aspects we needed to design operations \emph{dynamic memory allocation}
-(\texttt{malloc}), \emph{reading through dereferenced pointers}, \emph{memory free} in
-our shape analysis to be able to compute shape invariants.
+(\texttt{malloc}), \emph{reading through dereferenced pointers}, and \emph{memory free} in
+our abstract template domain to be able to compute shape invariants.
 As we mentioned above, we also designed combination of the described abstract domain
 for shape analysis with others already existing domains.
 
 Finally, we specified how to check properties such as \emph{absence of null pointer dereference},
 \emph{free safety}, and \emph{absence of memory leaks}.
-E.g., to check dereferences of $\nullptr$, for each expression $*p$
-occurring in a program location $i$, we verify the assertion
-$\ssa{p}{j} \neq \nullptr$ where $\ssa{p}{j}$ is the version of $p$
-valid at $i$.
+E.g., to check dereferences of $\nullptr$, we verify the assertion
+$\ssa{p}{i} \neq \nullptr$ where $\ssa{p}{i}$ is the version of $p$
+valid at $i$ for each expression $*p$ occurring in a program location $i$.
 
-A detailed description of abstract memory operations or how other properties are checked
+A detailed description of abstract memory operations or how all three memory safety properties are checked
 can be found in \cite{fmcad18} as well as empirical evaluation of our
 method on benchmark of heap manipulating programs.
-Their full description of th method is out of scope of this thesis and since
-we are not the main authors we limited ourselves to this brief overview.
+Their full description is out of scope of the thesis and since
+we are not the main authors of this approach we limited ourselves to this brief overview.
 
 \part{Automata in Software Testing}
 
@@ -9799,7 +9825,7 @@ different protocols and data structures, e.g.: \begin{inparaenum}[(1)]
 %
 \begin{figure}[bt]
   \centering
-  \includegraphics[scale=0.5]{figs/eurocast-diagram.pdf}
+  \includegraphics[scale=0.8]{figs/eurocast-diagram.pdf}
   \caption{Scheme of our solution.}
   \label{fig:tunis-diagram}
 \end{figure}
