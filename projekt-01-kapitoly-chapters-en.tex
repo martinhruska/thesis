@@ -100,6 +100,10 @@ them computationally feasable in many practical cases.
 As we mentioned above we focus on application of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
 dynamic data structures.
+As we mentioned above, language of finite automaton (or its variant) can represent
+seto of regular structures.
+We are interested in representation of regular data structures allocated on heap such
+as linked lists or trees.
 The properties mostly verified in these programs are absence of invalid memory
 dereference, invalid memory free, or memory leaks.
 The error prone programs to the mentioned bugs are written especially in programming
@@ -112,7 +116,8 @@ brings strong guarantees about software correctness.
 
 Our approach to shape analysis is based on forest automata and automata over graphs
 (both extensions of tree automata) with bounded tree width.
-We use the both formalisms to represent actual state of heap, i.e., dynamic data structures actually allocated on heap.
+Both formalisms are able to represent quite wide class of data structures that can be
+allocated on heap.
 Then we employ a verification procedure to compute shape invariants for each program logcation.
 In our case, shape invariant is an automaton representing all possible states of heap.
 Finally, we check that shape invariants implies that a given specification is fullfiled by program
@@ -129,9 +134,9 @@ generates tests for digital twin of manufactory where, e.g., a new version of so
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current state of the art of shape analysis.
-We aim to development of existing approach to shape analysis based on forest automata
-and its improvement to enable verification of largel class of programs.
-We also want to propose a new formalism which will be based on Courcelle theorem \cite{Courcelle}
+We aim to futher development of existing approach to shape analysis based on forest automata
+and its improvement to enable verification of larger class of programs.
+We also want to propose a new automata formalism which will be based on Courcelle theorem \cite{Courcelle}
 and will be able to represent graph with bound tree width as its language.
 
 The second part of the first goal is systematical development of a tool for shape analysis.
@@ -151,57 +156,62 @@ which will be orchestrated according to the tests we create.
 The first result is an extension of forest automata based shape analysis by
 spurious counterexample detection and predicate abstraction refinement published in \cite{vmcai17}.
 An abstraction is generally used in formal verification to overapproximate
-represented state space of a program and so enabling representation of infinite
+represented state space of program and so enabling representation of infinite
 state spaces.
 On the other hand, a violation of specification can be detected in the overapproximated
 part of state space which is not in a program under verification.
 We call such fake violations of specification spurious counterexamples.
-Forest automata based shape analysis used a abstraction overapproximating
-state of heap.
-However it did not contain any algorithm to check whether a found counterexample
+Forest automata based shape analysis used an abstraction overapproximating
+state of heap, i.e., abstract forest automata represent more possible shapes of heap
+than is allocated by program in reality.
+However the method did not contain any algorithm to check whether a found counterexample
 to given specification is real or spurious.
 We develop a detection of spurious counterexamples based on so called backward run.
-It will be described in more technical way in the rest of thesis but intuitively it
-reverts all actions over forest automata done forward run, i.e., a path to counterexample.
-When forest automata representing heap in a corresponding state of forward and
-backward run have an empty intersection, it means that a found counterexample is spurious.
+It will be described in more technical way in the rest of the thesis but intuitively it
+reverts all actions over forest automata done in forward symbolic execution
+starting from forest automaton representing an erroneous configuration.
+When forest automata in backward run diverges from the ones in forward run,
+it means that a found counterexample is spurious.
 
 Once we are able to detect spurious counterexamples we need an abstraction which is refinable. 
 In other words, we want to make abstraction more precise so when we restart analysis
 we will no reach the same counterexample again.
 Therefore we developed a version of predicate abstraction for forest automata.
 We are able to derive new predicates from a spurious counterexample which
-guarantee that after a restart of verification methods we exclude it
+guarantee that after a restart of verification method we exclude it
 from represented state space.
 
-Another part of this results is a participation of the tool Forester
+We achieved the second goal in the field of shape analysis, i.e., making a shape analyser
+competitive on international level, by the participations of the tool Forester
 implementing forest automata based shape analysis
-in software verification competition in edition for years 2015, 2016, 2017, and 2018.
-The participation was accompanied with publications \cite{svcomp16-forester,holik_run_2016,holik_forester_2017}
-describing crucial improvements for the given year.
-The improvements corresponds to the progress done in forest automata described above.
+in software verification competition SV-COMP \cite{svcompweb} in edition for years 2015, 2016, 2017, and 2018.
+The participation was accompanied by publications \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}
+describing the main improvements for the given edition of the competition.
+Basically, the improvements are gradual implementation of the new methods devoled for
+forest automata based shape analysis described above.
 Although Forester did not win any medal in any major category,
 we managed to support non trivial subset of C language needed for a reasonable
 participation in competition and made tool mature enough to be competitive with
 other tools, often developed by large teams.
-Forester stayed at state of prototype and a lot of engineering work would be needed to make
-it a mature tool, but we were able to show that a shape analysis based on automata is
-can compete with other approaches and that it is a meaningful path of research.
+The tool also verified soundly some test cases such as skip-list of the 3 level, or
+variants of trees which were not analysable by any other tool.
+Although Forester stayed at state of prototype and a lot of engineering work would be needed to make
+it a mature tool, we were able to show that a shape analysis based on automata
+can compete with other approaches and it is a meaningful path of research.
 
-
-The second results in shape analysis is introduction of automata over graphs
+Beyond the work done on forest automata based shape analysis we introduced automata over graphs
 with bounded tree width which was published in \cite{netys21}.
 The automata are directly influenced by Courcelle's theorem \cite{courcell_graph_2012}
 stating that any graph property definable in monadic second-ordred logic can be decided
 in a linear time on graphs with bounded tree width.
-We sketch automata using principles from this theorem and together with complexity
-of algorithm for entailment over these automata which is singly exponential.
+We sketch automata using principles from this theorem together with algorithm for entailment
+over these automata which has singly exponential complexity.
 Automata over graphs with bounded tree width would be able to represent
-more general class of graphs than forest automata but still having feasible computational
+more general class of graphs than forest automata but still have feasible computational
 properties which would make them a suitable domain for shape analysis.
 
 \subparagraph{Automated testing}
-The result of this part of thesis is a system for orchestrating a digital twin to
+The main result in automated testing is a system for orchestrating a digital twin to
 test a manufacturing execution system (MES).
 Our approach is based on learning a model of communication protocol used in a real manufactory between
 MES, machines, enterprise resource planning (ERP) system.
