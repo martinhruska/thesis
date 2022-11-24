@@ -254,15 +254,13 @@ of digital twin.
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
 This section provides a summary of the state-of-the-art methods for shape analysis.
-First, an overview of the chosen methods for analysis of programs with
-dynamic data structures is given.
-We will describe the most successful methods and those based on automata.
-Then refinement techniques for abstraction over various formalisms are summarized
-followed by a brief description of efficient algorithms for automata manipulation.
+First, an overview of the different formalism for representing states of heap is given.
+Then the refinement techniques for abstraction over various formalisms are summarized.
 Finally, an existing work on automata for graph languages is presented.
 
 \section{Shape Analysis}
-\emph{Shape analysis} deals with analysis of shapes allocated on the heap by a program.
+As we mentioned, \emph{shape analysis} deals with analysis of data structures allocated on the heap (so called shapes of heap)
+by a program.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
 \cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13}
@@ -273,7 +271,7 @@ graph grammars \cite{juggrnaut10,juggrnaut-learning12}, or upward closed sets \c
 % Apart from the underlying formalisms, the approaches differ in their degree of
 % automation, in the heap structures they can handle, and in their scalability.
 
-In the following text, we abstract data structures allocated on heap to graphs (so called \emph{heap graphs}
+In the following chapter, we abstract data structures allocated on heap to graphs (so called \emph{heap graphs}
 or \emph{heap shapes}).
 An allocated memory heap cell corresponds to a node of graph and a pointer pointing from one memory cell
 to another is represented by the edges between nodes.
@@ -300,10 +298,11 @@ of selector names.
 	  Moreover, it introduces the third logical value (\emph{unknown}) to the standard
 	  boolean values \emph{true, false}. The \emph{unknown} value is used when
 	  more items from a given universe may but need not to be in a relation.
-	  This is needed when an abstraction (merging some nodes) is performed. E.g., consider
-	  an abstraction $\alpha: V \rightarrow V$, where $V$ is a set of nodes
-	  of heap graphs, and the predicate $\emph{NEXT}: V \times V\rightarrow\{\emph{true}, \emph{false}, \emph{unknown}\}$.
-	  Then when $\alpha(u) = s$ and $\alpha(v) = s$, where $s$ is a so called summary node,
+	  The new value may be needed for an abstraction merging some nodes. E.g., consider
+	  an abstraction $\abstrA: V \rightarrow V$, where $V$ is a set of nodes
+	  of heap graphs, and the predicate $\emph{NEXT}: V \times V\rightarrow\{\emph{true}, \emph{false}, \emph{unknown}\}$
+          saying that we can go from the~heap node $u$ to the node $V$ using $NEXT$ selector, formally $(u,v)\in E \wedge \alpha(u,v)=NEXT$.
+	  Then when $\abstrA(u) = s$ and $\abstrA(v) = s$, where $s$ is a so called summary node,
 	  and there exists $w \in V$ such that $\emph{NEXT}(u,w) = \emph{true} \wedge
 	  \emph{NEXT}(v,w) = \emph{false}$, then $\emph{NEXT}(s,w) = \emph{unknown}$.
 
@@ -327,7 +326,7 @@ of selector names.
 	  with respect to semantics of $C$.
 
 	  While the assertions in Hoare logic consist of standard connectives and symbols of predicate logic,
-	  separation logic extends the framework with several new ones: $emp$ (representing
+	  separation logic extends the framework with several new ones for heap description: $emp$ (representing
 	  the empty heap), $P*Q$ (saying that the heap can be split to two separated parts where one satisfies $P$ and the second $Q$),
 	  $e \mapsto e'$ (an address defined by the expression $e$ is mapped to a value defined
 	  by the expression $e'$, and the rest of the heap is empty, i.e., $*emp$ is implicit),
@@ -351,11 +350,12 @@ of selector names.
 	  of more complex data structures such as skiplists \cite{locle:secondorder}.
 	  The principles similar to second-ordered bi-abduction enabling analysis of complex data structures
 	  were used in~\cite{indPrSynt07}.
-	  The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
+	  
+          The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
 	  the given specification.
-	  The separation-logic-based approa\-ches often suffer from the need to manually provide inductive predicates
+	  The separation logic-based approa\-ches often suffer from the need to manually provide inductive predicates
 	  describing the heaps shapes (even for some list structures).
-          These approaches are rather fragile. Especially~\cite{indPrSynt07}
+          Moreover, these approaches are rather fragile. Especially~\cite{indPrSynt07}
           seems quite dependent on the fact that the encountered
           data structures are built in a ``nice'' way conforming to the structure of the
           predicate to be learnt (meaning, e.g., that lists are built by adding elements
@@ -368,15 +368,15 @@ of selector names.
 	  in the Infer tool widely used in Facebook \cite{www:fbinfer}.
 
           Separation logic was further modified to \emph{incorrectness separation logic} \cite{soa-isl} which
-          combines local reasoning of separation logic with the newly introduced \emph{incorrectness logic} \cite{soa-il}.
+          combines local reasoning of separation logic with the newly introduced \emph{incorrectness logic} \cite{soa-isl}.
           An interprocedural analysis based on incorrectness separation logic has no false positives by construction
           and is aimed to rigorous bug hunting.
           Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
-          of Hoare triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has bee deallocated
-          and to reallocated. The operator was needed to distinguish between a dangling pointer and pointer which do not
-          know anything about. The distinguishing was needed for combination of separation logic with frame rule
+          of Hoare triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
+          (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which do not
+          know anything about what makes poosible to combine of separation logic with frame rule
           for underapproximating reasoning.
-          The methods was implemented in the Pulse tool inside Facebook infer.
+          The methods was implemented in the tool called Pulse inside Facebook Infer.
 
           We note that there
           are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
@@ -385,11 +385,11 @@ of selector names.
           The work \cite{thor10} proposes an approach that uses separation logic for
           generating numerical abstractions of heap manipulating programs allowing for
           checking both their safety as well as termination. The described experiments
-          include even verification of programs with 2-level skip lists.
+          include even verification of programs with 2 level skip-lists.
           The work, however,
           still expects the user to manually provide an inductive definition of skip lists
           in advance. Likewise, the work \cite{sas07:chang_rival_necula} based on the so-called separating
-          shape graphs reports on verification of programs with 2-level skip lists, but it
+          shape graphs reports on verification of programs with 2 level skip-lists, but it
           also requires the user to come up with summary edges to be used for summarizing
           skip list segments, hence basically with an inductive definition of skip lists.
 
@@ -404,9 +404,9 @@ of selector names.
           %
           Unfortunately, the cited works cannot be used to the bi-abduction problem described in
           the previous section, which is the crucial for a compositional (scalable) program analysis.
-          In bi-abduction, one needs to solve the abduction problem $\phi * [?] \models \psi$,
+          In bi-abduction, one needs to solve the abduction problem $P * [?] \models Q$,
           where $*$ is the separating conjunction.
-          The best solution (i.e., the logically weakest) is given by the formula $\phi \mw \psi$
+          The best solution (i.e., the logically weakest) is given by the formula $P \mw Q$
           where one needs to use the magic wand operator $\mw$.
           %
           The cited works do not support magic wand since it has been shown
@@ -434,7 +434,7 @@ of selector names.
 	  accelerate analysis and enable representation of infinite state spaces.
 	  Since the representation is quite straightforward it is easy to model
 	  semantics of the concrete program operations in the abstract domain.
-	  These practical advantages are confirmed by the repeated wins of the tool in the competition on software verification SV-COMP \cite{svcomopweb}.
+	  These practical advantages are confirmed by the repeated wins of the tool in the competition on software verification SV-COMP \cite{svcompweb}.
 
 	  The formalism was designed mainly for list structures aiming at verification
 	  of the system level programs (e.g. Linux kernel) using such structures.
@@ -445,9 +445,11 @@ of selector names.
 
 	  \subsection{Abstract Regular Model Checking}
 	  \label{subsection:armc}
-	  The \emph{abstract regular model checking} \cite{artmc} is an automata based method for verification of parametrized and infinite state systems.
+	  The \emph{abstract regular model checking} (ARMC) \cite{artmc} is an automata based method for verification of parametrized and infinite state systems.
 	  It employs automata over words and trees to represent the reachable configurations of system being verified
 	  and a regular transition relation (represented by transducer or operations over automata) to model the semantics of an analysed system.
+          E.g., we use words and trees to represent reachable shapes of heap when ARCM is used for shape anlysis.
+
 	  An (e.g., height or predicate language) abstraction is used to
 	  overapproximate the set of reachable configurations.
 	  The counterexample-guided refinement is applied to
@@ -485,8 +487,14 @@ of selector names.
 
 	  The approach was applied to verification of the C programs with dynamic data structures in
 	  the work on forest automata-based shape analysis \cite{forester12}.
+          The original work required user-provided database of boxes but
+          it was later extended to the framework with automatic learning of boxes
+          in~\cite{boxes13}.
+          The work~\cite{forester-data-acta} added ordering relations into forest
+          automata to allow verification of programs whose safety depends on relations among data values
+          from an unbounded domain.
 	  The \forester{} tool implementing the methods is able to verify complex data structures
-	  such as various tree and skiplists of the second and third level \cite{boxes13, vmcai17} which
+	  such as various tree and skiplists of the second and third level \cite{boxes13} which
 	  are not analysable by any other tool fully automatically.
 
 	  \subsection{Bounded Model Checking}
@@ -502,7 +510,7 @@ of selector names.
 	  The bound can be given, e.g., on a number of interleavings in a parallel program,
 	  on a number of the loop unfoldings, or on the size of the memory.
 	  
-	  BMC systematically explores the state space of (a model of) the analysed systems up
+	  BMC systematically explores the state space of the analysed systems up
 	  to the given bound and checks whether the given specification holds in each possible state.
 	  From the perspective of shape analysis it means that the methods explores which shape
 	  may be possibly allocated on the heap in a given state of the program
@@ -520,10 +528,9 @@ of selector names.
 
 	  \section{Counterexample Validation and Automatic Refinement of Abstraction for Shape Analysis}
 
-	  As noted in the recent work \cite{splinter15}, a common weakness of the
-	  current approaches to shape analysis is a lack of proper support for checking
+	  A common weakness of the current approaches to shape analysis is a lack of proper support for checking
 	  spuriousness of the counterexample traces, possibly followed by automated refinement
-	  of the employed abstraction. This is one of the problems we tackle in this work.
+	  of the employed abstraction. This is one of the problems we tackle in this thesis.
 	  Below, we characterize previous attempts on the problem and compare our
 	  approach with them.
 
@@ -617,15 +624,8 @@ of selector names.
           \cite{artmc} to be used. On the other hand, due to using a single automaton,
           the approach did not scale well and had problems with some heap transformations.
 
-          The basic formalism of forest automata using fixed abstraction and
-          user-provided database of boxes was introduced in~\cite{forester12}.
-          It was later extended the basic framework with automatic learning of boxes
-          in~\cite{boxes13}.
-          The work~\cite{forester-data-acta} added ordering relations into forest
-          automata to allow verification of
-          programs whose safety depends on relations among data values
-          from an unbounded domain.
-          In \cite{forester12,boxes13}, it was conjectured that counterexample validation and
+          The basic formalism of forest automata used a fixed abstraction \cite{forester12}.
+          However in \cite{forester12,boxes13}, it was conjectured that counterexample validation and
           abstraction refinement should be possible in the context of forest
           automata too. This thesis will show that this is indeed the case, however that much
           more involved methods than those of \cite{artmc} are needed.
