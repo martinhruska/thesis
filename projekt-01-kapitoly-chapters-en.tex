@@ -10343,11 +10343,11 @@ environments is our future work.
 
 \chapter{Conclusion and Further Directions}
 \label{ch:concl}
-The main achieved result in shape analysis based on automata is
+The main achieved result in shape analysis is
 application of backward run and counterexample-guided refinement (CEGAR) to shape
 analysis based forest automata.
 Backward run enables distinguishing between real and spurious (caused by abstraction) counterexamples.
-This made reporting of found bugs program reliable and avoid unnecessary false alarms.
+This made reporting of found bugs in program reliable and avoid unnecessary false alarms.
 The ability to detect spurious counterexamples is the first building block for CEGAR.
 The second one is application of predicate abstraction to domain of forest automata what makes precise refinement possible.
 Although the originally used height abstraction can be refined too, it does not guarantee
@@ -10358,7 +10358,7 @@ This enables verification of new class of data structures where set of predicate
 is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:asv}.
 
-The second result in shape analysis are mupltiple participations of the Forester
+The second result in shape analysis is the mupltiple participations of the Forester
 tool in software verification competition (SV-COMP).
 Although we did not win a medal in any major category we shown that our approach
 is able to compete and often superior to the other ones.
@@ -10380,14 +10380,14 @@ vectors.
 Basically, it computes points-to relation between pointers used in program and abstract memory
 objects used by analyses to represent heap using SMT solver.
 This approach is more straightforward than the automata based ones and enables combination of
-shape analysis with other domains such as termination other analysis, or domains for integer variables.
+shape analysis with other domains such as termination analysis, or domains for integer variables.
 On the other, it lacks generality of automata based approaches and currently supports
 only analysis of linked list data structures.
 
 The second field of focus of the thesis was automated testing.
 We developed automated testing procedure for manufacturing execution systems (MES)
 in environment of digital twins.
-We learn a model communication protocol and messages sent between software components
+We learn a model of communication protocol and messages sent between software components
 of a manufactory where MES is deployed.
 We automatically create test scenarios for digital twins using the learnt modesl
 where manufactory is emulated and MES deployed natively.
@@ -10399,7 +10399,7 @@ in Unis company.
 \section{Future Directions}
 The main potential in field of automata based shape analysis is in further development
 of graph automata over graphs with bounded tree width.
-We only sketched basic concepts and it is needed to design and proved the algorithm
+We only sketched basic concepts and it is needed to design and prove the algorithm
 for entailment between automata.
 Then one can think about using the formalism in a verification procedure such as
 regular model checking or abstract interpretation.
@@ -10438,7 +10438,7 @@ The library was already used for development of a new decision procedure for str
 
 In the field of automated testing, one may consider more domain specific abstractions
 over model of communication to enable generating useful test automatically.
-There are often domain dependent particularities such as order of message sent
+There are often domain dependent particularities such as an order of messages sent
 in system during initialization or a special restriction of parameters of some
 messages.
 In current settings, we do not take that in consideration which may lead to
