@@ -8677,18 +8677,18 @@ individual ones as the symbolic representation of sets of heaps.
 \section{Introduction}
 The following chapter describes development of the Forester tool \cite{foresterweb}
 for Software verification competition \cite{svcompweb} (SV-COMP) which is annually held within TACAS conference.
-The tools competing in SV-COMP varies from sound abstract interpreters or formal verifiers over static analysers
+The tools competing in SV-COMP varies from sound abstract interpreters or formal verifiers through static analysers
 to unsoud tools like bounded model checkers.
 The tools compete in verification of C programs from the competition benchmark.
 The length of programs are usually from tens to hundreds lines of code.
-The verification tasks are separated to different categories (chosen by authors of a tool), e.g., reachability,
+The verification tasks are separated to different categories, e.g., reachability,
 termination, or memory safety category.
 Each category has its own specification of program invariants which are checked.
-E.g., in reachability category there is checked a whether a certain line of program is reached.
+E.g., in reachability category there is checked whether a certain line of program is reached.
 
 A verification tool is supposed to answer for a given program and specification whether
-the program fulfill specification (tool answers true), break specification (tool answers
-false), or tool cannot decide and answers unknown.
+the program fulfill the specification (tool answers true), break specification (tool answers
+false), or tool cannot decide and gives an answer \emph{unknown}.
 The tools are rewarded by 2 points for a correct answer true, 1 point for a false answer false,
 or penalized by 32 points for a incorrect answer true, 16 points for an incorrect answer false.
 As one can see, since SV-COMP is a verification competition, not a testing competition, it favors
@@ -8696,7 +8696,7 @@ sound tools over unsound ones by its scoring scheme.
 
 \forester{} was participating in SV-COMP from 2015 to 2018.
 It was competing in the tasks related to memory safety and heap manipulation.
-These tasks were split to two two main categories:
+These tasks were split to the two main categories:
 \begin{enumerate*}
   \item a reachability subcategory containing programs working with dynamically allocated data structures,
   \item memory safety categories.
@@ -8708,7 +8708,7 @@ In particular,
 \forester{} competed in the categories \emph{HeapManipulation, MemorySafety} in the year 2015,
 in the categories \emph{HeapReach, HeapMemSafety} in 2016, and
 in the categories \emph{ReachSafety-Heap, MemSafety-Heap, MemSafety-LinkedLists} in the years 2017 and 2018.
-Its major success was the second places in \emph{MemSafety-LinkedLists},
+It major success was the second places in \emph{MemSafety-LinkedLists},
 a~sub-category of \emph{MemSafety}, in the years 2017 and 2018.
 % In fact, it was not the category but small sub-category containing mostly the test
 % cases from \forester and the related tool \predator.
@@ -8717,10 +8717,10 @@ Although \forester{} has never won any medal, it was able to analyze
 some really tough test cases that have not been successfully verified by any
 other (sound) tool.
 Examples of these programs are programs with skip lists (of the second and the
-third level) and some test cases from~\cite{vmcai17}, which were a~part of the
-category \emph{MemSafety-LinkedLists} as of SV-COMP 2019.
+third level) and some test cases from~\cite{vmcai17}, which were part of the
+category \emph{MemSafety-LinkedLists} in SV-COMP 2019.
 The former cases are hard to analyse because a~tool needs to derive
-complicated shape invariants, which \forester{} can do due to the automated
+complicated shape invariants what \forester{} can do thanks to the automated
 box discovery.
 The latter cases are hard due to the need to derive invariants describing relations
 between nodes of data structures, which \forester{} can infer using the CEGAR
@@ -8782,21 +8782,21 @@ therefore the rest of the chapter is going to mainly discuss technical improveme
 
 \section{Technical Preparation of Forester for SV-COMP}
 This section contains description of technical improvements of the tool we did
-for different editions of compeitition.
+for the different editions ofthe  compeitition.
 The conceptual improvements of forest auomatata based shape analysis in different
-editions of competition are described in the next section.
+editions of the competition are described in the next section.
 For the first participation of \forester in SVCOMP (edition 2015) \cite{svcomp15-forester},
-no principle changes in Forester were done and we aimed to preparing tool from technical
-perspective to fulfill requiraments of the competition.
-Forester did not have counterexample analysis or abstraction refinement for this first participation.
+no principle changes in Forester were done and we aimed to preparing the tool from technical
+perspective to fulfill the requiraments of the competition.
+Forester did not have a counterexample analysis or an abstraction refinement for this first participation.
 The tool was submitted as a binary file in an archive together
-with scripts wrapping execution for competition.
+with the scripts wrapping execution for competition.
 The scripts, e.g., translates outputs of Forester to predefined outputs by competition rules.
 
 However, it was needed to add to Forester a support for printing out a path leading to
 a found counterexample violating a given specification,
 so called witness.
-The witness format is dialect of GraphML (which is based on XML) defined by competition rules and described in more detail way in \cite{fse15-witness}.
+The witness format is a dialect of GraphML (which is based on XML) defined by the competition rules and described in more detail way in \cite{fse15-witness}.
 We use the fact that Forester performs a symbolic execution and creates symbolic states containing link to a previous state.
 We travel a path of symbolic states from an erroneous state to the beginning of program and gradually generate needed witness in GraphML.
 The witnesses are later used by so called witness checkers which perform precise model checking (i.e., without abstraction)
@@ -8822,16 +8822,16 @@ allocated on the heap) for each line of program visited during verification proc
 
 \section{Conceptual Improvements over the Editions of Competition}
 The first edition in which Forester participated (2015) consists of mainly of technical improvements of the tool.
-The main one was replacement of ad-hoc implemented tree automata library by the VATA library \cite{libvata}.
+The main conceptual change was a replacement of ad-hoc implemented tree automata library by the VATA library \cite{libvata}.
 It improved overall architecture of Forester (and therefore maintainability) and made possible
 to benefit from improvements in the VATA library which is specialized to an efficient implementation of
 algorithms for tree automata.
 
-The main bottleneck of Forester in competition, an inability to distinguish between false and real bugs in program
-was fixed, for the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
+The main bottleneck of Forester in competition, an inability to distinguish between false and real bugs in program,
+was fixed for the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
 automata as was described in the previous chapters).
 It was achieved by implementation of backward run from the point where a violation of specification was detected.
-Backward run starts with forest automaton representing state of heap in state where the violation was found.
+The backward run starts with forest automaton representing state of heap in state where the violation was found.
 It goes back through visited states during forward symbolic execution and reverts an effect of the operation done
 in the given state.
 Then it checks whether an intersection of forest automaton from forward run and backward run in given state is empty or not.
@@ -8841,14 +8841,21 @@ We use predicate abstraction where the refinement is done by adding forest autom
 It makes possible a recovery from a detection of a spurious counterexample.
 The intersection of forest automata needed for backward run was also newly implemented for this edition.
 
-Finally, for edition 2017 we extended backward run and abstraction refinement to hierarchical forest automata.
-That are forest automata with another forest automata (called boxes) used as symbols in their transitions.
-It complicates intersection of forest automata since the intersection needs to take semantics of symbols into account.
-One possible solution would be on fly unfolding of boxes which would make the intersection algorithm really complicated.
+The backward run and abstraction refinement were implemented in the standard CEGAR loop.
+We used already existing forward run and added it to a loop where a (potentially) found counterexample
+is analysed by new backward run. If it is a spurious one we perform refinement abstraction, either
+by increasing height for height abstraction or by deriving new predicates for predicate abstraction
+which was newly implemtented.
+
+Finally, for edition 2017 we extended backward run and abstraction refinement to hierarchical forest automata
+(forest automata with another forest automata, called boxes, used as symbols in their transitions).
+It complicates intersection of forest automata since the intersection needs to take semantics of boxes into account.
+One possible solution would be on fly unfolding of boxes which would make the intersection algorithm complicated.
 Therefore we take another approach which is keep automata in forward and backward run in so called compatible form.
 That is for assuring that the same heaps are represented in the same way.
-The more technical description of this concept was given in the previous chapter.
-From technical point of view the most challenging operations to revert in backward run
+From technical point of view we need to change implementation of the abstract operations performed in the forward run and
+their reversion in backward run.
+As it is was described in the previous chapter, the most challenging operations to revert in backward run
 w.r.t. compatible form are fold (creating box from forest automaton), unfold (reverting unfold),
 and normalization (i.e., operation of removing redundant cut-points and connecting associated tree automata).
 
@@ -9048,7 +9055,7 @@ We believe that this new formalism can eventually combine local reasoning of sep
 \end{center}
 \end{figure}
 
-We will first discuss encoding of graphs as variations on tree decompositions, similar to that used in \cite{iosif_treewidth_2013} and also \cite{IosifRogalewiczVojnar:deciding}.
+We will first discuss encoding of graphs as variations on tree decompositions, similar to that used in \cite{iosif_treewidth_2013} and also \cite{iosif_deciding_2014}.
 %The description should make it obvious that sets of such tree decompositions can be represented as finite tree automata.
 % Our encoding of graphs into trees is based on the its treedecomposition.
 
@@ -9521,13 +9528,12 @@ we add it here to give another perspective on shape analysis.
 We provide with an overview of the approach. For full technical description one should check \cite{fmcad18}.
 
 The verification method is based on describing state space of a program w.r.t. to a property of interest
-using logic formulae and so called templates.
-The templates are speacial logic formulae and conceptually they are similar to abstract domain
-in abstract interpretation since they are manually crafted to capture only certain aspects of analysed program
-and so they make analyses computationally feasable.
-Therefore we call templates (abstract) domains in the of the chapter.
-The invariant of program under analysis are synthesised from system of logic formulae and templates
-describing state space of program using SMT solver.
+using system of logic formulae and so called templates which describes state space of program using SMT solver.
+The templates are special logic formulae and are conceptually similar to abstract domain
+in abstract interpretation.
+They are manually crafted to capture only certain aspects of analysed program
+what makes analyses computationally feasable.
+Therefore we call templates (abstract) domains in the rest of the chapter.
 
 The main contributions of this work are:
 \begin{compactenum}
@@ -9650,9 +9656,13 @@ The property that our base shape domain describes is the
 \emph{may-point-to} relation between the set $\ptrlb$ and the set
 $\addr$ of memory addresses.
 
-The template of our base shape domain has the form of the formula $\templ^S
-\equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
-\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$.
+The template of our base shape domain has the form of the formula:
+\begin{equation}\label{eq:templ_shape}
+\begin{split}
+\templ^S \equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
+\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}).
+\end{split}
+\end{equation}
 %
 It is a conjunction of so-called \emph{template rows} $\templ^S_{\ssaplb{i}}$,
 each row corresponding to one loop-back pointer from the set $\ptrlb$.
@@ -9664,9 +9674,13 @@ The parameter $d_{\ssaplb{i}} \subseteq \addr$ of the row (a~so-called
 \emph{abstract value of the row}) specifies the set of all addresses from the
 set $\addr$ that $p$ may point to at the location $i$.
 %
-The template row can thus be expressed as the quantifier-free formula
-$ \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv (\bigvee_{a \in
-d_{\ssaplb{i}}} \ssaplb{i} = a)$.
+The template row can thus be expressed as the quantifier-free formula:
+\begin{equation}\label{eq:templ_row}
+\begin{split}
+\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv (\bigvee_{a \in
+d_{\ssaplb{i}}} \ssaplb{i} = a)
+\end{split}
+\end{equation}
   
 Abstract values of template rows corresponding to pointer fields of abstract
 dynamic objects allow the domain to describe unbounded linked paths in the heap,
@@ -9680,17 +9694,26 @@ would produce very imprecise results since the abstract value would
 need to cover even states in which the loop-back edge was not taken.}.
 %
 A row of a \emph{guarded shape template} is defined
-as a formula $\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv G_{\ssaplb{i}}
-\Rightarrow \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$ where $G_{\ssaplb{i}}$
-is a conjunction of SSA guards associated with the definition of the variable
+as a formula:
+\begin{equation}\label{eq:templ_row_guard}
+\begin{split}
+\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv G_{\ssaplb{i}}
+\Rightarrow \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})
+\end{split}
+\end{equation}
+where $G_{\ssaplb{i}}$ is a conjunction of SSA guards associated with the definition of the variable
 $\ssaplb{i}$ and $\templ^S_{\ssaplb{i}}$ is as in the base shape domain.
 %
 If $G_{\ssaplb{i}}$ is true for a program run, the definition of $\ssaplb{i}$
 was reached in the run.
 %
-A shape template $\templ^G$ with guards is then a conjunction
-$\templ^G \equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
-\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}})$.
+A shape template $\templ^G$ with guards is then a conjunction:
+\begin{equation}\label{eq:templ_guard}
+\begin{split}
+\templ^G \equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
+\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}})
+\end{split}
+\end{equation}
 
 Let $\ssaplb{i}$ be a loop-back pointer abstracting the value of a~pointer $p
 \in \ptr$ coming from the end of a loop $l \in L$. 
@@ -9723,26 +9746,27 @@ using SMT solver (since shape invariants are models of the logic formulae put in
 SMT solver).
 
 \section{Conclusion}
-The previous sections provided a very brief and dense introduction how we extended the template-based
-approach to static analysis by shape analysis.
+The previous sections provided a brief and dense introduction to the template-based
+approach to static analysis and it extension by shape analysis.
 
 Beyond the described aspects we needed to design operations \emph{dynamic memory allocation}
 (\texttt{malloc}), \emph{reading through dereferenced pointers}, and \emph{memory free} in
-our abstract template domain to be able to compute shape invariants.
+our abstract template domain to be able to model semantics of programs.
 As we mentioned above, we also designed combination of the described abstract domain
 for shape analysis with others already existing domains.
 
-Finally, we specified how to check properties such as \emph{absence of null pointer dereference},
+The last part of the described method is checking that
+a program contains no \emph{absence of null pointer dereferences},
 \emph{free safety}, and \emph{absence of memory leaks}.
-E.g., to check dereferences of $\nullptr$, we verify the assertion
-$\ssa{p}{i} \neq \nullptr$ where $\ssa{p}{i}$ is the version of $p$
-valid at $i$ for each expression $*p$ occurring in a program location $i$.
+E.g., to check absence of $\nullptr$ pointer dereference, we verify the assertion
+$\ssa{p}{i} \neq \nullptr$, where $\ssa{p}{i}$ is the version of $p$
+valid at a program location $i$, for each expression $*p$ occurring in every $i$.
 
 A detailed description of abstract memory operations or how all three memory safety properties are checked
 can be found in \cite{fmcad18} as well as empirical evaluation of our
 method on benchmark of heap manipulating programs.
 Their full description is out of scope of the thesis and since
-we are not the main authors of this approach we limited ourselves to this brief overview.
+we are not the main authors of the approach we limited ourselves to this brief overview.
 
 \part{Automata in Software Testing}
 
@@ -10320,52 +10344,55 @@ environments is our future work.
 \chapter{Conclusion and Further Directions}
 \label{ch:concl}
 The main achieved result in shape analysis based on automata is
-application of counterexample-guided refinement (CEGAR) with backward run to shape
+application of backward run and counterexample-guided refinement (CEGAR) to shape
 analysis based forest automata.
-Backward run enabled to distinguish between real counterexamples to a given
-specification and counterexamples caused by abstraction, so called spurious
-counterexamples.
-It makes reporting of found bugs program more reliable and avoid unnecessary
-false alarms.
-The ability to detect spurious counterexamples is the first building block
-for CEGAR.
-The second one is an application of predicate abstraction to domain of forest automata.
-Although the originally used height abstraction can be applied too, it does not guarantee
-exclusion of spurious counterexample after a refinement and therefore does not guarantee
-termination of verification procedure.
-Then once a spurious counterexample is detected we find a point a program where abstraction
-introducing it was used and derive the new predicates preventing
-reaching the spurious counterexample again.
+Backward run enables distinguishing between real and spurious (caused by abstraction) counterexamples.
+This made reporting of found bugs program reliable and avoid unnecessary false alarms.
+The ability to detect spurious counterexamples is the first building block for CEGAR.
+The second one is application of predicate abstraction to domain of forest automata what makes precise refinement possible.
+Although the originally used height abstraction can be refined too, it does not guarantee
+exclusion of spurious counterexample and therefore does not guarantee termination of verification procedure.
+On the other hand, predicate abstraction derives the new predicates from a detected spurious counterexample
+what prevents reaching the counterexample again.
 This enables verification of new class of data structures where set of predicates
 is needed to describe their invariants.
-The concrete examples were described in Chapter \ref{ch:vmcai}.
+The concrete examples were described in Chapter \ref{ch:asv}.
 
-The second result in shape analysis is repeated participation of the Forester
+The second result in shape analysis are mupltiple participations of the Forester
 tool in software verification competition (SV-COMP).
 Although we did not win a medal in any major category we shown that our approach
-is able to compete and often superior to the other tools.
+is able to compete and often superior to the other ones.
 Forester where able to soundly verify as the only tool in competition test cases
-such as skip list of 2nd and 3rd level, various trees (which Forester managed to
-verify in the original works \cite{boxes13} but not in competition settings),
+such as skip list of 2nd and 3rd level, various trees,
 and also data structures where invariants described by predicates were needed to derive
 (which was achieved due to the results mentioned in the previous paragraph).
 
-The final result in shape analysis is introduction of automata over graphs
+The final result in automata-based shape analysis is introduction of automata over graphs
 with bounded tree width which are inspired by Courcelle's theorem \cite{courcell_graph_2012}.
 These automata have expressivity higher than forest automata while keeping
 feasible algorithmic properties.
 Complexity of entailment between automata is singly exponential which we believe
 is suitable for application in practical tests cases once some heuristics will be introduced.
 
+We also participated on new kind of shape analysis based on SMT solving.
+The possible shapes of data structures allocated on heap are described by logic formulae over bit
+vectors.
+Basically, it computes points-to relation between pointers used in program and abstract memory
+objects used by analyses to represent heap using SMT solver.
+This approach is more straightforward than the automata based ones and enables combination of
+shape analysis with other domains such as termination other analysis, or domains for integer variables.
+On the other, it lacks generality of automata based approaches and currently supports
+only analysis of linked list data structures.
+
 The second field of focus of the thesis was automated testing.
 We developed automated testing procedure for manufacturing execution systems (MES)
 in environment of digital twins.
 We learn a model communication protocol and messages sent between software components
 of a manufactory where MES is deployed.
-We can automatically create test scenarios for digital twins where manufactory is emulated
-and MES deployed natively.
-In this way, we can test e.g., a new version of MES before it is deployed to a real manufactory.
-The results of this part of the thesis are mainly applied.
+We automatically create test scenarios for digital twins using the learnt modesl
+where manufactory is emulated and MES deployed natively.
+We can test e.g., a new version of MES before it is deployed to a real manufactory using the described method.
+The results of this part of the thesis are mainly from a field of applied research.
 We implemented the procedure in the tool Tyrant \cite{ref_tyrant} which was later applied
 in Unis company.
 
@@ -10382,9 +10409,9 @@ Eventually, design of heuristic for algorithm manipulating these automata may be
 an interesting research direction to make the verification procedure work for
 difficult test cases.
 
-We would also like to apply collected experience in work in with automata
+We would also like to apply collected experience in application of finite automata
 in a development of a new automata library.
-The library should provide an efficient, yet user friendly methods for
+The library should provide an efficient methods for
 manipulation with finite automata.
 The crucial algorithms for formal verification and automated reasoning
 such as emptiness check or language inclusion checking will be implemented
@@ -10393,7 +10420,7 @@ We want to keep library user friendly.
 The interface should be simple enough to be usable by anyone with basic
 programming skills and knowledge of automata theory.
 The source code should hide complicated heuristics and optimizations
-and keep basic data structures simple and so easily extensible.
+and keep basic data structures simple and easily extensible.
 The implementation should be in efficient language such as C++ and provide
 an interface to a high level programming language.
 
@@ -10401,12 +10428,11 @@ So far, we implemented the first prototype of library.
 It is in C++ and contains efficient representation of finite automata
 together with the algorithms over them such as union, intersection,
 complementation, determinisation, simulation based reduction, or language inclusion checking.
+We further extended the library by finite alternating automata representation.
 An interface for Python was implemented over the efficient implementation in C++.
 We design a text based format for description of various version of finite automata.
 The format support a finite automata and alternating finite automata with explicit, symbolic,
 or bitvector alphabet as well as transducers with mentioned alphabets.
-Currently, we work on extension of library by finite alternating automata representation
-which would support parsing from the designed format.
 The library was already used for development of a new decision procedure for string solving.
 
 
@@ -10427,22 +10453,12 @@ A paper describing the whole verification procedure based on forest automata
 was accepted for publication in book about state-of-the-art verification tool which
 should be published in year 2023.
 The papers related to Forester participation in SV-COMP are \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}.
-Graphs over automata with bounded tree width was sketched in NETYS'21.
+Graphs over automata with bounded tree width was sketched in \cite{netys21}.
+The approach to shape analysis based on SMT was published in \cite{fmcad18, svcomp-2ls}.
 
-During work on this thesis we participated also on two other results related to the shape
-analysis which were not included in the thesis.
-The first is development of a new kind of shape analysis based on SMT solving \cite{fmcad18, svcomp-2ls}.
-The possible shapes of data structures allocated on heap are described by logic formulae over bit
-vectors.
-Basically, it computes points-to relation between pointers used in program and abstract memory
-objects used by analyses to represent heap.
-The relation is then computed by a SMT solver.
-This approach is more straightforward than the automata based ones and enables combination of
-shape analysis with other domains such as termination other analysis, or domains for integer variables.
-On the other, it lacks generality of automata based approaches and currently supports
-only analysis of linked list data structures.
-
-The second project was connecting Symbiotic, a static analyser based on symbolic execution, with
+During work on this thesis we participated also on another results related to the shape
+analysis which was not included in the thesis.
+It was connecting Symbiotic, a static analyser based on symbolic execution, with
 Predator, a successful shape analyser using symbolic memory graphs \cite{svcomp-symbiotic}.
 Predator won multiple editions of SV-COMP in memory safety related categories and was
 therefore a good candidate for providing information about memory safety invariants
@@ -10460,7 +10476,7 @@ a tool suite of different versions of Predator (one in sound mode, several insta
 bug hunting mode) running on GCC frontend which was a more matured than LLVM fronted
 used in integration with Symbiotic.
 In the next editions of competition, the developers of both tools managed to make LLVM fronted
-for Predator as matured as GCC one which resulted in win of Symbiotic in the Memory Safety category.
+for Predator as matured as GCC one what resulted to win of Symbiotic in the Memory Safety category.
 
 The work on automated testing is accepted for publication in the proceedings of the conference EUROCAST 2022
 which should be published during year 2023.
