@@ -4,9 +4,9 @@
 \chapter{Introduction}
 \label{intro}
 
-Software quality is a crucial part of software development cycles
-regardless of type of software.
-It is important in low level code often deployed in the highly critical
+Software quality is a crucial part of development cycles
+for all kinds of software.
+It is important for low level code often deployed in the highly critical
 applications where one bug can have expensive consequences or even threat
 human lives.
 It is crucial also in high level software where bugs can destroy
@@ -18,22 +18,20 @@ with different quality warranties.
 The most rigorous one is based on a formal specification of requirements
 followed by deriving program from the specification or proving program
 against the specification manually.
-This approach is present from the beginning of computer and although it provides
-the highest level of guarantee it does not became mainstream.
-The main negatives are the high demands on developers and inability to scale
+This approach is present from the beginning of computer science and although it provides
+the highest level of guarantee it has not became mainstream.
+The main negatives are the high demands on qualification of developers and an inability to scale
 to larger software.
 
 There are also automated approaches to proving correctness of program such as
-model checking or automated theorem proving (generally called formal verification)
-which strive to verify a program according to given specification.
-They are easier to use, however problem with scaling and applicability to real world software.
-The lightweighted versions of this kind of methods are different sound static analysis or
+model checking or automated theorem proving which strive to verify a program according to given specification.
+These methods are generally called formal verification.
+They are easier to use than manual proving of program, however they have problem with scaling and applicability to real world software.
+The lightweighted versions of this kind of methods are different types of sound static analysis or
 abstract intepretation which are specialized to a certain program properties
-(e.g., different analyses for values of integer variables and different analyses
-for termination properties).
+(such as values of integer variables, or analyses for termination properties).
 These methods scale better and can work out of the box.
 However, they are less precise and often tuned for a particular program property. 
-
 
 Another approach comes from programming language community claiming
 that programming language itself should guide a programmer to writing
@@ -50,7 +48,7 @@ The third approach to software quality are lightweight automated methods
 such as automated testing, unsound static analysis based on patter matching, or bounded model checking.
 The methods try to hit sweet spot between mathematical rigorous and plain bug hunting.
 They are easy to use, straightforward, scale well but detect many false alarms which may cause
-that at the end they are ignored by developers completely.
+that they are ignored by developers completely.
 
 The last of the main approach is based on traditional testing by humans. It may be developers
 writing unit tests or the whole tester teams implementing the complex tests.
@@ -62,7 +60,7 @@ It tries to summary the main approaches and give an overview of them.
 In practice, the different approaches are combined, complement each other and may
 fall to different categories.
 The proposed thesis focuses on automated formal methods (the first part of thesis)
-and lightweight automated methods which we used in domain where scalability was required.
+and lightweight automated testing methods which we used in domain where scalability was required.
 
 \subparagraph{Finite Automata}
 The main uniting theme of the thesis is application of finite automata to
@@ -74,42 +72,41 @@ Finite automata are (syntactically) simple but powerful tool for representing re
 %dynamic data strucutre), or regular sequences of messages (used in modelling communication
 %protocols).
 Since their introduction in 50s by Rabin and Scott \cite{rabin-scott} they have been used in
-various domains such as compilers, modelling of different kinds of systems,
+various domains such as compilers, modelling of various kinds of systems,
 design of digital circuits, natural language proceeding, speech recognition,
 and in verification or testing of software and hardware.
 Moreover, finite automata and their variations are widely studied in theoretical computer science either
 from perspective of decidable properties, or complexity of algorithms for their manipulation.
 
-A regular language represented by automaton may contain different regular structures.
-A classical example is language consiting of regular strings (used in pattern matching applications
+Finite automata are mainly used to represent the various regular stracutres by their languages.
+A classical application is language consiting of regular strings (used in pattern matching applications
 such as lexical analysis in compilers or detection of malicious strings in security domains).
-Another possibility is language containing regular sequences of messages (used in modelling communication
-protocols).
-In formal verification we are intereseted also in representing regular infinite strings (by so called Buchi automata)
-what is used used for verification of properties described in linear temporal logic, or in represantation of
-regular tree structures (by so called tree automata) what is used to represent tree data structures allocated
-on heap by a program.
+More sophisticated is language containing regular sequences of messages, or generally objects with an inner structure
+what is used, e.g., for modelling communication protocols.
+In formal verification, there are also automata representing regular infinite strings (so called Buchi automata)
+what is used used for verification of properties such as termination of program.
+Another kind of automata used in formal verification are tree automata that represent sets of trees by their languages.
+The automata are applied mainly to represent tree data structures allocated on heap by a program.
 
 In the applications of automata in this thesis we are interested in properties such as language inclusion and equivalence
 of two finite automata, emptiness or complement of language of finite automaton.
 All these properties are decidable but some of them have high complexity complexity,
 i.e., complement is NP-complete, language inclusion and equivalence are even PSACE-complete.
-Fortunately, there were introduced heuristics for the mentioned operations making
+Fortunately, the efficent heuristics for the mentioned operations were introduced making
 them computationally feasable in many practical cases.
 
 As we mentioned above we focus on application of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
 dynamic data structures.
-As we mentioned above, language of finite automaton (or its variant) can represent
-seto of regular structures.
-We are interested in representation of regular data structures allocated on heap such
-as linked lists or trees.
-The properties mostly verified in these programs are absence of invalid memory
+As we mentioned above, language of finite automaton (or its variant) represent
+set of regular structures.
+In shape analysis, we are interested in representation of regular data structures allocated on heap such
+as linked lists or trees and verification of the properties such as absence of invalid memory
 dereference, invalid memory free, or memory leaks.
-The error prone programs to the mentioned bugs are written especially in programming
-languages with manual memory management as C or C++.
-At the same time, these programs are used in critical software such as controlling
-systems in airplanes or cars, or in kernel of operating system.
+Programs using dynamic data structures are a great fit for methods of formal verification since 
+they are prone to the mentioned bugs and are written in programming
+languages with manual memory management as C or C++ what makes situation even worse.
+At the same time, these programs are used in critical software such as kernel of operating system.
 Any bugs in them may affect many users and lead to the expensive losses.
 Therefore they are an ideal fit for application of formal verification which
 brings strong guarantees about software correctness.
@@ -130,18 +127,19 @@ production or even damage manufacturing machines.
 Such bugs may be very expensive and it is important to find as many of them as possible
 in MES before it is deployed to a real manufactory.
 Our approach analyses behavior of software used in a real manufactury, builds its models and then
-generates tests for digital twin of manufactory where, e.g., a new version of software is deployed.
+generates tests for digital twin of manufactory where, e.g., a new version of software is deployed
+and a rest of manufactory emulated.
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current state of the art of shape analysis.
 We aim to futher development of existing approach to shape analysis based on forest automata
 and its improvement to enable verification of larger class of programs.
 We also want to propose a new automata formalism which will be based on Courcelle theorem \cite{Courcelle}
-and will be able to represent graph with bound tree width as its language.
+and will be able to represent class of graphs with bound tree width as its language.
 
 The second part of the first goal is systematical development of a tool for shape analysis.
 Particulary, we focuse on Forester \cite{svcompweb} which implements shape analysis for forest automata.
-Our goal is to make Forester able to compete on international level although we are
+Our goal is to make Forester able to compete on an international level although we are
 aware of fact that due lack of human power we cannot enhance tool from research prototype
 to something applicable to real world software.
 
@@ -174,33 +172,29 @@ When forest automata in backward run diverges from the ones in forward run,
 it means that a found counterexample is spurious.
 
 Once we are able to detect spurious counterexamples we need an abstraction which is refinable. 
-In other words, we want to make abstraction more precise so when we restart analysis
-we will no reach the same counterexample again.
+In other words, we want to make abstraction more precise once a spurious counterexample is found
+so when we restart analysis we will no reach the same counterexample again.
 Therefore we developed a version of predicate abstraction for forest automata.
 We are able to derive new predicates from a spurious counterexample which
 guarantee that after a restart of verification method we exclude it
 from represented state space.
 
 We achieved the second goal in the field of shape analysis, i.e., making a shape analyser
-competitive on international level, by the participations of the tool Forester
+competitive on international level, by the participations of the Forester tool
 implementing forest automata based shape analysis
 in software verification competition SV-COMP \cite{svcompweb} in edition for years 2015, 2016, 2017, and 2018.
-The participation was accompanied by publications \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}
-describing the main improvements for the given edition of the competition.
-Basically, the improvements are gradual implementation of the new methods devoled for
-forest automata based shape analysis described above.
-Although Forester did not win any medal in any major category,
+Although Forester did not win a medal in any major category,
 we managed to support non trivial subset of C language needed for a reasonable
 participation in competition and made tool mature enough to be competitive with
 other tools, often developed by large teams.
 The tool also verified soundly some test cases such as skip-list of the 3 level, or
 variants of trees which were not analysable by any other tool.
-Although Forester stayed at state of prototype and a lot of engineering work would be needed to make
+Although Forester stayed at the state of prototype and a lot of engineering work would be needed to make
 it a mature tool, we were able to show that a shape analysis based on automata
 can compete with other approaches and it is a meaningful path of research.
 
 Beyond the work done on forest automata based shape analysis we introduced automata over graphs
-with bounded tree width which was published in \cite{netys21}.
+with bounded tree width.
 The automata are directly influenced by Courcelle's theorem \cite{courcell_graph_2012}
 stating that any graph property definable in monadic second-ordred logic can be decided
 in a linear time on graphs with bounded tree width.
@@ -209,6 +203,14 @@ over these automata which has singly exponential complexity.
 Automata over graphs with bounded tree width would be able to represent
 more general class of graphs than forest automata but still have feasible computational
 properties which would make them a suitable domain for shape analysis.
+
+Finally, the last result in shape analysis was participation on work based on SMT solving.
+The possible shapes of heap are described by a points-to relation between pointer variables
+and abstract memory objects.
+The program is converted to three address code over which a system of equations modelling
+operations on heap is put together.
+Then the invariants of points-to relation is computed by application of SMT solver to system of equitations.
+This approach is more straightforward, more scalable but less generalt than the approaches based on automata.
 
 \subparagraph{Automated testing}
 The main result in automated testing is a system for orchestrating a digital twin to
@@ -223,7 +225,7 @@ natively ran MES.
 Such setup can be used e.g., for testing a new version of MES, when the models were derived
 from logs from manufactory where an older version of MES was deployed.
 
-Moreover, we are able to make an abstraction over learnt models and extrapolate new test
+Moreover, we are able to make an abstraction over learnt models and extrapolate the new test
 cases which can be used for more robust testing of MES in digital twin than just a reproduction
 of the previously seen runs.
 
@@ -254,13 +256,13 @@ of digital twin.
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
 This section provides a summary of the state-of-the-art methods for shape analysis.
-First, an overview of the different formalism for representing states of heap is given.
+First, an overview of the formalisms for representing data structures allocated on heap is given.
 Then the refinement techniques for abstraction over various formalisms are summarized.
 Finally, an existing work on automata for graph languages is presented.
 
 \section{Shape Analysis}
-As we mentioned, \emph{shape analysis} deals with analysis of data structures allocated on the heap (so called shapes of heap)
-by a program.
+As we mentioned, \emph{shape analysis} deals with analysis of data structures
+allocated on the heap by a program.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
 \cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13}
@@ -298,10 +300,10 @@ of selector names.
 	  Moreover, it introduces the third logical value (\emph{unknown}) to the standard
 	  boolean values \emph{true, false}. The \emph{unknown} value is used when
 	  more items from a given universe may but need not to be in a relation.
-	  The new value may be needed for an abstraction merging some nodes. E.g., consider
+	  The \emph{unknown} value may be needed for an abstraction merging some nodes. E.g., consider
 	  an abstraction $\abstrA: V \rightarrow V$, where $V$ is a set of nodes
 	  of heap graphs, and the predicate $\emph{NEXT}: V \times V\rightarrow\{\emph{true}, \emph{false}, \emph{unknown}\}$
-          saying that we can go from the~heap node $u$ to the node $V$ using $NEXT$ selector, formally $(u,v)\in E \wedge \alpha(u,v)=NEXT$.
+          saying that we can go from the~heap node $u$ to the node $v$ using $NEXT$ selector, formally $(u,v)\in E \wedge \alpha(u,v)=NEXT$.
 	  Then when $\abstrA(u) = s$ and $\abstrA(v) = s$, where $s$ is a so called summary node,
 	  and there exists $w \in V$ such that $\emph{NEXT}(u,w) = \emph{true} \wedge
 	  \emph{NEXT}(v,w) = \emph{false}$, then $\emph{NEXT}(s,w) = \emph{unknown}$.
@@ -364,7 +366,7 @@ of selector names.
           might seem easy (such as certain rather straightforward variants of creations
           and deletions of a~doubly-linked list).
 
-	  Separation logic has found its way to practice which is demonstrated by its implementation
+	  Separation logic has found its way to practice, mainly its implementation
 	  in the Infer tool widely used in Facebook \cite{www:fbinfer}.
 
           Separation logic was further modified to \emph{incorrectness separation logic} \cite{soa-isl} which
@@ -373,7 +375,7 @@ of selector names.
           and is aimed to rigorous bug hunting.
           Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
           of Hoare triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
-          (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which do not
+          (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which we do not
           know anything about what makes poosible to combine of separation logic with frame rule
           for underapproximating reasoning.
           The methods was implemented in the tool called Pulse inside Facebook Infer.
@@ -440,7 +442,7 @@ of selector names.
 	  of the system level programs (e.g. Linux kernel) using such structures.
 	  Therefore it can also handle low level memory operations with byte precision~\cite{dudka13sas}.
 	  However, the domain has not been yet generalized to the tree structures.
-	  The scalability of the method has not been studied yet and but the principles of bi-abduction
+	  The scalability of the method has not been studied yet but the principles of bi-abduction
 	  should be applicable to the domain just as for the separation logic-based methods.
 
 	  \subsection{Abstract Regular Model Checking}
@@ -4570,9 +4572,11 @@ boxes that are required, and thus substantially increase the performance.
 
 Since theory of forest automata and its application to shape analysis
 may be too abstract we provide with a running example in the following section.
-We are going to show computation of fixpoint in abstraction loop where
+We are going to show computation of fixpoint in an abstraction loop where
 abstraction and folding are performed alternately until a fixpoint is reached.
-For a sake of clarity we show the main principle on a concrete heap graph
+The presented example should illustate the main principles and give you an intuition,
+therefore it is imprecise in some details.
+E.g., for a sake of clarity we show the main principle on a concrete heap graph
 instead of forest automata where one would need to the sets of heap graphs represented by automaton.
 
 Consider a data structure allocated on a heap shown on the left-handed side of
@@ -4596,24 +4600,24 @@ This is illustrated by colored nodes in the figure which were unfolded from boxe
 \label{ref:fig-re2}
 \end{figure}
 
-The first abstraction is performed which result is shown on the right-handed side
+After unfolding the solo boxes, the first abstraction is performed which result is shown on the right-handed side
 of Figure \ref{ref:fig-re1}.
 The dotted lines represent a loop in corresponding automaton created by abstraction.
 In our example, we use height abstraction with height two.
-Therefore in this step, abstraction merges all states with the same prefix languages up to height two.
-In our case, that are leaves or states with just one children node.
-We merge these state to one leave node with the root pointer.
-In the figure, we just remove the corresponding nodes and keep the root pointers to illustrate
+It mergers all states with height higher than two to to one leave node with the root pointer.
+In the figure, we illustrate it be removing the abstracted nodes and keep the root pointers to illustrate
 the created cycle while keeping the figure understandable.
 The resulting automaton now represents doubly-linked list
 which nodes are roots of trees of arbitrary depth.
+We note again that the example does not reproduce behaviour of algorithm precisely but it should
+bring an intuition how abstraction works, i.e., creates a loop in the graph.
 
 Then the folding operation is performed once the first abstraction is finished.
 The folding algorithm finds suitable parts of heap graph to be folded.
-These parts of graph are trees pointed by nodes of doubly-linked list as it is
-in Figure~\ref{ref:fig-re2}.
+These parts of graph are trees pointed by the nodes of doubly-linked list as it is
+shown in Figure~\ref{ref:fig-re2}.
 They are folded to box called \emph{tree-rootprt} which is
-added to edges leading from nodes of doubly-linked list as shown on the right-handed side of Figure \ref{ref:fig-re2}.
+added to edges leading from the nodes of doubly-linked list as shown on the right-handed side of Figure \ref{ref:fig-re2}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4654,8 +4658,7 @@ On the right-handed side is the graph after abstraction.}
 \label{ref:fig-re4}
 \end{figure}
 
-Now, another abstraction is performed over the corresponding automaton
-and it merges its states in such way that the automaton now represents
+Now, another abstraction is performed and merges its nodes in such way that the automaton now represents
 arbitrary doubly-linked list of length at least two (which is a consequence
 of fact that we used again height abstraction with height 2).
 The abtraction is shown on Figure \ref{ref:fig-re4}.
@@ -4678,8 +4681,7 @@ Now, the fixpoint is reached.}
 \end{figure}
 
 Finally, the last folding is performed.
-It finds that the whole heap graph could be folded as it is shown
-by the left-handed side of Figure \ref{ref:fig-re5}.
+The whole heap graph could be folded to one box as shown by the left-handed side of Figure \ref{ref:fig-re5}.
 As the result, we obtain the box \emph{circular-DLL-of-trees-rootptr} shown on the right-handed side
 of Figure \ref{ref:fig-re5}.
 The fixpoint is reached in this step and verification procedure proceed with an automaton containing
