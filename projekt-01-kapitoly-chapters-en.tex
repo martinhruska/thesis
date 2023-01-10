@@ -8679,14 +8679,14 @@ individual ones as the symbolic representation of sets of heaps.
 \section{Introduction}
 The following chapter describes development of the Forester tool \cite{foresterweb}
 for Software verification competition \cite{svcompweb} (SV-COMP) which is annually held within TACAS conference.
-The tools competing in SV-COMP varies from sound abstract interpreters or formal verifiers through static analysers
+The tools competing in SV-COMP vary from sound abstract interpreters or formal verifiers through static analysers
 to unsoud tools like bounded model checkers.
 The tools compete in verification of C programs from the competition benchmark.
 The length of programs are usually from tens to hundreds lines of code.
 The verification tasks are separated to different categories, e.g., reachability,
 termination, or memory safety category.
-Each category has its own specification of program invariants which are checked.
-E.g., in reachability category there is checked whether a certain line of program is reached.
+Each category has its own specification of program invariants which are verified.
+E.g., in reachability category an invariant may be that a certain line of program is never reached.
 
 A verification tool is supposed to answer for a given program and specification whether
 the program fulfill the specification (tool answers true), break specification (tool answers
@@ -8804,10 +8804,10 @@ We travel a path of symbolic states from an erroneous state to the beginning of 
 The witnesses are later used by so called witness checkers which perform precise model checking (i.e., without abstraction)
 navigated by the input witness to check that a found error is really in program.
 
-In the next edition of competition (year 2016), it was needed to adapt Forester to a new competition environment.
+In the next edition of competition (year 2016), we adapt Forester to a new competition environment.
 Particularly, the competition started using Benchexec \cite{sttt-benchexec}, a platform
 making easy execution of the different tools over a given benchmark and reporting results in a structured way.
-We needed to implement a script called by Benchexec to execute Forester over a given 
+We implemented a script called by Benchexec to execute Forester over a given 
 verification task.
 This script calls another script directly encapsulating Forester and translating outputs of the tool the ones
 predefined one by competition.
@@ -8833,10 +8833,10 @@ The main bottleneck of Forester in competition, an inability to distinguish betw
 was fixed for the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
 automata as was described in the previous chapters).
 It was achieved by implementation of backward run from the point where a violation of specification was detected.
-The backward run starts with forest automaton representing state of heap in state where the violation was found.
+The backward run starts with forest automaton representing data structures allocated on heap in a program state where the violation was found.
 It goes back through visited states during forward symbolic execution and reverts an effect of the operation done
 in the given state.
-Then it checks whether an intersection of forest automaton from forward run and backward run in given state is empty or not.
+Then it checks whether an intersection of forest automaton from forward run and backward run in the given state is empty or not.
 If it is empty the found violation is not real.
 When such a spurious counterexamples is detected, a refinement of abstraction is done.
 We use predicate abstraction where the refinement is done by adding forest automaton from backward run to set of predicates.
