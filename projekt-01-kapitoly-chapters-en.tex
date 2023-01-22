@@ -4,7 +4,7 @@
 \chapter{Introduction}
 \label{intro}
 
-Software quality is a crucial part of development cycles
+Assuring software quality is a crucial part of development cycles
 for all kinds of software.
 It is important for low level code often deployed in the highly critical
 applications where one bug can have expensive consequences or even threat
@@ -20,38 +20,38 @@ followed by deriving program from the specification or proving program
 against the specification manually.
 This approach is present from the beginning of computer science and although it provides
 the highest level of guarantee it has not became mainstream.
-The main negatives are the high demands on qualification of developers and an inability to scale
+The main negatives are the demands on qualification of developers and an inability to scale
 to larger software.
 
 There are also automated approaches to proving correctness of program such as
-model checking or automated theorem proving which strive to verify a program according to given specification.
+model checking which strive to verify that a program satisfies given specification.
 These methods are generally called formal verification.
 They are easier to use than manual proving of program, however they have problem with scaling and applicability to real world software.
-The lightweighted versions of this kind of methods are different types of sound static analysis or
-abstract intepretation which are specialized to a certain program properties
-(such as values of integer variables, or analyses for termination properties).
+The are also less general and more specialized automate methods such as different types of sound static analysis or
+abstract intepretation which are designed to verify certain program properties
+(such as values of integer variables, or analyses of termination properties).
 These methods scale better and can work out of the box.
 However, they are less precise and often tuned for a particular program property. 
 
 Another approach comes from programming language community claiming
-that programming language itself should guide a programmer to writing
+that programming language itself should guide a programmer to write
 software without bugs.
-This is mostly achieved by static strong type systems which makes possible to
-encode different program properties to type system.
+This is mostly achieved by static strong type systems which facilitates
+encoding different program properties to type system.
 The advantage of this approach is that one does not need another technology and forces
 programmers to write correct code.
 On the other hand, the programming languages of this kind have slow learning curve,
-or can be even unusable for certain programmers
-and only limited set of properties is encodable to type systems.
+and can be even unusable for certain programmers.
+Moreover, only limited set of program properties is encodable to type systems.
 
 The third approach to software quality are lightweight automated methods
 such as automated testing, unsound static analysis based on patter matching, or bounded model checking.
 The methods try to hit sweet spot between mathematical rigorous and plain bug hunting.
-They are easy to use, straightforward, scale well but detect many false alarms which may cause
+They are easy to use, straightforward, scale well but detect many false alarms what can cause
 that they are ignored by developers completely.
 
 The last of the main approach is based on traditional testing by humans. It may be developers
-writing unit tests or the whole tester teams implementing the complex tests.
+writing unit tests or the whole tester teams implementing the complex integration tests.
 It is mostly known and time-tested approach, but it costs a lot of human resources and
 does not given any guarantees about correctness.
 
@@ -98,18 +98,15 @@ them computationally feasable in many practical cases.
 As we mentioned above we focus on application of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
 dynamic data structures.
-As we mentioned above, language of finite automaton (or its variant) represent
-set of regular structures.
 In shape analysis, we are interested in representation of regular data structures allocated on heap such
 as linked lists or trees and verification of the properties such as absence of invalid memory
 dereference, invalid memory free, or memory leaks.
 Programs using dynamic data structures are a great fit for methods of formal verification since 
 they are prone to the mentioned bugs and are written in programming
-languages with manual memory management as C or C++ what makes situation even worse.
+languages with manual memory management as C or C++ where memory managment is fully within user's control.
 At the same time, these programs are used in critical software such as kernel of operating system.
 Any bugs in them may affect many users and lead to the expensive losses.
-Therefore they are an ideal fit for application of formal verification which
-brings strong guarantees about software correctness.
+Therefore they need strong safety quarantees which can the methods with formal basis provide.
 
 Our approach to shape analysis is based on forest automata and automata over graphs
 (both extensions of tree automata) with bounded tree width.
@@ -125,15 +122,15 @@ Particularly, we focus on testing of manufacturing execution system (MES) in env
 MES is critical software in controlling manufactory where bugs may stop
 production or even damage manufacturing machines.
 Such bugs may be very expensive and it is important to find as many of them as possible
-in MES before it is deployed to a real manufactory.
+before MES is deployed to a real manufactory.
 Our approach analyses behavior of software used in a real manufactury, builds its models and then
 generates tests for digital twin of manufactory where, e.g., a new version of software is deployed
-and a rest of manufactory emulated.
+and rest of manufactory emulated.
 
 \section{Goals of the Thesis}
-The first goal of this thesis is to improve the current state of the art of shape analysis.
+The first goal of this thesis is to improve the current tools and methods of shape analysis.
 We aim to futher development of existing approach to shape analysis based on forest automata
-and its improvement to enable verification of larger class of programs.
+and enhance it to enable verification of larger class of programs.
 We also want to propose a new automata formalism which will be based on Courcelle theorem \cite{Courcelle}
 and will be able to represent class of graphs with bound tree width as its language.
 
@@ -215,24 +212,25 @@ This approach is more straightforward, more scalable but less generalt than the 
 \subparagraph{Automated testing}
 The main result in automated testing is a system for orchestrating a digital twin to
 test a manufacturing execution system (MES).
-Our approach is based on learning a model of communication protocol used in a real manufactory between
+Our approach is based on learning a model of communication in a real manufactory between
 MES, machines, enterprise resource planning (ERP) system.
 We also learn models of messages communicated in a monitored system.
 Once we learn model of communication and models of sent messages we are able
 to generate testing scenario for a digital twin.
 A digital twin contains emulated parts of manufactory such machines, ERP, or human workers and
 natively ran MES.
-Such setup can be used e.g., for testing a new version of MES, when the models were derived
-from logs from manufactory where an older version of MES was deployed.
+Such setup can be used e.g., for testing a new version of MES, when we derive the models
+from logs of communication in a real manufactory where an older version of MES was deployed.
+Then the new version is run in digital twin and it is checked that it has the same semantics
+as the older version where it is expected.
 
 Moreover, we are able to make an abstraction over learnt models and extrapolate the new test
 cases which can be used for more robust testing of MES in digital twin than just a reproduction
 of the previously seen runs.
 
-The results of this part of thesis is the tool Tyrant \cite{ref_tyrant} for creating tests (i.e., digital twin scenarios) for
-industrial software applications.
-Our paper describing the method was accepted to proceeding of the conference EUROCAST'22 and will be published
-in Lecture Notes on Computer Science during the next year.
+The methods described above was implemented in the tool Tyrant \cite{ref_tyrant}.
+The tools were developed for testing a particular MES used in industry and is tested
+on communication logs from a real manufactory.
 
 \section{Plan of the Thesis}
 
@@ -256,13 +254,13 @@ of digital twin.
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
 This section provides a summary of the state-of-the-art methods for shape analysis.
-First, an overview of the formalisms for representing data structures allocated on heap is given.
-Then the refinement techniques for abstraction over various formalisms are summarized.
-Finally, an existing work on automata for graph languages is presented.
+First, we give an overview of the formalisms for representing data structures allocated on heap.
+Then the refinement techniques for abstraction over various formalisms are summarized, and
+finally, an existing work on automata for graph languages is presented.
 
 \section{Shape Analysis}
 As we mentioned, \emph{shape analysis} deals with analysis of data structures
-allocated on the heap by a program.
+allocated on the heap.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
 \cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13}
@@ -286,11 +284,11 @@ of selector names.
 	  reachable in the program.
 	  The requirements on the model are the following:
 	  \begin{enumerate*}[label=(\alph*)]
-	  	\item genericity and expressivity\,---\,the more general the model will be the more data structures can be
-	  		represented by it, and more programs can be analyzed,
+	  	\item genericity and expressivity\,---\,the more general the model can represent
+                      and therefore more programs can be analyzed,
 	  	\item automation\,---\,the model can be derived from a program automatically and have decidable
 			properties important for reasoning about the program,
-	  	\item efficiency and scalability\,---\,there exist efficient algorithms manipulating the model
+	  	\item efficiency and scalability\,---\,there exist efficient algorithms for manipulation with the model
 			even when it is applied to big systems.
 	  \end{enumerate*}
 
@@ -337,16 +335,16 @@ of selector names.
 
 	  An interest in separation logic has started raising with an introduction of the automated,
 	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}, or \slayer \cite{slayer11}.
-          These approaches are, however, much less general than
-          our approach since they are restricted to programs over certain classes of
+          These approaches are, however, are not very general since they are restricted to programs over certain classes of
           linked lists (and cannot handle even structures such as linked lists with data
           pointers pointing either inside the list nodes or optionally outside of them,
           which we can easily handle, as discussed later on). 
           The work \cite{overlaid11} concerning overlaid data
           structures mentions an extension of \spaceinvader to trees, but this extension
-          is of a limited generality and requires some manual help.
+          is also of a limited generality and requires some manual help.
 
 	  Separation logic has also been extended to a concurrent version \cite{brookes16}.
+
 	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction11}.
 	  Further, the second-order bi-abduction provided ability to learn some predicates automatically and so made possible analysis
 	  of more complex data structures such as skiplists \cite{locle:secondorder}.
@@ -374,11 +372,12 @@ of selector names.
           An interprocedural analysis based on incorrectness separation logic has no false positives by construction
           and is aimed to rigorous bug hunting.
           Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
-          of Hoare triples. The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
+          of Hoare triples, i.e., the inference rules are introduced.
+          The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
           (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which we do not
-          know anything about what makes poosible to combine of separation logic with frame rule
-          for underapproximating reasoning.
-          The methods was implemented in the tool called Pulse inside Facebook Infer.
+          know anything about and it also makes poosible to introduce a frame rule
+          for underapproximating reasoning in separation logic.
+          The methods were implemented in the tool called Pulse inside Facebook Infer.
 
           We note that there
           are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
@@ -641,10 +640,13 @@ of selector names.
 	the special rules how they can alternate).
 	Therefore the formalism should make it possible to represent of these such relations over graphs.
 
-	In the field of formal logic, a natural choice is monadic second order logic on graphs.
+	In the field of formal logic, a natural choice is monadic second order logic on graphs (MSO).
 	It allows one to quantify over sets of nodes of graphs.
 	Unfortunately, the logic is undecidable.
-	This implies that automata accepting such graphs would have undecidable
+        There are different version of graph automata with expressive power equal to MSO, i.e., for
+        each MSO formula there is a graph automaton with language (which is set of graphs) equivalent
+        to set of models fo the formula.
+	However, the undecidability of logic implies that automata have undecidable
 	crucial properties, e.g., emptiness of the automata language.
 	This is exactly what happens in works by \cite{Thomas:automata, soa-reiter15} where the designed automata
 	suffer from the undecidability of some properties.
