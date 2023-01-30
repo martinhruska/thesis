@@ -28,7 +28,7 @@ model checking which strive to verify that a program satisfies given specificati
 These methods are generally called formal verification.
 They are easier to use than manual proving of program, however they have problem with scaling and applicability to real world software.
 The are also less general and more specialized automate methods such as different types of sound static analysis or
-abstract intepretation which are designed to verify certain program properties
+abstract interpretation which are designed to verify certain program properties
 (such as values of integer variables, or analyses of termination properties).
 These methods scale better and can work out of the box.
 However, they are less precise and often tuned for a particular program property. 
@@ -55,7 +55,7 @@ writing unit tests or the whole tester teams implementing the complex integratio
 It is mostly known and time-tested approach, but it costs a lot of human resources and
 does not given any guarantees about correctness.
 
-The presented dychotomy does not pretend to be complete or exhaustive.
+The presented dichotomy does not pretend to be complete or exhaustive.
 It tries to summary the main approaches and give an overview of them.
 In practice, the different approaches are combined, complement each other and may
 fall to different categories.
@@ -78,8 +78,8 @@ and in verification or testing of software and hardware.
 Moreover, finite automata and their variations are widely studied in theoretical computer science either
 from perspective of decidable properties, or complexity of algorithms for their manipulation.
 
-Finite automata are mainly used to represent the various regular stracutres by their languages.
-A classical application is language consiting of regular strings (used in pattern matching applications
+Finite automata are mainly used to represent the various regular structures by their languages.
+A classical application is language consisting of regular strings (used in pattern matching applications
 such as lexical analysis in compilers or detection of malicious strings in security domains).
 More sophisticated is language containing regular sequences of messages, or generally objects with an inner structure
 what is used, e.g., for modelling communication protocols.
@@ -92,8 +92,8 @@ In the applications of automata in this thesis we are interested in properties s
 of two finite automata, emptiness or complement of language of finite automaton.
 All these properties are decidable but some of them have high complexity complexity,
 i.e., complement is NP-complete, language inclusion and equivalence are even PSACE-complete.
-Fortunately, the efficent heuristics for the mentioned operations were introduced making
-them computationally feasable in many practical cases.
+Fortunately, the efficient heuristics for the mentioned operations were introduced making
+them computationally feasible in many practical cases.
 
 As we mentioned above we focus on application of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
@@ -103,18 +103,18 @@ as linked lists or trees and verification of the properties such as absence of i
 dereference, invalid memory free, or memory leaks.
 Programs using dynamic data structures are a great fit for methods of formal verification since 
 they are prone to the mentioned bugs and are written in programming
-languages with manual memory management as C or C++ where memory managment is fully within user's control.
+languages with manual memory management as C or C++ where memory management is fully within user's control.
 At the same time, these programs are used in critical software such as kernel of operating system.
 Any bugs in them may affect many users and lead to the expensive losses.
-Therefore they need strong safety quarantees which can the methods with formal basis provide.
+Therefore they need strong safety guarantees which can the methods with formal basis provide.
 
 Our approach to shape analysis is based on forest automata and automata over graphs
 (both extensions of tree automata) with bounded tree width.
 Both formalisms are able to represent quite wide class of data structures that can be
 allocated on heap.
-Then we employ a verification procedure to compute shape invariants for each program logcation.
+Then we employ a verification procedure to compute shape invariants for each program location.
 In our case, shape invariant is an automaton representing all possible states of heap.
-Finally, we check that shape invariants implies that a given specification is fullfiled by program
+Finally, we check that shape invariants implies that a given specification is fulfilled by program
 (usually checking absence of invalid dereference, invalid free or memory leaks).
 
 The second field of application of automata in this thesis is automated software testing.
@@ -123,19 +123,19 @@ MES is critical software in controlling manufactory where bugs may stop
 production or even damage manufacturing machines.
 Such bugs may be very expensive and it is important to find as many of them as possible
 before MES is deployed to a real manufactory.
-Our approach analyses behavior of software used in a real manufactury, builds its models and then
+Our approach analyses behavior of software used in a real manufactory, builds its models and then
 generates tests for digital twin of manufactory where, e.g., a new version of software is deployed
 and rest of manufactory emulated.
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current tools and methods of shape analysis.
-We aim to futher development of existing approach to shape analysis based on forest automata
+We aim to further development of existing approach to shape analysis based on forest automata
 and enhance it to enable verification of larger class of programs.
 We also want to propose a new automata formalism which will be based on Courcelle theorem \cite{Courcelle}
 and will be able to represent class of graphs with bound tree width as its language.
 
 The second part of the first goal is systematical development of a tool for shape analysis.
-Particulary, we focuse on Forester \cite{svcompweb} which implements shape analysis for forest automata.
+Particularly, we focus on Forester \cite{svcompweb} which implements shape analysis for forest automata.
 Our goal is to make Forester able to compete on an international level although we are
 aware of fact that due lack of human power we cannot enhance tool from research prototype
 to something applicable to real world software.
@@ -143,7 +143,7 @@ to something applicable to real world software.
 The second goal of thesis is to apply automata to field of testing, particularly
 to testing manufacturing execution systems.
 We want to create a novel approach combining automated test generation from
-observed behaviour of a manufactory with testing in enviroment of digital twin
+observed behaviour of a manufactory with testing in environment of digital twin
 which will be orchestrated according to the tests we create.
 
 \section{Overview of the Achieved Results}
@@ -177,7 +177,7 @@ guarantee that after a restart of verification method we exclude it
 from represented state space.
 
 We achieved the second goal in the field of shape analysis, i.e., making a shape analyser
-competitive on international level, by the participations of the Forester tool
+competitive on international level, by the participation of the Forester tool
 implementing forest automata based shape analysis
 in software verification competition SV-COMP \cite{svcompweb} in edition for years 2015, 2016, 2017, and 2018.
 Although Forester did not win a medal in any major category,
@@ -193,7 +193,7 @@ can compete with other approaches and it is a meaningful path of research.
 Beyond the work done on forest automata based shape analysis we introduced automata over graphs
 with bounded tree width.
 The automata are directly influenced by Courcelle's theorem \cite{courcell_graph_2012}
-stating that any graph property definable in monadic second-ordred logic can be decided
+stating that any graph property definable in monadic second-ordered logic can be decided
 in a linear time on graphs with bounded tree width.
 We sketch automata using principles from this theorem together with algorithm for entailment
 over these automata which has singly exponential complexity.
@@ -207,7 +207,7 @@ and abstract memory objects.
 The program is converted to three address code over which a system of equations modelling
 operations on heap is put together.
 Then the invariants of points-to relation is computed by application of SMT solver to system of equitations.
-This approach is more straightforward, more scalable but less generalt than the approaches based on automata.
+This approach is more straightforward, more scalable but less general than the approaches based on automata.
 
 \subparagraph{Automated testing}
 The main result in automated testing is a system for orchestrating a digital twin to
@@ -376,7 +376,7 @@ of selector names.
           of Hoare triples, i.e., the inference rules are introduced.
           The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
           (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which we do not
-          know anything about and it also makes poosible to introduce a frame rule
+          know anything about and it also makes possible to introduce a frame rule
           for underapproximating reasoning in separation logic.
           The methods were implemented in the tool called Pulse inside Facebook Infer.
 
@@ -450,7 +450,7 @@ of selector names.
 	  The \emph{abstract regular model checking} (ARMC) \cite{artmc} is an automata based method for verification of parametrized and infinite state systems.
 	  It employs automata over words and trees to represent the reachable configurations of system being verified
 	  and a regular transition relation (represented by transducer or operations over automata) to model the semantics of an analysed system.
-          E.g., we use words and trees to represent reachable shapes of heap when ARCM is used for shape anlysis.
+          E.g., we use words and trees to represent reachable shapes of heap when ARCM is used for shape analysis.
 
 	  An (e.g., height or predicate language) abstraction is used to
 	  overapproximate the set of reachable configurations.
@@ -646,7 +646,7 @@ of selector names.
 	Unfortunately, the logic is undecidable.
         There are different version of graph automata with expressive power equal to MSO, i.e., for
         each MSO formula there is a graph automaton with language (which is set of graphs) equivalent
-        to set of models fo the formula.
+        to set of models of the formula.
 	However, the undecidability of logic implies that automata accepting such graphs would have undecidable
 	crucial properties, e.g., emptiness of the automata language.
 	This is exactly what happens in works by \cite{Thomas:automata, soa-reiter15} where the designed automata
@@ -4577,7 +4577,7 @@ Since theory of forest automata and its application to shape analysis
 may be too abstract we provide with a running example in the following section.
 We are going to show computation of fixpoint in an abstraction loop where
 abstraction and folding are performed alternately until a fixpoint is reached.
-The presented example should illustate the main principles and give you an intuition,
+The presented example should illustrate the main principles and give you an intuition,
 therefore it is imprecise in some details.
 E.g., for a sake of clarity we show the main principle on a concrete heap graph
 instead of forest automata where one would need to visualise the sets of heap graphs represented by automaton.
@@ -4664,7 +4664,7 @@ On the right-handed side is the graph after abstraction.}
 Now, another abstraction is performed and merges its nodes in such way that the automaton now represents
 arbitrary doubly-linked list of length at least two (which is a consequence
 of fact that we used again height abstraction with height 2).
-The abtraction is shown on Figure \ref{ref:fig-re4}.
+The abstraction is shown on Figure \ref{ref:fig-re4}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -8786,12 +8786,12 @@ therefore the rest of the chapter is going to mainly discuss technical improveme
 
 \section{Technical Preparation of Forester for SV-COMP}
 This section contains description of technical improvements of the tool we did
-for the different editions ofthe  compeitition.
-The conceptual improvements of forest auomatata based shape analysis in different
+for the different editions of the  competition.
+The conceptual improvements of forest automata based shape analysis in different
 editions of the competition are described in the next section.
 For the first participation of \forester in SVCOMP (edition 2015) \cite{svcomp15-forester},
 no principle changes in Forester were done and we aimed to preparing the tool from technical
-perspective to fulfill the requiraments of the competition.
+perspective to fulfill the requirements of the competition.
 Forester did not have a counterexample analysis or an abstraction refinement in this first participation.
 The tool was submitted as a binary file in an archive together
 with the scripts wrapping execution for the competition.
@@ -8847,7 +8847,7 @@ The backward run and abstraction refinement were implemented in the standard CEG
 We used already existing forward run and added it to a loop where a (potentially) found counterexample
 is analysed by new backward run. If it is a spurious one we perform refinement abstraction, either
 by increasing height for height abstraction or by deriving new predicates for predicate abstraction
-which was newly implemtented.
+which was newly implemented.
 Particularly, the new predicates forest automaton from backward.
 Once the abstraction is refined we can recover from detection of a spurious counterexample and restart the analysis.
 
@@ -9536,7 +9536,7 @@ using system of logic formulae and so called templates which describes state spa
 The templates are special logic formulae and are conceptually similar to abstract domain
 in abstract interpretation.
 They are manually crafted to capture only certain aspects of an analysed program
-what makes analyses computationally feasable.
+what makes analyses computationally feasible.
 Therefore we call templates (abstract) domains in the rest of the chapter.
 
 The main contributions of this work are:
@@ -9586,7 +9586,7 @@ quantification ($\exists_2$), we can formalise it as:
 \end{split}
 \end{equation}
 
-The above equtation would need a solver able to deal with second-order logic quatification,
+The above equitation would need a solver able to deal with second-order logic quantification,
 however, there are currently no general and efficient solvers able to do it.
 Therefore we reduce the problem to iterative application of a first-order solver
 by restriction of inductive invariant $\inv$ to $\templ(\vx, \vdelta)$ where $\templ$ is
@@ -9622,7 +9622,7 @@ In this encoding, special variables called \emph{guards} are used to track the c
 in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ which value
 encodes whether the program location is reachable.
 
-To achive acyclicity of the SSA, we cut the path coming from the end of the loop.
+To achieve acyclicity of the SSA, we cut the path coming from the end of the loop.
 We then represent the value of each variable $x$ at the loop head using a
 \emph{phi variable} $x^{phi}$ whose value is defined by a non-deterministic
 choice between the value coming from before the loop, say $x_0$, and the
@@ -10362,7 +10362,7 @@ This enables verification of a new class of data structures where a set of predi
 is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:asv}.
 
-The second result in shape analysis is the mupltiple participations of the Forester
+The second result in shape analysis is the multiple participations of the Forester
 tool in software verification competition (SV-COMP).
 Although we did not win a medal in any major category we shown that our approach
 is able to compete and often superior to the other ones.
@@ -10392,7 +10392,7 @@ We developed automated testing procedure for manufacturing execution systems (ME
 in environment of digital twins.
 We learn a model of communication protocol and messages sent between software components
 of a manufactory where MES is deployed.
-We automatically create test scenarios for digital twins using the learnt modesl
+We automatically create test scenarios for digital twins using the learnt models
 where manufactory is emulated and MES deployed natively.
 Since we use finite automata to model communication protocol we can use abstraction to
 overapproximate language and create the new test cases.
@@ -10471,7 +10471,7 @@ for each line of an analysed program.
 The information was further used by Symbiotic which relies heavily on slicing of program
 over which a symbolic execution is executed.
 Particularly, Symbiotic does not need to analyse lines of code which were denoted 
-safe (from perspective of memory safety) by Predator executed in overapproaximating (sound) mode.
+safe (from perspective of memory safety) by Predator executed in overapproximating (sound) mode.
 If Predator find a bug in program, Symbiotic takes a bug report and combines it with the
 results of its own static pointer analysis to filter out some spurious counterexamples.
 The viability of the approach was shown by the second place of Symbiotic and Predator
