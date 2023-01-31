@@ -135,8 +135,8 @@ We also want to propose a new automata formalism which will be based on Courcell
 and will be able to represent class of graphs with bound tree width as its language.
 
 The second part of the first goal is systematical development of a tool for shape analysis.
-Particularly, we focus on Forester \cite{svcompweb} which implements shape analysis for forest automata.
-Our goal is to make Forester able to compete on an international level although we are
+Particularly, we focus on \forester \cite{svcompweb} which implements shape analysis for forest automata.
+Our goal is to make \forester able to compete on an international level although we are
 aware of fact that due lack of human power we cannot enhance tool from research prototype
 to something applicable to real world software.
 
@@ -177,16 +177,16 @@ guarantee that after a restart of verification method we exclude it
 from represented state space.
 
 We achieved the second goal in the field of shape analysis, i.e., making a shape analyser
-competitive on international level, by the participation of the Forester tool
+competitive on international level, by the participation of the \forester tool
 implementing forest automata based shape analysis
 in software verification competition SV-COMP \cite{svcompweb} in edition for years 2015, 2016, 2017, and 2018.
-Although Forester did not win a medal in any major category,
+Although \forester did not win a medal in any major category,
 we managed to support non trivial subset of C language needed for a reasonable
 participation in competition and made tool mature enough to be competitive with
 other tools, often developed by large teams.
 The tool also verified soundly some test cases such as skip-list of the 3 level, or
 variants of trees which were not analysable by any other tool.
-Although Forester stayed at the state of prototype and a lot of engineering work would be needed to make
+Although \forester stayed at the state of prototype and a lot of engineering work would be needed to make
 it a mature tool, we were able to show that a shape analysis based on automata
 can compete with other approaches and it is a meaningful path of research.
 
@@ -240,7 +240,7 @@ In Chapter \ref{ch:state-of-the-art} a state of the art in shape analysis is des
 Then in Chapter \ref{ch:asv} we provide with a description of forest automata based
 shape analysis including a detailed description of backward run and predicate abstraction
 over forest automata which was developed as part of the thesis.
-Chapter \ref{ch:svcomp} summarizes Forester participation in the various editions
+Chapter \ref{ch:svcomp} summarizes \forester participation in the various editions
 of software verification competition SV-COMP.
 Chapter \ref{ch:netys} introduces automata over graphs with bounded tree width together
 with their crucial properties.
@@ -719,7 +719,7 @@ of selector names.
 	for proving properties of other abstract machines.
 	An example is emptiness of automata with auxiliary storage in \cite{soa-popl11tw}.
 
-\chapter{Forester ASV}
+\chapter{Shape Analysis based on Forest Automata}
 \label{ch:asv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:label}
@@ -8679,7 +8679,7 @@ individual ones as the symbolic representation of sets of heaps.
 \chapter{Developing Shape Analyser for Software Verification Competition}
 \label{ch:svcomp}
 \section{Introduction}
-The following chapter describes development of the Forester tool \cite{foresterweb}
+The following chapter describes development of the \forester tool \cite{foresterweb}
 for Software verification competition \cite{svcompweb} (SV-COMP) which is annually held within TACAS conference.
 The tools competing in SV-COMP vary from sound abstract interpreters or formal verifiers through static analysers
 to unsoud tools like bounded model checkers.
@@ -8753,7 +8753,7 @@ Still, \forester succeeded to show that the combination of forest automata with 
 %
 Building a more robust tool on top of our experience with \forester is one of our future goals.
 
-The main concepts of the verification approach used by Forester were described in detail in the previous parts of thesis
+The main concepts of the verification approach used by \forester were described in detail in the previous parts of thesis
 therefore the rest of the chapter is going to mainly discuss technical improvements done during the preparations for different editions of competition.
 
 %% Due to the focus of \forester on analysis of programs with difficult shape
@@ -8784,40 +8784,40 @@ therefore the rest of the chapter is going to mainly discuss technical improveme
 % These things complicated the preparation of \forester{} for the competition
 % since many man hours would be needed to make \forester{} competitive.
 
-\section{Technical Preparation of Forester for SV-COMP}
+\section{Technical Preparation of \forester for SV-COMP}
 This section contains description of technical improvements of the tool we did
 for the different editions of the  competition.
 The conceptual improvements of forest automata based shape analysis in different
 editions of the competition are described in the next section.
 For the first participation of \forester in SVCOMP (edition 2015) \cite{svcomp15-forester},
-no principle changes in Forester were done and we aimed to preparing the tool from technical
+no principle changes in \forester were done and we aimed to preparing the tool from technical
 perspective to fulfill the requirements of the competition.
-Forester did not have a counterexample analysis or an abstraction refinement in this first participation.
+\forester did not have a counterexample analysis or an abstraction refinement in this first participation.
 The tool was submitted as a binary file in an archive together
 with the scripts wrapping execution for the competition.
-The scripts, e.g., translates outputs of Forester to predefined outputs by competition rules.
+The scripts, e.g., translates outputs of \forester to predefined outputs by competition rules.
 
-However, it was needed to add to Forester a support for printing out a path leading to
+However, it was needed to add to \forester a support for printing out a path leading to
 a found counterexample violating the given specification,
 so called witness.
 The witness format is a dialect of GraphML (which is based on XML) defined by the competition rules and described in more detail way in \cite{fse15-witness}.
-We use the fact that Forester performs a symbolic execution and creates symbolic states containing link to a previous state.
+We use the fact that \forester performs a symbolic execution and creates symbolic states containing link to a previous state.
 We travel a path of symbolic states from an erroneous state to the beginning of program and gradually generate needed witness in GraphML.
 The witnesses are later used by so called witness checkers which perform precise model checking (i.e., without abstraction)
 navigated by the input witness to check that a found error is really in program.
 
-In the next edition of competition (year 2016), we adapt Forester to a new competition environment.
+In the next edition of competition (year 2016), we adapt \forester to a new competition environment.
 Particularly, the competition started using Benchexec \cite{sttt-benchexec}, a platform
 making easy execution of the different tools over a given benchmark and reporting results in a structured way.
-We implemented a script called by Benchexec to execute Forester over a given 
+We implemented a script called by Benchexec to execute \forester over a given 
 verification task.
-This script calls another script directly encapsulating Forester and translating outputs of the tool the ones
+This script calls another script directly encapsulating \forester and translating outputs of the tool the ones
 predefined one by competition.
 It was also needed to create a specification of participation in XML format and to upload it to SV-COMP repository.
-The specification defines in which categories Forester participates and which parameters should be used
+The specification defines in which categories \forester participates and which parameters should be used
 for a particular category.
 
-Finally, since edition 2017 of SV-COMP Forester supports printing so called correctness witness.
+Finally, since edition 2017 of SV-COMP \forester supports printing so called correctness witness.
 I.e., a description of state space explored during a verification of error-free task together with
 invariants implying correctness of program.
 A witness is again based on GraphML format defined by competition and described in \cite{fse16-correct}.
@@ -8825,13 +8825,13 @@ In our case, the invariants are forest automata representing a shape invariant (
 allocated on the heap) for each line of program visited during verification procedure.
 
 \section{Conceptual Improvements over the Editions of Competition}
-For the first edition in which Forester participated (2015), we did mainly technical improvements of the tool.
+For the first edition in which \forester participated (2015), we did mainly technical improvements of the tool.
 The main conceptual change was a replacement of ad-hoc implemented tree automata library by the VATA library \cite{libvata}.
-It improved overall architecture of Forester (and therefore maintainability) and made possible
+It improved overall architecture of \forester (and therefore maintainability) and made possible
 to benefit from improvements in the VATA library which is specialized to an efficient implementation of
 algorithms for tree automata.
 
-The main bottleneck of Forester in competition, an inability to distinguish between false and real bugs in program,
+The main bottleneck of \forester in competition, an inability to distinguish between false and real bugs in program,
 was fixed for the next edition (2016) (a possibility of false bug is caused by using abstraction over forest
 automata as was described in the previous chapters).
 It was achieved by implementation of backward run from the point where a violation of specification was detected.
@@ -8869,22 +8869,22 @@ The main strength of the tool in competition came from the generality of the und
 verification procedure.
 Forest automata as a domain are able to represent many different data structures,
 ranging from doubly linked list to different kinds of trees.
-E.g., Forester was the only tool able to soundly verify correctness of implementation of skip lists
+E.g., \forester was the only tool able to soundly verify correctness of implementation of skip lists
 of the second and the third level.
-The newly implemented backward run and abstraction refinement moreover gave Forester
+The newly implemented backward run and abstraction refinement moreover gave \forester
 an ability to learn more sophisticated invariants.
 An example of such invariant is alternation of two kinds of nodes in single or double linked list.
-This class of data structure were also tasks which only Forester verified soundly.
+This class of data structure were also tasks which only \forester verified soundly.
 
 The weaknesses came from technical immaturity of the tool.
 It did not support the whole C syntax and therefore it reported
 unknown on many tasks from SV-COMP benchmark.
 The examples of features occurring often in memory safety related categories are function  
 pointers, alloca function, or arrays.
-We lack manpower to add these features to Forester which was still prototype and
+We lack manpower to add these features to \forester which was still prototype and
 would need a major refactoring to reach a state where an easy maintainability and extensibility would be possible.
 
-\chapter{NETYS}
+\chapter{Towards Efficient Shape Analysis with Tree Automata}
 \label{ch:netys}
 \section{Introduction}
 
@@ -10362,11 +10362,11 @@ This enables verification of a new class of data structures where a set of predi
 is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:asv}.
 
-The second result in shape analysis is the multiple participations of the Forester
+The second result in shape analysis is the multiple participations of the \forester
 tool in software verification competition (SV-COMP).
 Although we did not win a medal in any major category we shown that our approach
 is able to compete and often superior to the other ones.
-Forester where able to soundly verify as the only tool in competition test cases
+\forester where able to soundly verify as the only tool in competition test cases
 such as skip list of 2nd and 3rd level, various trees,
 and also data structures with relations between nodes (for which we derive predicates using CEGAR).
 
@@ -10457,7 +10457,7 @@ The backward run and counterexample-guided refinement was published in \cite{vmc
 A paper describing the whole verification procedure based on forest automata
 was accepted for publication in book about state-of-the-art verification tool which
 should be published in year 2023.
-The papers related to Forester participation in SV-COMP are \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}.
+The papers related to \forester participation in SV-COMP are \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}.
 Graphs over automata with bounded tree width was sketched in \cite{netys21}.
 The approach to shape analysis based on SMT was published in \cite{fmcad18, svcomp-2ls}.
 
