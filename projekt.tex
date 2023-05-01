@@ -146,9 +146,10 @@
   keywords.en={static analysis, formal verification, shape analysis, testing, automata}, % klíčová slova v anglickém jazyce / keywords in english
   %keywords.en={Here, individual keywords separated by commas will be written in English.},
   % Abstrakt / Abstract
-  abstract.cs={Tato práce se zabývá aplikací teorie automatů v zajištění kvality software.
-V první části se zabývá aplikací automatů v tzv. analýze tvaru, což je formální verifikace programů pracujících s dynamickými datovými strukturami.
-Konkrétně představuje rozšíření analýzy tvaru založené na lesních automatech o zpětný běh a zjemnění abstrakce založené protipříkladech.
+  abstract.cs={Tato práce se zabývá aplikacemi teorie automatů v zajištění kvality software.
+V první části se zabývá aplikací automatů v tzv. analýze tvaru, kterou lze využít pro formální verifikaci programů pracujících s dynamickými datovými strukturami.
+Konkrétně představuje rozšíření analýzy tvaru založené na lesních automatech o zpětný běh analýzy přes řádky programu, které se objeví v potenciálním protipříkladu
+a zjemnění abstrakce založené protipříkladech.
 Dále je v práci představena nová doména pro analýzu tvaru a to automaty nad grafy s omezenou stromovou šířkou. Ty jsou obecnější
 než lesní automaty, ale zároveň výpočetní složitost algoritmů s nimi pracujících je použitelná.
 
@@ -158,14 +159,15 @@ To poskytuje bezpečné prostředí testování výrobních informačních syst�
 Navíc jsme metodu rozšířili o možnost tvorby nových testovacích scénářů nad rámec pouhé reprodukce již pozorovaného chování reálného prostředí,
 a tak zvýšili kvalitu testovacího procesu.
 Tato metoda je založena na použití teorie automatů, konkrétně na použití abstrakce nad konečnými automaty.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
-  abstract.en={This thesis focuses on application of automata theory to software quality. In the first part, we focus on shape analysis which is formal verification
-of programs manipulating dynamic data structures. Particularly, we develop backward run and counterexample-guided refinement for forest automata based shape analysis.
-We also introduce a new approach based on automata over graphs with bounded tree width which should be more general than forest automata but still have feasible computation
+  abstract.en={This thesis focuses on applications of automata theory to software quality. In the first part, we focus on shape analysis which can be used for formal verification
+of programs manipulating dynamic data structures. Particularly, we develop an approach of backward program execution along possible counterexamples traces
+and counterexample-guided refinement for shape analysis based on forest automata.
+We also introduce a new approach based on automata over graphs with a bounded tree width which is more general than forest automata but still has feasible computation
 properties.
 
 In the second part, we introduce a method for automated testing of manufacturing execution systems (MES) in digital twin.
-We are able to orchestrate a digital twin to reproduce behaviour of a real world settings in which MES is deployed and so provide a safe environment for testing.
-Moreover, we can generate the new test cases by applying automata and abstraction over them.}, % abstrakt v anglickém jazyce / abstract in english
+We are able to orchestrate a digital twin to reproduce behaviour of a real-world setting in which MES is deployed and so provide a safe environment for testing.
+Moreover, we can generate new test cases by applying automata and abstraction over them in this context.}, % abstrakt v anglickém jazyce / abstract in english
   %abstract.en={An abstract of the work in English will be written in this paragraph.},
   % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
   %declaration={Prohlašuji, že jsem tuto disertační práci vypracoval samostatně pod vedením pana X...

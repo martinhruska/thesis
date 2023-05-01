@@ -6,10 +6,10 @@
 
 Assuring software quality is a crucial part of development cycles
 for all kinds of software.
-It is important for low level code often deployed in the highly critical
+It is important for low-level code often deployed in highly critical
 applications where one bug can have expensive consequences or even threat
 human lives.
-It is crucial also in high level software where bugs can destroy
+It is crucial also in~high-level software where~bugs can destroy
 user experience and ruin the whole process of development and selling a new software.
 
 \subparagraph{Approaches to Software Quality}
@@ -17,133 +17,140 @@ There are different approaches to software quality at different stages of develo
 with different quality warranties.
 The most rigorous one is based on a formal specification of requirements
 followed by deriving program from the specification or proving program
-against the specification manually.
+against the specification manually or with help of automated proof assistant.
 This approach is present from the beginning of computer science and although it provides
 the highest level of guarantee it has not became mainstream.
-The main negatives are the demands on qualification of developers and an inability to scale
+The main negatives are the demands on qualification of developers and severe difficulties to scale
 to larger software.
 
-There are also automated approaches to proving correctness of program such as
-model checking which strive to verify that a program satisfies given specification.
+There are also more or even fully automated approaches to proving correctness of~programs such as
+model checking which strive to verify that a program satisfies a given specification.
 These methods are generally called formal verification.
-They are easier to use than manual proving of program, however they have problem with scaling and applicability to real world software.
-The are also less general and more specialized automate methods such as different types of sound static analysis or
-abstract interpretation which are designed to verify certain program properties
-(such as values of integer variables, or analyses of termination properties).
+They are easier to use than manual proving of program, however, they still have problems with scaling and applicability to real-world software.
+There are more specialized automated methods such as different types of sound static analysis based, e.g., on data flow analysis
+or~abstract interpretation, which are designed to verify certain program properties
+(such as values of integer variables or analyses of termination properties).
 These methods scale better and can work out of the box.
 However, they are less precise and often tuned for a particular program property. 
 
 Another approach comes from programming language community claiming
 that programming language itself should guide a programmer to write
 software without bugs.
-This is mostly achieved by static strong type systems which facilitates
-encoding different program properties to type system.
+This is mostly achieved by static strong type systems which facilitate
+encoding different program properties to the type system.
 The advantage of this approach is that one does not need another technology and forces
 programmers to write correct code.
-On the other hand, the programming languages of this kind have slow learning curve,
+On the other hand, the programming languages of this kind have a slow learning curve
 and can be even unusable for certain programmers.
-Moreover, only limited set of program properties is encodable to type systems.
+Moreover, only a limited set of program properties is encodable to type systems.
 
 The third approach to software quality are lightweight automated methods
-such as automated testing, unsound static analysis based on patter matching, or bounded model checking.
-The methods try to hit sweet spot between mathematical rigorous and plain bug hunting.
-They are easy to use, straightforward, scale well but detect many false alarms what can cause
+such as automated testing, unsound static analysis based, e.g., on error pattern matching, symbolic execution,
+or extrapolating dynamic analysis.
+This class of methods also contains the relaxed versions of methods from formal verifiction
+such as bounded model checking or different approaches to abstract interpretation which
+do not overapproximate the original semantics.
+The methods try to hit a sweet spot between mathematical rigour and plain bug hunting.
+They are easy to use, straightforward, often scale well but may detect many false alarms which can cause
 that they are ignored by developers completely.
 
-The last of the main approach is based on traditional testing by humans. It may be developers
-writing unit tests or the whole tester teams implementing the complex integration tests.
+The last of the main approach is based on traditional testing by humans possible aided
+by automated test execution, continuous integration, and the like.
+It may be developers writing unit tests or the whole tester teams implementing the complex integration tests.
 It is mostly known and time-tested approach, but it costs a lot of human resources and
-does not given any guarantees about correctness.
+does not give any guarantees about correctness.
 
 The presented dichotomy does not pretend to be complete or exhaustive.
-It tries to summary the main approaches and give an overview of them.
-In practice, the different approaches are combined, complement each other and may
-fall to different categories.
+It tries to summarise the main approaches and give an overview of them.
+In practice, the different approaches are combined, complement each other, and may
+fall to different categories at the same time.
 The proposed thesis focuses on automated formal methods (the first part of thesis)
-and lightweight automated testing methods which we used in domain where scalability was required.
+and lightweight automated testing methods (the second part), which we used in a domain where scalability was required.
 
 \subparagraph{Finite Automata}
 The main uniting theme of the thesis is application of finite automata to
 the fields of formal verification and automated testing.
-Finite automata are (syntactically) simple but powerful tool for representing regular languages. 
+Finite automata are a (syntactically) simple but powerful tool for representing regular languages. 
 %Particulary, such languages may consists of e.g., regular strings (used in pattern matching applications
 %such as lexical analysis in compilers or detection of malicious strings in security domains),
 %regular structures such as list or trees (used in verification of programs manipulating
 %dynamic data strucutre), or regular sequences of messages (used in modelling communication
 %protocols).
-Since their introduction in 50s by Rabin and Scott \cite{rabin-scott} they have been used in
+Since their introduction in the 50s by Rabin and Scott \cite{rabin-scott}, they have been used in
 various domains such as compilers, modelling of various kinds of systems,
-design of digital circuits, natural language proceeding, speech recognition,
-and in verification or testing of software and hardware.
+design of digital circuits, natural language processing, speech recognition,
+as well as in verification or testing of software and hardware.
 Moreover, finite automata and their variations are widely studied in theoretical computer science either
-from perspective of decidable properties, or complexity of algorithms for their manipulation.
+from perspective of the decidable properties or complexity of algorithms for their manipulation.
 
-Finite automata are mainly used to represent the various regular structures by their languages.
-A classical application is language consisting of regular strings (used in pattern matching applications
+Finite automata are mainly used to represent the various structures with reccurent patterns of substructures (we deliberately
+do not use word regular to prevent confusion with meaning of the word in context of theory of formal languages). 
+A classical application is language consisting of plain strings (used in pattern-matching applications
 such as lexical analysis in compilers or detection of malicious strings in security domains).
-More sophisticated is language containing regular sequences of messages, or generally objects with an inner structure
-what is used, e.g., for modelling communication protocols.
-In formal verification, there are also automata representing regular infinite strings (so called Buchi automata)
-what is used used for verification of properties such as termination of program.
-Another kind of automata used in formal verification are tree automata that represent sets of trees by their languages.
-The automata are applied mainly to represent tree data structures allocated on heap by a program.
+A more sophisticated case arises when using regular language s containing sequences of messages
+or generally objects with an inner structure, which is used, e.g., for modelling communication protocols.
+In formal verification, there are also automata representing regular languages of infinite strings (so called Buchi automata),
+which are used for verification of some properties requiring one to reason about infinite behaviours such as termination of a program.
+Another kind of automata used in formal verification are tree automata that represent sets of trees.
+These automata have been applied, e.g., to represent tree data structures (and even more complex structures defined over their tree backbones)
+allocated on heap by a program.
 
-In the applications of automata in this thesis we are interested in properties such as language inclusion and equivalence
-of two finite automata, emptiness or complement of language of finite automaton.
-All these properties are decidable but some of them have high complexity complexity,
-i.e., complement is NP-complete, language inclusion and equivalence are even PSACE-complete.
-Fortunately, the efficient heuristics for the mentioned operations were introduced making
-them computationally feasible in many practical cases.
+In the applications of automata in this thesis, we need to perform operations such as testing language inclusion and equivalence
+of two finite automata, testing emptiness of language of automaton or complementation of automaton.
+All these properties are decidable but some of them have a high complexity,
+e.g., complement has exponential complexity w.r.t. number of states of automaton, language inclusion and equivalence are PSACE-complete
+(or even EXPTIME-c for nondeterministic tree automata).
+Fortunately, efficient heuristics for the mentioned operations were introduced making
+them computationally feasible in many practical cases TODO CITE.
 
-As we mentioned above we focus on application of automata to two different fields.
+As we mentioned above, we focus on applications of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
 dynamic data structures.
-In shape analysis, we are interested in representation of regular data structures allocated on heap such
-as linked lists or trees and verification of the properties such as absence of invalid memory
+In shape analysis, we are interested in representing data structures allocated on the heap, such
+as linked lists or trees, and verifying the operations properties such as absence of invalid memory
 dereference, invalid memory free, or memory leaks.
 Programs using dynamic data structures are a great fit for methods of formal verification since 
 they are prone to the mentioned bugs and are written in programming
 languages with manual memory management as C or C++ where memory management is fully within user's control.
-At the same time, these programs are used in critical software such as kernel of operating system.
-Any bugs in them may affect many users and lead to the expensive losses.
-Therefore they need strong safety guarantees which can the methods with formal basis provide.
+At the same time, these programs are used in critical software such as kernels of operating systems.
+Any bugs in them may affect many users and lead to expensive losses.
+Therefore they need strong safety guarantees which can be provided by the methods with formal basis.
 
 Our approach to shape analysis is based on forest automata and automata over graphs
-(both extensions of tree automata) with bounded tree width.
-Both formalisms are able to represent quite wide class of data structures that can be
-allocated on heap.
-Then we employ a verification procedure to compute shape invariants for each program location.
-In our case, shape invariant is an automaton representing all possible states of heap.
-Finally, we check that shape invariants implies that a given specification is fulfilled by program
-(usually checking absence of invalid dereference, invalid free or memory leaks).
+(both extensions of tree automata) with a bounded tree width.
+Both formalisms are able to represent a quite wide class of data structures that can be
+allocated on the heap.
+We employ a verification procedure to compute shape invariants for each program location.
+In our case, a shape invariant is an automaton representing all possible states of heap.
+Finally, we check that shape invariants imply that a given specification is fulfilled by the program
+(usually checking absence of invalid dereferences, invalid frees or memory leaks).
 
 The second field of application of automata in this thesis is automated software testing.
-Particularly, we focus on testing of manufacturing execution system (MES) in environment of digital twin.
-MES is critical software in controlling manufactory where bugs may stop
-production or even damage manufacturing machines.
-Such bugs may be very expensive and it is important to find as many of them as possible
-before MES is deployed to a real manufactory.
-Our approach analyses behavior of software used in a real manufactory, builds its models and then
-generates tests for digital twin of manufactory where, e.g., a new version of software is deployed
-and rest of manufactory emulated.
+Particularly, we focus on testing of a manufacturing execution system (MES) in an environment of digital twins.
+MES is critical software in controlling a factory where bugs may stop
+the~production or even damage manufacturing machines.
+Such bugs may be very expensive, and it is important to find as many of them as possible
+before MES is deployed to a real factory.
+Our approach analyses the behavior of the software used in a real factory, builds its models and then
+generates tests for a digital twin of the factory which are applied, e.g., when a new version of the software is deployed
+and the rest of factory emulated.
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current tools and methods of shape analysis.
-We aim to further development of existing approach to shape analysis based on forest automata
-and enhance it to enable verification of larger class of programs.
-We also want to propose a new automata formalism which will be based on Courcelle theorem \cite{Courcelle}
-and will be able to represent class of graphs with bound tree width as its language.
+We aim to further develop the approach to shape analysis based on forest automata proposed in \cite{cav11,cav13}
+and enhance it by
+\begin{enumerate*}
+  \item revisiting and improving its description,
+  \item enhancing it by a mechanism of checking possible counterexamples and automated abstraction refinement,
+  \item improving its tool support, particulary tool \forester, to make it able to compete on an international level.
+\end{enumerate*}
+We also attempt to find an alternative automata-based representation suitable for shape analysis
+with the aim of cover the class of graphs with bounded tree width. 
 
-The second part of the first goal is systematical development of a tool for shape analysis.
-Particularly, we focus on \forester \cite{svcompweb} which implements shape analysis for forest automata.
-Our goal is to make \forester able to compete on an international level although we are
-aware of fact that due lack of human power we cannot enhance tool from research prototype
-to something applicable to real world software.
-
-The second goal of thesis is to apply automata to field of testing, particularly
+The second goal of the thesis is to apply automata to the field of testing, particularly
 to testing manufacturing execution systems.
 We want to create a novel approach combining automated test generation from
-observed behaviour of a manufactory with testing in environment of digital twin
+observed behaviour of a manufactory with testing in an environment of a digital twin
 which will be orchestrated according to the tests we create.
 
 \section{Overview of the Achieved Results}
