@@ -279,16 +279,16 @@ of digital twins.
 \chapter{State of the Art}
 \label{ch:state-of-the-art}
 This section provides a summary of the state-of-the-art methods for shape analysis.
-First, we give an overview of the formalisms for representing data structures allocated on heap.
+First, we give an overview of the formalisms for representing data structures allocated on the heap.
 Then the refinement techniques for abstraction over various formalisms are summarized, and
-finally, an existing work on automata for graph languages is presented.
+finally, existing works on automata for graph languages are presented.
 
 \section{Shape Analysis}
-As we mentioned, \emph{shape analysis} deals with analysis of data structures
+As we mentioned, \emph{shape analysis} deals with analysis of dynamically linked data structures
 allocated on the heap.
 Many different approaches to shape analysis have been proposed, using various
 underlying formalisms, such as logics
-\cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13}
+\cite{jensen,pale01,pale,Reynolds:SepLogic:02,InvaderCAV07,indPrSynt07,ndqc07,Zee:pldi08,InvaderCAV08,abduction11,mpq11,slayer11,predator11,overlaid11,indPrSynt07,thor10,sas07:chang_rival_necula,dragoi:atva12,sleek13},
 automata \cite{bhrv06b,deg06,forester12,boxes13,lists-counters},
 graphs with summary nodes and edges \cite{sas07:chang_rival_necula,dudka13sas},
 graph grammars \cite{juggrnaut10,juggrnaut-learning12}, or upward closed sets \cite{paroshBackward}.
@@ -296,10 +296,10 @@ graph grammars \cite{juggrnaut10,juggrnaut-learning12}, or upward closed sets \c
 % Apart from the underlying formalisms, the approaches differ in their degree of
 % automation, in the heap structures they can handle, and in their scalability.
 
-In the following chapter, we abstract data structures allocated on heap to graphs (so called \emph{heap graphs}
+In the following chapter, we abstract data structures allocated on the heap to graphs (so called \emph{heap graphs}
 or \emph{heap shapes}).
-An allocated memory heap cell corresponds to a node of graph and a pointer pointing from one memory cell
-to another is represented by the edges between nodes.
+An allocated memory heap cell corresponds to a node of the graph and a pointer pointing from one memory cell
+to another is represented by an~edge between the nodes.
 The selectors are represented by the labels of the edges.
 Formally, a heap graph $G$ is a tuple $(V,E,\alpha)$ where $V$ is a set of nodes, $E \subseteq V \times V$ is
 a set of edges, $\alpha: E \rightarrow \selectors$ is a labelling function, and $\selectors$ is a set
@@ -307,13 +307,13 @@ of selector names.
 
 	  Shape analysis heavily relies on the formal model used to represent the set of the heap shapes
 	  reachable in the program.
-	  The requirements on the model are the following:
+	  The requirements on the model include:
 	  \begin{enumerate*}[label=(\alph*)]
-	  	\item genericity and expressivity\,---\,the more general the model can represent
-                      and therefore more programs can be analyzed,
-	  	\item automation\,---\,the model can be derived from a program automatically and have decidable
+	  	\item genericity and expressivity\,---\,the more general classes of the heap grphs model can represent,
+                      more programs can be (in theory) analyzed,
+	  	\item automation\,---\,the model should be derivable from a program automatically and have decidable
 			properties important for reasoning about the program,
-	  	\item efficiency and scalability\,---\,there exist efficient algorithms for manipulation with the model
+	  	\item efficiency and scalability\,---\,there should exist efficient algorithms for manipulation with the model
 			even when it is applied to big systems.
 	  \end{enumerate*}
 
@@ -324,85 +324,92 @@ of selector names.
 	  boolean values \emph{true, false}. The \emph{unknown} value is used when
 	  more items from a given universe may but need not to be in a relation.
 	  The \emph{unknown} value may be needed for an abstraction merging some nodes. E.g., consider
-	  an abstraction $\abstrA: V \rightarrow V$, where $V$ is a set of nodes
-	  of heap graphs, and the predicate $\emph{NEXT}: V \times V\rightarrow\{\emph{true}, \emph{false}, \emph{unknown}\}$
-          saying that we can go from the~heap node $u$ to the node $v$ using $NEXT$ selector, formally $(u,v)\in E \wedge \alpha(u,v)=NEXT$.
-	  Then when $\abstrA(u) = s$ and $\abstrA(v) = s$, where $s$ is a so called summary node,
-	  and there exists $w \in V$ such that $\emph{NEXT}(u,w) = \emph{true} \wedge
-	  \emph{NEXT}(v,w) = \emph{false}$, then $\emph{NEXT}(s,w) = \emph{unknown}$.
+	  an abstraction $\abstrA: V \rightarrow V$ where $V$ is a set of nodes
+	  of heap graphs, and the predicate $\nextd: V \times V\rightarrow\{\emph{true}, \emph{false}, \emph{unknown}\}$
+          saying that we can go from the~heap node $u$ to the node $v$ using the $\nextd$ selector, formally $(u,v)\in E \wedge \alpha(u,v)=NEXT$.
+	  Then when $\abstrA(u) = s$ and $\abstrA(v) = s$, where $s$ is a so-called summary node,
+	  and there exists $w \in V$ such that $\nextr{u}{w} = \emph{true} \wedge
+	  \nextr{v}{w} = \emph{false}$, then $\nextr{s}{w} = \emph{unknown}$.
 
-	  The work of \cite{pale} that build the TVLA shape analyser on the top of 3-valued
+	  The work of \cite{pale} that build, the TVLA shape analyser on top of 3-valued
 	  predicate logic with transitive closure was one of the first works on shape analysis.
-	  The framework is general, it can found some basic predicates describing shapes in the analysed
-	  program automatically but it needs to be parametrized manually by predicates to
+	  The framework is general, it can find some basic predicates describing shapes in the analysed
+	  program automatically, but it needs to be parametrized manually by predicates to
 	  represent more complex data structures.
 	  The precision of the used abstraction by refinement was addressed in \cite{cav05:mcpeak_necula, beyer:lazy_shape_analysis}.
-	  Scalability of the method has not been studied.
+	  Scalability of the method has not been systematically studied.
 
 	  \subsection{Separation Logic}
 
 	  \emph{Separation logic} was first introduced by Reynolds \cite{Reynolds:SepLogic:02} as an extension
 	  of \emph{Hoare logic} for reasoning about programs manipulating dynamic data structures.
-	  Hoare logic builds on so-called \emph{Hoare triple}. A triple has form $\{P\}C\{Q\}$ where
+	  Hoare logic builds on so-called \emph{Hoare triples}. A triple has a form $\{P\}C\{Q\}$ where
 	  $P,Q$ are assertions in predicate logic and $C$ is a command in an imperative programming language.
-	  When $P$ assertion is satisfied before an execution of $C$ then the $Q$ assertion should hold
+	  When $P$ is satisfied before an execution of $C$, then the $Q$ assertion should hold
 	  when $C$ terminates.
 	  Another possible formulation is that predicates from the set $P$ are transformed to the set $Q$
-	  with respect to semantics of $C$.
+	  with respect to the semantics of $C$.
 
 	  While the assertions in Hoare logic consist of standard connectives and symbols of predicate logic,
 	  separation logic extends the framework with several new ones for heap description: $emp$ (representing
-	  the empty heap), $P*Q$ (saying that the heap can be split to two separated parts where one satisfies $P$ and the second $Q$),
-	  $e \mapsto e'$ (an address defined by the expression $e$ is mapped to a value defined
+	  the empty heap), $P*Q$ (saying that the heap can be split to two separated parts, i.e., parts not allocating same nodes, but allocating disjoint sets of nodes,
+          where one satisfies $P$ and the second $Q$),
+	  $e \mapsto e'$ (the address defined by the expression $e$ is mapped to the value defined
 	  by the expression $e'$, and the rest of the heap is empty, i.e., $*emp$ is implicit),
-	  and $P\sepimp Q$ (states that a heap $h'$ satisfying the assertion $P$ will, after union with some heap $h$,
-	  satisfy the assertion $Q$).
+	  and $P\sepimp Q$ (which describes $h$ such that the union of $h$ with heap $h'$ that is disjoint from $h$
+          and that satisfies $P$ will satisfy $Q$).
 
-	  An interest in separation logic has started raising with an introduction of the automated,
-	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08}, or \slayer \cite{slayer11}.
-          These approaches are, however, are not very general since they are restricted to programs over certain classes of
-          linked lists (and cannot handle even structures such as linked lists with data
+	  The interest in separation logic has started rising with the introduction of the automated,
+	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08} and \slayer \cite{slayer11}.
+          These approaches assume pre-defined templates of shape predicates and are not very general
+          since they are restricited to programs over certain classes of linked lists (and cannot
+          handle even structures such as linked lists with data
           pointers pointing either inside the list nodes or optionally outside of them,
-          which we can easily handle, as discussed later on). 
+          which we can easily handle, as discussed later on).
+	  E.g., the separation logic-based approa\-ch of \cite{indPrSynt07} suffer from the need to manually provide inductive predicates
+	  describing the heaps shapes (even for some list structures).
           The work \cite{overlaid11} concerning overlaid data
           structures mentions an extension of \spaceinvader to trees, but this extension
           is also of a limited generality and requires some manual help.
 
-	  Separation logic has also been extended to a concurrent version \cite{brookes16}.
+	  Separation logic has also been extended to a concurrent version, see, e.g., \cite{brookes16}.
 
 	  The scalability of the approach based on separation logic was significantly improved by bi-abduction \cite{abduction11}.
 	  Further, the second-order bi-abduction provided ability to learn some predicates automatically and so made possible analysis
 	  of more complex data structures such as skiplists \cite{locle:secondorder}.
 	  The principles similar to second-ordered bi-abduction enabling analysis of complex data structures
 	  were used in~\cite{indPrSynt07}.
-	  
-          The main downside of the bi-abduction based methods is inability to provide a counterexample breaking
+
+          The recent work \cite{soa-biabduction} further extended separation logic by the low-level features of data structures
+          manipulation such as pointer arithmetic, bit-masking on pointers,
+          block operations with blocks of variable size, their splitting to fields of in-advance-not-fixed size,
+          merging such fields back, and reinterpreting them differently, etc..   
+
+          A main downside of the bi-abduction-based methods is their inability to provide a counterexample breaking
 	  the given specification.
-	  The separation logic-based approa\-ches often suffer from the need to manually provide inductive predicates
-	  describing the heaps shapes (even for some list structures).
-          Moreover, these approaches are rather fragile. Especially~\cite{indPrSynt07}
-          seems quite dependent on the fact that the encountered
+          Moreover, these approaches are rather fragile. Especially, the~\cite{indPrSynt07}
+          is quite dependent on the fact that the encountered
           data structures are built in a ``nice'' way conforming to the structure of the
           predicate to be learnt (meaning, e.g., that lists are built by adding elements
           at the end only), which is close to providing an inductive definition of the
-          data structure, and, similarly, \cite{locle:secondorder}~fails on examples that
+          data structure. Similarly, the approach of \cite{locle:secondorder}~fails on examples that
           might seem easy (such as certain rather straightforward variants of creations
           and deletions of a~doubly-linked list).
 
 	  Separation logic has found its way to practice, mainly its implementation
-	  in the Infer tool widely used in Facebook \cite{www:fbinfer}.
+	  in the Facebook Infer tool widely used in Facebook \cite{www:fbinfer} and other companies.
 
           Separation logic was further modified to \emph{incorrectness separation logic} \cite{soa-isl} which
           combines local reasoning of separation logic with the newly introduced \emph{incorrectness logic} \cite{soa-isl}.
           An interprocedural analysis based on incorrectness separation logic has no false positives by construction
           and is aimed to rigorous bug hunting.
-          Incorrectness logic enables reasoning about errors in programs based on underapproximating analogue
-          of Hoare triples, i.e., the inference rules are introduced.
-          The authors introduce operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
+          Incorrectness logic enables reasoning about errors in programs based on an underapproximating analogue
+          of Hoare triples.
+          The authors also newly introduce the operator $x \not\mapsto$ saying that the pointer $x$ has been deallocated
           (and not reallocated). The operator was needed to distinguish between a dangling pointer and pointer which we do not
           know anything about and it also makes possible to introduce a frame rule
           for underapproximating reasoning in separation logic.
-          The methods were implemented in the tool called Pulse inside Facebook Infer.
+          The methods were implemented in the plugin called Pulse inside Facebook Infer.
 
           We note that there
           are other works on separation logic, e.g.~\cite{ndqc07}, that consider tree
@@ -419,17 +426,16 @@ of selector names.
           also requires the user to come up with summary edges to be used for summarizing
           skip list segments, hence basically with an inductive definition of skip lists.
 
-
-	  \subsection{Automated Decision Procedure}
-          It is not straightforward how to apply separation logic to a framework for verification of programs
-          since we need to decide problems such as satisfiability and entailment for separation logic.
-          In the recent years, there are many results on \emph{automated decision
+          For seperation logic to be applied in verification procedure, one needs to solve problems
+          of satisfiability and entailment on separation logic.
+          Many abstract interpretation tools solve the problem rather in ad hoc ways.
+          On the other hand, there have also appeared many results on \emph{automated decision
           procedures} for various fragments of separation logic addressing these problems
           \cite{enea_compositional_2014, iosif_deciding_2014,
           soa-JensFlorian:BeyondSymHeap:20, soa-LocLe:VMCAI21, soa-Radu:CADE21}.
           %
           Unfortunately, the cited works cannot be used to the bi-abduction problem described in
-          the previous section, which is the crucial for a compositional (scalable) program analysis.
+          the above section, which is crucial for a compositional (scalable) program analysis.
           In bi-abduction, one needs to solve the abduction problem $P * [?] \models Q$,
           where $*$ is the separating conjunction.
           The best solution (i.e., the logically weakest) is given by the formula $P \mw Q$
@@ -444,48 +450,52 @@ of selector names.
           which defined new semantics for separation logic.
           The new semantics make possible to use magic wand and the singly-linked list-segment
           predicate.
-          The work also discuss their application to the abduction problem.
-
-          This approach was further extended by the low-level features of data structures
-          manipulation such as pointer arithmetic, bit-masking on pointers,
-          block operations with blocks of variable size, their splitting to fields of in-advance-not-fixed size,
-          merging such fields back, and reinterpreting them differently, etc., by \cite{soa-biabduction}. 
+          The work also discuss their potenial application to the abduction problem.
+          However, to make this a reality, more research is needed.
 
 	  \subsection{Symbolic Memory Graphs}
 
 	  \emph{Symbolic Memory Graphs (SMG)} \cite{dudka13sas} were designed as
 	  an abstract domain for the framework of abstract interpretation \cite{cousot:popl77}.
-	  They model a state of heap precisely but can perform \emph{widening} by introducing
+	  They can model states of the heap precisely, but one can also perform \emph{widening} over SMGs by introducing
 	  summary nodes in the form of singly/doubly-linked lists nodes to
-	  accelerate analysis and enable representation of infinite state spaces.
-	  Since the representation is quite straightforward it is easy to model
-	  semantics of the concrete program operations in the abstract domain.
+	  accelerate the analysis and enable representation of infinite state spaces.
+	  Since the representation is quite straightforward, it is easy to model
+	  the semantics of the concrete program operations in the abstract domain.
 	  These practical advantages are confirmed by the repeated wins of the tool in the competition on software verification SV-COMP \cite{svcompweb}.
 
 	  The formalism was designed mainly for list structures aiming at verification
-	  of the system level programs (e.g. Linux kernel) using such structures.
-	  Therefore it can also handle low level memory operations with byte precision~\cite{dudka13sas}.
+	  of system-level programs (e.g. Linux kernel) using such structures.
+	  Therefore it can also handle low-level memory operations with byte precision~\cite{dudka13sas}.
 	  However, the domain has not been yet generalized to the tree structures.
-	  The scalability of the method has not been studied yet but the principles of bi-abduction
+	  The scalability of the method has not been systematically studied yet, but the principles of bi-abduction
 	  should be applicable to the domain just as for the separation logic-based methods.
+
+          Many of the principles used in \cite{dudka13sas} to deal with low-level memory operations have been applied
+          in the recent work \cite{soa-biabduction} combining them with sepration logic. The scalability of the approach is, however,
+          still limited despite the potential stemming from the modularity of the approach.
 
 	  \subsection{Abstract Regular Model Checking}
 	  \label{subsection:armc}
-	  The \emph{abstract regular model checking} (ARMC) \cite{artmc} is an automata based method for verification of parametrized and infinite state systems.
-	  It employs automata over words and trees to represent the reachable configurations of system being verified
-	  and a regular transition relation (represented by transducer or operations over automata) to model the semantics of an analysed system.
-          E.g., we use words and trees to represent reachable shapes of heap when ARCM is used for shape analysis.
+	  \emph{Abstract regular model checking} (ARMC) \cite{artmc} is an automata-based method for verification of parametrized and infinite-state systems.
+	  It employs automata over words and trees to represent reachable configurations of the system being verified
+	  and a regular transition relation (represented by transducers or speciliazed operations over automata) to model the semantics of the analysed system.
+          ARMC was applied on various kinds of parametric and infinite systems such push-down systems, systems with queues, parametrised networks of process,
+          petri nets.
+          It was also used for verification of programs with dynamic data structures where words and trees are used
+          to represent reachable shapes of heap\cite{bhrv06a}.
 
-	  An (e.g., height or predicate language) abstraction is used to
-	  overapproximate the set of reachable configurations.
-	  The counterexample-guided refinement is applied to
-	  refine the abstraction and to validate the found counterexamples when needed.
+	  Abstraction over automata is used to overapproximate the set of reachable configurations,
+          e.g., by collapsing automata states whose languages are same up to some bound or satisfy, i.e., intersect,
+          the same set of predicate languages. 
+	  Counterexample-guided refinement is applied to
+	  refine the abstraction and to validate the found potential counterexamples when needed.
 
-	  The verification procedure starts with an automaton representing
+	  When applied in forward manner, the verification procedure starts with an automaton representing
 	  initial configurations of an analysed system.
 	  An abstraction is applied to the automaton followed by an application
 	  of a transition in each step of the verification procedure.
-	  An intersection of the automaton representing so far computed reachable configurations with an automaton representing
+	  An intersection of the automaton representing so-far computed reachable configurations with an automaton representing
 	  the bad configurations of the system is also done in each step.
 	  When the intersection is empty, the verification procedure continues
 	  until a fixpoint is reached (the set of system configurations represented by an automaton
@@ -495,51 +505,51 @@ of selector names.
 	  the counterexample again, and the verification procedure is restarted.
 	  Otherwise the real counterexample is reported to a user.
 
-	  Abstract regular model checking is a general verification method was applied to various kinds of systems
+	  As inidicated above, abstract regular model checking is a general verification method that was applied to various kinds of systems
 	  including pointer programs \cite{bhrv06b, forester11, boxes13} where automata are used as a domain
 	  for representation of the allocated data structures on the heap.
-	  In \cite{bhrv06b}, the whole heap is encoded in one tree automaton and semantics of
+	  In \cite{bhrv06b}, the whole heap is encoded in one tree automaton, and the semantics of
 	  programs is represented by a tree transducer.
 	  The approach is able to verify complex tree structures but since it encodes the whole
-	  heap in one automaton, even a small change in one part of a heap may
-	  be propagated over the whole model which negatively effects the scalability of the method.
+	  heap in one automaton, even a small change in one part of the heap may
+	  be propagated over the whole model, which negatively effects the scalability of the method.
 	  The scalability problem was improved in \cite{forester11} where the heap is represented by a tuple of 
 	  tree automata, so called forest automata, which localize a change in one part of heap
 	  to a change in a particular tree automaton.
-	  The approach needed forest automata representing the repeating sub-graphs of a heap
+	  The approach needed forest automata representing the repeating sub-graphs of the heap
 	  to be provided manually.
 	  This was solved by \cite{boxes13} where the shape analysis based on forest automata became
 	  fully automated and was able to verify structures such as skiplists.
 
-	  The approach was applied to verification of the C programs with dynamic data structures in
-	  the work on forest automata-based shape analysis \cite{forester12}.
-          The original work required user-provided database of boxes but
-          it was later extended to the framework with automatic learning of boxes
-          in~\cite{boxes13}.
           The work~\cite{forester-data-acta} added ordering relations into forest
           automata to allow verification of programs whose safety depends on relations among data values
           from an unbounded domain.
-	  The \forester{} tool implementing the methods is able to verify complex data structures
+	  The \forester{} tool implementing the method is able to verify complex data structures
 	  such as various tree and skiplists of the second and third level \cite{boxes13} which
 	  are not analysable by any other tool fully automatically.
+          This work is starting point of some results of this thesis which extended \cite{boxes13} by potential
+          counterexamples analysis (to distinguish spurious and real ones). and abstraction refinement.
+
+          \subsection{Symbolic Execution}
+          TODO:
 
 	  \subsection{Bounded Model Checking}
 
 	  So far, we introduced domains for representation of shapes allocated on the heap and
-	  assumed that a used verification procedure will be sound.
-	  However, when the requirement on soundness is relaxed we will obtain a bug hunting method
+	  assumed that the verification procedure used will be sound.
+	  However, when the requirement on soundness is relaxed, we will obtain a bug hunting method
 	  still able to detect many errors in program.
-	  One of such methods is \emph{bounded model checking (BMC)} which achieved many achievements
-	  in the various editions of the SV-COMP competition \cite{svcompweb}.
+	  One of such methods is \emph{bounded model checking (BMC)} whose applications achieved many achievements
+	  in the various editions of the SV-COMP competition.
 
-	  An exploration of state space is limited up to some bound in BMC.
-	  The bound can be given, e.g., on a number of interleavings in a parallel program,
-	  on a number of the loop unfoldings, or on the size of the memory.
+	  An exploration of the state space is limited up to some bound in BMC.
+	  The bound can be given, e.g., on the number of interleavings in a parallel program,
+	  on the number of the loop unfoldings, or on the size of the memory.
 	  
 	  BMC systematically explores the state space of the analysed systems up
 	  to the given bound and checks whether the given specification holds in each possible state.
-	  From the perspective of shape analysis it means that the methods explores which shape
-	  may be possibly allocated on the heap in a given state of the program
+	  From the perspective of shape analysis it means that the methods explores which shapes
+	  may be possibly allocated on heap in the given state of the program
 	  and checks whether it does not lead to a memory manipulation related error.
 	  
 	  A model of the analysed system can be automatically derived from an analysed program.
@@ -547,18 +557,18 @@ of selector names.
 	  It can be also easily combined with other domains of interest in program analysis,
 	  e.g., interval analysis of numerical values.
 	  It is also general and scales to large software systems.
-	  On the other hand, because the approach is unsound it can only find bugs
-	  but it can not prove a program to be correct.
-	  There are attempts to get over this bottleneck by \emph{k-induction} but they are still not mature
+	  On the other hand, because the approach is unsound it can only find bugs,
+	  but it cannot prove a program to be correct.
+	  There are attempts to get over this bottleneck by \emph{k-induction} but they are still not as mature
 	  as the original bounded approach.
 
 	  \section{Counterexample Validation and Automatic Refinement of Abstraction for Shape Analysis}
 
-	  A common weakness of the current approaches to shape analysis is a lack of proper support for checking
-	  spuriousness of the counterexample traces, possibly followed by automated refinement
+	  A common weakness of the current approaches to shape analysis is a lack of a proper support for checking
+	  spuriousness of potenial counterexample traces, possibly followed by automated refinement
 	  of the employed abstraction. This is one of the problems we tackle in this thesis.
-	  Below, we characterize previous attempts on the problem and compare our
-	  approach with them.
+	  Below, we characterize previous attempts on the problem and preparing grounds for its application
+          to forest-automata-based shape analysis described in the Section \ref{subsec:armc}.
 
 	  A well-known approach to refinement of abstraction is the \emph{counterexample-guided
 	  refinement (CEGAR)} principle \cite{CEGAR} which works as follows:
@@ -571,7 +581,7 @@ of selector names.
 			\item if it is valid, report an error,
 			\item otherwise refine the abstraction and go to Point $2$.
 		\end{enumerate}
-		\item If no counterexample is found, report the program as correct.
+		\item If no potential counterexample is found, report the program as correct.
 	  \end{enumerate}
 	  CEGAR has been quite well elaborated in the context of software verification.
 	  In the following text, we discuss the application of CEGAR in the different
@@ -650,10 +660,10 @@ of selector names.
           \cite{artmc} to be used. On the other hand, due to using a single automaton,
           the approach did not scale well and had problems with some heap transformations.
 
-          The basic formalism of forest automata used a fixed abstraction \cite{forester12}.
-          However in \cite{forester12,boxes13}, it was conjectured that counterexample validation and
+          The first approach based on forest automata used a fixed abstraction \cite{forester12}.
+          However, in \cite{forester12,boxes13}, it was conjectured that counterexample validation and
           abstraction refinement should be possible in the context of forest
-          automata too. This thesis will show that this is indeed the case, however that much
+          automata too. This thesis will show that this is indeed the case, but that much
           more involved methods than those of \cite{artmc} are needed.
 
 	\section{Work on Graph Automata}
@@ -663,45 +673,45 @@ of selector names.
 	Moreover, some data structures are defined with special relations
 	between nodes or sets of nodes (e.g., red-black trees have red and black nodes with
 	the special rules how they can alternate).
-	Therefore the formalism should make it possible to represent of these such relations over graphs.
+	Therefore the formalism should make it possible to represent also relations over graphs.
 
 	In the field of formal logic, a natural choice is monadic second order logic on graphs (MSO).
 	It allows one to quantify over sets of nodes of graphs.
 	Unfortunately, the logic is undecidable.
-        There are different version of graph automata with expressive power equal to MSO, i.e., for
-        each MSO formula there is a graph automaton with language (which is set of graphs) equivalent
-        to set of models of the formula.
-	However, the undecidability of logic implies that automata accepting such graphs would have undecidable
+        There are different versions of graph automata with expressive power equal to MSO, i.e., for
+        each MSO formula there is a graph automaton whose language (which is a set of graphs) is equivalent
+        to the set of models of the formula.
+	However, the undecidability of the logic implies that automata accepting such graphs have undecidable
 	crucial properties, e.g., emptiness of the automata language.
-	This is exactly what happens in works by \cite{Thomas:automata, soa-reiter15} where the designed automata
+	This is exactly what happens in the works \cite{Thomas:automata, soa-reiter15} where the designed automata
 	suffer from the undecidability of some properties.
 
-	The undecidability does not necessarily imply that formalism is not usable (since sufficient
-	heuristics may exists) but it is better to target decidability, or at least a formalism
-	allowing for a design of efficient algorithmic heuristics.
+	The undecidability does not necessarily imply that a formalism is not usable, but
+        it is better to target decidability or if that is not possible, at least a formalism allowing
+        for a design of efficient algorithmic heuristics.
 
 	When accepting a graph, an automaton needs to remember which nodes have already been
 	processed and which will be processed further.
 	This is a difference compared to the classical word or tree automata where an automaton runs over
 	a given input in a particular direction.
-	Contrarily, remembering the so far processed parts of the graphs is more complicated for graph automata.
+	Remembering the so-far processed parts of the graphs is not easy task.
 	In \cite{Thomas:automata}, the path through a processed graph is encoded in symbols.
 	In \cite{soa-reiter15}, there is a special automaton for each node of the graph, the automata
-	communicate in rounds and the computation continues until all automata reach their stable state.
+	communicate in rounds, and the computation continues until all automata reach their stable state.
 
 	However, when the domain is restricted to a special class of graphs, it is possible to design
 	automata with much more useful properties.
 	It has been shown~by Courcelle \cite{courcell_graph_2012} that when we restrict MSO to graphs 
-	with bounded tree width, it is possible to decide satisfiability of MSO formulas.
+	with a bounded tree width, it is possible to decide satisfiability of MSO formulas.
 	A decision procedure is then implemented by encoding the formula to a tree automaton
 	and checking its emptiness.
 	Unfortunately, the tree automaton has an exponential number of states
-	compared to the size of the formula which makes the manipulation with it inefficient.
+	compared to the size of the formula, which makes the manipulation with it inefficient.
 
 	Another approach to the definition of graph automata is from an algebraic point of view.
 	In the work \cite{soa-blume:2012}, the automata were defined using concepts
 	of \emph{cospans} from category theory.
-	Intuitively, the automata have as symbols the basic graph operations which can create
+	Intuitively, the automata have as symbols some basic graph operations which can create
 	an arbitrary graph with a bounded tree width.
 	Such a definition implies that word and graph automata are basically the same
 	because the graph operations can be viewed just as standard letters from an alphabet of word automata.
@@ -717,19 +727,18 @@ of selector names.
 	graphs and graph grammars and shows that they describe the same class of graph languages as
 	the NCE graph grammars.
 	
-	The natural comparison of graph grammars is also to the separation logic which was originally designed
-	for reasoning about programs with dynamic data structures.
+	Graph grammars can also be naturally compared with the separation logic.
 	The relation has been shown in Jansen et. all \cite{matheja_treelike_2015}.
 	They show that so-called \emph{tree-like separation logic} can describe the same graphs
 	as those that can be generated by the so-called \emph{tree-like grammars (TLG)}.
 	Both formalisms are meant to describe tree-like data structures (i.e., data structures
 	decomposable to trees).
-	Further, a TLG formula can be transformed to the $MSO_2$ logic which is a variant of MSO
+	Further, a TLG formula can be transformed to the $\mathrm{MSO_2}$ logic which is a variant of MSO
 	on graphs where the quantification is allowed not only over sets of nodes but also
 	over edges.
 
 	Both of the works comparing graph automata to grammars and separation logic
-	explore the expressive power of the automata and their relation to the other formalisms
+	explore the expressive power of the automata and their relation to other formalisms
 	but do not concern efficient algorithms and their properties.
 	Hence, they are not really suitable for applications in shape analysis.
 
@@ -742,6 +751,9 @@ of selector names.
 	The notion of graph automata on graphs with bounded tree width has also been used
 	for proving properties of other abstract machines.
 	An example is emptiness of automata with auxiliary storage in \cite{soa-popl11tw}.
+
+        In this work (Chapter \ref{ch:netys}) we present graph automata over graphs with bounded tree wdith that,
+        unlike presented works, aims to efficient manipulation within automata-based shape analysis.
 
 \chapter{Shape Analysis based on Forest Automata}
 \label{ch:asv}
@@ -785,7 +797,7 @@ described.
 %Finally, since FA are not closed under union, we work with sets of
 %forest automata, which are an analogy of disjunctive separation logic formulae.
 
-We showed in \cite{habermehl:forest} that
+We showed in \cite{cav11} that
 \emph{entailment} of non-nested FAs
 (i.e., having a~bounded number of cut-points) is decidable. This covers  sets of
 complex structures like SLLs with head/tail pointers. 
