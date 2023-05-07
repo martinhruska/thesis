@@ -137,7 +137,7 @@ and the rest of factory emulated.
 
 \section{Goals of the Thesis}
 The first goal of this thesis is to improve the current tools and methods of shape analysis.
-We aim to further develop the approach to shape analysis based on forest automata proposed in \cite{cav11,cav13}
+We aim to further develop the approach to shape analysis based on forest automata proposed in \cite{forester11,boxes13}
 and enhance it by
 \begin{enumerate*}
   \item revisiting and improving its description,
@@ -170,7 +170,7 @@ of finite state space and to allow infinite state spaces to be represented finit
 On the other hand, a violation of a specification can be detected in the overapproximated
 part of the state space, which needs no to correspond to a real behaviour in a program under verification.
 We call such fake violations of specification spurious counterexamples.
-Forest-automata-based shape analysis as proposed in \cite{cav11, cav13} used an abstraction overapproximating
+Forest-automata-based shape analysis as proposed in \cite{forester11, boxes13} used an abstraction overapproximating
 the set of reachable states of the heap, i.e., abstract forest automata represent more possible shapes of the heap
 than those allocated by the program in reality.
 However, the method did not contain any algorithm to check whether a found possible counterexample
@@ -761,33 +761,48 @@ of selector names.
 \section{Introduction}\label{sec:label}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+This chapters presents some of the main contributions of this the thesis,
+namely, the proposed way of checking spuriousness of potential counterexample
+traces within forest-automata-based shape analysis, the proposed refinement of the abstraction
+used, as well as the improvements done to the implementation of forest-automata-based shape analysis
+in the \forester tool.
 
-We present an approach to verification of sequential C-like programs with complex \emph{dynamic linked
+In order for these approaches to be presented, the basic shape analysis based on forest automata
+is introduced first. We note here that while basic shape analysis based on forest automata
+were introduced in \cite{forester11,boxes13,forester12,forester11:techrep,techrep},
+the conference publications \cite{forester11, boxes13} were missing quite some details,
+the technical reports \cite{forester11:techrep, techrep} were not fully consistent
+and easy to read.
+Therefore they were revisted as part of our work and this revised version was accepted
+as a chapter of a book about tools participating in software verification competition SV-COMP.
+Further we modified basic approach using forest automata with respect to \cite{vmcai17}
+to allow the analysis of potenatial counterexamples traces and abstraction refinement to be added in a smooth way.
+The revised description of the method is also presented in this chapter.
+
+Forest-automata-based shape analysis is an approach to verification of sequential C-like programs with complex \emph{dynamic linked
 data structures} such as various forms of singly and doubly-linked lists
 (SLLs/DLLs), possibly cyclic, shared, hierarchical, and/or having different
 additional (head, tail, data, and similar) pointers, as well as various forms
 of trees, based on the so-called \emph{forest automata}. 
-We target verification of generic \emph{safety
-properties} like
+The approach is suitable for verification of generic \emph{safety properties} like
 absence of null dereferences, double free operations, dealing with dangling
-pointers, or memory leakage. We also allow verification of special shape properties of
-the involved data structures via \emph{testers}, i.e., additional parts of the
+pointers, or memory leakage. Moreover, Verification of special shape properties of
+the involved data structures is allowed via \emph{testers}, i.e., additional parts of the
 code that, in the
 case some desired property is broken, lead the control flow to a designated
 error location.
 
-For the above purpose, forest automata were proposed as an approach of representing sets of heaps
-via \emph{tree automata} (TAs). A heap is split in
+Forest automata represent sets of heaps via \emph{tree automata} (TAs). A heap is split in
 a~canonical way into several \emph{tree components} whose roots are the so-called
 \emph{cut-points}. Cut-points are nodes pointed to by program variables or
 having several incoming edges. The tree components can refer to the roots of
 each other, and hence they are ``separated''~much~like~heaps described by
-formulae joined by the separating conjunction in separation logic
+formulae joint by the separating conjunction in separation logic
 \cite{Reynolds:SepLogic:02}. Using this decomposition, sets of heaps with
-a~bounded number of cut-points are then represented by a~new class of automata
-called \emph{forest automata} (FAs), which are basically tuples of TAs accepting
+a~bounded number of cut-points can be represented by \emph{forest automata} (FAs)
+that are basically tuples of TAs accepting
 tuples of trees whose leaves can refer back to the roots of the trees. Moreover,
-we allow alphabets of FAs to contain \emph{nested~FAs}, leading to
+alphabets of FAs may contain \emph{nested~FAs}, leading to
 a~\emph{hierarchical encoding of heaps}, so that FAs can represent even sets of
 heaps with an unbounded number of cut-points (e.g., sets of DLLs). Intuitively,
 a~nested FA can describe a part of a heap with a~bounded number of cut-points
@@ -797,19 +812,18 @@ described.
 %Finally, since FA are not closed under union, we work with sets of
 %forest automata, which are an analogy of disjunctive separation logic formulae.
 
-We showed in \cite{cav11} that
-\emph{entailment} of non-nested FAs
+In \cite{forester11}, it was shown that \emph{entailment} of non-nested FAs
 (i.e., having a~bounded number of cut-points) is decidable. This covers  sets of
 complex structures like SLLs with head/tail pointers. 
-We also showed that entailment can be decided or quite precisely approximated for a~large class
+It was also showed that entailment can be decided or quite precisely approximated for a~large class
 of nested FAs. 
 Further, C program statements manipulating pointers can be encoded as operations
 modifying~FAs. 
 %
-This allowed us to generalise the essential parts (mainly the forward state space exploration) of the framework of 
+This made it possible to generalise the essential parts (mainly the forward state space exploration) of the framework of 
 \emph{abstract regular tree model checking (ARTMC)} \cite{bhrv06a,bhrv06b} to forest automata and implement a shape analyser based on it. 
 %
-Finally, the work \cite{vmcai17} shows that it is possible to compute forest
+Finally, our work \cite{vmcai17} (which is one of main contributions of this thesis) shows that it is possible to compute forest
 automata intersection (under-approximated or even precise for a~large class
 of nested~FAs) and implement a~generalisation of the
 counterexample-based abstraction refinement of~\cite{bhrv06a,bhrv06b} based on it. 
@@ -828,7 +842,7 @@ The proposed approach brings the principle of \emph{local heap manipulation}
 world of automata. It combines some advantages of using
 automata and separation logic. Automata provide higher generality and
 flexibility of the abstraction 
-and allow us to leverage the
+and allow one to leverage the
 recent advances of efficient use of non-deterministic
 automata~\cite{abdulla_computing_2008,tacas10}.
 As~further discussed below, the use of
@@ -882,8 +896,8 @@ structures that no other tool could successfully verify.
 \section{From Heaps to Forests}\label{sec:heaps2forests}
 %===============================================================================
 
-In this section, we outline the concept of hierarchical
-forest automata as a~symbolic representation of heaps in an informal way. For
+In this section, the concept of hierarchical
+forest automata as a~symbolic representation of heaps in an informal way is outlined. For
 the purpose of the explanation, \emph{heaps} may be viewed as directed graphs
 whose nodes correspond to allocated memory cells and edges to pointer links
 between these cells. The nodes may be labelled by non-pointer data stored in
@@ -891,7 +905,7 @@ them (assumed to be from a finite data domain) and by program variables pointing
 to the nodes. Edges may be labelled by the corresponding selectors of data
 structures.
 
-In what follows, we restrict ourselves to \emph{garbage-free heaps}, in which all
+In what follows, the description is restricted to \emph{garbage-free heaps}, in which all
 memory cells are reachable from pointer variables by following pointer links.
 This is, however, not a restriction in practice since the emergence of garbage
 can be checked for each executed program statement. If some garbage arises, an
@@ -918,7 +932,7 @@ cut-point, labelled by its number.
 %their roots.
 %\annot[lh]{removed sentence about canonical ordering}
 
-Our proposal of forest automata builds upon the described decomposition of heaps
+The notion of forest automata builds upon the described decomposition of heaps
 into tree components. In particular, a \emph{forest automaton} (FA) is basically
 a~tuple of tree automata (TAs). Each of the TAs accepts trees whose
 leaves may refer back to the roots of any of these trees. An FA then represents
@@ -986,9 +1000,9 @@ The described encoding allows one to represent sets of heaps with a~bounded
 number of cut-points. Many common dynamic data structures,
 however, have an \emph{unbounded number of
 cut-points}. Indeed, for instance, in doubly-linked lists (DLLs), every node is
-a cut-point. We solve the problem of an unbounded number of cut-points by
+a cut-point. The problem of an unbounded number of cut-points is solved by
 representing heaps in a \emph{hierarchical
-way}. In particular, we collect sets of repeated subgraphs (called
+way}. In particular, one collects sets of repeated subgraphs (called
 \emph{components}) containing cut-points into the so-called \emph{boxes}. Every
 occurrence of such components can then be replaced by a single edge labelled by
 the appropriate box. To specify how a subgraph enclosed within a~box is
@@ -1054,7 +1068,7 @@ used as a~kind of a~meta-selector).
 \end{center}
 \end{figure}
 
-In general, we allow a box to have more than one output port. Boxes with
+In general, a box is allowed to have more than one output port. Boxes with
 multiple output ports, however, reduce heap graphs not to graphs but rather
 \emph{hypergraphs} with \emph{hyperedges} having a single source node, but
 multiple target nodes. This situation is illustrated on a simple example shown
@@ -1068,8 +1082,8 @@ Therefore, the hypergraph from Fig.~\ref{fig:hyper_c}
 encodes one level of the tree by a~hyperedge with one source and \emph{two}
 target nodes.
 %
-A formalisation using hypergraphs and hyperedges was used in \cite{habermehl:forest}.
-Here, in order to simplify the formal development, we will stay with ordinary graphs, 
+A formalisation using hypergraphs and hyperedges was used in \cite{forester12}.
+Here, in order to simplify the formal development, ordinary graphs are used, 
 in which a hyperedge is represented by a~set of ordinary edges (which always
 need to occur together) from a single source to several targets.
 
@@ -1080,10 +1094,10 @@ alphabets can contain nested FAs.
 Intuitively, FAs appearing in the alphabet of some higher-level FA play a~role
 in some sense similar to that of inductive predicates in  separation
 logic.\footnote{For
-instance, we use a nested FA to encode a DLL segment of length 1.  In separation
+instance, a nested FA is used to encode a DLL segment of length 1.  In separation
 logic, the corresponding inductive predicate would represent segments of length
-1 or more. In our approach, the repetition of the segment is encoded in the
-structure of the top-level~FA.} We restrict ourselves to automata whose nesting forms
+1 or more. In forest-automata-based approach, the repetition of the segment is encoded in the
+structure of the top-level~FA.} The approach is restricted to automata whose nesting forms
 a~finite and strict hierarchy (i.e., there is no circular use of the automata in
 their alphabets). 
 This is obviously different from separation logic, where recursive inductive predicates are standard.
@@ -1153,8 +1167,8 @@ Each pointer field points to another node (we model the
 $\code{NULL}$ address and undefined locations as special memory nodes pointed by variables
 $\code{NULL}$ and $\code{undef}$, respectively), and the same holds for pointer variables of the program.
 Data fields of memory nodes hold a~data value.
-We use the term \emph{selector} to talk both about pointer and data fields.
-For simplification, we model data variables as pointer variables pointing to
+Term \emph{selector} is used to talk both about pointer and data fields.
+For simplification, data variables are modelled as pointer variables pointing to
 allocated nodes that contain a single data field with the value of the
 variable, and therefore consider only pointer
 variables hereafter.
@@ -1174,11 +1188,11 @@ variables hereafter.
 %% The decomposition of a~heap into tree components can be
 %% performed canonically as described at the end of Section~\ref{sec:fa}.
 
-We represent heap memory by partitioning it into a~tuple of trees, the
+Heap memory is represented by partitioning it into a~tuple of trees, the
 so-called \emph{forest}.
 The leaves of the trees contain information about roots of which trees they should be merged with to recover the original heap. 
-Our \emph{forest automata} symbolic representations of sets of heaps is based
-on representing sets of forests using tuples of tree automata.
+The symbolic representation of a set of heaps by forest automata is based
+on representing the obtained sets of forests using tuples of tree automata.
 %
 
 % \td{OL: keep the example? START}
@@ -1394,7 +1408,7 @@ tuples, each tuple being a forest decomposition of a graph, associated with a~ma
 %-------------------------------------------------------------------------------
 \subsubsection*{Tree Automata}
 %-------------------------------------------------------------------------------
-To simplify the formal development, we use a definition of tree automata specialised to our application in shape analysis.
+To simplify the formal development, we use a definition of tree automata specialised to the above sketched application in shape analysis.
 
 A (finite, non-deterministic) \emph{tree automaton} (TA) over
 $\tuple{\abcd,\leaflab}$
@@ -1465,7 +1479,7 @@ $\edgesymb = a^1 \cdots a^m$ such that $\runof{\node} = q$ and for all $1
 %  $a_{\tree}^i(\node)$.
 %
 %\end{itemize} 
-We define the \emph{language} of $\ta$ as $\langof{\ta}= \{\tree
+The \emph{language} of $\ta$ is defined as $\langof{\ta}= \{\tree
 \mid \mbox{there is a run of $\ta$ over $\tree$} \}$, and the language of a~state~$q \in Q$ as $\langof{A, q} = \langof{(Q, q, \Delta)}$.
 
 %\begin{example} BSTs, such as the tree labeled by $\code{root}$ but without the variable $\code{x}$  in
@@ -1547,14 +1561,14 @@ heaps with an unbounded number of cut-points, since this would require
 an unbounded number of TAs within the FAs.
 An example of such a set of heaps is the
 set of all doubly-linked lists (DLLs) of an arbitrary length, where each internal node is a cut-point.
-The solution provided in \cite{habermehl:forest} is to allow FAs to use
+The solution provided in \cite{forester11} is to allow FAs to use
 other nested FAs, called \emph{boxes}, as symbols to ``hide'' recurring
 subheaps 
 %with designated \emph{input/output ports} 
 and in this way eliminate
 cut-points. 
 %
-The alphabet of a~box itself may also include boxes, though we require them
+The alphabet of a~box itself may also include boxes, though it is required that they them
 to form a~finite hierarchy---they cannot be recursively nested.%
 \footnote{Recursive boxes would introduce complications in symbolic execution
 and checking entailment. Instead, recursively repeating structure of heap graphs is
@@ -1578,11 +1592,11 @@ is an FA over $\tuple{\abcd\cup\boxes, \gvars}$ where $\boxes$ may contain
 selectors of the form $\botoxi i$, where $\botox$ is a nested box over
 $\tuple{\abcd, \gvars}$ of a level smaller than~$\ell$ and $1\leq i \leq \rankof\botox$. 
 %
-Finally, given a $k$-ary box $\botox$, we call a~$k$-tuple of graph edges $\edgeof {\botoxi 1} \node {\nodep_1},\ldots,\edgeof {\botoxi k} \node {\nodep_k}$  a~\emph{hyperedge} of $\botox$ from the source node $\node$ to the target nodes 
+Finally, given a $k$-ary box $\botox$, a~$k$-tuple of graph edges $\edgeof {\botoxi 1} \node {\nodep_1},\ldots,\edgeof {\botoxi k} \node {\nodep_k}$ is called  a~\emph{hyperedge} of $\botox$ from the source node $\node$ to the target nodes 
 $\nodep_1,\ldots,\nodep_k$.
 %
 
-In the case of a~nested FA $\fa$, we need to distinguish between its
+In the case of a~nested FA $\fa$, one needs to distinguish between its
 language~$\langof{\fa}$, which is a~set of heaps over $\tuple{\abcd \cup \boxes,
 \gvars}$, and its \emph{semantics}~$\semof \fa$, which is a~set of heaps over
 $\tuple{\abcd, \gvars}$ that emerges when all boxes in the heaps of the
@@ -1591,7 +1605,7 @@ language are recursively \emph{unfolded} in all possible ways.
 
 
 %\annot[lh]{generalized to multitle outputs}
-We say that a~heap $\heapp$ is an unfolding of a~heap $\heap$
+A~heap $\heapp$ is called an unfolding of a~heap $\heap$
 if $\heap$ has edges 
 $\kseq{\edgeof{\botoxi{#1}} {\nodep} {\node_{#1}}}$
 labeled with indexed variants of a~box 
@@ -1614,9 +1628,9 @@ and all its remaining nodes do not appear in~$\heap$.
 %, and
 %associating $\asgnboxof \iport$ with $\nodep$ and $\asgnboxof \oport$  with
 %$\node$. 
-We then write $\heap \unfoldof{\botox,u}{\heap_{\botox}} \heapp$, 
+We then write $\heap \unfoldof{\botox,u}{\heap_{\botox}} \heapp$ 
 or simply $\heap\unfold\heapp$. 
-We use $\unfold^{*}$ to denote the reflexive transitive
+Then $\unfold^{*}$ is used to denote the reflexive transitive
 closure of~$\unfold$.
 The \emph{semantics} of~$\fa$, written as~$\semof{\fa}$,
 is the set of all heaps $\heapp$ over $\tuple{\abcd, \gvars}$ for which
@@ -1670,7 +1684,7 @@ there is a heap $\heap$ in~$\langof{\fa}$ such that $\heap \unfold^{*}
 The \emph{entailment}, or semantic inclusion, test of forest automata is needed when
 testing convergence of our program analysis.
 %
-In this section, we give an overview of the techniques described in detail in~\cite{habermehl:forest,jiri:diza}. 
+In this section, an overview of the techniques described in detail in~\cite{forester11,jiri:diza} is given. 
 %
 
 The starting point is a~component-wise language inclusion test.
@@ -1684,7 +1698,7 @@ efficient, allowing us to use fast tree automata language checking
 algorithms such as~\cite{tacas10}. It is incomplete though---if it returns
 $\false$, the language inclusion and entailment may still hold.
 %
-In the following, we will discuss how to make the test more precise by means of converting the FAs
+In the following, it is discussed how the test can be made more precise by means of converting the FAs
 into special normal forms.
 
 %-------------------------------------------------------------------------------
@@ -1721,7 +1735,7 @@ has at most one successor for every selector).
 Hence, there is indeed exactly one canonic forest representation for every heap.
 %
 An FA is \emph{canonicity-respecting} if it accepts only canonical forests.
-The transformation into the canonicity-respecting form is discussed in detail in~\cite{habermehl:forest,jiri:diza}. 
+The transformation into the canonicity-respecting form is discussed in detail in~\cite{forester11,jiri:diza}. 
 %
 It may transform a single FA into a~set of canonicity-respecting FAs such that
 the semantics of FAs in the set form a~partition of the semantics of the
@@ -1736,7 +1750,7 @@ coincides with its semantics).
 
 
 To test language inclusion of a~pair of non-canonicity-respecting FAs~$\fa$ and~$\fa'$ in a sound and complete way, 
-we first convert the two FAs into sets~$S$ and~$S'$ of canonicity-respecting FAs, respectively.
+one first converts the two FAs into sets~$S$ and~$S'$ of canonicity-respecting FAs, respectively.
 The second step is testing language inclusion of the two sets, that is, testing whether $\bigcup_{\fa_a\in S}\langof{\fa_a} \subseteq \bigcup_{\fa_{b}\in S'}\langof{\fa_{b}}$.
 %
 
@@ -1749,37 +1763,36 @@ That is, $A^\fa$ accepts trees that arise by taking a tree from each $A_i$, and 
 This tree automaton is created from the tree automata union of $A_1,\ldots,A_n$
 by introducing a new root state $q$ and transitions
 $q\rightarrow(q_1,\ldots,q_n)$ where, for $1\leq i \leq n$, it holds that~$q_i$ is the root state of
-$A_i$ (we assume w.l.o.g. that $A_1, \ldots, A_n$ have disjoint sets of
-states and, as mentioned later, we keep the FAs in the form where each TA has one root transition).
+$A_i$ (one assumes w.l.o.g. that $A_1, \ldots, A_n$ have disjoint sets of
+states and, as mentioned later, the FAs are kept in the form where each TA has one root transition).
 %
 $A^S$ is then obtained as the tree automata union of all $A^\fa$ for $\fa\in S$. 
 %
 The tree automaton $A^{S'}$ is constructed analogously from $S'$.
 It then holds that 
-$\bigcup_{\fa_a\in S}\langof{\fa_a} \subseteq \bigcup_{\fa_{b}\in S'}\langof{\fa_{b}} \iff \langof{A^S}\subseteq\langof{A^{S'}}$ (which for non-hierarchical FA is equivalent to $\bigcup_{\fa_a\in S}\semof{\fa_a} \subseteq \bigcup_{\fa_{b}\in S'}\semof{\fa_{b}}$).
-
+$\bigcup_{\fa_a\in S}\langof{\fa_a} \subseteq \bigcup_{\fa_{b}\in S'}\langof{\fa_{b}} \iff \langof{A^S}\subseteq\langof{A^{S'}}$, which is equivalent to $\bigcup_{\fa_a\in S}\semof{\fa_a} \subseteq \bigcup_{\fa_{b}\in S'}\semof{\fa_{b}}$ for non-hierarchical FA.
 
 
 %-------------------------------------------------------------------------------
 \subsubsection*{Entailment and Canonicity-respecting Form of Hierarchical FAs}\label{sec:label}
 % \paragraph{Entailment and Canonicity-respecting Form of Hierarchical FAs}
 %-------------------------------------------------------------------------------
-Entailment of hierarchical FAs is substantially more difficult, since they can
+Entailment of hierarchical FAs is substantially more difficult since they can
 hide parts of heaps into boxes in an arbitrary way.
 %
-We believe (though have not proved yet) that
+We believe (though that has not been proved yet) that
 the problem is decidable, considering that the expressive power of
 hierarchical FAs is close to the decidable fragments of separation logic with
 inductive predicates studied within~\cite{iosif_treewidth_2013,Katelaan:seplog}.
 %
 %Instead of trying to come up with a~complete algorithm that would take into account the semantics of the boxes in full,
 %
-Here we present a solution that is (theoretically speaking) incomplete, but
+Here is presented a solution that is (theoretically speaking) incomplete, but
 practical in the context of shape analysis with forest automata as the
 abstract domain---it is fast, relatively simple, and
 precise enough.
 %
-For this, we again start from the component-wise test discussed above, and
+To describe this solution, we again start from the component-wise test discussed above, and
 elaborate on how and when it can be made more precise by transformations of FAs
 to normal forms.
 %
@@ -1809,15 +1822,15 @@ The notion of canonicity and the canonicity-respecting form for hierarchical FAs
 is hence in~\cite{forester12,jiri:diza} modified to take into account
 such paths as well.
 %
-Essentially, we pre-compute the so-called \emph{port interconnection} of boxes,
-i.e., how the graphs encoded by boxes interconnect their ports, and take this
+Essentially, one pre-computes the so-called \emph{port interconnection} of boxes,
+i.e., how the graphs encoded by boxes interconnect their ports, and takes this
 into account in the depth-first traversal, which determines the canonic order of
 the tree components.
 %
-This way, we~can still have a precise language inclusion test of canonicity-respecting hierarchical FA,
+This way, one~can still have a precise language inclusion test of canonicity-respecting hierarchical FA,
 but since the full semantics of boxes is not taken into account, it is only a sound approximation of the semantic entailment.
 
-In~\cite{habermehl:forest,jiri:diza} we go one step further and define
+The works~\cite{forester11,jiri:diza} go one step further and define
 a~sub-class of nested FAs for which the generalised canonicity with the
 component-wise test is a~complete semantic entailment test.
 In short, for the test of the entailment of FAs~$\fa$ and~$\fa'$ to be complete, it must hold that
@@ -1831,7 +1844,7 @@ hide a~DLL segment of length two).
 %
 We note that although these restrictions may seem strong, 
 %
-our program analysis using forest automata is designed in such a way that
+The program analysis using forest automata is designed in such a way that
 they are usually satisfied or can easily be enforced.
 %
 The fact that the entailment test is oblivious to the full semantics of boxes (apart from the pre-computed information of port interconnection, it treats boxes as ordinary selectors) makes it also highly efficient.
@@ -1839,9 +1852,8 @@ The fact that the entailment test is oblivious to the full semantics of boxes (a
 \subsubsection*{Root Interconnection Graph}
 \label{sec:icgraph}
 
-In the practice of shape analysis based on forest automata, we use an
-additional heuristic to speed up entailment testing.
-We keep every FA paired with the so-called \emph{root interconnection
+In the practice of shape analysis based on forest automata, an additional heuristic is used to speed up entailment testing.
+In particular, every FA is kept paired with the so-called \emph{root interconnection
 graph}~\cite{jiri:diza}, which contains information about reachability between
 its cut-points.
 This allows a very fast refutation of their entailment in case the reachability
@@ -1862,7 +1874,7 @@ the DFT, then $\ell = 1$, otherwise $\ell = 2$.
 Forest automata are kept in a form in which they accept forests with the same
 root interconnection graph (this is actually a stronger property than the
 dense form). 
-We can then talk about the root interconnection graph of a forest automaton.
+One can then talk about the root interconnection graph of a forest automaton.
 Such FAs can be transformed to the canonicity-respecting form by permuting
 the TA components based on the information on the edges of the root
 interconnection graph.
@@ -1897,9 +1909,10 @@ in~\cite{jiri:diza}).
 \section{Verification of Pointer Programs with Forest
 Automata}\label{sec:verification}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this section, we provide an overview of the main components of our approach to verification of pointer programs based on forest automata, implemented in the tool \forester. The detailed discussion of some of the components will be the subject of the further sections.
+In this section, we provide an overview of the main components of the approach to verification of pointer programs using forest automata as implemented in the tool \forester.
+The detailed discussion of some of the components will be the subject of the further sections.
 
-Let us now discuss symbolic execution of C programs in the abstract domain of forest automata.%
+We start by discussing symbolic execution of C programs in the abstract domain of forest automata.%
 \footnote{By \emph{symbolic execution}, we mean an execution of the program
 in the given abstract domain using abstract transformers (there are also other
 different notions of symbolic execution).}
@@ -2019,7 +2032,7 @@ some sets of heaps expressible by a finite union of semantics of forest automata
 are not expressible by a~single forest automaton.%
 %
 \footnote{
-To show an example of how a symbolic execution may generate a set of configurations not expressible not expressible using a single FA, assume that the statement $\code{x = y\text{\texttt{->}}sel}$ is
+To show an example of how a symbolic execution may generate a set of configurations not expressible using a single FA, assume that the statement $\code{x = y\text{\texttt{->}}sel}$ is
 executed on a~forest automaton that encodes
 cyclic singly-linked lists of an arbitrary length where \code{y} points to
 the~head of the list.
@@ -2057,7 +2070,7 @@ These two configurations cannot be represented using a~single forest automaton.
 %are not expressible by a single forest automaton.
 %
 %
-The symbolic execution explores the
+The symbolic execution builds the
 \emph{abstract reachability tree}~(ART) of the program, with branches being symbolic executions.
 %\tomas{Denote as abstract
 %reachability tree (ART), common in other works?}
@@ -2235,7 +2248,7 @@ $\fwrun_i$ is infeasible from all $\conf\in\semof{\sconf_i} \setminus \semof{\in
 %think. But we get the other from the backward computation, right? So, then just
 %again explain explicitly that it is so and that it is for pragmatic reasons.}
 
-In the following, we describe how to use backward run, which reverts operations
+In the following, we describe how to use a backward run, which reverts operations
 of the forward run on the semantic level, to check spuriousness of an abstract
 counterexample.
 Moreover, we show how to derive interpolants from backward runs reporting
@@ -2297,7 +2310,7 @@ We can formulate \emph{progress guarantees} for the next iterations of the CEGAR
 The formulation will refer to the notion of \emph{compatibility} of two FAs,
 which intuitively means that the two FAs represent the heaps from the
 intersection of their semantics in the same way: their boxes are folding the
-same sub-heaps of the represented heaps and their TA components are
+same sub-heaps of the represented heaps, and their TA components are
 partitioning the represented heaps into the same tree components. 
 We will define compatibility formally in Section~\ref{sec:compatibility}.
 %
@@ -2369,20 +2382,21 @@ transformation-abstraction-folding loop in \secref{sec:box_discovery}.
 \label{sec:intersection}
 %*******************************************************************************
 
-The inference of interpolants used intersection of semantics of forest automata to
+The above presented inference of interpolants used the intersection of the semantics of forest automata to
 detect spuriousness of a~counterexample.
 In this section, we give an algorithm that computes an under-approximation of
-the intersection of semantics of a~pair of FAs, and later give conditions
+the intersection of the semantics of a~pair of FAs, and later give conditions
 (which are, in fact, met by the pairs of FAs in our backward run analysis) on
 the intersected FAs to guarantee that the computed intersection is precise.
 
 \subsection{Intersection Construction}
 A simple way to compute 
 %
-the intersection of semantics of two FAs, denoted as $\cap$, is com\-po\-nent-wise, 
+the intersection of the semantics of two FAs, denoted as $\cap$, is com\-po\-nent-wise, 
 that is, for two hierarchical FAs $\fa = \tuple{\tas,\asgn}$ and $\fa' = \tuple{\tasprime,\asgn'}$ over $\tuple{\abcd, \gvars}$ with $\asgn=\asgn'$,
 we compute the FA $\fa\cap\fa' =
-\tuple{(\ta_1\cap\ta_1')\cdots(\ta_n\cap\ta_n'), \asgn}$ (intersection of forest automata with different numbers of components or different assignments of references is always empty).
+\tuple{(\ta_1\cap\ta_1')\cdots(\ta_n\cap\ta_n'), \asgn}$.
+Note that intersection of forest automata with different numbers of components or different assignments of references is always empty.
 %
 The tree automata product construction for our special kind of tree automata
 synchronizes on data values and on references.
@@ -2392,10 +2406,10 @@ if $a = b$, and removed otherwise (cf. \cite{tata} for the standard construction
 %
 This  algorithm only under-approximates the actual semantic intersection, i.e., it is only guaranteed that $\semof{\fa\cap\fa'}\subseteq\semof\fa\cap \semof{\fa'}$.
 
-To increase its precision, we replace the operator $\cap$ by the operator $\isectfa$, which takes into account the semantics of boxes.
+To increase its precision, we replace the operator $\cap$ by the operator $\isectfa$ that takes into account the semantics of the boxes.
 %Namely, when synchronising two transitions in the TA product, it recursively calls intersection of forest automata.
 %
-Namely, we compute the FA $\fa\isectfa\fa'$ in a~similar way as $\fa\cap\fa'$, but replace the tree
+Namely, we compute the FA $\fa\isectfa\fa'$ in a~similar way as $\fa\cap\fa'$ but replace the tree
 automata product $\ta\cap\ta'$ by the construction of $\ta\isectta\ta'$, which recursively calls $\isectta$ on boxes.
 For TAs $\ta = (Q, q_0, \Delta)$ and $\ta' = (Q',q_0', \Delta')$, it computes the  TA
 $\ta\isectta\ta' = (Q \times Q', (q_0, q_0'), \Delta\isectta\Delta')$ where
@@ -2430,7 +2444,8 @@ $\Delta\isectta\Delta'$ is built as follows:
       \in \Delta,
       \transover{q'}{a_1'\cdots a_n'}{q'_1, \ldots, q'_m} \in \Delta'
       \big\}.
-    \end{align*} where the symbol $a_i\isectfa a_i'$ is computed as follows:
+    \end{align*}.
+    Here, the symbol $a_i\isectfa a_i'$ is computed as follows:
     %Suppose $\edgesymb = a_1 \cdots a_m$, $\edgesymb' = a_1' \cdots
     %a_m'$, and that there is an index $0 \leq i \leq m$ such that if $
     %j \leq i$, $a_j$ and $a_j'$ are not boxes, and if $i < j
@@ -2441,9 +2456,9 @@ $\Delta\isectta\Delta'$ is built as follows:
     %The symbol $a_i\isectta a_i'$ is defined as follows:
     %
     \begin{enumerate}
-		\item If $a_i = a_i'$ then $a_i \isectfa a_i' = a_i$,  
+		\item If $a_i = a_i'$, then $a_i \isectfa a_i' = a_i$;  
       \item else if $a_i = B_{(i)}$ and $a_i' = B'_{(i)}$ where $B$ and $B'$ are boxes over $\tuple{\abcd,\gvars}$, 
-				then $a_i\isectfa a_i' = (B\isectfa B')_{(i)}$,
+				then $a_i\isectfa a_i' = (B\isectfa B')_{(i)}$;
 		\item otherwise $a_i \isectfa a_i'$ as well as the whole transition is undefined (and no transition is added to $\Delta \isectta \Delta'$). 
     \end{enumerate}
 
@@ -2453,13 +2468,13 @@ $\Delta\isectta\Delta'$ is built as follows:
 %-------------------------------------------------------------------------------
 
 In this section, we formally define the notion of \emph{compatibility} of FAs.
-Compatibility is required in order to guarantee precision of intersection of FAs
+Compatibility is required in order to guarantee precision of the intersection of FAs
 from the forward and the backward runs.
 Intuitively, it means that the heaps represented by the FAs are folded into
 boxes in the same way.
 If this were not the case, due to the different positions (or types) of boxes
 occurring in the~FAs, the intersection operation might yield an FA with the
-empty language, although intersection of the semantics of the FAs would be non-empty.
+empty language although the intersection of the semantics of the FAs would be non-empty.
 
 For a forest automaton $\fa = \tuple{\tas,\valuation}$, its version with \emph{marked components}
 is the FA 
@@ -2472,9 +2487,9 @@ The \emph{root variables} $\rootvar_i$ are fresh variables that
 point to the roots of the tree components in $\langof{\fa}$. 
 %
 $\semof{\decof\fa}$ then contains the same heaps as $\semof\fa$, but the
-roots of the components from $\langof{\fa}$ remain visible, since they are explicitly marked by the root variables.
+roots of the components from $\langof{\fa}$ remain visible since they are explicitly marked by the root variables.
 %
-In other words, the root variables track how the forest decomposition of heaps
+In other words, the root variables track how the forest decomposition of the heaps
 in $\langof{\fa}$ partitions the heaps from~$\semof{\fa}$. 
 %
 By removing the root variables of $\decof\heap\in\semof{\decof\fa}$, we get the
@@ -2507,7 +2522,7 @@ obtained from the sequence of unfoldings\vspace*{-0.5mm}
  \heap_n 
 \end{equation*}
 %
-with $\heap_0 = \decof\heap$ and $\heap_n\in\langof{\decof{\fa}}$, such that for
+with $\heap_0 = \decof\heap$ and $\heap_n\in\langof{\decof{\fa}}$, such that, for
 each $1\leq i\leq n$, $\repre_i$ is (recursively) the representation of $g_i$ in
 $\botox_i$.
 
@@ -2631,7 +2646,7 @@ manipulations with transitions and states of FAs.
 %rules and states of FAs. 
 %since it is not important for this paper; instead,
 %we refer the reader to~\cite{forester12,jiri:diza} for details.
-We refer the reader to~\cite{habermehl:forest,jiri:diza} for the
+We refer the reader to~\cite{forester11,jiri:diza} for the
 details.
 
 We note that when we talk about removing a~component or inserting a~component
@@ -5846,7 +5861,7 @@ Each pointer field points to another node (we model the
 $\code{NULL}$ and undefined locations as special memory nodes pointed by variables
 $\code{NULL}$ and $\code{undef}$, respectively), and the same holds for pointer variables of the program.
 Data fields of memory nodes hold a data value.
-We use the term \emph{selector} to talk both about pointer and data fields.
+The term \emph{selector} is used to talk both about pointer and data fields.
 For simplification, we model data variables as pointer variables pointing to
 allocated nodes that contain a single data field with the value of the
 variable, and therefore consider only pointer
