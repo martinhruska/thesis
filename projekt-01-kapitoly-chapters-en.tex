@@ -2706,11 +2706,11 @@ Therefore, $\fa$ is compatible with~$\fa'$.
 % \paragraph{Operations Modifying Component Semantics}
 % \comment[ol]{the title is strange}
 % \paragraph{Operations modifying component decomposition.}
-This class of operations is used to implement transformation of FAs to the dense form and as
+This class of operations is used to implement the transformation of FAs to the dense form and they are also used as
 pre-processing steps before the operations of folding, unfolding, and symbolic
 implementation of program statements.
 %
-They do not modify the semantics of forest automata, 
+They do not modify the semantics of forest automata 
 but change the component decomposition of the represented heaps.
 %Folding and unfolding of boxes and implementations of program commands need preprocessing of the forest automata so that their component semantics satisfies certain properties. The preprocessing is done by a set of operations that modify the component semantics, while not modifying the box semantics.
 %
@@ -2733,7 +2733,7 @@ but change the component decomposition of the represented heaps.
 %The symbolic execution is then split to the separated branches for particular
 %forest automata and each branch continues independently.
 % \item[\emph{Connecting of components.} ] 
-\item \emph{Connecting of components.}
+\item \emph{Connecting components.}
 %\tomas{This name sounds extremely strange to me. Perhaps Connecting a Component?}
 When the $j$-th component $\ta_j$ of a forest automaton $\fa$ accepts trees with false roots, 
 then $\ta_j$ can be connected to the component that refers to it. 
@@ -2743,7 +2743,7 @@ a~reference $\rr j$ to them can appear only in a~single component, say $\ta_k$,
 and at most once in every tree from its language (because a~false root
 can have at most one incoming edge). 
 %
-For simplicity, assume that~$\ta_j$ has only one root state~$q$, which does
+For simplicity, assume that~$\ta_j$ has only one root state~$q$ which does
 not appear as a~child state in transitions.
 %
 The connection is done by adding the states and transitions of~$\ta_j$ to~$\ta_k$,
@@ -2763,13 +2763,13 @@ The previous sequence of actions is below denoted as the operation $\connecting{
 %as the operation $\connecting{q,i}$. 
 %\lukas{state maybe not needed to remember}
 % \item [\emph{Cutting of a component.}] 
-\item \emph{Cutting of a component.}
+\item \emph{Cutting a component.}
 Cutting splits a~component with an index~$j$ into two. 
 The part of the $j$-th component containing the root will accept tree prefixes
 of the original trees, and the~new $k$-th component will accept their remaining
 sub-trees.
 %of them is accepting subtrees of the trees accepting by the original one, and the other one is accepting tree prefixes that have a reference to the sub-tree component at the place where the sub-tree was connected.  
-The cutting is done at a state $q$ of $\ta_j$, which appears exactly once in
+The cutting is done at a state $q$ of $\ta_j$ which appears exactly once in
 each run (the FA is first transformed to a~form that satisfies this). 
 Occurrences of~$q$ as child states of transitions are replaced by the
 reference~$\rr k$ to the new component, and $q$~becomes the root state of the new
@@ -2778,7 +2778,7 @@ We denote this operation by $\cutting{j,k,q}$.
 %The information about $q$ and $i$ together with the assumption about $q$ will allow us to revert it in the backward run. 
 % \item [\emph{Swapping of components.}]
 % \annot[lh]{the output references must be then shifted}
-\item \emph{Swapping of components.}
+\item \emph{Swapping components.}
   The operation $\swapping{j,k}$ swaps the
   $j$-th and the $k$-th component (and renames references and assignments
   accordingly). 
@@ -2877,16 +2877,16 @@ This operation is denoted as $\folding{n,S_{\iport},S_{\oport_1}, \ldots, S_{\op
 \subsubsection*{Unfolding of Boxes}\label{sec:box_unfolding}
 %*******************************************************************************
 
-Unfolding is called as a preprocessing step before operations that implement
+Unfolding is called as a preprocessing step to used before applying operations that implement
 program statements
 in order to expose the selectors accessed by the statement. 
 Before an unfolding is performed, the input FA with a~$k$-ary box~$\botox$ is first transformed
 (using a sequence of cutting, splitting, and swapping)
-into the form
-$\fa' = \tuple{\ta_\iport'\kword{\ta_{\oport_{#1}}'}\ta_1'\cdots\ta_m',\asgn'}$
+into the form:
+$$\fa' = \tuple{\ta_\iport'\kword{\ta_{\oport_{#1}}'}\ta_1'\cdots\ta_m',\asgn'}$$
 where
 the roots of the trees accepted by~$\ta'_\iport$ have an outgoing
-$\botox$-labeled hyperedge to references
+$\botox$-labeled hyperedge to the references
 %$\kseq{\overline {1+{#1}}}$
 $\overline {2},\ldots,{\overline{k+1}}$.
 %to $\kseq{\ta_{\oport_{#1}}'}$ accessible by a 
@@ -2894,13 +2894,15 @@ $\overline {2},\ldots,{\overline{k+1}}$.
 %if there is an hyperedge of $\heap$ of a $k$-ary box $\botox$ from a node $\node$ 
 %hyperedge going from the root and labelled by the box~$\botox$ that is to be unfolded.
 %
-Furthermore, assume that the box $\botox$ is of the form
-$\tuple{\boxtasin,\{\iport\mapsto 1,\oport_1 \mapsto n-k+1, \ldots, \oport_k \mapsto n\}}$
+Furthermore, assume that the box $\botox$ is of the form:
+\begin{equation*} 
+\tuple{\boxtasin,\{\iport\mapsto 1,\oport_1 \mapsto n-k+1, \ldots, \oport_k \mapsto n\}},
+\end{equation*} 
 %
 and 
 %
 the ports have outgoing edges with selectors from the sets 
-$S_\iport$ and $\kseq{S_{\oport_{#1}}}$ respectively. 
+$S_\iport$ and $\kseq{S_{\oport_{#1}}}$, respectively. 
 %
 The operation returns the forest automaton~$\fa$ that arises from~$\fa'$ by 
 %$\tuple{\ta_\iport'',\tas,\ta_\oport'',\{\iport\mapsto 1,\oport\mapsto n+1\}}$
@@ -2913,14 +2915,12 @@ removing the $\botox$-transition
 including its targets, 
 %successor of the root in~$\ta_\iport'$,
 and merging~$\ta_\iport^\botox$ with~$\ta_\iport'$ and $\kseq{\ta_{\oport_{#1}}^\botox}$
-with $\kseq{\ta_{\oport_{#1}}'}$ respectively.
+with $\kseq{\ta_{\oport_{#1}}'}$, respectively.
 % The merging on the language level consists of merging roots of the trees.
 The merging on the TA level consists of merging root transitions of the
 corresponding TAs.
 %
 We denote this operation as $\unfolding{n,S_{\iport},\kseq{S_{\oport_{#1}}},\botox}$.\footnote{The parameters $S_{\iport},\kseq{S_{\oport_{#1}}}$ are used  in the backward run to easily invert the operation of unfolding by folding, cf. \secref{sec:bwd_run}.}
-
-
 
 %*******************************************************************************
 \subsubsection*{Symbolic Execution of Program Statements}\label{sec:label}
@@ -3000,8 +3000,8 @@ $\code{y\text{\texttt{->}}sel := x}$ changes the reference $\rr j$ in $\ta_{\asg
 %		  changes heaps from language of FA by redirecting the edges corresponding to
 %		  the $\code{sel}$ selector.
 
-      \item $\code{assume(x \datarel y)}$ where $\datarel\ \in \{\code{==},
-        \code{{!}{=}}\}$:
+      \item $\code{assume(x \datarel y)}$ where $\datarel\ \in \{\mathtt{==},
+        \mathtt{{!}{=}}\}$:
         This statement tests the equality of $\valuation(\code{x})$ and $\valuation(\code{y})$
         and stops the current branch of the forward run if the result does not match $\datarel$.
       \item $\code{assume(x\text{\texttt{->}}data \datarel y\text{\texttt{->}}data)}$
@@ -3088,7 +3088,8 @@ unreachable component and continues with the execution.
 %\section{Backward Run for Counterexample Analysis}\label{sec:CEXanalysis}
 \section{Abstraction and Counterexample-based Refinement}\label{sec:CEGAR}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this section, we will describe the complete counterexample-based refinement loop (CEGAR) for forest automata.
+In this section, we will describe the counterexample-based refinement loop (CEGAR) for forest automata
+that we proposed.
 It is a~generalisation of the CEGAR for abstract regular tree model checking of~\cite{bhrv06a,bhrv06b}. 
 
 %\annot[lh]{a coppy of vmcai intro. Some parts are a good description of refinement and backward run that can be used}
@@ -3141,13 +3142,13 @@ The analysis of spurious counterexamples is further used to refine the abstracti
 Particularly, we use a modification of the so-called \emph{predicate
 language abstraction} on TAs~\cite{artmc}, which 
 collapses those states of component TAs that
-have non-empty intersection with the same predicate languages, which are
-obtained from the backward run.
+have non-empty intersection with the same predicate languages.
+
 %
 In case the intersection of the set of configurations of the above described forward and backward symbolic runs
 is empty, we can derive from it an \emph{automata interpolant} allowing us to
-get more predicate languages and to refine the abstraction such that progress of
-the CEGAR loop is guaranteed (in the sense that the same
+get more predicate languages and to refine the abstraction such that
+the CEGAR loop is guaranteed to progress (in the sense that the same
 abstract forward run is not repeated).
 %\comment[ar]{* -- End of the complete change}
 
@@ -3221,16 +3222,16 @@ This is where the backward run will cut the components to revert the connecting.
 Before that, though, we replace the mentioned product states with $q$ by a new state~$q'$.
 This replacement does not change the language because $q$ was appearing
 exactly once in every run (because in the forward run, it is the root state of
-the connected component that does not appear as a~child state of any transition), therefore, 
+the connected component that does not appear as a~child state of any transition), and so, 
 a product state with $q$ can appear at most once in
 every run of the product too.
 %
 Finally, we compute $\bwsconf_{i-1}$ as $\cutting{k,j,q'}(\bwsconf_i')$.
 
-Folding is inverted by unfolding and \emph{vice versa}. Namely, 
+\sloppy Folding is inverted by unfolding and \emph{vice versa}. Namely, 
 we invert the operation $\folding{n,S_{\iport},\kseq{S_{\oport_{#1}}},\botox}$ by 
 $\unfolding{n,S_{\iport},\kseq{S_{\oport_{#1}}},\botox}$ and
-$\unfolding{n,S_{\iport},\kseq{S_{\oport_{#1}}},\botox}$ by
+$\mathit{unfold}$$[n,$$S_{\iport},$$S_{\oport_{1}},$\\$\ldots,$$S_{\oport_{k}},$$\botox]$ by
 $\folding{n,S_{\iport},\kseq{S_{\oport_{#1}}},\botox'}$ where the box $\botox'$ folded in
 the backward run might be semantically smaller than $\botox$ (since the
 backward run is returning with a subset of configurations of the forward run). 
@@ -3241,7 +3242,7 @@ then $\bwsconf_{i-1} = \bwsconf_{i} \isectfa\sconf_{i-1}$.
 
 Finally, inversions of abstract statements
 use $\bwsconf_{i} = \tuple{\bar\ta_1 \cdots \bar\ta_m, \bar\asgn}$ and
-$\sconf_{i-1} = \tuple{\ta_1 \cdots \ta_n, \asgn}$
+$\sconf_{i-1}$ $= \tuple{\ta_1 \cdots \ta_n, \asgn}$
 to
 compute the FA $\bwsconf_{i-1} =
 \tuple{\bar\ta'_1 \cdots \bar\ta'_n, \bar\asgn'}$
@@ -3257,7 +3258,7 @@ as follows:
 	%	corresponds to removing a node added to heaps of $\fa$ in forward run.
 
   \item $\code{x := y\text{\texttt{->}}sel}$:
-Inversion is done by setting $\bar\asgn'(\code{x})$ to the value of
+The inversion is done by setting $\bar\asgn'(\code{x})$ to the value of
 $\asgn(\code{x})$ from~$\sconf_{i-1}$.
 % is set to the value it has in $\sconf_{i-1}$.
 %
@@ -3291,8 +3292,8 @@ removed in the forward run, is inserted at the same position in $\bwsconf_{i}$, 
 $\bar\asgn'(\code{x})$ is set to that position.
 %
 Then we must invert the rewriting of root references pointing to $\asgn(\code{x})$ to $\asgnof{\unef}$ done by the forward run.
-For this, we compute the $\isectta$ forest automata product from \secref{sec:intersection} with $\sconf_{i-1}$, but modified so that 
-instead of discarding reached pairs $(\asgnof\unef,\valuation(\code{x}))$, 
+For this, we compute the $\isectta$ forest automata product from \secref{sec:intersection} with $\sconf_{i-1}$ but modified so that 
+instead of discarding the reached pairs $(\asgnof\unef,\valuation(\code{x}))$, 
 it replaces them by $\valuation(\code{x})$.
 %
 Intuitively, the references to $\code x$ are still present at $\sconf_{i-1}$,
@@ -3567,7 +3568,7 @@ and every operation of connecting, cutting, and swapping of components.
 %\section{CEGAR for Forest Automata}\label{sec:abstraction}
 %*******************************************************************************
 
-Our abstraction over FAs is based on automata abstraction
+Our abstraction over FAs is based on the automata abstraction
 from the framework of \emph{abstract regular tree model checking}
 (ARTMC)~\cite{artmc}.
 This framework comes with two abstractions for tree automata, 
@@ -3584,9 +3585,9 @@ then an abstraction of~$\ta$ is
 %
 % using $\abstra$
 %
-the TA $\abstraof \ta =( \eqstates,[q_0]_{\eqrel{}},\Delta_{\eqrel{}} )$,
+the TA $\abstraof \ta =( \eqstates,[q_0]_{\eqrel{}},\Delta_{\eqrel{}} )$
 such that $\eqstates$ is the set of
-$\eqrel$'s equivalence classes, i.e. $\eqstates = \{[q]\,|\, q\in Q\}$, where
+$\eqrel$'s equivalence classes, i.e., $\eqstates = \{[q]\,|\, q\in Q\}$ where
 $[q_0]_{\eqrel{}}$ denotes the equivalence class
 of $q_0$,  and $\Delta_{\eqrel{}}$ arises from $\Delta$ by replacing
 occurrences of states in transitions by their equivalence classes, i.e., $\Delta_{\eqrel{}}=\{\trans{[q]}{[q_1], \dots, [q_m]}
@@ -3604,7 +3605,7 @@ It~holds that $|Q/_{\eqrel}| \leq |Q|$ and
 $\langof \ta \subseteq \langof{\abstra(\ta)}$.
 %
 
-\emph{Finite height abstraction} 
+A \emph{Finite height abstraction} 
 %The range of abstraction function is the set of the equivalence classes of the relation $\heqrel{\ta}$.
  is a function $\abstra_h$ that merges states 
  with languages equivalent
@@ -3620,13 +3621,13 @@ $\langlen{\ta}{q}$ is the language of tree prefixes of trees from $L(\ta,q)$
 %However the refinement does not guarantee that the detected spurious counterexample will not
 %be detected again in the next run.
 %
-\emph{Predicate language abstraction}
+A \emph{Predicate language abstraction}
 is a~function $\predabstra \predset$ parameterized by a set of predicate languages $\predset=\{\pred_1, \ldots, \pred_n\}$
 represented by tree automata.
 %
-States are merged according to the equivalence ${\peqrel} \subseteq Q \times Q$, such that
+States are merged according to the equivalence ${\peqrel} \subseteq Q \times Q$ such that
 ${\peqrel} = \{(q,q')\in Q\times Q \,|\, \forall \pred \in \predset: \langof{A,q} \cap \langof{\pred} =~\emptyset \Leftrightarrow \langof{A,q'} \cap \langof{\pred} = \emptyset\}$.
-Informally, $q$ and $q'$ are merged if their languages $L(A,q)$ and $L(A,q')$ intersect with the same subset of predicate languages from $\predset$.
+Informally, $q$ and $q'$ are merged iff their languages $L(A,q)$ and $L(A,q')$ intersect with the~same subset of predicate languages from $\predset$.
 %
 %that is, merging is done according to the equivalence $\peqrel$
 %such that $q \peqrel q'$ if $P_q = P_{q'}$.
@@ -3731,13 +3732,13 @@ A~disadvantage is
 %
 that the refinement by increasing the height is quite rough.
 Moreover, the cost of computing in the abstract domain rises quickly with increasing
-the height of the abstraction, as exponentially more concrete configurations may be explored
+the height of the abstraction as exponentially more concrete configurations may be explored
 before the abstraction closes the analysis of a~particular branch.
 %
 % , getting exponentially more of them.
 %
 The finite height abstraction was used---in a specifically fine-tuned
-version---in the first versions of \forester{}~\cite{habermehl:forest,boxes13}, which
+version---in the first versions of \forester{}~\cite{forester11,boxes13}, which
 successfully verified a number of benchmarks, but the refinement was not
 sufficiently flexible to prove some more challenging examples. 
 
@@ -3760,7 +3761,7 @@ let $\predset(\interp) = \{\langof{\interp,q}\mid q\in Q\}$ denote the set of la
 %
 Then, if $\langof{\ta} \cap \langof{\interp} = \emptyset$, it is guaranteed that 
 $\langof{\predabstraof{\predset(\interp)}{\ta}} \cap \langof{\interp} = \emptyset$.
-That is, when the abstraction is refined with languages of all states of
+That is, when the abstraction is refined with the languages of all states of
 $\interp$, it will
 exclude $\langof{\interp}$---unless applied on a~TA whose language is already
 intersecting~$\langof{\interp}$. 
@@ -3845,20 +3846,20 @@ $\predset({A_i})$ only where $A_i$ is the $i$-th component of $\interp$ and $\la
 \section{Automatic Discovery of Boxes}\label{sec:box_discovery}
 %*******************************************************************************
 
-In this section, we discuss in a more detail \emph{box folding} from Section~\ref{sec:box_folding};
+In this section, we discuss in a more detail the operation of \emph{box folding} from Section~\ref{sec:box_folding};
 mainly, we focus on how boxes are discovered (synthesised) automatically.
 
-Originally, our verification approach, as published in \cite{habermehl:forest}, relied
+Originally, the verification approach published in \cite{forester11} relied
 on the following two facts:
 %
 \begin{enumerate}
 \item the user is able to provide a set of nested boxes that is sufficient for
-  the verification of the given program and
+  the verification of the given program, and
 \item it is enough to look for instances of the provided boxes to
   be folded at roots existing in the FA in which the folding should occur.
 \end{enumerate}
 %
-In our experiments, however, it turned out that constructing a~set of boxes
+However, the subsequent experiments showed, it turned out that constructing a~set of boxes
 suitable for verification of a given program is quite inconvenient.
 In particular, constructing boxes requires a non-trivial insight into the program's semantics and a considerable amount of manual
 effort of an experienced user. 
@@ -3874,14 +3875,15 @@ Finally, in certain cases, the algorithm could at some point
 choose between two actions:
 either eliminate an existing root by concatenating two components together
 or perform a folding of some box at this root.
-If the concatenation is performed first (during
-normalization), it could happen that the box (whose folding is crucial for
+If the concatenation is performed first, it could happen that the box (whose folding is crucial for
 eliminating other cut-points that could not be eliminated in any other way)
 cannot be folded anymore because the required root disappeared, and, as
 a~consequence, the analysis does not terminate.
-To address these issues, we have developed a~fully automatic approach that is
+To address these issues, a~fully automatic approach was proposed in the later work \cite{boxes13} that is
 able to automatically find a suitable set of boxes and, moreover, does not rely
 on folding at existing roots only.
+The slightly lighter-weighted version of the automatic approach was implemented in the \forester tool and
+described in \cite{jiri:diza}.
 
 Recall that boxes were introduced in order to bring a possibility of hiding certain
 cut-points that appear repeatedly within the heap. The way boxes look like heavily depends on the shape of the data
@@ -3912,11 +3914,11 @@ handling a larger class of shape graphs) was presented in~\cite{boxes13}.
 %suitable for dealing with the data structures generated by the program being verified
 %(whose shape is unknown to us), 
 %
-In \cite{jiri:diza}, we concentrate directly on dealing with the growing
-number of cut-points. That is, we do not ask ``Which repeated
+In \cite{jiri:diza}, one concentrates directly on dealing with the growing
+number of cut-points. That is, one does not ask ``Which repeated
 patterns does one need to fold?'', but rather ``Which cut-points need to be eliminated?''.
 In the rest of this section, we show how we can automatically eliminate certain
-kinds of cut-points using box folding.
+kinds of cut-points using this kind box folding.
 %We focus on giving a~description close to what is actually implemented in the
 %version of \forester that participated in SV-COMP; for a~more general approach,
 %see~\cite{boxes13}.
@@ -3932,7 +3934,7 @@ kinds of cut-points using box folding.
   \begin{center}
     \input{figs/type1cp}
   \end{center}
-  \caption{Type 1 cut-point $i$ (reference within the same component)}
+  \caption{Type 1 cut-point $i$ representing a reference within the same component}
   \label{fig:t1cutpoint}
   \end{subfigure}
   \hfill
@@ -3940,8 +3942,8 @@ kinds of cut-points using box folding.
   \begin{center}
     \input{figs/type2cp}
   \end{center}
-  \caption{Type 2 cut-point $j$ (a single component contains
-    multiple references to~$j$)}
+  \caption{Type 2 cut-point $j$ representing a single component contains
+    multiple references to~$j$}
   \label{fig:t2cutpoint}
   \end{subfigure}
 
@@ -3950,7 +3952,7 @@ kinds of cut-points using box folding.
   \begin{center}
     \input{figs/type3cp}
   \end{center}
-  \caption{Type 3 cut-points $i$ and $j$ (several mutually linked components)}
+  \caption{Type 3 cut-points $i$ and $j$ representing a several mutually linked components}
   \label{fig:t3cutpoint}
   \end{subfigure}
   \hfill
@@ -3958,7 +3960,7 @@ kinds of cut-points using box folding.
   \begin{center}
     \input{figs/type4cp}
   \end{center}
-  \caption{Type 4 cut-point $k$ (referenced from several other components)}
+  \caption{Type 4 cut-point $k$ representing a reference from several other components)}
   \label{fig:t4cutpoint}
   \end{subfigure}
   %
@@ -3989,22 +3991,22 @@ Fig.~\ref{fig:cptypes}), each of which is eliminated by a special algorithm.
 We distinguish whether a~node is a cut-point due to a cycle in the heap or whether it is only referenced multiple times, 
 and we also distinguish whether this can be seen locally within a single component or only across several different components.
 This gives us four different types of cut-points.
-One cut-point can be of multiple types.
+Note, however, that one cut-point can be of multiple types.
 
-In particular, Type~1 cut-points arise, for instance, when one works with cyclic
+In particular, \emph{Type~1} cut-points arise, for instance, when one works with cyclic
 lists. In such a case, a single TA component encodes a set of cyclic lists with the
-cycle encoded using a leaf that refers back to the root of the component. Type~2
+cycle encoded using a leaf that refers back to the root of the component. \emph{Type~2}
 cut-points are those cut-points that are referenced multiple times from within
 a~single component. These typically arise when one deals with trees whose all leaves
 refer to some designated node (e.g., the root). Next, a set of two or more cut-points
-is said to consist of cut-points of Type~3 if the components rooted at them are linked
-in a~cycle. A typical scenario where such cut-points appear is working with
-doubly-linked lists, where the cycle appears between a~pair of successive list nodes.
+is said to consist of cut-points of \emph{Type~3} if the components rooted at them are linked
+in a~cycle. A typical scenario, where such cut-points appear is working with
+doubly-linked lists where the cycle appears between a~pair of successive list nodes.
 Observe that each inner element of the lists is pointed from its predecessor and
 from its successor at the same time, and so (without using a hierarchical encoding)
 every element has to reside in its own component (and the present loops cannot be
 reduced to loops within a single component with a cut-point of Type~1). Finally,
-Type~4 cut-points are the cut-points referred from two or more components at the
+\emph{Type~4} cut-points are cut-points referred from two or more components at the
 same time.
 
 In the following section, we will show how to eliminate cut-points of Type~1 and 2
@@ -4015,7 +4017,7 @@ We do not consider any other form of Type~3 cut-points since we have not
 encountered them in any of our case studies (in particular, we have not
 encountered loops going through more than two cut-points).
 We also do not have any direct elimination procedure for cut-points of Type~4.
-This was not needed in our case studies either, because no matter how
+This was not needed in our case studies either because no matter how
 ubiquitous cut-points of Type~4 were, they were always of other types too, and
 eliminating cut-points of Type~1, 2, and~3 either eliminated Type~4 too or
 turned Type~4 cut-points to one of the first three types.
@@ -4115,14 +4117,15 @@ We will now discuss how slicing is implemented on the level of forest automata.
 Let us recall that an FA is a~tuple $\fa = \tuple{A_i \cdots A_n,\sigma}$ where the TAs~$A_i$, for $1\leq i \leq n$,
 have transitions of the form $\transover q {a_1\cdots a_n} {q_1,\ldots, q_n}$. 
 Such transition generates a tree node $v$ connected to nodes $v_1,\ldots,v_n$ via edges $(n,a_i,n_i)$ for each $i:1\leq i \leq n$.   
-The symbols $a_i$ are either selectors or indexed boxes of the form $B_{(k)}$, where $B$ is a box and $1\leq k \leq \rankof B$, where the symbols $B_{(1)},\ldots,B_{(\rankof B)}$ always appear together and represent a hyperedge labeled by $B$.
+The symbols $a_i$ are either selectors or indexed boxes of the form $B_{(k)}$ where $B$ is a box, $1\leq k \leq \rankof B$, and
+the symbols $B_{(1)},\ldots,B_{(\rankof B)}$ always appear together and represent a hyperedge labeled by $B$.
 %
 We use additional technical assumptions on the form of FAs that simplify the
-operation of slicing; in the symbolic execution, we always keep FAs in the form.
+operation of slicing; in the symbolic execution, we always keep FAs in the following form.
 %
 Namely, (1)~root states of tree automata components never appear as child
-states of transitions,
-(2)~for every state, all transitions with the state as the parent state have
+states of transitions, and
+(2)~for every state, all transitions with that state as the parent state have
 the same vector of symbols
 (both can be achieved by simple automata transformations).
 %
@@ -4376,7 +4379,7 @@ cut-points of Type~1.
     \parbox{0.33\textwidth}{\centering\input{figs/type3fold2}} & + & \parbox{0.33\textwidth}{\centering\input{figs/type3box}}
   \end{tabular}
 
-  \caption{An illustration of elimination of Type~3 cut-points. First, the two components are
+  \caption{An illustration of an elimination of Type~3 cut-points. First, the two components are
   sliced at their accepting states. Next, the kernels of the result containing
   references to~$i$ and~$j$ are transformed into a~new box~$B$, which is added to the remaining part of the component~$i$.
   Finally, the modified component~$j$ contains no references to~$i$.}
@@ -4388,25 +4391,25 @@ cut-points of Type~1.
 % \paragraph{Type~3.}
 To eliminate a pair of Type~3 cut-points $i$ and $j$ (i.e., the cut-points
 mutually referencing
-each other---see Fig.~\ref{fig:t3cutpoint}), we need to use a~box encoding a~cycle
-starting at cut-point $i$ going through cut-point $j$ and, finally, back to~$i$ (this
+each other---see Fig.~\ref{fig:t3cutpoint}), we need to use a~box that encodes a~cycle
+starting at the cut-point $i$, going through the cut-point $j$, and, finally, back to~$i$ (this
 corresponds, e.g., to a pair of forward and backward links in a doubly-linked list).
 Intuitively, we create a box composed of two components (unlike cut-points of
 Type~1 and~2,
-which have only a single component). The first component of the box will be made from the part of the
+which have a single component only). The first component of the box will be constructed from the part of the
 $i$-th component that contains all references to $j$. Similarly, the second component of
-the box will be made from the part of the $j$-th that contains all references to $i$. 
-As a result, the box will represent a sub-graph containing the loop between the roots of the original $i$-th and $j$-th component.
+the box will be constructed from the part of the $j$-th component that contains all references to $i$. 
+As a result, the box will represent a sub-graph containing the loop between the roots of the original $i$-th and $j$-th components.
 
 Let us describe the elimination of Type~3 cut-point in a greater detail. First, we perform
-slicing of components~$i$ and~$j$, which mutually refer each other, such that
+slicing of the components~$i$ and~$j$, which mutually refer each other, such that
 the kernels obtained in the slicing
 contain all paths from~$i$ to~$j$ (resp.\ from~$j$ to~$i$).
 The two kernels are
 transformed into a box~$B$. The box~$B$ is then appended to the accepting transitions of
 the residue of the component~$i$ in the same way as in the previous cases. As the last step,
-we replace (i)~the component~$i$ within the original FA by the modified residue
-and (ii)~the component~$j$ by the residue of component~$j$.
+we replace (1)~the component~$i$ within the original FA by the modified residue
+and (2)~the~component~$j$ by the residue of component~$j$.
 As a~result, the new component~$i$ contains a~single reference to~$j$, and the
 new component~$j$ contains no reference to~$i$---see
 Fig.~\ref{fig:type3folding}.
@@ -4434,8 +4437,8 @@ The comparison of two boxes is done via checking
 language equality of their underlying FAs\footnote{
 Here, we are not dealing with sets of FAs, hence the comparison of two FAs can
 be done component-wise.
-}\footnote{The language equality check is performed as two inclusion queries.
-The inclusion test itself is again only a~safe approximation, since we ignore the structure
+}, \footnote{The language equality check is performed as two inclusion queries.
+The inclusion test itself is again a~safe approximation only, since we ignore the structure
 of nested boxes that can appear within the box we have just created. Therefore,
 it can be the case that two boxes with the same semantics are represented by different
 alphabet symbols. According to our experiments, such approximation, however,
@@ -4445,11 +4448,11 @@ If the same box already exists, the symbol obtained from the database is used fo
 representation. Otherwise, a~new alphabet symbol is created and
 stored in the database.
 
-Furthermore, we can also consider only language inclusion to relax the requirement of
+Furthermore, we can also consider language inclusion only to relax the requirement of
 equality when testing whether the two boxes match. This means that during the folding the
 given box can be potentially replaced by a~``bigger'' one that already exists in the
 database. As discussed later, this can in some cases drastically decrease the number of
-boxes that are required, and thus substantially increase the performance.
+boxes that are required and thus substantially increase the performance.
 
 %\ol{say that the discovered boxes are folded according to \secref{sec:box_folding}}
 
@@ -4620,23 +4623,22 @@ boxes that are required, and thus substantially increase the performance.
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-handed side is a data structure allocated on heap by a program. On the right-handed side is the same structure after the first abstraction.}
+\caption{On the left-hand side there is a data structure allocated on the heap by a program. On the right-hand side there is the same structure after the first abstraction.}
 \label{ref:fig-re1}
 \end{figure}
 
-Since theory of forest automata and its application to shape analysis
-may be too abstract we provide with a running example in the following section.
-We are going to show computation of fixpoint in an abstraction loop where
+To illustate the proposed application of FAs to shape analysis, this sections provides with a running example.
+We are going to show a computation of shape invariant in which
 abstraction and folding are performed alternately until a fixpoint is reached.
-The presented example should illustrate the main principles and give you an intuition,
+The presented example should illustrate the main principles and give you some intuition,
 therefore it is imprecise in some details.
-E.g., for a sake of clarity we show the main principle on a concrete heap graph
-instead of forest automata where one would need to visualise the sets of heap graphs represented by automaton.
+E.g., for sake of clarity, we show the main principle on a concrete heap graph
+instead of forest automata where one would need to visualise the sets of heap graphs represented by automata.
 
-Consider a data structure allocated on a heap shown on the left-handed side of
+Consider the data structure allocated on the heap shown on the left-hand side of
 Figure~\ref{ref:fig-re1}.
-It is a doubly-linked list which nodes are also the roots of trees with the root pointers.
-As the first step, all solo boxes are unfolded before the abstraction loop is executed.
+It is a doubly-linked list whose nodes are also the roots of trees whose all nodes contain pointers to the root.
+As the first step, all solo boxes, i.e., boxes that are not on a cycle, are unfolded before the abstraction loop is executed.
 In the figure, this is illustrated by colored nodes in the figure which are unfolded from the solo boxes.
 
 \begin{figure}[bt]
@@ -4650,28 +4652,29 @@ In the figure, this is illustrated by colored nodes in the figure which are unfo
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-handed side is the studied data structure with the highlighted parts which are going to be folded to a box. On~the right-handed side the highlighted parts of graph are folded and replaced by box \emph{tree-rootptr}.}
+\caption{On the left-hand side there is the studied data structure with highlighted parts which are going to be folded to a box. On~the right-hand side,
+the highlighted parts of the graph are folded and replaced by the box \emph{tree-rootptr}.}
 \label{ref:fig-re2}
 \end{figure}
 
-After unfolding the solo boxes, the first abstraction is performed which result is shown on the right-handed side
+After unfolding the solo boxes, the first abstraction is performed whose result is shown on the right-hand side
 of Figure \ref{ref:fig-re1}.
-The dotted lines represent a loop in corresponding automaton created by abstraction.
-In our example, we use height abstraction with height two.
-It mergers all states with height higher than two to to one leave node with the root pointer.
-In the figure, we illustrate it be removing the abstracted nodes but preserving the root pointers to illustrate
+The dotted lines represent a loop in the corresponding automaton created by the abstraction.
+In our example, we use the height abstraction with the height two.
+It merges all states whose height is greater than two to one leave node with the root pointer.
+In the figure, we illustrate this be removing the abstracted nodes but preserving the root pointers to illustrate
 the created cycle while keeping the figure understandable.
-The resulting automaton now represents doubly-linked list
-which nodes are roots of trees of arbitrary depth.
-We note again that the example does not reproduce behaviour of algorithm precisely but it should
-bring an intuition how abstraction works, i.e., creates a loop in the automaton.
+The resulting automaton now represents a doubly-linked list
+whose nodes are roots of trees with the root pointer of arbitrary depth.
+We note again that the example does not reproduce the behaviour of the algorithm precisely but it should
+bring an intuition how the abstraction works, i.e., that it creates a loop in the automaton.
 
 Then the folding operation is performed once the first abstraction is finished.
 The folding algorithm finds suitable parts of heap graph to be folded.
-These parts of graph are trees pointed by the nodes of doubly-linked list as it is
+These parts of the graph are the trees with root pointers pointed by the nodes of the doubly-linked list as it is
 shown in Figure~\ref{ref:fig-re2}.
-They are folded to box called \emph{tree-rootprt} which is
-added to edges leading from the nodes of doubly-linked list as shown on the right-handed side of Figure \ref{ref:fig-re2}.
+They are folded to a box called \emph{tree-rootprt} which is
+added to the edges leading from the nodes of the doubly-linked list as shown on the right-hand side of Figure \ref{ref:fig-re2}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4684,17 +4687,17 @@ added to edges leading from the nodes of doubly-linked list as shown on the righ
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-handed side is the data structure before another folding where blue areas are going to be folded.
-On the right-handed side is the resulting graph with the highlighted parts folded in the box \emph{DLS}.}
+\caption{On the left-hand side there is the data structure before another folding where blue areas are going to be folded.
+On the right-hand side there is the resulting graph with the highlighted parts folded in to the box \emph{DLS}.}
 \label{ref:fig-re3}
 \end{figure}
 
-The second abstraction is performed, however the abstraction algorithm finds nothing what could be abstracted.
+The second abstraction is performed, but the abstraction algorithm finds nothing that could be abstracted.
 The second folding follows. It finds the suitable sub-graphs for folding which are highlighted by
-blue color on the left-handed side of Figure \ref{ref:fig-re3}.
-These sub-graphs are segments of doubly-linked list, i.e., part of graph between two DLL nodes.
-It folds the sub-graphs to the boxes called \emph{DLS}.
-The resulting graph after folding is shown on the right-handed side of Figure \ref{ref:fig-re3}.
+the blue color on the left-hand side of Figure \ref{ref:fig-re3}.
+These sub-graphs are segments of the doubly-linked list, i.e., the parts of the graph between two neighbouring DLL nodes.
+The algorithm folds the sub-graphs to the boxes called \emph{DLS}.
+The resulting graph after the folding is shown on the right-hand side of Figure \ref{ref:fig-re3}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4707,15 +4710,15 @@ The resulting graph after folding is shown on the right-handed side of Figure \r
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-handed side is the data structure before the last abstraction.
-On the right-handed side is the graph after abstraction.}
+\caption{On the left-hand side there is the data structure before the last abstraction.
+On the right-hand side there is the graph after the abstraction.}
 \label{ref:fig-re4}
 \end{figure}
 
-Now, another abstraction is performed and merges its nodes in such way that the automaton now represents
-arbitrary doubly-linked list of length at least two (which is a consequence
-of fact that we used again height abstraction with height 2).
-The abstraction is shown on Figure \ref{ref:fig-re4}.
+Now, another abstraction is performed which merges the nodes of the paragraph in such way that the automaton now represents
+arbitrary doubly-linked lists of length at least two (which is a consequence
+of the fact that we used again the height abstraction with the height 2).
+The abstraction is shown in Figure \ref{ref:fig-re4}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4728,18 +4731,120 @@ The abstraction is shown on Figure \ref{ref:fig-re4}.
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-handed side there is the data structure before the last folding. The highlighted green part is going to be folded.
-On the right-handed side is the graph with the folded highlighted part to box \emph{circular-DLL-of-trees-rootptr}.
-Now, the fixpoint is reached.}
+\caption{On the left-hand side there is the data structure before the last folding. The highlighted green part is going to be folded.
+On the right-hand side there is the graph with the highlighted part folded to the box \emph{circular-DLL-of-trees-rootptr}.
+Now, a fixpoint is reached.}
 \label{ref:fig-re5}
 \end{figure}
 
 Finally, the last folding is performed.
-The whole heap graph could be folded to one box as shown by the left-handed side of Figure \ref{ref:fig-re5}.
-As the result, we obtain the box \emph{circular-DLL-of-trees-rootptr} shown on the right-handed side
+The whole heap graph can now be folded to one box as shown by the left-hand side of Figure \ref{ref:fig-re5}.
+As the result, we obtain the box \emph{circular-DLL-of-trees-rootptr} shown on the right-hand side
 of Figure \ref{ref:fig-re5}.
-The fixpoint is reached in this step and verification procedure proceed with an automaton containing
+A fixpoint is reached in this step, and verification procedure proceeds with an automaton containing
 just one transition with the mentioned box.
+
+    \input{figs/running/complex_forest.tikz}
+\begin{figure}[bt]
+\begin{center}
+    \exmp
+\caption{The forest automaton on the figure represents circular doubly-linked list whose nodes are root pointers of binary trees with root pointers.}
+    \label{ref:fig-re6.1}
+      \input{figs/running/complex_forest_abstr.tikz}
+\caption{The same forest automaton after abstraction is applied. Now the forest automaton represents the same structure but the trees can have arbitrary depth.}
+     \label{ref:fig-re6.2}
+\end{center}
+\end{figure}
+
+To make the running example complete we illustate the same computation on forest automata.
+In Figure \ref{ref:fig-re6.1}, there is a forest automaton representing data structure
+already shown in the left-hand side of Figure \ref{ref:fig-re1}, i.e., circular doubly-linked lists whose
+nodes are roots of binary tree with root pointers.
+The forest automaton consists of four tree automata with the numbered root states.
+The transitions from the roots states are labeled by the selectors $\mathtt{p,l,t,r,n}$ (in this order)
+where $\mathtt{n,p}$ correspond to the \emph{next, previous} selectors of doubly-linked list
+and $\mathtt{l,t,r}$ to the \emph{left, tail, right} selectors of binary tree with root (or tail) pointer.
+The remaining transition from non-root states contains only the selectors $\mathtt{l,t, r}$ (in this order) what
+meas that these states accepts the tree parts of represented heap graph.
+Futher, the overlined numbers in the colored boxes are the root refences to the root states.
+One can see that in every transition of a tree automaton, the selector $t$ leads to a root reference
+referencing a root state of the given tree automaton.
+That respects the fact that in binary tree tree with root pointers, a root pointer always leads
+to a root of tree.
+The last tree automaton references the first automaton over the selector $\mathtt{n}$ and
+the first tree automaton references the last automaton over the selector $\mathtt{p}$ which
+models the circularity of doubly-linked lists where the first and the last node are
+connected via \emph{next} and \emph{previous} selectors.
+ 
+For the sake of simplicity, the automaton is not drawn complete in the figure.
+The dotted lines mean that there is a part of automaton pointed by a line which is not presented
+here due to space limitations.
+
+Figure \ref{ref:fig-re6.2} contains the same automaton after the first abstraction has been applied.
+The abstraction merged states of automaton representing tree part of the heap graph and created
+loops on the states under the root states.
+Now the automaton represents the binary trees with tree pointers of arbitrary length.
+
+\begin{figure}[bt]
+\begin{center}
+      \input{figs/running/complex_forest_abstr_knots.tikz}
+\caption{The parts of forest automaton are denoted by red lines as suitable for folding to boxes.}
+\label{ref:fig-re7.1}
+      \input{figs/running/complex_forest_abstr_folded.tikz}
+\caption{The part of forest automaton representing trees are folded to the box.}
+\label{ref:fig-re7.2}
+\end{center}
+\end{figure}
+
+The procedure continues with first folding.
+It detects that parts of tree automata representing binary trees with roots pointers can be folded to a box.
+This is illustrated by red oval in Figure \ref{ref:fig-re7.1}.
+The resulting automaton after folding is performed is in Figure \ref{ref:fig-re7.2}.
+The transitions from the root states now contains only two selectors $\mathtt{p,n}$ corresponding to
+the selectors $\emph{next, previous}$ of the doubly-linked list and one box named $\mathtt{trp}$
+representing binary tree with root pointer.
+
+
+\begin{figure}[bt]
+\begin{center}
+      \input{figs/running/complex_forest_dls_box.tikz}
+\caption{The figure illustrates a box that was detected in the previous forest automaton. This box represents one segment of doubly-linked list.}
+\label{ref:fig-re8.1}
+      \input{figs/running/complex_forest_dls_folded.tikz}
+\caption{The forest automaton after parts of it were folded to the box from the figure above.}
+\label{ref:fig-re8.2}
+\end{center}
+\end{figure}
+
+\begin{figure}[bth!]
+\begin{center}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \input{figs/running/complex_forest_dls_normalized.tikz}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\linewidth}
+      \input{figs/running/complex_forest_dls_abstracted.tikz}
+  \end{subfigure}
+\caption{The cutting points are no longer cutting points after the last folding and can be removed. The forest automaton now consists of one tree automaton.
+The resulting automaton after another abstraction is in the right-hand figurewas applied. The automaton represents doubly linked of arbitrary length.}
+\label{ref:fig-re9}
+\end{center}
+\end{figure}
+
+Now the abstraction is performed again but there is nothing to abstract so we continue with illustration of anther
+folding done after this abstraction.
+The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containig two nodes
+referencing each other via the $\emph{next,previous}$ selector.
+On the forest automata level, there are two root states $\mathtt{b,c}$ and the two root references (one for each root state)
+such that $\mathtt{b}$ references $\mathtt{c}$ via the $\mathtt{n}$ selector and and $\mathtt{c}$ references $\mathtt{b}$ via the $\mathtt{p}$ selector.
+It is illustrated in Figure~\ref{ref:fig-re8.1}.
+
+When this pattern is folded to a box named $\mathtt{dls}$ and the corresponding parts of automaton are replaced by the box, we obtain automaton shown in left-hand side
+of Figure~\ref{ref:fig-re8.2}.
+
+After the folding we can merge the tree automata in the forest automaton in Figure~\ref{ref:fig-re8.2} to one tree automaton
+since the represented heap graph has no longer any cut-points (i.e., each node is pointed exatly once), shown in the left-hand side of Figure~\ref{ref:fig-re9}.
+Finally, when the abstraction is applied to this automaton, we obtain an automaton representing circular
+doubly-linked list of arbitrary length as it is shown in the right-hand side of Figure~\ref{ref:fig-re9}.
 
   %\begin{minipage}{3.1cm}
   %  \incmargin{7mm}
