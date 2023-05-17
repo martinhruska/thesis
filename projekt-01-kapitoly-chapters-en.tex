@@ -4632,14 +4632,13 @@ We are going to show a computation of shape invariant in which
 abstraction and folding are performed alternately until a fixpoint is reached.
 The presented example should illustrate the main principles and give you some intuition,
 therefore it is imprecise in some details.
-E.g., for sake of clarity, we show the main principle on a concrete heap graph
-instead of forest automata where one would need to visualise the sets of heap graphs represented by automata.
+We will first show the main principle on a concrete heap graph at first to build basic inuition
+and we are going to present the same computation done on forest automata.
 
 Consider the data structure allocated on the heap shown on the left-hand side of
 Figure~\ref{ref:fig-re1}.
 It is a doubly-linked list whose nodes are also the roots of trees whose all nodes contain pointers to the root.
-As the first step, all solo boxes, i.e., boxes that are not on a cycle, are unfolded before the abstraction loop is executed.
-In the figure, this is illustrated by colored nodes in the figure which are unfolded from the solo boxes.
+The shapes of trees differs in the colored nodes.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4657,8 +4656,8 @@ the highlighted parts of the graph are folded and replaced by the box \emph{tree
 \label{ref:fig-re2}
 \end{figure}
 
-After unfolding the solo boxes, the first abstraction is performed whose result is shown on the right-hand side
-of Figure \ref{ref:fig-re1}.
+When the first abstraction is performed whose result is shown on the right-hand side
+of Figure \ref{ref:fig-re1} these differences are abstracted away.
 The dotted lines represent a loop in the corresponding automaton created by the abstraction.
 In our example, we use the height abstraction with the height two.
 It merges all states whose height is greater than two to one leave node with the root pointer.
