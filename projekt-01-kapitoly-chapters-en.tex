@@ -4756,41 +4756,43 @@ just one transition with the mentioned box.
 \end{figure}
 
 To make the running example complete we illustate the same computation on forest automata.
-In Figure \ref{ref:fig-re6.1}, there is a forest automaton representing data structure
-already shown in the left-hand side of Figure \ref{ref:fig-re1}, i.e., circular doubly-linked lists whose
+In Figure~\ref{ref:fig-re6.1}, there is a forest automaton representing data structure
+already shown in the left-hand side of Figure \ref{ref:fig-re1}, i.e., circular doubly-linked lists which
 nodes are roots of binary tree with root pointers.
 The forest automaton consists of four tree automata with the numbered root states.
 The transitions from the roots states are labeled by the selectors $\mathtt{p,l,t,r,n}$ (in this order)
 where $\mathtt{n,p}$ correspond to the \emph{next, previous} selectors of doubly-linked list
 and $\mathtt{l,t,r}$ to the \emph{left, tail, right} selectors of binary tree with root (or tail) pointer.
-The remaining transition from non-root states contains only the selectors $\mathtt{l,t, r}$ (in this order) what
-meas that these states accepts the tree parts of represented heap graph.
+The remaining transition from non-root states contains only the selectors $\mathtt{l,t, r}$ (in this order),
+i.e., these states accepts the tree parts of represented heap graph.
 Futher, the overlined numbers in the colored boxes are the root refences to the root states.
+
 One can see that in every transition of a tree automaton, the selector $t$ leads to a root reference
 referencing a root state of the given tree automaton.
-That respects the fact that in binary tree tree with root pointers, a root pointer always leads
+This is consistent with the fact that in binary tree tree with root pointers, a root pointer always leads
 to a root of tree.
+
 The last tree automaton references the first automaton over the selector $\mathtt{n}$ and
-the first tree automaton references the last automaton over the selector $\mathtt{p}$ which
-models the circularity of doubly-linked lists where the first and the last node are
+the first tree automaton references the last automaton over the selector $\mathtt{p}$.
+That models the circularity of doubly-linked lists where the first and the last node are
 connected via \emph{next} and \emph{previous} selectors.
  
 For the sake of simplicity, the automaton is not drawn complete in the figure.
-The dotted lines mean that there is a part of automaton pointed by a line which is not presented
+The dotted lines mean that there are parts of automaton pointed by such lines which are not presented
 here due to space limitations.
 
 Figure \ref{ref:fig-re6.2} contains the same automaton after the first abstraction has been applied.
-The abstraction merged states of automaton representing tree part of the heap graph and created
+The abstraction merges states of automaton representing tree part of the heap graph and creates
 loops on the states under the root states.
 Now the automaton represents the binary trees with tree pointers of arbitrary length.
 
 \begin{figure}[bt]
 \begin{center}
       \input{figs/running/complex_forest_abstr_knots.tikz}
-\caption{The parts of forest automaton are denoted by red lines as suitable for folding to boxes.}
+\caption{The parts of forest automaton denoted by red lines are suitable for folding to boxes.}
 \label{ref:fig-re7.1}
       \input{figs/running/complex_forest_abstr_folded.tikz}
-\caption{The part of forest automaton representing trees are folded to the box.}
+\caption{The part of forest automaton representing trees from heap graph are folded to the box.}
 \label{ref:fig-re7.2}
 \end{center}
 \end{figure}
@@ -4807,10 +4809,10 @@ representing binary tree with root pointer.
 \begin{figure}[bt]
 \begin{center}
       \input{figs/running/complex_forest_dls_box.tikz}
-\caption{The figure illustrates a box that was detected in the previous forest automaton. This box represents one segment of doubly-linked list.}
+\caption{The figure illustates box representing one segment of doubly-linked list.}
 \label{ref:fig-re8.1}
       \input{figs/running/complex_forest_dls_folded.tikz}
-\caption{The forest automaton after parts of it were folded to the box from the figure above.}
+\caption{The forest automaton after folding to the $\mathtt{dls}$ boxes is done.}
 \label{ref:fig-re8.2}
 \end{center}
 \end{figure}
@@ -4823,24 +4825,23 @@ representing binary tree with root pointer.
   \begin{subfigure}[b]{0.49\linewidth}
       \input{figs/running/complex_forest_dls_abstracted.tikz}
   \end{subfigure}
-\caption{The cutting points are no longer cutting points after the last folding and can be removed. The forest automaton now consists of one tree automaton.
+\caption{The left-hand side show automatan after tree automata has been merged to one since there were no longer any cutting points after the last folding.
 The resulting automaton after another abstraction is in the right-hand figurewas applied. The automaton represents doubly linked of arbitrary length.}
 \label{ref:fig-re9}
 \end{center}
 \end{figure}
 
-Now the abstraction is performed again but there is nothing to abstract so we continue with illustration of anther
-folding done after this abstraction.
+Now the abstraction is performed again but there is nothing to abstract so we continue with another folding.
 The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containig two nodes
-referencing each other via the $\emph{next,previous}$ selector.
-On the forest automata level, there are two root states $\mathtt{b,c}$ and the two root references (one for each root state)
+referencing each other via the $\emph{next, previous}$ selectors.
+On the forest automata level, the pattern is illustrated two root states $\mathtt{b,c}$ and their references
 such that $\mathtt{b}$ references $\mathtt{c}$ via the $\mathtt{n}$ selector and and $\mathtt{c}$ references $\mathtt{b}$ via the $\mathtt{p}$ selector.
-It is illustrated in Figure~\ref{ref:fig-re8.1}.
+It is shown in Figure~\ref{ref:fig-re8.1}.
 
-When this pattern is folded to a box named $\mathtt{dls}$ and the corresponding parts of automaton are replaced by the box, we obtain automaton shown in left-hand side
-of Figure~\ref{ref:fig-re8.2}.
+When this pattern is folded to a box named $\mathtt{dls}$ and the corresponding parts of automaton are replaced by the box.
+The obtainws automaton is shown in the left-hand side of Figure~\ref{ref:fig-re8.2}.
 
-After the folding we can merge the tree automata in the forest automaton in Figure~\ref{ref:fig-re8.2} to one tree automaton
+After the folding we can merge the tree automata in the forest automaton to one tree automaton
 since the represented heap graph has no longer any cut-points (i.e., each node is pointed exatly once), shown in the left-hand side of Figure~\ref{ref:fig-re9}.
 Finally, when the abstraction is applied to this automaton, we obtain an automaton representing circular
 doubly-linked list of arbitrary length as it is shown in the right-hand side of Figure~\ref{ref:fig-re9}.

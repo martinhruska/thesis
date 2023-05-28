@@ -1,0 +1,50 @@
+\usetikzlibrary{arrows,fit}
+\begin{tikzpicture}
+[
+	scale=0.85,
+	transform shape
+%	edge from parent/.style={draw,->,>=stealth'}
+]
+
+%\path[use as bounding box] (-30mm,7mm) rectangle (111mm,-40mm);
+
+\definecolor{ref1col}{rgb}{0.6,0.6,1.0}
+\definecolor{ref2col}{rgb}{1.0,0.7,0.7}
+\definecolor{ref3col}{rgb}{0.3,1.0,0.3}
+\definecolor{ref4col}{rgb}{1.0,0.3,1.0}
+\definecolor{refboxcol}{rgb}{0.0,0.8,0.8}
+
+\tikzstyle{state}=[draw,circle]
+\tikzstyle{trans}=[draw,->,>=stealth']
+\tikzstyle{abstr}=[draw,dotted,thick]
+\tikzstyle{ref}=[rectangle,inner sep=0.5mm]
+\tikzstyle{sepline}=[draw=black!40,thick,dashdotted]
+
+% Automaton 1
+\node[state] (q1) at (0mm,0mm) {};
+\node[ref,fill=refboxcol] (r4) [below of=q1] {$\overline{a}$};
+\node[state,node distance=14mm] (r3) [left of=r4] {};
+%\node[ref,fill=ref4col,node distance=7mm] (r1) [left of=r3] {$\overline{4}$};
+\node[] (r5) [right of=r4] {};
+%\node[ref,fill=ref2col,node distance=7mm] (r2) [right of=r5] {$\overline{2}$};
+
+%\draw (q1) edge[trans] node[near start,label={above:p}] (r1mid) {} (r1);
+%\draw (q1) edge[trans] node[near start,label={above:n}] (r2mid) {} (r2);
+\draw (q1) edge[trans] node[near start,label={below left:l}] (r3mid) {} (r3);
+\draw (q1) edge[trans] node[near start,label={below right:t}] (r4mid) {} (r4);
+\draw (q1) edge[trans,out=260,in=0] node[near start,label={[label distance=-0.8mm]below left:r}] (r5mid) {} (r3);
+\draw (r3mid.center) to[out=-45,in=225] (r4mid.center);
+
+\node[anchor=south,ref,fill=refboxcol] at (q1.north) {$a$};
+
+\node[inner sep=0] (s2) [below of=r3] {};
+\node[ref,fill=refboxcol,yshift=-2.5mm] (s2p) at (s2.south) {$\overline{a}$};
+
+\draw[trans] (r3) .. controls +(-5mm,-10mm) and +(-7mm,-3mm) .. node[very near start,label={left:l}] (s1mid) {} (r3);
+\draw (r3) edge[trans] node[label={[label distance=-1mm]below right:t}] {} (s2);
+\draw[trans] (r3) .. controls +(5mm,-10mm) and +(7mm,-3mm) .. node[very near start,label={right:r}] (s3mid) {} (r3);
+\draw (s1mid.center) to[out=-45,in=225] (s3mid.center);
+
+\node[thick,fit=(q1.east) (r3) (r4) (s2p),rounded corners,draw=red] {};
+
+\end{tikzpicture}
