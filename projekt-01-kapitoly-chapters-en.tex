@@ -4908,10 +4908,10 @@ which provides a~higher-level interface over GIMPLE.
 Let us describe the architecture of \forester (see Fig.~\ref{fig:fa_exec}).
 \forester starts the analysis by using \codelistener (providing an interface to
 \gcc) to obtain the intermediate code of the analysed program.
-This intermediate code is in the second step compiled, using \forester's
+This intermediate code is in the second step compiled, using the \forester's
 \emph{Compiler} module, into its representation in the \forester
 \emph{Microcode} (representing abstract transformers), which can be interpreted
-by the Virtual Machine.
+by the \forester's Virtual Machine.
 We give more details about the microcode in \secref{sec:microinstr}.
 
 The Virtual Machine is an abstract execution engine whose configuration contains
@@ -5089,12 +5089,12 @@ struct T {
 \end{quote}
 %
 The syntax of a~microinstruction is $\mathit{op}\ r_0,\ r_1,\ r_2$
-where $\mathit{op}$ is the name of an instruction and
+where $\mathit{op}$ is the operation code of the instruction and
 $r_0, r_1$, and $r_2$ are operands such that $r_0$ is the destination register and
 $r_1$ and $r_2$ are source registers or constants.
 A~microinstruction can have zero to three operands.
 The notation $[r+c]$ is used to access the selector with displacement~$c$ in a~label
-under the root referenced by register~$r$.
+under the root referenced by the register~$r$.
 % \bexmp\,
 % 	The statement \codix{x = (struct\ \ T*)\ \ malloc(sizeof(struct\ \ T));} is translated
 % 	to these microcode instructions:
@@ -5133,18 +5133,19 @@ The statement is translated into the following sequence of microinstructions:
 \end{quote}
 
 First, on line~1, the size of the newly allocated data is stored into
-register~$r_0$ (it is the size of \texttt{struct~T}, which is in this case~8).
+register~$r_0$ (it is the size of \texttt{struct~T}, which is $8$ in this case).
 Second, on line~2, a~new symbolic memory location of the size given by~$r_0$ is created
 and its symbolic address stored into~$r_1$.
 On line~3, we create a~new TA~$t$ with a~single transition representing
 a~freshly created instance of the type \texttt{struct~T} at the memory location
-give by~$r_1$ and append it to the FA representing the symbolic state.
+given by~$r_1$ and append it to the FA representing the symbolic state.
 The reference to the TA is stored into~$r_2$.
 The type of the instance is given by \verb=<next,data>[0:4:+0,4:4:+0]=, which
-gives names of the selectors and for each of them their offset (location in the memory cell),
-size (we assumed a~32-bit system, which uses 4\,B for a~pointer, and~4\,B
-\texttt{int}), and displacement (it is valid only for pointers and denotes offset
-at which the pointer points into the referenced memory location%
+gives names of the selectors and for each of them their offset (location in the memory cell,
+i.e., 0 for next and 4 for data),
+size (we assumed a~32-bit system, which uses 4\,B for a~pointer and~4\,B
+\texttt{int}), and displacement (it is valid only for pointers and denotes the target offset
+with which the pointer points into the referenced memory location\,--\,in our case 0 for the next pointer.%
 \footnote{%
 For instance, linked lists used within the Linux kernel do not point at the
 beginning of the linked data structure, but, instead, into its middle (the position of
@@ -5155,7 +5156,7 @@ On~line~4, a~reference to the TA representing the current function's stack frame
 (Note that in \forester, the program stack is represented using memory locations
 on the heap.)
 Finally, on line~5, the root reference to the TA~$t$ stored in register~$r_2$ is
-added to the~selector with displacement~12 (corresponding to the displacement of
+added to the~selector with the displacement~12 (corresponding to the displacement of
 the local variable~\texttt{x} in the current stack frame) in the TA referenced
 by register~$r_3$.
 The instruction \texttt{check} on line~6 checks that the heap is garbage free.
@@ -5183,25 +5184,25 @@ The instruction \texttt{check} on line~6 checks that the heap is garbage free.
 \section{Tutorial}\label{sec:tutorial}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\forester is can be obtained from its webpage \cite{foresterweb}, and the
+\forester can be obtained from its webpage \cite{foresterweb}, and the
 easiest way to run it is from the virtual machine~\cite{zenodo}.
-Once you boot the virtual machine (Ubuntu~16) you will find the \texttt{forester} folder
+Once the provided virtual machine (Ubuntu~16) is booted, the user will find the \texttt{forester} folder
 on the desktop.
 The folder contains compiled binaries (the \texttt{fa\_build} folder) of \forester and also its source code (the \texttt{fa} folder).
-For running the tool please read \texttt{README}.
-The instruction for compilation of the tool are in the \texttt{INSTALL} file.
+For running the tool, one can follow the instructions provided in the \texttt{README} file.
+Instructions for compilation of the tool from sources can then be found in the \texttt{INSTALL} file.
 
 %*******************************************************************************
 \subsection{Running \forester{} with BenchExec}
 %*******************************************************************************
 
 The BenchExec framework is a platform for evaluation of tools over a benchmark.
-Since it is used for evaluation of the SV-COMP competition it contains modules necessary
+Since it is used for evaluation of the SV-COMP competition, it contains modules necessary
 for running \forester.
-If you want to use BenchExec, you still need to compile \forester{} and provide the \texttt{include}
+If one wants to use BenchExec, it is still needed to compile \forester{} and provide the \texttt{include}
 directory, the files \texttt{libfa.so}, and \texttt{sv\_comp\_run.py} from the directory \texttt{fa\_build}.
-Please check the GitHub repository of BenchExec\footnote{\url{https://github.com/sosy-lab/benchexec/}} for further
-information about how to run a tool using the framework.
+It is suggested to check the GitHub repository of BenchExec\footnote{\url{https://github.com/sosy-lab/benchexec/}} for further
+information about how to run the tool using the framework.
 
 
 
@@ -5215,8 +5216,8 @@ the abilities of~\forester{}.
 The benchmark set consists of the tasks from~\cite{boxes13} and~\cite{vmcai17}.
 We selected the programs in order to illustrate the two crucial features
 of~\forester: the ability to learn boxes
-automatically and counterexample analysis with abstraction refinement.
-We also compare with \predator~\cite{predator11,dudka13sas}, a~many-times winner of
+automatically and to perform counterexample analysis with abstraction refinement.
+We also compare \forester with \predator~\cite{predator11,dudka13sas}, a~many-times winner of
 heap-manipulation-related categories of SV-COMP.
 
 The benchmarks are C~programs manipulating singly and doubly-linked list, trees, skip lists, and their combinations.
@@ -5333,7 +5334,7 @@ which roughly corresponds to the reachability relation among variables and
 cut-points in the heaps represented by a~forest automaton.
 This restriction was already used with the
 finite height abstraction in the versions of \forester
-from~\cite{habermehl:forest,boxes13}.
+from~\cite{forester11,boxes13}.
 
 Table~\ref{tab:times} also provides a comparison of the version of~\forester
 from~\cite{boxes13} with the version from~\cite{vmcai17}.
@@ -5403,8 +5404,8 @@ integer abstraction.
 We use ``SLL'' and ``DLL'' to denote singly and doubly-linked lists
 respectively.
 
-The cases described in the following list satisfy some (regular-expressible)
-safe invariant (if their status in the table is ``safe'') or contain an error
+The cases described in the following list satisfy some 
+safe invariant expressible usgin regular languages (if their status in the table is ``safe'') or contain an error
 (if their status is ``error'').
 As an error, we consider violation of memory safety properties, i.e.,  absence
 of $\nil$/undefined pointer dereference, invalid free, and presence of garbage.
@@ -5438,7 +5439,7 @@ For some data structures, we have both a~safe case and an~error case.
     its address is assigned to the optional pointer. We verify the relation of
     integer values and optional pointers for all nodes of the list.
   \item \emph{Queue(SLL/DLL)}: We create a list with nodes containing the integers 0, 1, 2, and~3.
-    The list can form sequences $0$, $01$, $012$, $0123^*$. A particular sequence is created
+    The list can form sequences $0$, $01$, $012$, $0123^+$. A particular sequence is created
     during construction of the list nondeterministically. We remember which sequence was actually created
     by an auxiliary integer variable. Then we traverse the list and check that
     the sequence formed by the list corresponds to the value of the auxiliary variable.
