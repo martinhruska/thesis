@@ -9050,63 +9050,64 @@ would need a major refactoring to reach a state where an easy maintainability an
 %Verification of pointer manipulating programs (shape analysis) is challenging.  
 %State spaces of pointer programs are infinite and complex: the entire dynamic memory is a program state. It is usually understood as a graph whose nodes are memory locations and edges are pointers. 
 %
-The recent 20 years have seen a rise of many approaches to verification of pointer programs, aka shape analysis, up to their industrial deployment (e.g. the technique of \cite{abduction11} in Facebook's Infer). 
+As we have already discussed in the previous chapters, the recent 20 years have seen a rise of many approaches to verification of pointer programs, aka shape analysis, up to their industrial deployment (e.g. the technique of \cite{abduction11} in Facebook's Infer).
 %
 The existing approaches are mainly distinguished by the formalism used to describe sets of memory configurations (shape graphs), which are essentially graphs with nodes being memory locations and edges being pointers.
 %
 The dominant position, previously held by frameworks such as \cite{pale,pale01},
 is currently occupied by more automated and scalable approaches based on separation
-logic (SL)~\cite{Reynolds:SepLogic:02,InvaderCAV07,sas07:chang_rival_necula} such as symbolic memory
-graphs~\cite{dudka13sas}, on forest automata~\cite{forester12}, and on graph
-grammars~\cite{Juggrnaut2015}.
+logic (SL)~\cite{Reynolds:SepLogic:02,InvaderCAV07,sas07:chang_rival_necula}, symbolic memory
+graphs~\cite{dudka13sas}, forest automata~\cite{forester12}, and graph grammars~\cite{Juggrnaut2015}.
 These approaches clearly identified the importance of local reasoning and modularity in reasoning about memory configurations as the key to scalability.
 
 One of the major bottlenecks in the field is extending the techniques to more complex data structures: with anything beyond relatively simple variants of lists and trees,
 %
-the existing approaches 
+the existing approaches
 struggle with scalability and precision or require a non-trivial users assistance.
 %
-None of the existing formalisms for describing shape graphs have all the following desirable properties.
-%\begin{enumerate}
-\begin{inparaenum}
+None of the existing formalisms for describing shape graphs have all the following desirable properties:
+\begin{enumerate*}
+%\begin{inparaenum}
 \item
-\emph{Expressiveness}: the ability to talk about variants variants lists, trees, structures such as skip-lists, threaded trees, their combinations and overlayer variants.   
+\emph{Expressiveness}\,--\,the ability to talk about variants of lists, trees, structures such as skip-lists, threaded trees, their combinations and overlayd variants.
 \item
-\emph{Local reasoning}: running a program statement on the abstract domain should have only a local effect, it should be possible to reason locally about the affected parts.
+\emph{Local reasoning}\,--\,running a program statement on the abstract domain should have a local effect only, it should be possible to reason locally about the affected parts.
 \item
-\emph{Effectiveness}: 
+\emph{Effectiveness}\,--\,
 %\mh{Wouldn't be Efficiency better word?}%
 %\lh{myslel jsem effectiveness jako rozhodnutelnost}%
  satisfiability and entailment should be efficiently decidable, as well as additional graph operations needed, e.g., in (higher-order) bi-abduction \cite{abduction11,locle:secondorder}.
 \item
-\emph{Abstraction and generalization learning mechanisms}: the ability to learn abstractions of inductive invariants with controlled precision.
-%\end{enumerate}
-\end{inparaenum}
+\emph{Abstraction and generalization learning mechanisms}\,--\,it should be possible automatically and efficiently learn abstractions of inductive invariants with controlled precision.
+\end{enumerate*}
+%\end{inparaenum}
 %
 
-Separation logic approaches provides the first two qualities, 
-expressiveness and local reasoning,
-but lacks in the other two. 
+Separation logic approaches provide the first two qualities,
+expressiveness and local reasoning
+but lack in the other two (despite the local reasoning that allows efficient implementation of some of the needed operations but not all of them).
 %
-Earlier verification methods are not sufficiently general their decision procedures handle mostly just lists. The approaches such as \cite{iosif_deciding_2014,enea_compositional_2014,ruzica_automating} are rather restricted and incomplete, while the general approaches \cite{iosif_treewidth_2013,matheja_treelike_2015} are theoretical and far from being efficiently implementable.
+Earlier verification methods based on separation logic are not sufficiently general, their decision procedures handle mostly just lists. Indeed, the approaches
+such as \cite{iosif_deciding_2014,enea_compositional_2014,ruzica_automating} are rather restricted and incomplete, while the general approaches \cite{iosif_treewidth_2013,matheja_treelike_2015} are theoretical and far from being efficiently implementable.
 %
 The recent works \cite{Katelaan:seplog,pagel,Iosif:CSL,Iosif:LPAR} finally came with an entailment for a large fragment of separation logic. These algorithms have not yet been tried within actual verification of pointer programs but are promising not only in the context of separation logic.
 
-SL approaches so far lack ways to automatically learning shape invariants without a help of user-predefined patterns. 
+SL approaches so far lack ways to automatically learn shape invariants without a help of user-predefined patterns.
 %
-The higher-order bi-abduction \cite{locle:secondorder} is a notable exception: it is capable of learning extremely complex shape invariants such as B+ trees, skip-lists, or threaded trees. 
+The higher-order bi-abduction \cite{locle:secondorder} is a notable exception: it is capable of learning extremely complex shape invariants such as B+ trees, skip-lists, or threaded trees.
 %
-It is, however, very sensitive to how the code is written (since it is, in a sense, transforming the recursive code to inductive shape predicates) and hence quite fragile, easily failing on seemingly easy examples such as natural implementations of a doubly-linked list reversal. 
+It is, however, very sensitive to how the code is written (since it is, in a sense, transforming the recursive code to inductive shape predicates) and hence quite fragile, easily failing on seemingly easy examples such as natural implementations of a doubly-linked list reversal.
 %Turning \cite{locle:secondorder} into a more robust method would require a decidable formalism for reasoning about sets of graphs
 %that would support standard as well as some special graph operations
 %together with abstraction/generalization methods capable of inferring inductive predicates.
 
-Outside separation logic, especially the approach based on Forest automata \cite{forester11,forester12,holik_boxes_2013,vmcai17} has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning, it is efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{svcomp15-forester} with counterexample guided refinement loop. The formalism however suffers from some deficiencies, such as that expressible classes shape graphs are limited and that it is not closed under union.
+Outside separation logic, especially the approach based on forest automata \cite{forester11,forester12,holik_boxes_2013,vmcai17} has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning and has potential to be efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{svcomp15-forester} with counterexample guided refinement loop. The formalism, however, suffers from some deficiencies as that the classes of shape graphs it can handle are relatively rich but still with limitations
+and that it is not closed under union (wihch complicates their manipulation during verification procedure, e.g., a fixpoint computing).
 
-We discuss here our ongoing work on developing a new graph formalism in the spirit of Forest automata that would remedy their weaknesses.
+We discuss here our work on developing a new graph formalism in the spirit of forest automata that would remedy their weaknesses.
 %
-We present main ideas on which such formalism can be built. 
-First, we explain how graphs can be encoded into trees and tree automata (as a variation on tree decomposition of graphs \cite{Courcelle} and also the formalism used in \cite{iosif_treewidth_2013,iosif_deciding_2014}).
+We present main ideas on which such a formalism can be built.
+First, we explain how graphs can be encoded into trees and tree automata (as a variation on the tree decomposition of graphs \cite{Courcelle} and also the formalism used in \cite{iosif_treewidth_2013,iosif_deciding_2014}).
 We then discuss basic ideas for an entailment procedure for the formalism.
 %
 We believe that this new formalism can eventually combine local reasoning of separation logic and forest automata, strong entailment procedures of \cite{Katelaan:seplog,pagel,Iosif:CSL,Iosif:LPAR}, efficiency of tree automata \cite{tacas10,almeida_reduction_2016,abdulla_computing_2008,libvata}, and powerful abstraction schemes of regular model checking.
@@ -9309,7 +9310,7 @@ Intuitively, a node of a tree represents a node in the tree decomposition, and t
 %
 
 \section{Towards Entailment}
-The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{tacas2010,almeida_reduction_2016,abdulla_computing_2008,libvata}) over tree automata encodings of tree decompositions.
+The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{tacas10,almeida_reduction_2016,abdulla_computing_2008,libvata}) over tree automata encodings of tree decompositions.
 The difficulty here is that a single graph has multiple decompositions and the tree automata may accept only some of them, hence simple language inclusion check may underapproximate the inclusion of sets of represented graphs (entailment).
 %
 We therefore propose means of saturating the tree automata languages with all possible tree decompositions of the represented graphs.
@@ -9327,7 +9328,7 @@ Computing the language inclusion of thus saturated automata is then a sound algo
 %We will concentrate on showing the result for local star connected decompositions only,
 %hence, unless said otherwise, decomposition in this section are assumed star local connected.
 
-We will now outline the operations. These operations are essentially meant to complete the \emph{rotation} operation of \cite{IosifRogalewiczVojnar:deciding}.
+We will now outline the operations. These operations are essentially meant to complete the \emph{rotation} operation of \cite{iosif_deciding_2014}.
 
 \begin{comment}
 \subsection{Decomposition Isomorphism}
@@ -9523,10 +9524,11 @@ and then we compute language inclusion between the saturated automata.
 Since language inclusion of tree automata is EXPTIME-complete, Conjectures 1 and 2 give an entailment algorithm singly exponential, assuming a fixed maximum tree-width $t$.
 
 \section{Conclusions and Future Work}
-We have presented basic outline of a formalism for representing shape graphs based on tree automata. The ideas should lead to an entailment algorithm, and conjectures that, if true, would imply that the algorithm is relatively fast assuming fixed maximum tree-width of the graph representations.
+We have presented a basic outline of a formalism for representing shape graphs based on tree automata. The ideas should lead to an entailment algorithm which is relatively fast assuming fixed maximum tree-width of the graph representations if the proposed conjectures are true.
 
-We plan to perfect these ideas and to prove Conjectures 1 and 2. The conjectures are somewhat optimistic, but not in a direct contradiction with the recent 2-EXPTIME-hardness result of \cite{Iosif:LPAR}. If the conjectures turn out to be false, we wish to search for (1) restrictions under which they are true, and/or (2) to prove termination of the described entailment algorithm regardless its complexity.
-Our long term plan is to develop a shape analysis framework based on this formalism and entailment check in the spirit of \cite{holik_boxes_2013} and also \cite{locle:secondorder}.
+In the future, the Conjectures 1 and 2 need to be proven. The conjectures are somewhat optimistic but not in a direct contradiction with the recent 2-EXPTIME-hardness result of \cite{Iosif:LPAR}. If the conjectures turn out to be false, one could search for (1) restrictions under which they are true and/or (2) one could try to show that the algorithm is efficient in practice (possible
+combined with some heuristics) despite its complexity.
+In the long term plan, one could develop a shape analysis framework based on this formalism and entailment check in the spirit of \cite{holik_boxes_2013} and also \cite{locle:secondorder}.
 
 %their saturation is polynomial with a fixed maximum tree-width. Since tree automata inclusion is EXPTIME-complete, the entailment would be fixed parameter EXPTIME-complete with the parameter being the maximum tree-width. 
 %
