@@ -9680,27 +9680,45 @@ In the long term plan, one could develop a shape analysis framework based on thi
 
 \chapter{Shape Analysis based on SMT Solving}
 \label{ch:fmcad}
-Apart from automata based approach the author of this thesis participated in work on shape analysis
-based on SMT solving.
-Although we are not the main authors and have a rather minor share in this work (published in \cite{fmcad18})
-we add it here to give another perspective on shape analysis.
-We provide with an overview of the approach. For a full technical description please check \cite{fmcad18}.
+Apart from the automata-based approach as described in the previous chapters, the author of this thesis participated
+in also in development of a new shape analysis based on SMT solving \cite{fmcad18}.
+Although the author of this thesis has a minor share on the work, it is presented
+here since it gives yet another perspective on shape analysis.
+However, we provide an overview of the approach only. For a full technical description please check \cite{fmcad18}.
 
-The verification method is based on describing state space of a program w.r.t. to a property of interest
-using system of logic formulae and so called templates which describes state space of program using SMT solver.
-The templates are special logic formulae and are conceptually similar to abstract domain
-in abstract interpretation.
-They are manually crafted to capture only certain aspects of an analysed program
-what makes analyses computationally feasible.
-Therefore we call templates (abstract) domains in the rest of the chapter.
+The verification method is based on representing the state space of the program being verified w.r.t. the property of interest
+using a first order formula over a suitable combination of SMT theories that represents both the program in SSA form, a set of
+invariants based on predefined templates (proposed for various domains of data), and the property of intereset.
+Templates manually crafted logic formulea to capture only certain aspects of an analysed program
+which makes the analyses computationally quite efficient.
+An example of such template may be formula $\bigwedge_{i} x_i \leq d_i$ where $x_i$ are the program
+variables and $d_i$ are templates parameters for which analysis should find constant values.
+From perspective of abstract interpretation, the templates parameters (the $d_i$ values in the previous example)
+are \emph{abstract values} representing more concrete states of the verified program.
+Similarly, the templates may be viewed as abstract domains from this perspective 
+and we use this term to speak about templates in the rest of chapter.
+
+The template-based representation of state space of program is then used within~the $k$I$k$I algorithm \cite{kiki}.
+The algorithm is based on $k$-induction \cite{kind} which unwinds transition relation representing program to the depth $k$
+in the $k$-th iteration.
+For each depth~$k$ of unwinding, there is inferred $k$-inductive invariant (using the templates described above).
+The invariant is added to a set of so far inferred invariants and the algorithm
+tries to prove safety of program using the invariants.
+If it cannot be proved, the algorithm tries to find counterexample in the current unwinding.
+If the counterexample is found, it is reported to user, otherwise the unwinding $k$ is incremented and
+the algorithm continues.
+
+The verification method using template-based representation of program state space and $k$I$k$I algorithm is
+implemented in the 2LS tool.
+
 
 The main contributions of this work are:
 \begin{compactenum}
 \item We propose a novel abstract template domain for reasoning over
   heap-allocated data structures such as singly and doubly linked
-  lists using a template-based parameter synthesis engine.
-\item Since we designed our domain in existing framework for template-based
-  verification we can build product and power domain combinations
+  lists.
+\item Since we designed our domain in the template-based
+  verification framework of 2LS, we can build product and power domain combinations
   of our heap domain with structural domains (e.g.\ trace partitioning) and
   value domains such as template polyhedra that capture the content of
   data structures.
@@ -9708,30 +9726,24 @@ The main contributions of this work are:
   tool for C~programs. We demonstrate the power of the proposed domain
   on benchmarks, which require combined reasoning about
   the shape and content of data structures, showing that other tools, which
-  performed well in SV-COMP, cannot handle these examples.
+  performed well in the international verification competition SV-COMP, cannot handle these examples.
 \end{compactenum}
 
-In this chapter, we firstly describe the verification method and then the domain for shape
-analysis which we designed.
+In this chapter, we firstly describe the template-based verification method and then the domain for the shape
+analysis in whose design we participated.
 
 \section{Template-based Program Verification}
 
 In template-based program verification, 
-a state of a program is a logical interpretation of logical variables
-corresponding to each program variable. A set of states can be described using
-a formula---states in the set are defined by models of the formula. Given a
-vector of variables $\vx$, the predicate $\fminit(\vx)$ describes
-the initial states. A transition relation is described as a formula
-$\fmtrans(\vx, \vxp)$.
+a set of program states is described using
+a formula built using suitable templates---states in the set are defined by models of the formula. Given a
+vector of variables $\vx$, let the formula $\fminit(\vx)$ describe
+the initial states. Futher, let $\fmtrans(\vx, \vxp)$ be a a describing the transition relation.
+Finally, let $Err(\vx)$ be a formula describing error states.
 
-From these, it is possible to determine the set of reachable states as the
-least fixed-point of the transition relation starting from the states described
-by $\fminit(\vx)$. This is, however, difficult to compute, so instead, we use an
-\emph{inductive invariant}.
-A verification task requires showing that the set of reachable
-states does not intersect with the set of error states $\err(\vx)$.
-Using the concept of inductive invariants and  existential second-order
-quantification ($\exists_2$), we can formalise it as:
+Using $\inv(\vx)$ to refor for an (inductive) invariant of the system,
+the verification task can be reduced to the following second-order
+quantification ($\exists_2$):
 \begin{equation}\label{eq:2ls}
 \begin{split}
 \exists_2 \inv . \; \forall \vx, \vxp . \; 
@@ -9741,15 +9753,14 @@ quantification ($\exists_2$), we can formalise it as:
 \end{split}
 \end{equation}
 
-The above equitation would need a solver able to deal with second-order logic quantification,
-however, there are currently no general and efficient solvers able to do it.
-Therefore we reduce the problem to iterative application of a first-order solver
-by restriction of inductive invariant $\inv$ to $\templ(\vx, \vdelta)$ where $\templ$ is
-a fixed expression (a so-called \emph{template}) over program
-variables $\vx$ and template parameters~$\vdelta$.
-Template captures only properties of interest for a certain analysis (which corresponds
-to choice of an abstract domain in abstract interpretation).
-The resulting first order search is following:
+The above formula would, however, need a solver able to deal with second-order logic quantification
+and there are currently no general and efficient solvers able to do it.
+Therefore, the problem is reduced to an iterative application of a first-order solver
+by restricting the inductive invariant $\inv$ to $\templ(\vx, \vdelta)$ where $\templ$ is
+a template formula over program variables $\vx$ and template parameters~$\vdelta$.
+The template should ideally capture only properties of interest for a certain analysis (which corresponds
+to the choice of an abstract domain in abstract interpretation).
+The resulting first-order verification task is therefore following:
 \begin{equation}\label{eq:formula-templates}
 \begin{split}
 \exists \vdelta . \; \forall \vx, \vxp . \; & 
@@ -9759,8 +9770,9 @@ The resulting first order search is following:
 \end{split}
 \end{equation}
 
-Finally, since quantifier alternation is a problem for current SMT solvers
-we iteratively search for the negated formula:
+Finally, since quantifier alternation is a problem for current SMT solvers,
+one iteratively chose different values of $\vd$ and
+checks unsatisfiability for the negated formula:
 \begin{equation}\label{eq:templ_neg}
 \begin{split}
 \exists \vx, \vxp .\; &
@@ -9770,15 +9782,15 @@ we iteratively search for the negated formula:
 \end{equation}
 
 \subsection{Program Encoding}
-We encode the program into a formula representing a specific \emph{static single assignment form} (SSA).
+The program is encoded into a formula representing a specific \emph{static single assignment form} (SSA).
 As usual, we use a fresh copy~$x_i$ of each variable~$x$ for each program location~$i$
 where the value of~$x$ is modified.
 In this encoding, special variables called \emph{guards} are used to track the control flow of the program
-in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ which value
+in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ whose value
 encodes whether the program location is reachable.
 
-To achieve acyclicity of the SSA, we cut the path coming from the end of the loop.
-We then represent the value of each variable $x$ at the loop head using a
+To achieve acyclicity of the SSA, each the path is cutted coming from the end of some loops.
+The value of each variable $x$ at the loop head is then represented using a
 \emph{phi variable} $x^{phi}$ whose value is defined by a non-deterministic
 choice between the value coming from before the loop, say $x_0$, and the
 value coming from the end of the loop. The latter value is represented by a
@@ -9788,14 +9800,15 @@ $x^{phi} = g^{ls} ~?~ x^{lb} : x_0$ where $g^{ls}$ is a so-called
 non-deterministic choice. 
 The effect of the loop is overapproximated and 
 the value of the loop-back variable $x^{lb}$ is initially unconstrained
-and later constrained by the derived candidate loop invariants
+and later constrained by the derived candidate loop invariants.
 
 \section{Template domain for Shape Analysis}
-We design a template domain which are used in the described framework to
-derive \emph{loop invariants} of the analysed programs.
-Templates are also used to constrain values of the \emph{loop-back variables} that are
-used in the SSA-based program encoding to over-approximate values returning from
-the end of the loop to the loop head.
+In \cite{fmcad18}, we design a template domain which is used in the described framework to
+derive \emph{loop invariants} of the programs with dynamic pointer -linked data structures.
+The domain is particulary useful for programs with various kinds of lists as shown in our experiments.
+% Templates are also used to constrain values of the \emph{loop-back variables} that are
+% used in the SSA-based program encoding to over-approximate values returning from
+% the end of the loop to the loop head.
 %
 Since we are interested in describing shapes of heaps,
 we limit our shape domain to the set $\ptrlb$ of all \emph{loop-back pointers}. 
@@ -9829,7 +9842,7 @@ each row corresponding to one loop-back pointer from the set $\ptrlb$.
 A template row $\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$ describes the
 may-point-to relation for the loop-back pointer $\ssaplb{i}$.
 %
-The parameter $d_{\ssaplb{i}} \subseteq \addr$ of the row (a~so-called
+The parameter $d_{\ssaplb{i}} \subseteq \addr$ of the row (i.e., the
 \emph{abstract value of the row}) specifies the set of all addresses from the
 set $\addr$ that $p$ may point to at the location $i$.
 %
@@ -9837,7 +9850,7 @@ The template row can thus be expressed as the quantifier-free formula:
 \begin{equation}\label{eq:templ_row}
 \begin{split}
 \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv (\bigvee_{a \in
-d_{\ssaplb{i}}} \ssaplb{i} = a)
+d_{\ssaplb{i}}} \ssaplb{i} = a).
 \end{split}
 \end{equation}
   
@@ -9845,15 +9858,15 @@ Abstract values of template rows corresponding to pointer fields of abstract
 dynamic objects allow the domain to describe unbounded linked paths in the heap,
 such as list segments.
 
-In order to use the base shape domain in our approach, we have to augment it
+In order to use the base shape domain within the 2LS approach, we have to augment it
 with information about the guard variables that encode the program's control
 flow in the SSA. The guards express when an appropriate loop-back control edge
 is executed and the loop-back pointer has a defined value\footnote{Using the base domain without the guard variables would be sound. However, it
 would produce very imprecise results since the abstract value would
 need to cover even states in which the loop-back edge was not taken.}.
 %
-A row of a \emph{guarded shape template} is defined
-as a formula:
+We define a row of a \emph{guarded shape template}
+as the formula
 \begin{equation}\label{eq:templ_row_guard}
 \begin{split}
 \templ^G_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv G_{\ssaplb{i}}
@@ -9870,7 +9883,7 @@ A shape template $\templ^G$ with guards is then a conjunction:
 \begin{equation}\label{eq:templ_guard}
 \begin{split}
 \templ^G \equiv \bigwedge_{\ssaplb{i} \in \ptrlb}
-\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}})
+\templ^G_{\ssaplb{i}}(d_{\ssaplb{i}}).
 \end{split}
 \end{equation}
 
