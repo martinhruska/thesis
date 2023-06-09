@@ -9894,7 +9894,7 @@ The row guard $G_{\ssaplb{i}}$ is a conjunction of the following guards:
 \begin{itemize} 
 
   \item The guard $\ssavar{g}{lh}{j}$ linked with the head of the loop
-    $l$ located at program location~$j$, encoding that the
+    $l$ located at a program location~$j$, encoding that the
     loop $l$ is reachable.
 
   \item The guard $\ssagls{i}$ linked with the use of $\ssaplb{i}$. The value of
@@ -9903,42 +9903,147 @@ The row guard $G_{\ssaplb{i}}$ is a conjunction of the following guards:
 
   \item If $\ssaplb{i}$ describes a pointer field of some abstract
     dynamic object (i.e.\ it has the form $\ssalb{\dynobj{j}{k}.f}{i}$
-    for some $\dynobj{j}{k} \in \dobj, f \in \fld$ where $\dobj$ is a set of all abstract dynamic object
+    for some $\dynobj{j}{k} \in \dobj, f \in \fld$ where $\dobj$ is a set of all abstract dynamic objects
     and $\fld$ a set of all fields of abstract objects), we also use the
     guard $\ssavar{g}{\dynobj{j}{k}}{}$ linked with the allocation of
-    $\dynobj{j}{k}$ at program location~$j$. This guard conjoins the
-    guard expressing reachability of program location~$j$ with the
+    $\dynobj{j}{k}$ at a program location~$j$. This guard conjoins the
+    guard expressing reachability of the program location~$j$ with the
     object-select guards $\ssagosij{j}{l}$ and their negations
     denoting allocation of the $k$-th materialisation $\dynobj{j}{k}$ of the
     object allocated at~$j$.
 \end{itemize}
 
-Once we assemble a set of templates describing possible we derive shape invariants
-using SMT solver (since shape invariants are models of the logic formulae put into
-SMT solver).
+Once we assemble a set of templates describing possible shapes of heap we derive shape invariants
+using an SMT solver (since shape invariants are models of the logic formulae put into
+the SMT solver).
 
 \section{Conclusion}
 The previous sections provided a brief and dense introduction to the template-based
-approach to static analysis and it extension by shape analysis.
+approach to static analysis and its extension by shape analysis.
 
-Beyond the described aspects we needed to design operations \emph{dynamic memory allocation}
+Beyond the described aspects, we needed to design operations of \emph{dynamic memory allocation}
 (\texttt{malloc}), \emph{reading through dereferenced pointers}, and \emph{memory free} in
-our abstract template domain to be able to model semantics of programs.
-As we mentioned above, we also designed combination of the described abstract domain
-for shape analysis with others already existing domains.
+our abstract template domain to be able to model the semantics of C programs.
+As we mentioned above, we also designed a combination of the described abstract domain
+for shape analysis with other already existing domains.
 
 The last part of the described method is checking that
 a program contains no \emph{absence of null pointer dereferences},
 \emph{free safety}, and \emph{absence of memory leaks}.
-E.g., to check absence of $\nullptr$ pointer dereference, we verify the assertion
-$\ssa{p}{i} \neq \nullptr$, where $\ssa{p}{i}$ is the version of $p$
-valid at a program location $i$, for each expression $*p$ occurring in every $i$.
-
+For instance, to check absence of a $\nullptr$ pointer dereference on a pointer $p$, we verify the assertion
+$\ssa{p}{i} \neq \nullptr$ where $\ssa{p}{i}$ is the version of $p$
+valid at a program location $i$, for each expression $*p$ occurring at every $i$.
 A detailed description of abstract memory operations or how all three memory safety properties are checked
-can be found in \cite{fmcad18} as well as empirical evaluation of our
-method on benchmark of heap manipulating programs.
-Their full description is out of scope of the thesis and since
-we are not the main authors of the approach we limited ourselves to this brief overview.
+can be found in \cite{fmcad18}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[t]
+\captionsetup{font=small}
+\caption{Comparison of 2LS using the proposed method with the previous version of the tool over the SV-COMP benchmark.}
+\vspace*{-1mm}
+\label{tab:2ls-old}
+\centering
+\scriptsize
+\bgroup
+\def\arraystretch{1.2}
+\begin{tabular}{|l| r | r | r | r | r | r | r | r | r | r | r | r | r | r | r | r | r | r | r | r |}
+\hline
+& \multicolumn{2}{c|}{\textbf{RS-ControlFlow}}  & \multicolumn{2}{c|}{\textbf{RS-Heap}} & \multicolumn{2}{c|}{\textbf{MS-Heap}} & \multicolumn{2}{c|}{\textbf{MS-LinkedLists}} & \multicolumn{2}{c|}{\textbf{MS-Other}}\\\hline
+        & cpu (s) & score & cpu (s) & score & cpu (s) & score & cpu (s) & score & cpu (s) & score \\\hline
+ 2LS     & 252  & 64 & 41    & 106  & 17.5 & 59   & 107  & 7    & 29 & 46\\\hline
+2LS-old & 1400 & 45 & 53  & -161 & 190 & -194 & 96 & -182 & 23 & 46\\\hline
+\end{tabular}
+\egroup
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To conclude this chapter, we provide a brief overview of an empirical evaluation of our method.
+First, we did an experiment showing how the proposed method improved performance of 2LS
+on benchmarks of the software verification competition SV-COMP,
+particulary on the sub-categories \emph{ReachSafety-ControlFlow} and \emph{ReachSafety-Heap},
+where a reachability of an error condition was checked and on the sub-categories
+\emph{MemSafety-Heap}, \emph{MemSafety-LinkedLists}, \emph{MemSafety-Others}
+where absence of invalid pointer dereference,
+invalid free, and memory leaks.
+We used BenchExec~\cite{BLW15} to run the experiments with
+time limit set to $900$\,s and memory limit to $15$\,GB.
+We compared the implementation of the described method to the version of 2LS from SV-COMP'17 without
+the proposed shape analysis.
+
+The results are shown in Table \ref{tab:2ls-old}.
+As one can see the old version of 2LS had even a negative score due to
+missing shape analysis which often lead to reporting incorrect results.
+ 
+2LS with our analysis obtained a positive score in all subcategories and it is
+also faster in some of them.
+
+Unfortunately, we are sill unable to compete with the best tools of SV-COMP'18 in the heap categories.
+They support the bigger set of the C language features such pointer arithmetics or
+manipulation with arrays and they use the domains for shape analysis with higher expressive power
+so they can hand various kinds of trees or nested lists what is currently beyond expressivity
+of our approach.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\newcolumntype{g}{>{\columncolor{LightCyan}}r}
+\begin{table*}[t]
+\captionsetup{font=small}
+\caption{Comparison of 2LS with other tools on examples combining unbounded data structures and their stored data.}
+\vspace*{-1mm}
+\label{tab:others}
+\centering
+\scriptsize
+\bgroup
+\def\arraystretch{1.2}
+\begin{tabular}{|l| g | r | r | r | r | r |}
+\hline
+& \textbf{2LS}  & \textbf{CPA-Seq } & \textbf{PredatorHP} & \textbf{Forester}  & \textbf{Symbiotic} & \textbf{UAutomizer}  \\\hline
+Calendar          & 2.88   & timeout & false   & unknown  & timeout  & timeout  \\\hline
+Cart              & 23.70  & timeout & false   & unknown  & timeout  & timeout  \\\hline
+Hash Function     & 3.65   & 8.51    & unknown & unknown  & unknown  & timeout  \\\hline
+MinMax            & 5.14   & timeout & false   & unknown  & timeout  & timeout  \\\hline
+Packet Filter     & 431.00 & timeout & timeout & unknown  & unknown  & timeout  \\\hline
+Process Queue     & 6.62   & 7.68    & timeout & unknown  & timeout  & timeout  \\\hline
+Quick Sort        & 18.20  & 3.50    & timeout & unknown  & unknown  & 5.75     \\\hline
+Running Example   & 1.24   & timeout & timeout & unknown  & timeout  & unknown  \\\hline
+SM1               & 0.53   & timeout & 0.31    & false    & timeout  & timeout  \\\hline
+SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    \\\hline
+\end{tabular}
+\egroup
+\vspace{-1.5em}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
+However, the main comparative advatenge of our work is combining different analysis,
+particulary we can combine value and shape analysis.
+We created a benchmark consisting of $10$ program in the C language.
+There programs manipulates unbounded dynamic data structure with their values.
+All of these programs are correct.
+We compared our approach to the various state-of-the-art tools with the following results.
+As one can see in Table~\ref{tab:others}, 2LS outperforms the other tools significantly.
+Numbers in the table represent CPU time in seconds needed for the
+analysis of the example.
+%
+To evaluate, we performed an experiment comparing our tool with the
+leaders of SV-COMP'18 in the heap-related categories, on tasks
+combining manipulation of unbounded data structures with a need to
+reason about the data stored in these structures.
+The value \emph{unknown} means that the tool was not able to analyse
+the task.
+
+The tools like \emph{Forester}~\cite{HHRSV11} and \emph{Predator}~\cite{DPV13} were
+limited by their inability to resaon about the stored in the lists.
+On the other hand, more general tools such as \emph{Symbiotic}~\cite{CVS18} or
+\emph{Ultimate Automizer}~\cite{HCDGHLNM18} often timed out since they
+probably lack an efficient abstraction for combination of shape and
+value properties. \emph{CPAChecker}~\cite{BK11} (in the
+\emph{CPA-Seq} configuration from SV-COMP'18) solved four tasks but
+times out on the rest.
+
+The empirical evaluation shows that our method has potential outperform the
+state-of-the-art tools and it may be a promising direction in the field of shape
+analysis.
+As we mentioned before, the full description of the method can be found in \cite{fmcad18}
+and we provided only a brief overview since we are not the main authors of it.
 
 \part{Automata in Software Testing}
 
