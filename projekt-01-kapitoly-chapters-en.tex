@@ -9858,6 +9858,74 @@ Abstract values of template rows corresponding to pointer fields of abstract
 dynamic objects allow the domain to describe unbounded linked paths in the heap,
 such as list segments.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstset{language=C,
+        basicstyle=\scriptsize{\fontfamily{ppl}\selectfont},
+        numbers=left,numbersep=5pt,numberstyle=\tiny}
+\begin{lstlisting}[caption={A running example}, label={lst:example},
+                   mathescape=true, basicstyle=\footnotesize\ttfamily,
+                   float=tp,floatplacement=tbp,abovecaptionskip=0mm,
+                   belowskip=-4mm,  xleftmargin=.33\textwidth, xrightmargin=.1\textwidth]
+typedef struct node {
+  int val;
+  struct node *next;
+} Node;
+
+int main() {
+  Node *p, *list = malloc(sizeof(Node));
+  Node *tail = list;
+  *list = {.next = NULL, .val = 10};
+  while (__VERIFIER_nondet_int()) {
+    int x = __VERIFIER_nondet_int();
+    if (x < 10 || x > 20) continue;
+    p = malloc(sizeof(Node));
+    *p = {.next = NULL, .val = x};
+    tail$\rightarrow$next = p; tail = p;
+  }
+}
+\end{lstlisting}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To illustrate how template domain represents an unbounded data structure we provide an example in Listing~\ref{lst:example}.
+It contains a program in the C programming language
+extended by the function \lstinline{__VERIFIER_nondet_int()} which generates a random number.
+The program contains a structure representing a node of singly-linked list
+with one integer value and the main function allocating a list of arbitrary length.
+In each iteration of the cycle in the main function, a random number is generated and if the number is in range
+from $10$ to $20$, there is also allocated a node with the generated value
+and this node is added to the list.
+%
+
+Our template domain will represent the shape invariants of the cycle from the example in the following way.
+Objects in the segment are linked through the pointer field \texttt{next}, and
+they are represented by the abstract dynamic objects $\dynobj{13}{1}$ and
+$\dynobj{13}{2}$.
+Please note that the \texttt{malloc} on Line~13 must be represented by two objects
+$\dynobj{13}{1}$ and $\dynobj{13}{2}$ as, e.g.\ on Line~14, variables
+\texttt{tail} and \texttt{p} may point to different concrete objects allocated
+by this \texttt{malloc} call.
+
+%
+The shape of this segment will be described by an
+invariant for the first loop, specifically by the two template rows for
+$\ssalb{\dynobj{13}{1}.next}{16}$ and $\ssalb{\dynobj{13}{2}.next}{16}$.
+%
+They will give us the formula $\wedge_{l=1,2}
+\templ^S_{\ssalb{\dynobj{13}{l}.next}{16}}(\{\&\dynobj{13}{1}, \&\dynobj{13}{2},
+\nullptr\})$ where the rows $\templ^S_{\ssalb{\dynobj{13}{l}.next}{16}}$ are the
+formulae $\ssalb{\dynobj{13}{l}.next}{16} = \&\dynobj{13}{1} \vee
+\ssalb{\dynobj{13}{l}.next}{16} = \&\dynobj{13}{2} \vee
+\ssalb{\dynobj{13}{l}.next}{16} = \nullptr$.
+%
+These formulae say that the \texttt{next} fields of both $\dynobj{13}{1}$ and
+$\dynobj{13}{2}$ may either point to one of the objects themselves or to
+$\nullptr$.
+%
+This describes an unbounded linked path in the heap composed of
+objects abstracted by $\dynobj{13}{1}$ or $\dynobj{13}{2}$ and terminated by
+$\nullptr$.
+
+
 In order to use the base shape domain within the 2LS approach, we have to augment it
 with information about the guard variables that encode the program's control
 flow in the SSA. The guards express when an appropriate loop-back control edge
@@ -9917,6 +9985,21 @@ Once we assemble a set of templates describing possible shapes of heap we derive
 using an SMT solver (since shape invariants are models of the logic formulae put into
 the SMT solver).
 
+We provide again an example provide more intuition about guards.
+Consider again the program from Listing~\ref{lst:example},
+the corresponding guards for the two template rows of that invariant are
+$G_{\ssalb{\dynobj{13}{1}.next}{16}} = \ssag{10} \wedge \ssagls{16} \wedge
+(\ssag{13} \wedge \ssagos{13})$ and $G_{\ssalb{\dynobj{13}{2}.next}{16}} =
+\ssag{10} \wedge \ssagls{16} \wedge (\ssag{13} \wedge \neg \ssagos{13})$.
+%
+Here, the loop head guard is $\ssag{10}$, the loop-select guard is
+$\ssagls{16}$, and the allocation guard is given by the guard of the
+reachability of the allocation site $\ssag{13}$ and by the appropriate
+object-select guards ($\ssagos{13}$ for $\dynobj{13}{1}$ and $\neg \ssagos{13}$
+for $\dynobj{13}{2}$, respectively).
+
+
+
 \section{Conclusion}
 The previous sections provided a brief and dense introduction to the template-based
 approach to static analysis and its extension by shape analysis.
@@ -9959,12 +10042,12 @@ can be found in \cite{fmcad18}.
 
 To conclude this chapter, we provide a brief overview of an empirical evaluation of our method.
 First, we did an experiment showing how the proposed method improved performance of 2LS
-on benchmarks of the software verification competition SV-COMP,
-particulary on the sub-categories \emph{ReachSafety-ControlFlow} and \emph{ReachSafety-Heap},
-where a reachability of an error condition was checked and on the sub-categories
+in benchmarks of the software verification competition SV-COMP,
+particulary in the sub-categories \emph{ReachSafety-ControlFlow} and \emph{ReachSafety-Heap},
+where a reachability of an error condition was checked and in the sub-categories
 \emph{MemSafety-Heap}, \emph{MemSafety-LinkedLists}, \emph{MemSafety-Others}
 where absence of invalid pointer dereference,
-invalid free, and memory leaks.
+invalid free, and memory leaks were checked.
 We used BenchExec~\cite{BLW15} to run the experiments with
 time limit set to $900$\,s and memory limit to $15$\,GB.
 We compared the implementation of the described method to the version of 2LS from SV-COMP'17 without
@@ -9973,14 +10056,14 @@ the proposed shape analysis.
 The results are shown in Table \ref{tab:2ls-old}.
 As one can see the old version of 2LS had even a negative score due to
 missing shape analysis which often lead to reporting incorrect results.
- 
 2LS with our analysis obtained a positive score in all subcategories and it is
 also faster in some of them.
 
 Unfortunately, we are sill unable to compete with the best tools of SV-COMP'18 in the heap categories.
 They support the bigger set of the C language features such pointer arithmetics or
-manipulation with arrays and they use the domains for shape analysis with higher expressive power
-so they can hand various kinds of trees or nested lists what is currently beyond expressivity
+manipulation of arrays.
+Some of the tools also use the domains for shape analysis with higher expressive power
+so they can handle various kinds of trees or nested lists what is currently beyond expressivity
 of our approach.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
@@ -10016,21 +10099,19 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 However, the main comparative advatenge of our work is combining different analysis,
 particulary we can combine value and shape analysis.
 We created a benchmark consisting of $10$ program in the C language.
-There programs manipulates unbounded dynamic data structure with their values.
+These programs manipulates unbounded dynamic data structure and the verification tools also need to
+reason about the data stored in these structures.
 All of these programs are correct.
-We compared our approach to the various state-of-the-art tools with the following results.
-As one can see in Table~\ref{tab:others}, 2LS outperforms the other tools significantly.
+We compared our approach to the various leaders of SV-COMP'18 in
+the heap-related categories with the the results shown in Table~\ref{tab:others}.
+As one can see, 2LS outperforms the other tools significantly.
 Numbers in the table represent CPU time in seconds needed for the
 analysis of the example.
-%
-To evaluate, we performed an experiment comparing our tool with the
-leaders of SV-COMP'18 in the heap-related categories, on tasks
-combining manipulation of unbounded data structures with a need to
-reason about the data stored in these structures.
-The value \emph{unknown} means that the tool was not able to analyse
+The value \emph{unknown} means that a tool was not able to analyse
 the task.
+%
 
-The tools like \emph{Forester}~\cite{HHRSV11} and \emph{Predator}~\cite{DPV13} were
+The tools like \emph{Forester} and \emph{Predator}~\cite{dudka13sas} were
 limited by their inability to resaon about the stored in the lists.
 On the other hand, more general tools such as \emph{Symbiotic}~\cite{CVS18} or
 \emph{Ultimate Automizer}~\cite{HCDGHLNM18} often timed out since they
