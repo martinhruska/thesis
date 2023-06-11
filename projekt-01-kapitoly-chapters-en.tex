@@ -10128,21 +10128,28 @@ and we provided only a brief overview since we are not the main authors of it.
 
 \part{Automata in Software Testing}
 
-\chapter{Orchestrating Digital Twins for Distributed Manufacturing Execution Systems}
+%\chapter{Orchestrating Digital Twins for Distributed Manufacturing Execution Systems}
+\chapter{Generating Scenarios for Digital Twins of Distributed Manufacturing Execution Systems}
 \label{ch:eurocast}
 \section{Introduction}
 
-One of the main challenges of the Industry 4.0 is to develop secure and
-bug-free components, especially in distributed, manufacturing execution
-systems. These systems usually include manufacturing machines paired with
-controlling terminals, industrial control systems (ICS), and/or system that
-controls the whole manufactory process (manufactory execution system).
+In this chapter, we switch to our proposed usage of automata in the area of Industry 4.0.
+Industry 4.0 (or the fourth industrial revolution) is a trend pushing
+further cooperation between humans, computers, and machines in the industrial applications.
+In Industry 3.0, computers increased the level of automation in industrial production
+and so improved the efficiency of manufacturing.
+In Industry 4.0, the automation is pushed even further by allowing computers
+and machines to make autonomous decisions and control a part of production without human intervention.
+One of the main challenges of Industry 4.0 is to develop secure and
+bug-free components, especially in distributed manufacturing execution
+systems. These systems usually control an industrial production consisting of manufacturing machines paired with
+controlling terminals, industrial control systems (ICS), enterprise resource planning systen.
 Development and testing of such systems is quite complex because their
 components
 %
 \begin{inparaenum}[(1)]
 %
- \item work in distributed environment,
+ \item work in a distributed environment,
 %
  \item use different communication protocols, 
 %
@@ -10160,28 +10167,28 @@ Moreover, any bug or security issue may be quite costly which can be
 substantiated by the expected grow of the market of ICS security up to \$22.2
 billions by 2025~\cite{ref_market}.
 %
-Quality assurance teams usually utilize some form of test automation 
+Quality assurance teams working in this area usually utilize some form of test automation 
 %performing more test scenarios 
-while keeping effort spent on the testing itself.  Unfortunately, test
+while they still need to spent effort on the manual testing itself. Unfortunately, test
 automation of distributed manufacturing systems is hard for two main reasons.
 
 
-First, testing in a real-world environment (so called out-of-the-lab testing)
-is expensive.  Hence, we usually construct the so called digital twin:
+First, testing in a real-world environment (so-called out-of-the-lab testing)
+is expensive.  Hence, one usually constructs the so-called digital twin:
 a~virtual environment where components (such as production machines) are
-emulated or simulated to replicate the digital copy of manufacturing process.  
+emulated or simulated to create a digital copy of the manufacturing process.  
 %
 Such a~copy can then be used for testing in an~environment as close as possible
-to a real system.
+to the real system.
 
-The other problem is how to model the communication among number of quite
-different components common in manufacturing process.
+The other problem is how to model the communication among a number of quite
+different components common in a manufacturing process.
 %
-The communication within the system is often purpose-specific and requires
-strong domain knowledge. 
+The communication within the system is often purpose-specific and replicating it requires
+a strong domain knowledge. 
 %
-Hence, creating the automated test suite is complicated as it requires effort
-spent on precise test environment setup and deterministic test case
+Hence, creating the automated test suite is complicated as it requires a lot of effort
+spent on a precise test-environment setup and deterministic test-case
 description.
 
 In this work, we propose a generic framework for creating automated test suites
@@ -10191,7 +10198,7 @@ The framework analyses the communication captured from a run of the real
 system, learns a~model of the communication protocol and models of data sent.
 %
 Based on these models, we generate test scenarios that are used for
-orchestration of corresponding digital twin.
+orchestration of the corresponding digital twin.
 %
 In particular, we suggest to use such scenarios for automated testing of
 systems, e.g., when a new version of MES is being developed.
@@ -10199,74 +10206,74 @@ systems, e.g., when a new version of MES is being developed.
 \section{Framework for Generating Orchestration Scenarios}
 \label{sec:overview}
 
-We propose a generic framework that can be applied to various settings of
-distributed MES systems. In this paper, however, we will demonstrate it on
+In \cite{eurocast22}, on which this chapter is based,
+we proposed a generic framework that can be applied to various settings of
+distributed MES system and instantiated it for
 a~particular use case consisting of various types of nodes communicating using
 various protocols.
 %
 We assume the following infrastructure: the distributed system consists of an
-Enterprise Resource Planning (ERP) system, the MES system that controls the
-actual production, manufacturing machines and their corresponding terminals
+Enterprise Resource Planning (ERP) system, a MES system that controls the
+actual production, and manufacturing machines with their corresponding terminals
 used by human operators.  
 %
-We expect that the communication between particular components uses
+We expect that the communication between the particular components uses
 different protocols and data structures, e.g.: \begin{inparaenum}[(1)]
 %
-\item MES and ERP communicate using REST protocol with XML data, 
+\item MES and ERP communicate using the REST protocol with XML data, 
 %
-\item MES and Terminal communicate using REST protocol with JSON data, and 
+\item MES and terminal communicate using the REST protocol with JSON data, and 
 %
-\item MES communicates with machines using OPC-UA protocol\end{inparaenum},
-    although some minor manual tweaks for understanding specific-purpose data
-    might be necessary.
+\item MES communicates with machines using the OPC-UA protocol\end{inparaenum}.
+    % although some minor manual tweaks for understanding specific-purpose data might be necessary.
 
 %
 \begin{figure}[bt]
   \centering
   \includegraphics[scale=0.8]{figs/eurocast-diagram.pdf}
-  \caption{Scheme of our solution.}
+  \caption{A scheme of our solution for generating scenarions for orchestrating digital twins based on learning from logs of a real system.}
   \label{fig:tunis-diagram}
 \end{figure}
 
 An overview of our framework is shown in Figure~\ref{fig:tunis-diagram}.  
 %
 Our framework requires logs of communication collected from a~real-world
-system, e.g., with an older version of MES system under testing: the collected log
-usually represents either expected communication in the system, or a log of
+system, e.g., with an older version of the MES system under testing: the collected log
+usually represents either expected communication in the system or a log of
 communication that led to some incident.  
 %
-The log is in form of a~sequence of messages between pairs of communicating
-components logged with the timestamps of the communication and the data that
+The log is in the form of a~sequence of messages between pairs of communicating
+components logged with timestamps of the communication and the data that
 were transferred.
 %
-We derive two kinds of model based on this log: (1) model of the data
-transmitted in the messages, and (2) the model of the whole communication in
+We derive two kinds of models based on this log: (1) a model of the data
+transmitted in the messages, and (2) a model of the whole communication in
 the system.
 %
-To model communication, we convert the log to a~so called event calendar
-which provides efficient and direct manipulation with seen messages.
-Then, we eventually convert event the calendar to a finite automaton (where
-every event is a symbol) which is more abstract representation but provides
-options for postprocessing (e.g., by applying length abstraction to generate
-new test cases) or analyses (e.g., by searching for particular string
+To model the communication, we convert the log to a~so-called event calendar
+which provides efficient and direct manipulation with the seen messages.
+Then, we eventually convert the event calendar to a finite automaton (where
+every event is a symbol) which is a more abstract representation but provides
+options for postprocessing (e.g., by applying a length abstraction to generate
+new test cases) or analyses (e.g., by searching for a particular string
 representing an error behaviour).
 %
-From the derived (abstract) models, we generate a so called scenario: a
-sequence of concrete messages that will be sent in a real-world or simulated
+From the derived (abstract) models, we generate a so-called scenario: a
+sequence of concrete messages that will be sent into a real-world or simulated
 environment. 
 %
 A scenario is later used by a digital twin orchestrator to perform simulation
-of real system in digital twin.
+of a real system in a digital twin.
 %
-In our case, we use the Cryton tool~\cite{ref_cryton} to orchestrate simulated
+In our case, we use the Cryton tool~\cite{ref_cryton} to orchestrate the simulated
 environment. Other orchestrators that conform to our format of scenarios can be
 naturally used as well. 
 %
 % It requires as an input a configuration of a system infrastructure and the
 % mentioned the scenario.
 %
-Finally, based on the result of orchestration developers can observe whether
-the new version in a digital twin behaves as expected.
+Finally, based on the result of orchestration, developers can observe whether
+the new version in the digital twin behaves as expected.
 
 % An outline of the paper is following.  The unified representation of the
 % different message format is presented in the section \ref{sec:messages}.  A
@@ -10275,10 +10282,10 @@ the new version in a digital twin behaves as expected.
 % model of communication to a scenario for orchestration of digital twin is
 % given.
 
-The framework can also be quite easily extended to support the performance
+The framework can also be quite easily extended to support performance
 testing of the digital twins.
 %
-In particular, we propose to mine selected performance metrics (e.g., among
+In particular, we propose to mine selected performance metrics (among
 others, the duration of communications) from the captured logs.
 %
 The metrics are then used for comparison of runs from different environments or
@@ -10287,14 +10294,14 @@ from different versions to detect, e.g., anomalies in the performance.
 %We also developed an additional tool called \emph{Prefekt} implementing such
 %performance analysis.
 
-\paragraph{Related work.} There has been several different approaches for
-modelling communication in manufactory and deriving new test cases.
+\paragraph{Related work.} There exist different approaches for
+modelling communication in manufactoring systems and deriving new test cases.
 %
-\cite{csight} uses Finite Automata to model the communication in systems,
-however, their approach is limited to learning only fixed number of components.
+The work \cite{csight} uses finite automata to model the communication in the described systems,
+however, their approach is limited to learning a fixed number of components only.
 %
-Another approach is the process mining~\cite{procmin}, a mature technique for
-modelling event based system. We see the technique as not suited well for MES
+Another approach is the process mining approach~\cite{procmin}, a mature technique for
+modelling event-based systems. We see the technique as not suited well for MES
 systems as it analyses one-to-one communications and is restricted to a single
 thread per node~\cite{procmindist}.
 %
@@ -10304,70 +10311,74 @@ thread per node~\cite{procmindist}.
 Modelling of communication for anomaly detection~\cite{havlena} implements an
 approach based on probabilistic automata.  
 %
-The usual communication in manufactory is, however, mostly deterministic,
-hence, no probabilistic transitions are created in derived automaton.  
+The usual communication in factory is, however, mostly deterministic,
+hence, no probabilistic transitions are created in the derived automata.  
 %
-Finally, we can mention approaches of~\cite{prospex,icpn08,wcre09} which are
-research prototypes only and possible not mature enough for use case in
-real-world distributed systems.
+Finally, there some other approaches such as \cite{wcre09} (does not have available implementation
+and it is not clear from the experiments if the new test cases can be generated from an inferred model),
+\cite{prospex} (focuses on infering a state machine representing a communication
+protocol but does not consider more comunicating components of system neither
+an inner structure of comunicated messages),
+or \cite{icpn08} (which produce complex models from which it would be complicated to generate scenarios),
+but none of them fulfill all needs of this project.
 
-Beside modelling communication we need also to model and generate new messages.
-In our use case, the messages are in JSON and XML format.
-There are several tools which can generate testing data in the formats.
-One of them is \emph{DTM Data Generator for JSON} \cite{ref_dtm} which can
-generate testing JSON data having structure defined manually by user
-or derived from an example input document.
-It supports deriving relations in JSON document and contains domain
-specific built-in data generator (e.g., address, phones, or URLs).
-Moreover it can also combine more structures to new test cases.
+Beside modelling communication, we also need to model and generate new messages.
+In our use case, the messages are in the JSON and XML formats.
+There are several tools which can generate testing data in theese formats.
+One of them is the \emph{DTM Data Generator for JSON} \cite{ref_dtm} which can
+generate testing JSON data having a structure defined manually by the user
+or derived from an example of an input document.
+It supports deriving relations between data in a JSON document and contains a domain-specific
+built-in data generator (e.g., for addresses, phone numbers, or URLs).
+Moreover, it can also combine more structures to new test cases.
 However, the software is proprietary, it is not clear how other
-formats than XML would be supported and it does not provide
-strong abstraction over the input data which would allow
+formats than JSON would be supported, and it does not provide
+a abstraction over the input data which would allow
 extrapolation for generating testing data.
-Another example of tool for generating input data in JSON is \emph{JSON Schema TestData Generator} \cite{ref_stg}.
+Another example of a tool for generating input data in JSON is the \emph{JSON Schema TestData Generator} \cite{ref_stg}.
 The tool is open source but quite simple.
 It generates test data based on a given JSON scheme and does not provide
-any functionality for deriving relations between data in JSON document
+any functionality for deriving relations between data in a JSON document
 or ability to learn and abstract from a given set of JSON documents.
 
-For generating XML, there two class of approaches.
+For generating XML, there two classes of approaches.
 The first one is based on generating XML according to a given XPath query
-(so called category-partition based) \cite{xpath1, xpath2}.
-The advantage is ability to change specification easily and so generated data.
-However, it is not suitable for our purposes since we want learn syntactic structure
+(the so-called category-partition based approach) \cite{xpath1, xpath2}.
+The advantage is the ability to change the specification easily and so the generated data.
+However, it is not suitable for our purposes since we want to learn the syntactic structure
 of logged messages, not to write their specification manually.
-The second one is based on generating XML documents based on a given XML schema \cite{xmlscheme} instance
-which is more close to our needs.
-But it does not solve generalization of the same class of message to one generic syntactic structure. 
+The second approach is based on generating XML documents based on a given XML schema instance \cite{xmlscheme}
+which is closer to our needs.
+Morever, it does not provide generalization of the same class of messages to one generic syntactic structure. 
 
 \section{Modelling Messages} \label{sec:messages} 
 
-In distributed system, components usually communicate through messages.
+In a distributed system, components usually communicate through messages.
 %
-We assume, that each message that was captured in the log has the following
+We assume that each message that was captured in the log has the following
 parts: (1) a~timestamp (when the message was sent), (2) data (what was sent),
-and, (3) a~type (what kind of message was sent).
+and (3) a~type (what kind of message was sent).
 %
 A~suitable data representation of such messages can be a~challenging task,
-especially, when modelling the communication among different components.  
+especially when modelling communication among different components.  
 %
 The representation should be unified for different kinds of data formats (such
-as JSON, XML or YAML), should preserve the original semantics, and should allow
+as JSON, XML,, or YAML), should preserve the original semantics, and should allow
 generating new test cases from the observed data (e.g., extrapolating extreme
 values from the underlying domains).  
 
 Communication logs usually contain lots of subsets of messages that are
-structurally similar to each other and differ only in a certain aspects (mainly
+structurally similar to each other and differ only in certain aspects (mainly
 in the data that were sent and the type of the message). Thus, we propose
-classification of the messages into a groups of similar messages before creating
+classification of the messages into groups of similar messages before creating
 abstract models.
 %
-In particular, we classify the seen messages based on the so called fingerprint
-of the message (i.e., the spanning tree of the nested structure with respect to
+In particular, we classify the seen messages based on the so-called fingerprint
+of the message (in the form of the spanning tree of the nested structure with respect to
 the fields of the data) and based on the type of the message.
 %
-The idea is that messages having similar structure (but that differ in, e.g.,
-number of items in a list, or values in leaves) should have the same abstract
+The idea is that messages having a similar structure (but differing, e.g., in the
+number of items in a list or values in the leaves) should have the same abstract
 model.
 %
 For each such class, we construct an abstract model that represents all seen
@@ -10381,66 +10392,78 @@ We propose to model the messages using the following representation (simplified
 for the sake of presentation).
 %
 %
-We assume two types of nodes: (1) a~leaf node is a~quadruple $n =
-\nodee{k}{l}{u}{V}$, where $k$ is a key associated with the node (e.g., as in
+We assume two types of nodes: (1) A~leaf node is a~quadruple $n =
+\nodee{k}{l}{u}{V}$ where $k$ is a key associated with the node (e.g., as in
 JSON key-value pairs), $l$ (resp. $u$) is the minimum (resp. maximum) number of
-occurrences of the node in the given part of message, and $V$ is the set of all
-seen values for the node; and (2) a~composite node is a quadruple $n =
-\nodee{k}{l}{u}{N}$, where $k$, $l$, and $u$ are defined the same as previously
+occurrences of the node with the key $k$ in the given part of the message, and $V$ is the set of all
+seen values for the node, (2) A~composite node is a quadruple $n =
+\nodee{k}{l}{u}{N}$ where $k$, $l$, and $u$ are defined the same as previously,
 and $N$ is a set of child nodes (either leaves or composite).
 %
 We assume that the root of every message is represented by the
 $root$ key.
 %
-Note that we support also other types of nodes, e.g., the attribute node, used
-in XML format, but due to the space constrains we omit their description.
+Intuition behind minimum and maximum of node occurrences is that these values are
+computed when we use \emph{group and reduce} and \emph{merge} operations (which are defined later)
+over the nodes.
+The minimum and maximum values are later used during generation of the new messages from an
+abstract model of the seen messages.
+%
+Note that other types of nodes are special cases of the defined nodes, e.g., the attribute node, used
+in the XML format, is a special case of leaf node.
 
-To create abstract models, we process input log message by message (which are in
-XML or JSON format). 
+To create abstract models, we process the input log message by message (which are in
+the XML or JSON format). 
 %
 Atomic values correspond to leaf nodes and composite values (lists,
 dictionaries, nested tags) correspond to composite nodes.
 %
-Further, we will work with predicate $c$ over node $n$ written as $c(n)$
-(e.g., representing that node $n$ has a specific key). We denote set of
+Further, we will work with unary predicates $c$ over nodes $n$ written as $c(n)$
+representing that the node $n$ has a specific key. We denote the set of
 all possible predicates as $C$.
 
 We define the function \emph{reduce} over a~set of leaves $\{n_1,\ldots,n_m\}$
 with the same key $k$ as $\reduceop{\{\nodee{k}{l_1}{u_1}{V_1}$, $\ldots$,
-$\nodee{k}{l_n}{u_n}{V_n}\}} = \nodee{k}{\sum_1^n l_i}{\sum_1^n u_i}{$
-$\bigcup_1^n V_i}$; similarly,  we define the \emph{reduce} of a~set of
+$\nodee{k}{l_n}{u_n}{V_n}\}} = \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{$
+$\bigcup_{i=1}^n V_i}$; similarly,  we define the \emph{reduce} of a~set of
 composite nodes $\{n_1,\ldots,n_m\}$ corresponding to a key $k$ as
 $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
-\nodee{k}{\sum_1^n l_i}{\sum_1^n u_i}{\bigcup_1^n N_i}$.  
+\nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
+%
+Let us explain why the values $u_i$ and $l_i$ are sumed in the following example.
+If we reduce two nodes with key $a$, one with $30$ maximal occurences (i.e., occurend in $30$ places)
+and the second with $20$ maximal occurences (i.e., occured in $30$ places),
+then the resulting node has $50$ occurences maximally (i.e., represents node which occured in $50$ places).
 %
 Then, for composite nodes, we define the \emph{group and reduce} function as
 $\grpreduceop{\nodee{k}{l}{u}{N},\preds{c}{m}}$ $= \nodee{k}{l}{u}{N'}$, where
-$\preds{c}{m}$ are predicates and $N' = \bigcup_1^m \big\{ \reduceop{\{n \in N \mid
+$\preds{c}{m}$ are predicates and $N' = \bigcup_{i-1}^m \big\{ \reduceop{\{n \in N \mid
 c_i(n)\}}\big\}$.
 %
 Basically, the operation groups the children nodes according to a given
 predicate (e.g., it groups children named with the same key), merges their
-values and aggregates their occurrences.
+values, and aggregates their occurrences.
 
-Finally, we define the \emph{merge} of two nodes ($\mergeop{n}{n'}$) with the
-same key $k$ as follows: (1)
-$\mergeop{\nodee{k}{l_1}{u_1}{V_1}}{\nodee{k}{l_2}{u_2}{V_2}} = \nodee{k}{min(l_1,
-l_2)}{max(u_1, u_2)}{V_1$ $\cup V_2}$, and (2)
-$\mergeop{\nodee{k}{l_1}{u_1}{N_1}}{\nodee{k} {l_2}{u_2}{N_2}} =
+Finally, we define the \emph{merge} of leaves and composite nodes, respectively, with the
+same key $k$ as follows: (1)~for two leave nodes $n_l=\nodee{k}{l_1}{u_1}{V_1}$ and
+$n_l'=\nodee{k}{l_2}{u_2}{V_2}$ as $\mergeop{n_l}{n_l'} = \nodee{k}{min(l_1,
+l_2)}{max(u_1, u_2)}{V_1$ $\cup V_2}$ and (2) two composite nodes
+$n_c=\nodee{k}{l_1}{u_1}{N_1}$ and $n_c'=\nodee{k} {l_2}{u_2}{N_2}$ as $\mergeop{n_c}{n_c'} =
 \nodee{k}{min(l_1, l_2)}{max(u_1, u_2)}{$ $Merged(N_1,$ $N_2)\ \cup\ Copy(N_1,
-N_2)\ \cup\ Copy(N_2, N_1)}$, where $Merged(N,$ $N')$ $= \{\mergeop{n}{n'}\ |\
-\exists c \in C \, \exists n \in N \, \exists n' \in N': c(n) \wedge c(n')\}$
-and $Copied(N,$ $N') = \{n\ |\ \exists c\in C \, \exists n \in N \, \forall n'
-\in N':  c(n) \wedge \neg c(n')\}$.
+N_2)\ \cup\ Copy(N_2, N_1)}$, where $Merged(N,$ $N')$ $= \{\mergeop{n}{n'}\ |\ 
+n \in N \wedge n' \in N' \wedge \exists c \in C: c(n) \wedge c(n')\}$
+and $Copied(N,$ $N') = \{n\ |\ n \in N \ \wedge n' \in N' \exists c\in C: c(n) \wedge \neg c(n')\}$.
 %
-We choose values of minimal and maximal number of occurrences to cover both
+Intuitively, we choose values of minimal and maximal number of occurrences to cover both
 nodes.
 %
-In the composite nodes, we group the children satisfying the same criteria and
+In the composite nodes, we group the children satisfying the same criterium and
 recursively merge them.  If there is a child node from $N_1$ (resp. $N_2$) with
-no node from $N_2$ (resp. $N_1$) that matches the same criterion the first node
+no node from $N_2$ (resp. $N_1$) that matches the same criterion, the former node
 is simply copied to the result.  For simplicity, we assume that a criterion $c$
 is satisfied by maximally one node in one subtree. 
+We can afford such restriction since in our use cases \emph{merge} is always
+called after the \emph{group and reduce} operations with the same set of criteria. 
 %
 Finally, for each class and its messages with the root nodes $r_1, \ldots,
 r_n$, we compute the final abstract node $n$ representing the class as $n =
