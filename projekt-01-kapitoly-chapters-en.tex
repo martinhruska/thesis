@@ -10254,7 +10254,7 @@ To model the communication, we convert the log to a~so-called event calendar
 which provides efficient and direct manipulation with the seen messages.
 Then, we eventually convert the event calendar to a finite automaton (where
 every event is a symbol) which is a more abstract representation but provides
-options for postprocessing (e.g., by applying a length abstraction to generate
+options for postprocessing (e.g., by applying a trace abstraction to generate
 new test cases) or analyses (e.g., by searching for a particular string
 representing an error behaviour).
 %
@@ -10514,7 +10514,7 @@ easy to generate in contrast to the time demanding process of writing
 tests manually.
 %
 Hence, we propose to transform the event calendar to a \emph{finite
-automaton} and apply, e.g., a length abstraction which over-approximates the language
+automaton} and apply, e.g., a trace abstraction which over-approximates the language
 of the automaton.
 In the following paragraphs, we describe our method in a formal way.
 % MH: I don't like mixing things below here and trie abstraction
@@ -10558,13 +10558,13 @@ and the set of final states is $\calfi=\{q_{n+1}\}$.  Finally, $\forall 2 \leq i
 %\tsf{What's hashing? (AS: now I'm ok with this)}
 
 In order to create new scenarios, we need to overapproximate the models. In
-particular, we propose to use a length abstraction transforming the automaton
+particular, we propose to use a trace abstraction transforming the automaton
 $\A$ to an abstracted automaton $\A^\K$ by merging all states with the same
 language with respect to a given length.
 %
-Formally, a length abstraction over an automaton $\A=\aut$ is an equivalence
+Formally, a trace abstraction up to a length $n$ over an automaton $\A=\aut$ is an equivalence
 relation $\abstrln \subseteq \states\times \states$ such that $(p,p')\in
-\abstrln$ iff $\langstabs{p}{n}=\langstabs{p'}{n}$ where $\langstabs{q}{n}=\{w\,|\, w \in \langst{q} \wedge |w| \leq n\}$.
+\abstrln$ iff $\langstabs{p}{n}=\langstabs{p'}{n}$ where $\langstabs{q}{n}=\{w\,|\, \exists w':\,ww' \in \langst{q} \wedge |w| \leq n\}$.
 We denote the equivalence class of $q\in\states$ w.r.t. $\abstrln$ by $\eqclasse{q}.$ The abstracted automaton
 $\abstrln(\A)=\abstraut$ is obtained using $\abstrln$ in the following way:
 $\abstrst=\{\eqclasse{q}\,|\,q\in\states\}$, for each $\intrans{p}{a}{q}$ there
@@ -10572,7 +10572,7 @@ is $(\eqclasse{p}, a, \eqclasse{q}) \in \abstrtr$, and finally,
 $\abstrin=\{\eqclasse{q}\,|\,q\in I\}$ and $\abstrfi=\{\eqclasse{q}\,|\,q\in
 F\}$.
 
-The length abstraction overaprroximates language of the original automaton, i.e.,
+The trace abstraction overaprroximates language of the original automaton, i.e.,
 $\langof{\A}\subseteq\langof{\abstrA}$ (in fact, $A$ accepts just word representing content of the event calendar $\C$,
 i.e., $|\langof{\A}|=1$)
 meaning that there may exist a~word
@@ -10693,10 +10693,32 @@ timestamps:
 
 %
 We tested our approach on the captured communication provided by a~partner
-company that offers a~MES as their product. We were able to successfully
-generate valid scenarios for the Cryton tool, which then subsequently
-orchestrated a digital twin using our scenarios.
-However, our Tyrant is still a prototype, and it would need extensive collaboration
+company that offers a~MES as their product.
+Particulary, we got the following logs:
+\begin{enumerate}
+  \item communication between MES and ERP consisting of $228$ XML files where each file is one message,
+  \item communication between MES and two machines consisting of $25072$ messages between the first machine and MES and $20$ messages between the second machine and MES,
+  \item communication between MES and terminal consisting of $5970$ messages.
+\end{enumerate}
+
+That is a total of $31290$ messages.
+We processed the logs using the Tyrant tool on machine having $3$ GHz Dual-Core Intel Core i5, $8$ GB DDR3.
+We generated a scenario for the Cryton tool having $31303$ steps which corresponds to the
+total number of messages with $13$ steps added for initialization of communicatation between MES and ERP.
+We generated the scenario in $22$ seconds.
+
+We futher transformed an event calendar representing the scenario to an automaton and applied abstraction over it.
+We obtained automaton with $31303$ states (which corresponds to a number of steps in scenario).
+After an abstraction we got automaton with $3568$ states and $17$ loops.
+We were able to generate the new scenarios using the abstracted automaton.
+Although the results of abstraction application look promising,
+this feature of Tyrant is still experimental and to be fully aplicable
+for testing a particular MES in digital twin it would need some fine tuning.
+E.g., some sequences of messages (such as the initial ones) cannot be repeated more than once
+or some messages needs to be kept in particular order.
+Unfortunately, we did not managed to do this fine tuning in a cooperation with the partner company.
+
+In general, the Tyrant tool is still a prototype and it would need extensive collaboration
 with the company to deploy it to production.
 %
 % It is implemented in C\# language and supports as an input a log of
