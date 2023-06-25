@@ -10363,7 +10363,7 @@ A~suitable data representation of such messages can be a~challenging task,
 especially when modelling communication among different components.  
 %
 The representation should be unified for different kinds of data formats (such
-as JSON, XML,, or YAML), should preserve the original semantics, and should allow
+as JSON, XML, or YAML), should preserve the original semantics, and should allow
 generating new test cases from the observed data (e.g., extrapolating extreme
 values from the underlying domains).  
 
@@ -10400,8 +10400,71 @@ seen values for the node, (2) A~composite node is a quadruple $n =
 \nodee{k}{l}{u}{N}$ where $k$, $l$, and $u$ are defined the same as previously,
 and $N$ is a set of child nodes (either leaves or composite).
 %
-We assume that the root of every message is represented by the
-$root$ key.
+% We assume that the root of every message is represented by the
+% $root$ key.
+%
+We illustate a representation of an XML message by our model in the following example.
+Consider the XML messages from the Listing \ref{list:XML1} and \ref{list:XML2}.
+Both messages contains simplified description of components needed to create a product.
+For each component there is specified a material of compoment and a number of needed items of the given component for production.
+Beside a description of components needed a product production the XML messages containt also name of the product.
+The messages are sent from ERP to MES and they are stored in the files having the timestamps
+in their names (particularly, \texttt{20211207-125952.xml} and \texttt{20211207-125955.xml}) in the logs of communication.
+
+An illustration of the models of the XML message are in Figure \ref{fig:eurocast:models}.
+The pink nodes are composite nodes and the blue nodes are leaf nodes.
+The text inside nodes corresponds to the quadraples in the definition of both kinds of nodes. 
+Please note, that the children of the composite nodes are not explicitly in the text but are reflected by the tree
+structure of the model.
+As one can see the tree structures of the models in the figure corresponds to the structures of the XML models.
+
+\begin{figure}
+\begin{lstlisting}[caption={An XML message between ERP and MES. In the captured logs, it is stored in the file named 20211207-125952.xml containing timestamp in its name. The message describes of components needed for construction of a product.},frame=tlrb,label={list:XML1}]{EMM}
+ <Item>
+  <Name>laptop</Name>
+  <Component>
+    <Material>silicon</Material>
+    <Count>5</Count>
+  </Component>
+  <Component>
+    <Material>aluminum</Material>
+    <Count>1</Count>
+  </Component>
+  <Component>
+    <Material>plastic</Material>
+    <Count>2</Count>
+  </Component>
+ </Item> 
+\end{lstlisting}
+\begin{lstlisting}[caption={An XML message between ERP and MES. In the captured logs, it is stored in the file named 20211207-125955.xml containing timestamp in its name.},frame=tlrb,label={list:XML2}]{EMM}
+ <Item>
+  <Name>table</Name>
+  <Component>
+    <Material>wood</Material>
+    <Count>10</Count>
+  </Component>
+  <Component>
+    <Material>metal</Material>
+    <Count>3</Count>
+  </Component>
+ </Item> 
+\end{lstlisting}
+\captionsetup{labelformat=empty}
+\caption{}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{center}
+                \begin{subfigure}[b]{1\linewidth}
+                  \includegraphics[width=1\linewidth]{figs/eurocast/example.001.size.png}
+                \end{subfigure}\\
+                \begin{subfigure}[b]{1\linewidth}
+                  \includegraphics[width=1\linewidth]{figs/eurocast/example.003.size.png}
+                \end{subfigure}
+\caption{The models of the XML messages from Listing \ref{list:XML1} (the upper figure) and Listing \ref{list:XML2} (the bottom figure)}
+\label{fig:eurocast:models}
+\end{center}
+\end{figure}
 %
 Intuition behind minimum and maximum of node occurrences is that these values are
 computed when we use \emph{group and reduce} and \emph{merge} operations (which are defined later)
@@ -10409,7 +10472,7 @@ over the nodes.
 The minimum and maximum values are later used during generation of the new messages from an
 abstract model of the seen messages.
 %
-Note that other types of nodes are special cases of the defined nodes, e.g., the attribute node, used
+Note that other types of nodes are special cases of the defined nodes, e.g., the attribute node used
 in the XML format, is a special case of leaf node.
 
 To create abstract models, we process the input log message by message (which are in
@@ -10430,19 +10493,44 @@ composite nodes $\{n_1,\ldots,n_m\}$ corresponding to a key $k$ as
 $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
 \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
 %
-Let us explain why the values $u_i$ and $l_i$ are sumed in the following example.
-If we reduce two nodes with key $a$, one with $30$ maximal occurences (i.e., occurend in $30$ places)
-and the second with $20$ maximal occurences (i.e., occured in $30$ places),
-then the resulting node has $50$ occurences maximally (i.e., represents node which occured in $50$ places).
+Let us explain why the values $u_i$ and $l_i$ are sumed.
+If we reduce two nodes with key $a$, one with $30$ maximal occurences (i.e., occured in $30$ places)
+and the second with $20$ maximal occurences (i.e., occured in $20$ places),
+then the resulting node has $50$ occurences maximally (i.e., represents nodes which occured in $50$ places).
 %
 Then, for composite nodes, we define the \emph{group and reduce} function as
 $\grpreduceop{\nodee{k}{l}{u}{N},\preds{c}{m}}$ $= \nodee{k}{l}{u}{N'}$, where
-$\preds{c}{m}$ are predicates and $N' = \bigcup_{i-1}^m \big\{ \reduceop{\{n \in N \mid
+$\preds{c}{m}$ are predicates and $N' = \bigcup_{i=1}^m \big\{ \reduceop{\{n \in N \mid
 c_i(n)\}}\big\}$.
 %
 Basically, the operation groups the children nodes according to a given
-predicate (e.g., it groups children named with the same key), merges their
+predicate (e.g., it groups children with the same key), merges their
 values, and aggregates their occurrences.
+
+We illustrate the \emph{group and reduce} function in the following example.
+Consider the models of the messages from Figure \ref{fig:eurocast:models}.
+If we apply \emph{group and reduce} to the composite nodes of the models starting
+from the root nodes and then proceeding in the breath-first manner, we obtain
+the tree structure represented in Figure \ref{fig:eurocast:gar}.
+We use predicate stating that only the nodes with the same children (i.e., their children have
+the same keys) can be grouped.
+As one can see the nodes with the key \emph{Component} are grouped to one node
+as well as their children nodes with the keys \emph{Material} and \emph{Count}.
+The number of occurence of the nodes has also changed to $3$ in the left sub-figure 
+and to $2$ in the right sub-figure which reflect the number of grouped nodes.
+
+\begin{figure}[tb]
+\begin{center}
+                \begin{subfigure}[b]{0.6\linewidth}
+                  \includegraphics[width=1\linewidth]{figs/eurocast/example.002.size.png}
+                \end{subfigure}
+		\begin{subfigure}[b]{0.6\linewidth}
+                  \includegraphics[width=1\linewidth]{figs/eurocast/example.004.size.png}
+                \end{subfigure}
+\caption{The results of applying  of the \emph{group and reduce} function to the trees in Figure~\ref{fig:eurocast:models}.}
+\label{fig:eurocast:gar}
+\end{center}
+\end{figure}
 
 Finally, we define the \emph{merge} of leaves and composite nodes, respectively, with the
 same key $k$ as follows: (1)~for two leave nodes $n_l=\nodee{k}{l_1}{u_1}{V_1}$ and
@@ -10452,7 +10540,7 @@ $n_c=\nodee{k}{l_1}{u_1}{N_1}$ and $n_c'=\nodee{k} {l_2}{u_2}{N_2}$ as $\mergeop
 \nodee{k}{min(l_1, l_2)}{max(u_1, u_2)}{$ $Merged(N_1,$ $N_2)\ \cup\ Copy(N_1,
 N_2)\ \cup\ Copy(N_2, N_1)}$, where $Merged(N,$ $N')$ $= \{\mergeop{n}{n'}\ |\ 
 n \in N \wedge n' \in N' \wedge \exists c \in C: c(n) \wedge c(n')\}$
-and $Copied(N,$ $N') = \{n\ |\ n \in N \ \wedge n' \in N' \exists c\in C: c(n) \wedge \neg c(n')\}$.
+and $Copied(N,$ $N') = \{n\ |\ n \in N \wedge \forall n' \in N'\,\forall c\in C: c(n) \wedge \neg c(n')\}$.
 %
 Intuitively, we choose values of minimal and maximal number of occurrences to cover both
 nodes.
@@ -10469,6 +10557,23 @@ Finally, for each class and its messages with the root nodes $r_1, \ldots,
 r_n$, we compute the final abstract node $n$ representing the class as $n =
 \mergeop{\grpreduceop{r_1,\preds{c}{m}}}{\mergeop{\ldots}{\grpreduceop{r_n,\preds{c}{m}}}}$.
 
+We illustate the \emph{merge} operation by Figure \ref{fig:eurocast:merge}.
+The figure contains a result of application of the operation to the trees from Figure \ref{fig:eurocast:gar}.
+The nodes with keys \emph{Name} and \emph{Component} from both trees were merged.
+The numbers defining minimal and maximal occurences of nodes \emph{Name} are still $1$ since
+the node appeares exactly once in the both reduced trees.
+The minimal number of occurences of the nodee with the key \emph{Component} is now $2$ (since
+it has $2$ occurences in the right-hand tree from Figure \ref{fig:eurocast:gar}) and
+the maximal number of occurences is $3$ of the nodes is $3$ (which is the number of the occurences of the node
+in the tree from the left-hand side of the same figure).
+The same holds also for the leaf nodes  \emph{Material} and \emph{Count}.
+\begin{figure}[tb]
+\begin{center}
+                  \includegraphics[scale=0.2]{figs/eurocast/example.005.size.png}
+\caption{The result of application of the \emph{merge} method to the trees from Figure \ref{fig:eurocast:gar}}.
+\label{fig:eurocast:merge}
+\end{center}
+\end{figure} 
 % \begin{figure}[t!]
 %   \centering
 %         \includegraphics[scale=0.6]{figs/abstract-example.pdf}
@@ -10562,7 +10667,7 @@ particular, we propose to use a trace abstraction transforming the automaton
 $\A$ to an abstracted automaton $\A^\K$ by merging all states with the same
 language with respect to a given length.
 %
-Formally, a trace abstraction up to a length $n$ over an automaton $\A=\aut$ is an equivalence
+Formally, a trace abstraction up to length $n$ over an automaton $\A=\aut$ is an equivalence
 relation $\abstrln \subseteq \states\times \states$ such that $(p,p')\in
 \abstrln$ iff $\langstabs{p}{n}=\langstabs{p'}{n}$ where $\langstabs{q}{n}=\{w\,|\, \exists w':\,ww' \in \langst{q} \wedge |w| \leq n\}$.
 We denote the equivalence class of $q\in\states$ w.r.t. $\abstrln$ by $\eqclasse{q}.$ The abstracted automaton
@@ -10582,6 +10687,42 @@ events.  Therefore, it is possible to convert the word $w$ to a series of actual
 messages (i.e., to a new event calendar).  Supposing that $w$ is not in the language of the original automaton,
 we thus obtain a~series of events not present in the original system that can
 be used as a new test case for testing the MES system in a~digital twin.
+
+The principles described in this section are shown in the following example.
+Consider the event calendar at the left part of Figure \ref{fig:eurocast:aut}.
+It contains six messages, two between ERP and MES (communicated using REST protocol),
+two between terminal and MES (communicated using REST protocol),
+and two between machines and MES (communicated using OPC-UA protocol).
+The messages between ERP and MES corresponds to the XML messages from Listing~\ref{list:XML1}~and~\ref{list:XML2}
+as one can from the timestamps (which are the same as the timestamps in the names of files with XML messages).
+The messages between machines and MES are in the Listing~\ref{list:MMM} and the messages between
+terminals and MES are in the Listing~\ref{list:TERM}.
+
+Each event contains information as defined above.
+The messages are not included or shorthended for the sake of brevity.
+The text \texttt{<XML>} or \texttt{<JSON>} means that the whole XML or JSON message would be included in an event.
+A type of event is determined by communication protocol and the types of XML and JSON messages are futher refined
+by their class (we described concept of a class of a message in the previous section).
+In our example, we have types \texttt{REST-1} and \texttt{REST-2} which means that all messages with
+this are communicated via REST protocol but those with the first type are classified to the class $1$
+and those with the second type are classified to the class $2$.
+
+In the next step, we convert the events to the symbols (of alphabet of an automaton) by dropping the message
+and timestamp as we described above. In this case, we obtain three different symbols\,--\,\texttt{a,b,c}.
+Then we create an automaton representing the event calendar.
+The automaton has seven states and trasition over the created symbols.
+Finally if we apply a trace abstraction up to length $3$ we get the automaton on the right-hand side of the figure.
+The states $1$ was merged with the state $4$, the state $2$ with the state $5$, and the state $3$ with state $6$.
+One loop was created in the resulting automaton and a language of the automaon is $(abc)^n$ for $n \geq 1$.
+
+\begin{figure}[tb]
+\begin{center}
+                  \includegraphics[scale=0.2]{figs/eurocast/example.006.png}
+\caption{Figure illustrates transformation of an event calendar (on the left side) to an automaton.
+It also contains an automaton created by applying abstraction to the one obtained from the event calendar}.
+\label{fig:eurocast:aut}
+\end{center}
+\end{figure} 
 
 \section{Generating Scenario}
 \label{sec:scenario}
@@ -10612,51 +10753,69 @@ description of components of the digital twin) and a~scenario generated by Tyran
 the YAML format.
 %
 
-In the following, we will illustrate the transformation of communication logs
-from a real system to a YAML scenario. We remark that we consider a system consisting
+In the following, we will illustrate the transformation of communication logs to a YAML scenario.
+We remark that we consider a system consisting
 of an~ERP system, a~MES system, and manufacturing machines and their corresponding
 terminals used by human operators.
 %
-Listing \ref{list:EMM} shows a message between the~ERP and the~MES. The message is
-stored in the file \texttt{20211207-125952.xml} which has a timestamp encoded
-in its name. The message is in the XML format, and its semantics is that there are 42
-items of Material 1 in stocks. 
+Consider again the XML messages from Listing~\ref{list:XML1}~and~\ref{list:XML2}.
+As we said, these messages are sent between the~ERP and the~MES. The messages are
+stored in the file \texttt{20211207-125952.xml} and  \texttt{20211207-125955.xml} which have the timestamps encoded
+in their names. 
 %Implicitly we know that it was communicated using REST protocol.
 %
-%
-Listing~\ref{list:MMM} shows a message between a machine and the MES.  The message
-was sent one second after the previous one. The semantics of message is that
-the value of the node $0$ should be set to $99$ in Machine $001$.
+Listing~\ref{list:MMM} shows the messages between a machine and the MES.
+The messages contains their timestemps. The semantics of message is that
+the value of the node $0$ should be set to $99$ (and then to $100$ by the second message) in Machine $001$.
+Listing~\ref{list:TERM} shows an example of a log of communcation between terminal and MES consisting of two messages.
+The messages have two sections.
+The first one is header which includes an timestamp, the identification numbers of a client and a communication, a type message.
+The second part of a message are data in the JSON format.
 % Again, we know that messages between the machines and MES are communicated
 % using OPC-UA protocol.
 %
 %
-Finally, Listing \ref{list:GS} shows a~generated scenario consisting of two
-steps.  The first step is executed in (logical) time 0 hours, 0 minutes, 0
+
+Finally, Listing \ref{list:GS} and \ref{list:GS1} shows a~generated scenario consisting of two
+steps (Listing is splitted to two part because it length).  The first step is executed in (logical) time 0 hours, 0 minutes, 0
 seconds: the orchestrator will send a message from the ERP to the MES using the REST
 protocol. The message has the XML data attached.  The second step is executed
-one second after the first step: the orchestrator will send another message
-from the MES to Machine 001 using the OPC-UA protocol. The message says that the value
-of the node with path $0$ should be set to $99$.
+one second after the first step (which corresponds to a difference between the times of the first and the second messages):
+the orchestrator will send another message from the MES to Machine 001 using the OPC-UA protocol.
+The message says that the value of the node with path $0$ should be set to $99$.
+The third messages is sent three seconds after the start of orchestration from Terminal 001
+to MES using REST protocol.
+The message contains data from the headers of the logged messages and the data in the JSON format.
+Note, that we can drop some information from the logged message such as id of communication since
+we get the fresh values of such variables in a simulation in digital twin.
+
+Then the orchestration continues with the similar three steps.
+They have only different arguments which are derived
+from the log in Listing~\ref{list:XML2} and from the second messages in Listing~\ref{list:MMM}~\ref{list:TERM} respectively.
+
 %
 %The Cryton tool later uses scenario like this to precisely orchestrate a
 %digital twin.
 
 \begin{figure}
-\begin{lstlisting}[caption=The file named 20211207-125952.xml containing XML message between ERP and MES.,frame=tlrb,label={list:EMM}]{EMM}
- <DataSource>
-  <Data>
-    <Name>Material1</Name>
-    <Value>42</Value>
-  </Data>
- </DataSource> 
-\end{lstlisting}
 \begin{lstlisting}[caption=A message between the MES and a machine,label={list:MMM},frame=tlrb]{MMM}
  SampleDataTime          ; Value ; Name        ; Path
  2021-12-07 12:59:53.617 ;  99   ; Machine 001 ; 0
+ 2021-12-07 12:59:56.617 ;  100  ; Machine 001 ; 0
 \end{lstlisting}
-
-\begin{lstlisting}[caption=Generated scenario,frame=tlrb,label={list:GS}]{GS}
+\begin{lstlisting}[caption={An example of messages sent between a terminal and MES. The messages consist of a header containing an timestamp, the identification numbers of a client and a communication, a type message, and a body containing data in JSON.},label={list:TERM},frame=tlrb]{TERM}
+07/12/2021 12:59:54 PM | ClientId: ExampleHost, Command: ResponseCommand, MessageType: Response
+CommunicationId: 00000075-54f6-6fc3-84b6-0037d241d36b,
+Data: {"user": "username", "isLoggedIn": true, "productsInBucket": 10}
+07/12/2021 12:59:57 PM | ClientId: ExampleHost, Command: ProductionBalance, MessageType: Request
+CommunicationId: 00000075-54f6-6fc3-84b6-0037d241d36b,
+Data: {"MatchSetupOperationStr":"456 (930s)","MatchSetupLoginStr":"456 (0s)"}
+\end{lstlisting}
+\captionsetup{labelformat=empty}
+\caption{}
+\end{figure}
+\begin{figure}
+\begin{lstlisting}[caption=The generated scenario,frame=tlrb,label={list:GS}]{GS}
 ---
 timestamps:
 - delta:
@@ -10664,17 +10823,26 @@ timestamps:
     minutes: 0
     hours: 0
   steps:
-  - type: ERP
+  - type: REST
     host: ERP
     target: MES
     args:
       xml: |-
-        <DataSource>
-          <Data>
-            <Name>Data1</Name>
-            <Value>42</Value>
-          </Data>
-        </DataSource>
+       <Item>
+        <Name>laptop</Name>
+        <Component>
+          <Material>silicon</Material>
+          <Count>5</Count>
+        </Component>
+        <Component>
+          <Material>aluminum</Material>
+          <Count>1</Count>
+        </Component>
+        <Component>
+          <Material>plastic</Material>
+          <Count>2</Count>
+        </Component>
+       </Item> 
 - delta:
     seconds: 1
     minutes: 0 
@@ -10686,40 +10854,104 @@ timestamps:
     args:
      value: 99
      node: 0
+- delta:
+    seconds: 2
+    minutes: 0 
+    hours: 0
+  steps:
+  - type: REST
+    host: MES
+    target: Terminal 001
+    args:
+      ClientId: ExampleHost
+      Command: ResponseCommand
+      MessageType: Response
+      CommunicationId: 00000075-54f6-6fc3-84b6-0037d241d36b
+      json: |-
+        {
+          "user": "username",
+          "isLoggedIn": true,
+          "productsInBucket": 10
+        }
+\end{lstlisting}
+\captionsetup{labelformat=empty}
+\caption{}
+\end{figure}
+\begin{figure}
+\begin{lstlisting}[caption=The second of part of the generated scenario from Listing~\ref{list:GS},frame=tlrb,label={list:GS1}]{GS}
+- delta:
+    seconds: 3
+    minutes: 0
+    hours: 0
+  steps:
+  - type: REST
+    host: ERP
+    target: MES
+    args:
+      xml: |-
+       <Item>
+        <Name>table</Name>
+        <Component>
+          <Material>wood</Material>
+          <Count>10</Count>
+        </Component>
+        <Component>
+          <Material>metal</Material>
+          <Count>3</Count>
+        </Component>
+       </Item> 
+- delta:
+    seconds: 4
+    minutes: 0 
+    hours: 0
+  steps:
+  - type: OPC-UA
+    host: MES
+    target: Machine 001
+    args:
+     value: 100
+     node: 0
+- delta:
+    seconds: 5
+    minutes: 0 
+    hours: 0
+  steps:
+  - type: REST
+    host: MES
+    target: Terminal 001
+    args:
+      ClientId: ExampleHost
+      Command: ProductionBalance
+      MessageType: Request
+      json: |-
+        {
+          "MatchSetupOperationStr": "456 (930s)",
+          "MatchSetupLoginStr": "456 (0s)"
+        }
 \end{lstlisting}
 \captionsetup{labelformat=empty}
 \caption{}
 \end{figure}
 
 %
-We tested our approach on the captured communication provided by a~partner
-company that offers a~MES as their product.
-Particulary, we got the following logs:
+We tested our approach on captured communication provided by a~partner company that offers a~MES as their product. Particulary, we got the following logs:
 \begin{enumerate}
-  \item communication between MES and ERP consisting of $228$ XML files where each file is one message,
-  \item communication between MES and two machines consisting of $25072$ messages between the first machine and MES and $20$ messages between the second machine and MES,
-  \item communication between MES and terminal consisting of $5970$ messages.
-\end{enumerate}
+  \item communication between the MES and ERP consisting of $228$ XML files where each file is one message,
+  \item communication between the MES and two machines consisting of $25,072$ messages between the first machine and MES and $20$ messages between the second machine and MES,
+  \item communication between the MES and a terminal consisting of $5,970$ messages.
+\end{enumerate} That is a total of $31,290$ messages.
 
-That is a total of $31290$ messages.
-We processed the logs using the Tyrant tool on machine having $3$ GHz Dual-Core Intel Core i5, $8$ GB DDR3.
-We generated a scenario for the Cryton tool having $31303$ steps which corresponds to the
-total number of messages with $13$ steps added for initialization of communicatation between MES and ERP.
-We generated the scenario in $22$ seconds.
+We processed the logs using the Tyrant tool on a machine having a $3$ GHz Dual-Core Intel Core i5 CPU and $8$ GiB DDR3 RAM. We generated a scenario for the Cryton tool having $31,303$ steps, which corresponds to the mentioned $31,290$ messages with $13$ steps added for initialization of the communicatation between the MES and ERP. We generated the scenario in $22$ seconds.
 
-We futher transformed an event calendar representing the scenario to an automaton and applied abstraction over it.
-We obtained automaton with $31303$ states (which corresponds to a number of steps in scenario).
-After an abstraction we got automaton with $3568$ states and $17$ loops.
-We were able to generate the new scenarios using the abstracted automaton.
-Although the results of abstraction application look promising,
-this feature of Tyrant is still experimental and to be fully aplicable
-for testing a particular MES in digital twin it would need some fine tuning.
-E.g., some sequences of messages (such as the initial ones) cannot be repeated more than once
-or some messages needs to be kept in particular order.
-Unfortunately, we did not managed to do this fine tuning in a cooperation with the partner company.
+We futher transformed the event calendar representing the above scenario to an automaton and applied abstraction over it. Before the abstraction, we obtained
+an automaton with $31,303$ states (which corresponds to the number of steps in the scenario). After the abstraction, we got an automaton with $3,568$ states
+and $17$ loops, and we were able to generate new scenarios using the abstracted automaton.
 
-In general, the Tyrant tool is still a prototype and it would need extensive collaboration
-with the company to deploy it to production.
+Although the results of applying the abstraction look promising, this feature of Tyrant is still experimental, and to be fully aplicable for testing a particular
+MES in a digital twin, it would need some fine-tuning. For instance, some sequences of messages (such as the initial ones) cannot be repeated more than
+once or some messages need to be kept in a particular order. Unfortunately, we did not manage to do this fine-tuning in cooperation with the partner company.
+
+In general, the Tyrant tool is still a prototype, and it would need extensive collaboration with the company to deploy it to production.
 %
 % It is implemented in C\# language and supports as an input a log of
 % communication of system and generates scenario in YAML langauge as output.
