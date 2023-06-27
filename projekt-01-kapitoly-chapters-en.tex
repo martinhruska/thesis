@@ -10457,7 +10457,7 @@ As one can see the tree structures of the models in the figure corresponds to th
 \begin{center}
                 \begin{subfigure}[b]{1\linewidth}
                   \includegraphics[width=1\linewidth]{figs/eurocast/example.001.size.png}
-                \end{subfigure}\\
+                \end{subfigure}
                 \begin{subfigure}[b]{1\linewidth}
                   \includegraphics[width=1\linewidth]{figs/eurocast/example.003.size.png}
                 \end{subfigure}
@@ -10510,7 +10510,7 @@ values, and aggregates their occurrences.
 We illustrate the \emph{group and reduce} function in the following example.
 Consider the models of the messages from Figure \ref{fig:eurocast:models}.
 If we apply \emph{group and reduce} to the composite nodes of the models starting
-from the root nodes and then proceeding in the breath-first manner, we obtain
+from the root nodes and then proceeding in the breadth-first manner, we obtain
 the tree structure represented in Figure \ref{fig:eurocast:gar}.
 We use predicate stating that only the nodes with the same children (i.e., their children have
 the same keys) can be grouped.
@@ -10769,7 +10769,7 @@ The messages contains their timestemps. The semantics of message is that
 the value of the node $0$ should be set to $99$ (and then to $100$ by the second message) in Machine $001$.
 Listing~\ref{list:TERM} shows an example of a log of communcation between terminal and MES consisting of two messages.
 The messages have two sections.
-The first one is header which includes an timestamp, the identification numbers of a client and a communication, a type message.
+The first one is header which includes a timestamp, the identification numbers of a client and a communication, a type of message.
 The second part of a message are data in the JSON format.
 % Again, we know that messages between the machines and MES are communicated
 % using OPC-UA protocol.
@@ -10789,9 +10789,11 @@ The message contains data from the headers of the logged messages and the data i
 Note, that we can drop some information from the logged message such as id of communication since
 we get the fresh values of such variables in a simulation in digital twin.
 
-Then the orchestration continues with the similar three steps.
-They have only different arguments which are derived
-from the log in Listing~\ref{list:XML2} and from the second messages in Listing~\ref{list:MMM}~\ref{list:TERM} respectively.
+Then the orchestration continues with the similar three steps which different only in the agruments (and time).
+The fourth step is communication between ERP and MES containing the XML message from Listing~\ref{list:XML2}.
+The fifth step is a message from Machine 001 to MES setting the value of the node with path $0$ to the value $100$ (which is
+derived from the second message in the in Listing~\ref{list:MMM}), and finaly, the sixth step is
+a message from Terminal 001 to MES containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
 
 %
 %The Cryton tool later uses scenario like this to precisely orchestrate a
@@ -10803,7 +10805,7 @@ from the log in Listing~\ref{list:XML2} and from the second messages in Listing~
  2021-12-07 12:59:53.617 ;  99   ; Machine 001 ; 0
  2021-12-07 12:59:56.617 ;  100  ; Machine 001 ; 0
 \end{lstlisting}
-\begin{lstlisting}[caption={An example of messages sent between a terminal and MES. The messages consist of a header containing an timestamp, the identification numbers of a client and a communication, a type message, and a body containing data in JSON.},label={list:TERM},frame=tlrb]{TERM}
+\begin{lstlisting}[caption={An example of messages sent between a terminal and MES. The messages consist of a header containing a timestamp, the identification numbers of a client and a communication, a type of message, and a body containing data in JSON.},label={list:TERM},frame=tlrb]{TERM}
 07/12/2021 12:59:54 PM | ClientId: ExampleHost, Command: ResponseCommand, MessageType: Response
 CommunicationId: 00000075-54f6-6fc3-84b6-0037d241d36b,
 Data: {"user": "username", "isLoggedIn": true, "productsInBucket": 10}
