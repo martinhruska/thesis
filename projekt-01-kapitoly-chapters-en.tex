@@ -101,7 +101,7 @@ All these properties are decidable but some of them have a high complexity,
 e.g., complement has exponential complexity w.r.t. number of states of automaton, language inclusion and equivalence are PSACE-complete
 (or even EXPTIME-c for nondeterministic tree automata).
 Fortunately, efficient heuristics for the mentioned operations were introduced making
-them computationally feasible in many practical cases TODO CITE.
+them computationally feasible in many practical cases \cite{tacas10,bonchi_checking_2013}.
 
 As we mentioned above, we focus on applications of automata to two different fields.
 The first one is shape analysis, i.e., static analysis of programs manipulating
@@ -531,7 +531,40 @@ of selector names.
           counterexamples analysis (to distinguish spurious and real ones). and abstraction refinement.
 
           \subsection{Symbolic Execution}
-          TODO:
+          The main idead of symbolic execution \cite{soa-king:se} is to run a program under verification on symbolic values instead of concrete ones.
+          I.e., the program is run on symbolic input which may have an arbirtary value.
+          The concrete program operations from the original program are then replaced by opeartion manipulating symbolic values.
+          When a symbolic execution reaches a branching condition, then it continues in the both branches and maintains
+          a set of \emph{path conditions} for each brach, i.e., the conditions which needs to be satisfied for the given branch
+          to be (symbolically) executable.
+          When the path conditions are unsatisfiable, the symbolic execution of the corresponding branch is aborted.
+          When a bug is found during symbolic execution, it is possible to generate a test case using
+          the concrete values which satisfies the path conditions in the path to the found bug.
+
+          An advatange of this approach is that it does not produce false alarms since all symbolically executed paths are feasible.
+          On other hand, a user needs to add \texttt{assert} statements to a source code to represent the error states.
+          Symbolic execution may also be computationaly demanding and it may not even terminate on programs
+          with unbounded loops or recursion.
+
+          Symbolic execution was sucessfully used to detect bugs in real-world software.
+          E.g., The \texttt{KLEE} tool \cite{soa-klee} find bugs in the tools such as \texttt{GNU COREUTILS}.
+
+          In the recent years, the tool Symbiotic \cite{fmics12} based on symbolic execution done by \texttt{KLEE}
+          won the numerous medals in the various categories of the SV-COMP competition.
+          Symbiotic combines symbolic execution with metacompilation and program slicing.
+          It instruments a given program with a code that tracks the states of the state machines.
+          These state machines describe errorness behaviour in code\,---\,they contain the error states whose
+          reachability means that there is a bug in code.
+          Once the code is instrumented a program slicer is executed to reduce an input for symbolic execution.
+          Finally, the instrumented and sliced code is given to symbolic execution.
+
+          Symbiotic instruments code also with state machines describing bugs related to shape analysis, i.e.,
+          invalid dereferences, invalid frees, or memory leaks.
+          Futher, it uses a data-flow analysis (particularly, a pointer analysis) to prevent adding
+          checks to the manipulations with pointers which are guranteed to be safe by the pointer analysis
+          and so do not need to be verify by computationally expensive symbolic execution.
+          One of possible goals for this thesis is adding a more precise shape analysis to the work flow of Symbiotic
+          which would even more reduce complexity of symbolic execution by reducing the unnecessary checks of pointer manipulation. 
 
 	  \subsection{Bounded Model Checking}
 
@@ -10656,7 +10689,8 @@ $\calst=\{q_i\in \mathbb{N}\,|\, q_i = i \wedge \,1\leq i \leq n+1\}$\,--\,we cr
 modeled system before this event happens and we also add the final state $q_{n+1}$ representing the state of
 system after the series of event, the alphabet $\Sigma$ is obtained by
 transforming each event $\E_i=\evntind{i}$, where $1 \leq i \leq n$, to a unique symbol $a^{\E_i}$ by applying
-a~hashing function over $(\etyp_i,\esend_i,\erec_i)$, i.e., giving away $m_i$ and $\etime_i$,
+a~hashing function (particularly, we concatenate string
+representing the given values and call a hashing function over the resulting string) over $(\etyp_i,\esend_i,\erec_i)$, i.e., giving away $m_i$ and $\etime_i$,
 the set of initial states is $\calin=\{q_1\}$ (the state corresponding to the state ofthe  modeled system before the series of event starts)
 and the set of final states is $\calfi=\{q_{n+1}\}$.  Finally, $\forall 2 \leq i \leq n+1:
 (q_{i-1},a^{\E_i},\{q_{i}\})$ is added to $\caltr$.  
@@ -11102,7 +11136,9 @@ Further, we have have designed a text-based format for description of various ve
 The format supports finite automata and alternating finite automata with explicit, symbolic,
 or bitvector alphabet as well as transducers with the mentioned alphabets.
 
-The library was already used for development of a new decision procedure for string solving. TODO: citation
+The library was already used for development of a new decision procedure for string solving
+published in \cite{FM13} where the library was used as the beckend for the tool Z3-noodler\cite{z3_noodler}.
+Another paper related to string solving, in which the library is used, was accpeted for publication in the OOPSLA 2023 conference.
 
 In the field of automated testing of MES-controlled digitalized manufactoring systems,
 one may consider more domain-specific abstractions
