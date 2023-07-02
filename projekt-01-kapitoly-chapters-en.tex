@@ -47,7 +47,7 @@ Moreover, only a limited set of program properties is encodable to type systems.
 The third approach to software quality are lightweight automated methods
 such as automated testing, unsound static analysis based, e.g., on error pattern matching, symbolic execution,
 or extrapolating dynamic analysis.
-This class of methods also contains the relaxed versions of methods from formal verifiction
+This class of methods also contains the relaxed versions of methods from formal verification
 such as bounded model checking or different approaches to abstract interpretation which
 do not overapproximate the original semantics.
 The methods try to hit a sweet spot between mathematical rigour and plain bug hunting.
@@ -83,14 +83,14 @@ as well as in verification or testing of software and hardware.
 Moreover, finite automata and their variations are widely studied in theoretical computer science either
 from perspective of the decidable properties or complexity of algorithms for their manipulation.
 
-Finite automata are mainly used to represent the various structures with reccurent patterns of substructures (we deliberately
+Finite automata are mainly used to represent the various structures with recurrent patterns of substructures (we deliberately
 do not use word regular to prevent confusion with meaning of the word in context of theory of formal languages). 
 A classical application is language consisting of plain strings (used in pattern-matching applications
 such as lexical analysis in compilers or detection of malicious strings in security domains).
 A more sophisticated case arises when using regular language s containing sequences of messages
 or generally objects with an inner structure, which is used, e.g., for modelling communication protocols.
 In formal verification, there are also automata representing regular languages of infinite strings (so called Buchi automata),
-which are used for verification of some properties requiring one to reason about infinite behaviours such as termination of a program.
+which are used for verification of some properties requiring one to reason about infinite behaviors such as termination of a program.
 Another kind of automata used in formal verification are tree automata that represent sets of trees.
 These automata have been applied, e.g., to represent tree data structures (and even more complex structures defined over their tree backbones)
 allocated on heap by a program.
@@ -142,13 +142,13 @@ and enhance it by
 \begin{enumerate*}
   \item revisiting and improving its description,
   \item enhancing it by a mechanism of checking possible counterexamples and automated abstraction refinement,
-  \item improving its tool support, particulary tool \forester, to make it able to compete on an international level.
+  \item improving its tool support, particularly tool \forester, to make it able to compete on an international level.
 \end{enumerate*}
 We also attempt to find an alternative automata-based representation suitable for shape analysis
 with the aim of cover the class of graphs with bounded tree width.
 
-Futher we want to study possible alternatives to shape analysis based on forest automata.
-We will focuse mainly on the following topics:
+Further we want to study possible alternatives to shape analysis based on forest automata.
+We will focus mainly on the following topics:
 \begin{enumerate*}
   \item an alternative automata-based representation with the aim of cover the class of graphs with bounded tree width (taking inspiration from Courcelle theorem \cite{Courcelle}),
   \item exploring possibilities of shape analysis based on predicate logic, templates-based invariants, abstract domains, and SMT solving.
@@ -199,7 +199,7 @@ about state-of-the-art methods in software verification.
 
 We have also significantly improved implementation of the approach in the \forester tool.
 Consequently, Forester was able to seriously compete in international level.
-Particulary, it participated in software verification competition SV-COMP \cite{svcompweb} in the editions of years 2015, 2016, 2017, and 2018.
+Particularly, it participated in software verification competition SV-COMP \cite{svcompweb} in the editions of years 2015, 2016, 2017, and 2018.
 Although \forester did not win a medal in any major category,
 we managed to support a non trivial subset of the C language needed for a reasonable
 participation in the competition and made the tool mature enough to be competitive with
@@ -207,7 +207,7 @@ other tools, often developed by large teams.
 The tool also verified soundly some test cases such as programs manipulating skip-lists of level 3 or
 variants of trees which were not analysable by any other tool.\footnote{to the best of our knowledge,
 even today there is no tool in SV-COMP that would be capable of handling these programs in sound way.
-Some of the programs cound be handled by the S2 tool\cite{locle:secondorder} whose abstraction is, however, rather fragile,
+Some of the programs could be handled by the S2 tool\cite{locle:secondorder} whose abstraction is, however, rather fragile,
 allowing it to handle complex programs on one hand, but failing on simple ones on the other hand according to our experiments with the tool. See also related work section.}
 Although \forester stayed at the state of a prototype and a lot of engineering work would be needed to make
 it a mature tool, we were able to show that a shape analysis based on automata
@@ -309,7 +309,7 @@ of selector names.
 	  reachable in the program.
 	  The requirements on the model include:
 	  \begin{enumerate*}[label=(\alph*)]
-	  	\item genericity and expressivity\,---\,the more general classes of the heap grphs model can represent,
+	  	\item genericity and expressivity\,---\,the more general classes of the heap graphs model can represent,
                       more programs can be (in theory) analyzed,
 	  	\item automation\,---\,the model should be derivable from a program automatically and have decidable
 			properties important for reasoning about the program,
@@ -362,7 +362,7 @@ of selector names.
 	  The interest in separation logic has started rising with the introduction of the automated,
 	  abstract-interpretation-based approaches associated with Space Invader \cite{InvaderCAV08} and \slayer \cite{slayer11}.
           These approaches assume pre-defined templates of shape predicates and are not very general
-          since they are restricited to programs over certain classes of linked lists (and cannot
+          since they are restricted to programs over certain classes of linked lists (and cannot
           handle even structures such as linked lists with data
           pointers pointing either inside the list nodes or optionally outside of them,
           which we can easily handle, as discussed later on).
@@ -426,7 +426,7 @@ of selector names.
           also requires the user to come up with summary edges to be used for summarizing
           skip list segments, hence basically with an inductive definition of skip lists.
 
-          For seperation logic to be applied in verification procedure, one needs to solve problems
+          For separation logic to be applied in verification procedure, one needs to solve problems
           of satisfiability and entailment on separation logic.
           Many abstract interpretation tools solve the problem rather in ad hoc ways.
           On the other hand, there have also appeared many results on \emph{automated decision
@@ -450,7 +450,7 @@ of selector names.
           which defined new semantics for separation logic.
           The new semantics make possible to use magic wand and the singly-linked list-segment
           predicate.
-          The work also discuss their potenial application to the abduction problem.
+          The work also discuss their potential application to the abduction problem.
           However, to make this a reality, more research is needed.
 
 	  \subsection{Symbolic Memory Graphs}
@@ -472,16 +472,16 @@ of selector names.
 	  should be applicable to the domain just as for the separation logic-based methods.
 
           Many of the principles used in \cite{dudka13sas} to deal with low-level memory operations have been applied
-          in the recent work \cite{soa-biabduction} combining them with sepration logic. The scalability of the approach is, however,
+          in the recent work \cite{soa-biabduction} combining them with separation logic. The scalability of the approach is, however,
           still limited despite the potential stemming from the modularity of the approach.
 
 	  \subsection{Abstract Regular Model Checking}
 	  \label{subsection:armc}
 	  \emph{Abstract regular model checking} (ARMC) \cite{artmc} is an automata-based method for verification of parametrized and infinite-state systems.
 	  It employs automata over words and trees to represent reachable configurations of the system being verified
-	  and a regular transition relation (represented by transducers or speciliazed operations over automata) to model the semantics of the analysed system.
+	  and a regular transition relation (represented by transducers or specialized operations over automata) to model the semantics of the analysed system.
           ARMC was applied on various kinds of parametric and infinite systems such push-down systems, systems with queues, parametrised networks of process,
-          petri nets.
+          Petri nets.
           It was also used for verification of programs with dynamic data structures where words and trees are used
           to represent reachable shapes of heap\cite{bhrv06a}.
 
@@ -505,7 +505,7 @@ of selector names.
 	  the counterexample again, and the verification procedure is restarted.
 	  Otherwise the real counterexample is reported to a user.
 
-	  As inidicated above, abstract regular model checking is a general verification method that was applied to various kinds of systems
+	  As indicated above, abstract regular model checking is a general verification method that was applied to various kinds of systems
 	  including pointer programs \cite{bhrv06b, forester11, boxes13} where automata are used as a domain
 	  for representation of the allocated data structures on the heap.
 	  In \cite{bhrv06b}, the whole heap is encoded in one tree automaton, and the semantics of
@@ -531,37 +531,37 @@ of selector names.
           counterexamples analysis (to distinguish spurious and real ones). and abstraction refinement.
 
           \subsection{Symbolic Execution}
-          The main idead of symbolic execution \cite{soa-king:se} is to run a program under verification on symbolic values instead of concrete ones.
-          I.e., the program is run on symbolic input which may have an arbirtary value.
-          The concrete program operations from the original program are then replaced by opeartion manipulating symbolic values.
+          The main idea of symbolic execution \cite{soa-king:se} is to run a program under verification on symbolic values instead of concrete ones.
+          I.e., the program is run on symbolic input which may have an arbitrary value.
+          The concrete program operations from the original program are then replaced by operation manipulating symbolic values.
           When a symbolic execution reaches a branching condition, then it continues in the both branches and maintains
-          a set of \emph{path conditions} for each brach, i.e., the conditions which needs to be satisfied for the given branch
+          a set of \emph{path conditions} for each branch, i.e., the conditions which needs to be satisfied for the given branch
           to be (symbolically) executable.
           When the path conditions are unsatisfiable, the symbolic execution of the corresponding branch is aborted.
           When a bug is found during symbolic execution, it is possible to generate a test case using
           the concrete values which satisfies the path conditions in the path to the found bug.
 
-          An advatange of this approach is that it does not produce false alarms since all symbolically executed paths are feasible.
+          An advantage of this approach is that it does not produce false alarms since all symbolically executed paths are feasible.
           On other hand, a user needs to add \texttt{assert} statements to a source code to represent the error states.
-          Symbolic execution may also be computationaly demanding and it may not even terminate on programs
+          Symbolic execution may also be computationally demanding and it may not even terminate on programs
           with unbounded loops or recursion.
 
-          Symbolic execution was sucessfully used to detect bugs in real-world software.
+          Symbolic execution was successfully used to detect bugs in real-world software.
           E.g., The \texttt{KLEE} tool \cite{soa-klee} find bugs in the tools such as \texttt{GNU COREUTILS}.
 
           In the recent years, the tool Symbiotic \cite{fmics12} based on symbolic execution done by \texttt{KLEE}
           won the numerous medals in the various categories of the SV-COMP competition.
           Symbiotic combines symbolic execution with metacompilation and program slicing.
           It instruments a given program with a code that tracks the states of the state machines.
-          These state machines describe errorness behaviour in code\,---\,they contain the error states whose
+          These state machines describe erroneous behaviour in code\,---\,they contain the error states whose
           reachability means that there is a bug in code.
           Once the code is instrumented a program slicer is executed to reduce an input for symbolic execution.
           Finally, the instrumented and sliced code is given to symbolic execution.
 
           Symbiotic instruments code also with state machines describing bugs related to shape analysis, i.e.,
           invalid dereferences, invalid frees, or memory leaks.
-          Futher, it uses a data-flow analysis (particularly, a pointer analysis) to prevent adding
-          checks to the manipulations with pointers which are guranteed to be safe by the pointer analysis
+          Further, it uses a data-flow analysis (particularly, a pointer analysis) to prevent adding
+          checks to the manipulations with pointers which are guaranteed to be safe by the pointer analysis
           and so do not need to be verify by computationally expensive symbolic execution.
           One of possible goals for this thesis is adding a more precise shape analysis to the work flow of Symbiotic
           which would even more reduce complexity of symbolic execution by reducing the unnecessary checks of pointer manipulation. 
@@ -598,7 +598,7 @@ of selector names.
 	  \section{Counterexample Validation and Automatic Refinement of Abstraction for Shape Analysis}
 
 	  A common weakness of the current approaches to shape analysis is a lack of a proper support for checking
-	  spuriousness of potenial counterexample traces, possibly followed by automated refinement
+	  spuriousness of potential counterexample traces, possibly followed by automated refinement
 	  of the employed abstraction. This is one of the problems we tackle in this thesis.
 	  Below, we characterize previous attempts on the problem and preparing grounds for its application
           to forest-automata-based shape analysis described in the Section \ref{subsection:armc}.
@@ -785,7 +785,7 @@ of selector names.
 	for proving properties of other abstract machines.
 	An example is emptiness of automata with auxiliary storage in \cite{soa-popl11tw}.
 
-        In this work (Chapter \ref{ch:netys}) we present graph automata over graphs with bounded tree wdith that,
+        In this work (Chapter \ref{ch:netys}) we present graph automata over graphs with bounded tree width that,
         unlike presented works, aims to efficient manipulation within automata-based shape analysis.
 
 \chapter{Shape Analysis based on Forest Automata}
@@ -806,10 +806,10 @@ were introduced in \cite{forester11,boxes13,forester12,forester11:techrep,techre
 the conference publications \cite{forester11, boxes13} were missing quite some details,
 the technical reports \cite{forester11:techrep, techrep} were not fully consistent
 and easy to read.
-Therefore they were revisted as part of our work and this revised version was accepted
+Therefore they were revisited as part of our work and this revised version was accepted
 as a chapter of a book about tools participating in software verification competition SV-COMP.
 Further we modified basic approach using forest automata with respect to \cite{vmcai17}
-to allow the analysis of potenatial counterexamples traces and abstraction refinement to be added in a smooth way.
+to allow the analysis of potential counterexamples traces and abstraction refinement to be added in a smooth way.
 The revised description of the method is also presented in this chapter.
 
 Forest-automata-based shape analysis is an approach to verification of sequential C-like programs with complex \emph{dynamic linked
@@ -1201,7 +1201,7 @@ $\code{NULL}$ address and undefined locations as special memory nodes pointed by
 $\code{NULL}$ and $\code{undef}$, respectively), and the same holds for pointer variables of the program.
 Data fields of memory nodes hold a~data value.
 Term \emph{selector} is used to talk both about pointer and data fields.
-For simplification, data variables are modelled as pointer variables pointing to
+For simplification, data variables are modeled as pointer variables pointing to
 allocated nodes that contain a single data field with the value of the
 variable, and therefore consider only pointer
 variables hereafter.
@@ -4661,12 +4661,12 @@ boxes that are required and thus substantially increase the performance.
 \label{ref:fig-re1}
 \end{figure}
 
-To illustate the proposed application of FAs to shape analysis, this sections provides with a running example.
+To illustrate the proposed application of FAs to shape analysis, this sections provides with a running example.
 We are going to show a computation of shape invariant in which
 abstraction and folding are performed alternately until a fixpoint is reached.
 The presented example should illustrate the main principles and give you some intuition,
 therefore it is imprecise in some details.
-We will first show the main principle on a concrete heap graph at first to build basic inuition
+We will first show the main principle on a concrete heap graph at first to build basic intuition
 and then we are going to present the same example on forest automata.
 
 Consider the data structure allocated on the heap shown on the left-hand side of
@@ -4729,7 +4729,7 @@ On the right-hand side there is the resulting graph with the highlighted parts f
 The second abstraction is performed, but the abstraction algorithm finds nothing that could be abstracted.
 Then the second folding follows. It finds the suitable sub-graphs for folding which are highlighted by
 the blue color on the left-hand side of Figure \ref{ref:fig-re3}.
-These sub-graphs are segments of the doubly-linked list, i.e., the parts of the graph between two neighbouring DLL nodes.
+These sub-graphs are segments of the doubly-linked list, i.e., the parts of the graph between two neighboring DLL nodes.
 The algorithm folds the sub-graphs to the boxes called \emph{DLS}.
 The resulting graph after the folding is shown on the right-hand side of Figure \ref{ref:fig-re3}.
 
@@ -4790,7 +4790,7 @@ just one transition with the mentioned box.
 \end{center}
 \end{figure}
 
-To make the running example complete we illustate the same computation on forest automata.
+To make the running example complete we illustrate the same computation on forest automata.
 In Figure~\ref{ref:fig-re6.1}, there is a forest automaton representing data structure
 already shown in the left-hand side of Figure \ref{ref:fig-re1}, i.e., circular doubly-linked lists which
 nodes are roots of binary tree with root pointers.
@@ -4800,7 +4800,7 @@ where $\mathtt{n,p}$ correspond to the \emph{next, previous} selectors of doubly
 and $\mathtt{l,t,r}$ to the \emph{left, tail, right} selectors of binary tree with root (or tail) pointer.
 The remaining transition from non-root states contains only the selectors $\mathtt{l,t, r}$ (in this order),
 i.e., these states accept the tree parts of the represented heap graph.
-Futher, the overlined numbers in the colored boxes are the root refences to the root states.
+Further, the overlined numbers in the colored boxes are the root references to the root states.
 
 One can see that in every transition of a tree automaton, the selector $t$ leads to a root reference
 referencing the root state of the given tree automaton.
@@ -4844,7 +4844,7 @@ representing a binary tree with root pointers.
 \begin{figure}[bt]
 \begin{center}
       \input{figs/running/complex_forest_dls_box.tikz}
-\caption{The figure illustates box representing one segment of doubly-linked list.}
+\caption{The figure illustrates box representing one segment of doubly-linked list.}
 \label{ref:fig-re8.1}
       \input{figs/running/complex_forest_dls_folded.tikz}
 \caption{The forest automaton after folding of the $\mathtt{dls}$ boxes is done.}
@@ -4860,14 +4860,14 @@ representing a binary tree with root pointers.
   \begin{subfigure}[b]{0.49\linewidth}
       \input{figs/running/complex_forest_dls_abstracted.tikz}
   \end{subfigure}
-\caption{The left-hand side show automatan after tree automata has been merged to one since there were no longer any cutting points after the last folding.
-The resulting automaton after another abstraction is in the right-hand figurewas applied. The automaton represents doubly linked of arbitrary length.}
+\caption{The left-hand side show automata after tree automata has been merged to one since there were no longer any cutting points after the last folding.
+The resulting automaton after another abstraction is in the right-hand figure was applied. The automaton represents doubly linked of arbitrary length.}
 \label{ref:fig-re9}
 \end{center}
 \end{figure}
 
 Now the abstraction is performed again but there is nothing to abstract so we continue with another folding.
-The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containig two nodes
+The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containing two nodes
 referencing each other via the $\emph{next, previous}$ selectors.
 On the forest automata level, the pattern is illustrated (in Figure~\ref{ref:fig-re8.1} by the two root states $\mathtt{b,c}$ and their references
 such that the state~$\mathtt{b}$ references the~state~$\mathtt{c}$ via the~selector~$\mathtt{n}$ and the state~$\mathtt{c}$ references the~state~$\mathtt{b}$ via the selector~$\mathtt{p}$.
@@ -4880,7 +4880,7 @@ More precise would be to draw each transition with two selectors, one labeled by
 we use the single line representation for the sake of simplicity. 
 
 After the folding we can merge the tree automata in the forest automaton to one tree automaton
-since the represented heap graph has no longer any cut-points (i.e., each node is pointed exatly once) which is shown in the left-hand side of Figure~\ref{ref:fig-re9}.
+since the represented heap graph has no longer any cut-points (i.e., each node is pointed exactly once) which is shown in the left-hand side of Figure~\ref{ref:fig-re9}.
 Finally, when the abstraction is applied to this automaton, we obtain an automaton representing circular
 doubly-linked list of arbitrary length as it is shown in the right-hand side of Figure~\ref{ref:fig-re9}.
 
@@ -5222,7 +5222,7 @@ The instruction \texttt{check} on line~6 checks that the heap is garbage free.
 \section{Tutorial}\label{sec:tutorial}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\forester can be obtained from its webpage \cite{foresterweb}, and the
+\forester can be obtained from its web page \cite{foresterweb}, and the
 easiest way to run it is from the virtual machine~\cite{zenodo}.
 Once the provided virtual machine (Ubuntu~16) is booted, the user will find the \texttt{forester} folder
 on the desktop.
@@ -5443,7 +5443,7 @@ We use ``SLL'' and ``DLL'' to denote singly and doubly-linked lists
 respectively.
 
 The cases described in the following list satisfy some 
-safe invariant expressible usgin regular languages (if their status in the table is ``safe'') or contain an error
+safe invariant expressible using regular languages (if their status in the table is ``safe'') or contain an error
 (if their status is ``error'').
 As an error, we consider violation of memory safety properties, i.e.,  absence
 of $\nil$/undefined pointer dereference, invalid free, and presence of garbage.
@@ -9029,9 +9029,9 @@ various algorithms for tree automata.
 The main bottleneck of \forester in the competition, namely, is inability to distinguish between false and real bugs in a program,
 was fixed for the next edition (2016) (the possibility of false bugs is caused by using abstraction over forest
 automata as was described in the previous chapters).
-This defficiency was resolved by an implementation of a backward symbolic exection from the point where a~violation of the specification was detected
+This deficiency was resolved by an implementation of a backward symbolic execution from the point where a~violation of the specification was detected
 and check whether it is real or spurious counterexample.
-The princple of this procedure was already described in Section \ref{subsec:backward_run}.
+The principle of this procedure was already described in Section \ref{subsec:backward_run}.
 
 The backward run and abstraction refinement were implemented in the standard CEGAR loop.
 We used the already existing forward run and added it to a loop where a (potentially) found counterexample
@@ -9043,7 +9043,7 @@ Once the abstraction is refined, \forester can recover from the phase of detecti
 
 Finally, for edition 2017 we extended the backward run and abstraction refinement to hierarchical forest automata
 (described in Section \ref{sec:boxes}).
-The hirearchical structuring complicates the intersection of forest automata since the intersection needs to take the semantics of boxes into account.
+The hierarchical structuring complicates the intersection of forest automata since the intersection needs to take the semantics of boxes into account.
 One possible solution would be some on-the-fly unfolding of boxes which would make the intersection algorithm complicated.
 Therefore, as described in Section \ref{sec:intersection}, we take another approach which keeps automata in forward and backward run in the so-called compatible form (Section \ref{sec:compatibility}).
 This form assures that the same heaps are represented in the same way.
@@ -9072,7 +9072,7 @@ unknown on many tasks from the SV-COMP benchmark.
 Further, memory-safety-related categories of SV-COMP frequently contain C features such as function  
 pointers, alloca function, or arrays.
 We did not have the manpower to add these features to \forester, which is still a prototype and
-would need a major refactoring to reach a state where an easy maintainability and extensibility would be possible.
+would need a major refactoring to reach a state where an easy maintainability and extensible would be possible.
 
 \chapter{Towards Efficient Shape Analysis with Tree Automata}
 \label{ch:netys}
@@ -9106,7 +9106,7 @@ None of the existing formalisms for describing shape graphs have all the followi
 \begin{enumerate*}
 %\begin{inparaenum}
 \item
-\emph{Expressiveness}\,--\,the ability to talk about variants of lists, trees, structures such as skip-lists, threaded trees, their combinations and overlayd variants.
+\emph{Expressiveness}\,--\,the ability to talk about variants of lists, trees, structures such as skip-lists, threaded trees, their combinations and overlaid variants.
 \item
 \emph{Local reasoning}\,--\,running a program statement on the abstract domain should have a local effect only, it should be possible to reason locally about the affected parts.
 \item
@@ -9139,7 +9139,7 @@ It is, however, very sensitive to how the code is written (since it is, in a sen
 %together with abstraction/generalization methods capable of inferring inductive predicates.
 
 Outside separation logic, especially the approach based on forest automata \cite{forester11,forester12,holik_boxes_2013,vmcai17} has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning and has potential to be efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{svcomp15-forester} with counterexample guided refinement loop. The formalism, however, suffers from some deficiencies as that the classes of shape graphs it can handle are relatively rich but still with limitations
-and that it is not closed under union (wihch complicates their manipulation during verification procedure, e.g., a fixpoint computing).
+and that it is not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computing).
 
 We discuss here our work on developing a new graph formalism in the spirit of forest automata that would remedy their weaknesses.
 %
@@ -9347,7 +9347,7 @@ Intuitively, a node of a tree represents a node in the tree decomposition, and t
 %
 
 \section{Towards Entailment}
-The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{tacas10,almeida_reduction_2016,abdulla_computing_2008,libvata}) over tree automata encodings of tree decompositions.
+The idea for deciding entailment is to use tree automata language inclusion algorithms (such as \cite{tacas10,almeida_reduction_2016,abdulla_computing_2008,libvata}) over tree automata encoding of tree decompositions.
 The difficulty here is that a single graph has multiple decompositions and the tree automata may accept only some of them, hence simple language inclusion check may underapproximate the inclusion of sets of represented graphs (entailment).
 %
 We therefore propose means of saturating the tree automata languages with all possible tree decompositions of the represented graphs.
@@ -9439,7 +9439,7 @@ Last, replace the edge leading to $\bag$ by $(\bag',\rho_1',\bag)$ where $\rho_1
 This makes $\bag$ a child of $\bag'$ and connects the new primed pipes to the corresponding original pipes of $\bag$.
 
 An example of the operation is shown in Figure \ref{fig:decomps} (c)
-where the righ-handed side decomposition $\dect_0$ from Figure \ref{fig:decomps} (b) is rotated by $\chr(b_0,b_0',\dect_0)$.
+where the right-handed side decomposition $\dect_0$ from Figure \ref{fig:decomps} (b) is rotated by $\chr(b_0,b_0',\dect_0)$.
 %\paragraph{Complex reconnection.} 
 %\item[Complex reconnection.] 
 %It is a variant of the reconnection where $\bag$ and $\bag'$ can be on the same branch. The normal reconnection on $\bag$ and $\bag'$ would in such case introduce a cycle,
@@ -9467,7 +9467,7 @@ An example of the operation is shown in Figure \ref{fig:decomps} (d) where the d
 %\paragraph{Phase.}
 \item[Phase.]
 %We will continue with the assumption that a complete set of operations is rotation and (normal) reconnection.
-The operations from one tree decomposition to an equivalent one may take unboundedly many operations. We will devide them into \emph{phases}.
+The operations from one tree decomposition to an equivalent one may take unboundedly many operations. We will divide them into \emph{phases}.
 %We will therefore need a procedure that implements unboundedly many operations on a tree automaton that represents infinitely many decompositions in a finite way.
 %To make this procedure manageable, we will divide it into \emph{phases}.
 One phase can still perform unboundedly many operations, but the set is restricted: 
@@ -9725,8 +9725,8 @@ However, we provide an overview of the approach only. For a full technical descr
 
 The verification method is based on representing the state space of the program being verified w.r.t. the property of interest
 using a first order formula over a suitable combination of SMT theories that represents both the program in SSA form, a set of
-invariants based on predefined templates (proposed for various domains of data), and the property of intereset.
-Templates manually crafted logic formulea to capture only certain aspects of an analysed program
+invariants based on predefined templates (proposed for various domains of data), and the property of interest.
+Templates manually crafted logic formulae to capture only certain aspects of an analysed program
 which makes the analyses computationally quite efficient.
 An example of such template may be formula $\bigwedge_{i} x_i \leq d_i$ where $x_i$ are the program
 variables and $d_i$ are templates parameters for which analysis should find constant values.
@@ -9775,10 +9775,10 @@ In template-based program verification,
 a set of program states is described using
 a formula built using suitable templates---states in the set are defined by models of the formula. Given a
 vector of variables $\vx$, let the formula $\fminit(\vx)$ describe
-the initial states. Futher, let $\fmtrans(\vx, \vxp)$ be a a describing the transition relation.
+the initial states. Further, let $\fmtrans(\vx, \vxp)$ be a a describing the transition relation.
 Finally, let $Err(\vx)$ be a formula describing error states.
 
-Using $\inv(\vx)$ to refor for an (inductive) invariant of the system,
+Using $\inv(\vx)$ to refer for an (inductive) invariant of the system,
 the verification task can be reduced to the following second-order
 quantification ($\exists_2$):
 \begin{equation}\label{eq:2ls}
@@ -9842,7 +9842,7 @@ and later constrained by the derived candidate loop invariants.
 \section{Template domain for Shape Analysis}
 In \cite{fmcad18}, we design a template domain which is used in the described framework to
 derive \emph{loop invariants} of the programs with dynamic pointer -linked data structures.
-The domain is particulary useful for programs with various kinds of lists as shown in our experiments.
+The domain is particularly useful for programs with various kinds of lists as shown in our experiments.
 % Templates are also used to constrain values of the \emph{loop-back variables} that are
 % used in the SSA-based program encoding to over-approximate values returning from
 % the end of the loop to the loop head.
@@ -10080,7 +10080,7 @@ can be found in \cite{fmcad18}.
 To conclude this chapter, we provide a brief overview of an empirical evaluation of our method.
 First, we did an experiment showing how the proposed method improved performance of 2LS
 in benchmarks of the software verification competition SV-COMP,
-particulary in the sub-categories \emph{ReachSafety-ControlFlow} and \emph{ReachSafety-Heap},
+particularly in the sub-categories \emph{ReachSafety-ControlFlow} and \emph{ReachSafety-Heap},
 where a reachability of an error condition was checked and in the sub-categories
 \emph{MemSafety-Heap}, \emph{MemSafety-LinkedLists}, \emph{MemSafety-Others}
 where absence of invalid pointer dereference,
@@ -10097,7 +10097,7 @@ missing shape analysis which often lead to reporting incorrect results.
 also faster in some of them.
 
 Unfortunately, we are sill unable to compete with the best tools of SV-COMP'18 in the heap categories.
-They support the bigger set of the C language features such pointer arithmetics or
+They support the bigger set of the C language features such pointer arithmetic or
 manipulation of arrays.
 Some of the tools also use the domains for shape analysis with higher expressive power
 so they can handle various kinds of trees or nested lists what is currently beyond expressivity
@@ -10134,7 +10134,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
 However, the main comparative advatenge of our work is combining different analysis,
-particulary we can combine value and shape analysis.
+particularly we can combine value and shape analysis.
 We created a benchmark consisting of $10$ program in the C language.
 These programs manipulates unbounded dynamic data structure and the verification tools also need to
 reason about the data stored in these structures.
@@ -10149,7 +10149,7 @@ the task.
 %
 
 The tools like \emph{Forester} and \emph{Predator}~\cite{dudka13sas} were
-limited by their inability to resaon about the stored in the lists.
+limited by their inability to reason about the stored in the lists.
 On the other hand, more general tools such as \emph{Symbiotic}~\cite{CVS18} or
 \emph{Ultimate Automizer}~\cite{HCDGHLNM18} often timed out since they
 probably lack an efficient abstraction for combination of shape and
@@ -10180,7 +10180,7 @@ and machines to make autonomous decisions and control a part of production witho
 One of the main challenges of Industry 4.0 is to develop secure and
 bug-free components, especially in distributed manufacturing execution
 systems. These systems usually control an industrial production consisting of manufacturing machines paired with
-controlling terminals, industrial control systems (ICS), enterprise resource planning systen.
+controlling terminals, industrial control systems (ICS), enterprise resource planning system.
 Development and testing of such systems is quite complex because their
 components
 %
@@ -10268,7 +10268,7 @@ different protocols and data structures, e.g.: \begin{inparaenum}[(1)]
 \begin{figure}[bt]
   \centering
   \includegraphics[scale=0.8]{figs/eurocast-diagram.pdf}
-  \caption{A scheme of our solution for generating scenarions for orchestrating digital twins based on learning from logs of a real system.}
+  \caption{A scheme of our solution for generating scenarios for orchestrating digital twins based on learning from logs of a real system.}
   \label{fig:tunis-diagram}
 \end{figure}
 
@@ -10332,7 +10332,7 @@ from different versions to detect, e.g., anomalies in the performance.
 %performance analysis.
 
 \paragraph{Related work.} There exist different approaches for
-modelling communication in manufactoring systems and deriving new test cases.
+modelling communication in manufacturing systems and deriving new test cases.
 %
 The work \cite{csight} uses finite automata to model the communication in the described systems,
 however, their approach is limited to learning a fixed number of components only.
@@ -10353,15 +10353,15 @@ hence, no probabilistic transitions are created in the derived automata.
 %
 Finally, there some other approaches such as \cite{wcre09} (does not have available implementation
 and it is not clear from the experiments if the new test cases can be generated from an inferred model),
-\cite{prospex} (focuses on infering a state machine representing a communication
-protocol but does not consider more comunicating components of system neither
-an inner structure of comunicated messages),
+\cite{prospex} (focuses on inferring a state machine representing a communication
+protocol but does not consider more communicating components of system neither
+an inner structure of communicated messages),
 or \cite{icpn08} (which produce complex models from which it would be complicated to generate scenarios),
 but none of them fulfill all needs of this project.
 
 Beside modelling communication, we also need to model and generate new messages.
 In our use case, the messages are in the JSON and XML formats.
-There are several tools which can generate testing data in theese formats.
+There are several tools which can generate testing data in these formats.
 One of them is the \emph{DTM Data Generator for JSON} \cite{ref_dtm} which can
 generate testing JSON data having a structure defined manually by the user
 or derived from an example of an input document.
@@ -10386,7 +10386,7 @@ However, it is not suitable for our purposes since we want to learn the syntacti
 of logged messages, not to write their specification manually.
 The second approach is based on generating XML documents based on a given XML schema instance \cite{xmlscheme}
 which is closer to our needs.
-Morever, it does not provide generalization of the same class of messages to one generic syntactic structure. 
+Moreover, it does not provide generalization of the same class of messages to one generic syntactic structure. 
 
 \section{Modelling Messages} \label{sec:messages} 
 
@@ -10440,17 +10440,17 @@ and $N$ is a set of child nodes (either leaves or composite).
 % We assume that the root of every message is represented by the
 % $root$ key.
 %
-We illustate a representation of an XML message by our model in the following example.
+We illustrate a representation of an XML message by our model in the following example.
 Consider the XML messages from the Listing \ref{list:XML1} and \ref{list:XML2}.
 Both messages contains simplified description of components needed to create a product.
-For each component there is specified a material of compoment and a number of needed items of the given component for production.
-Beside a description of components needed a product production the XML messages containt also name of the product.
+For each component there is specified a material of component and a number of needed items of the given component for production.
+Beside a description of components needed a product production the XML messages contain also name of the product.
 The messages are sent from ERP to MES and they are stored in the files having the timestamps
 in their names (particularly, \texttt{20211207-125952.xml} and \texttt{20211207-125955.xml}) in the logs of communication.
 
 An illustration of the models of the XML message are in Figure \ref{fig:eurocast:models}.
 The pink nodes are composite nodes and the blue nodes are leaf nodes.
-The text inside nodes corresponds to the quadraples in the definition of both kinds of nodes. 
+The text inside nodes corresponds to the quadruples in the definition of both kinds of nodes. 
 Please note, that the children of the composite nodes are not explicitly in the text but are reflected by the tree
 structure of the model.
 As one can see the tree structures of the models in the figure corresponds to the structures of the XML models.
@@ -10531,9 +10531,9 @@ $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
 \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
 %
 Let us explain why the values $u_i$ and $l_i$ are sumed.
-If we reduce two nodes with key $a$, one with $30$ maximal occurences (i.e., occured in $30$ places)
-and the second with $20$ maximal occurences (i.e., occured in $20$ places),
-then the resulting node has $50$ occurences maximally (i.e., represents nodes which occured in $50$ places).
+If we reduce two nodes with key $a$, one with $30$ maximal occurrences (i.e., occurred in $30$ places)
+and the second with $20$ maximal occurrences (i.e., occurred in $20$ places),
+then the resulting node has $50$ occurrences maximally (i.e., represents nodes which occurred in $50$ places).
 %
 Then, for composite nodes, we define the \emph{group and reduce} function as
 $\grpreduceop{\nodee{k}{l}{u}{N},\preds{c}{m}}$ $= \nodee{k}{l}{u}{N'}$, where
@@ -10553,7 +10553,7 @@ We use predicate stating that only the nodes with the same children (i.e., their
 the same keys) can be grouped.
 As one can see the nodes with the key \emph{Component} are grouped to one node
 as well as their children nodes with the keys \emph{Material} and \emph{Count}.
-The number of occurence of the nodes has also changed to $3$ in the left sub-figure 
+The number of occurrence of the nodes has also changed to $3$ in the left sub-figure 
 and to $2$ in the right sub-figure which reflect the number of grouped nodes.
 
 \begin{figure}[tb]
@@ -10582,7 +10582,7 @@ and $Copied(N,$ $N') = \{n\ |\ n \in N \wedge \forall n' \in N'\,\forall c\in C:
 Intuitively, we choose values of minimal and maximal number of occurrences to cover both
 nodes.
 %
-In the composite nodes, we group the children satisfying the same criterium and
+In the composite nodes, we group the children satisfying the same criterion and
 recursively merge them.  If there is a child node from $N_1$ (resp. $N_2$) with
 no node from $N_2$ (resp. $N_1$) that matches the same criterion, the former node
 is simply copied to the result.  For simplicity, we assume that a criterion $c$
@@ -10594,14 +10594,14 @@ Finally, for each class and its messages with the root nodes $r_1, \ldots,
 r_n$, we compute the final abstract node $n$ representing the class as $n =
 \mergeop{\grpreduceop{r_1,\preds{c}{m}}}{\mergeop{\ldots}{\grpreduceop{r_n,\preds{c}{m}}}}$.
 
-We illustate the \emph{merge} operation by Figure \ref{fig:eurocast:merge}.
+We illustrate the \emph{merge} operation by Figure \ref{fig:eurocast:merge}.
 The figure contains a result of application of the operation to the trees from Figure \ref{fig:eurocast:gar}.
 The nodes with keys \emph{Name} and \emph{Component} from both trees were merged.
-The numbers defining minimal and maximal occurences of nodes \emph{Name} are still $1$ since
-the node appeares exactly once in the both reduced trees.
-The minimal number of occurences of the nodee with the key \emph{Component} is now $2$ (since
-it has $2$ occurences in the right-hand tree from Figure \ref{fig:eurocast:gar}) and
-the maximal number of occurences is $3$ of the nodes is $3$ (which is the number of the occurences of the node
+The numbers defining minimal and maximal occurrences of nodes \emph{Name} are still $1$ since
+the node appears exactly once in the both reduced trees.
+The minimal number of occurrences of the node with the key \emph{Component} is now $2$ (since
+it has $2$ occurrences in the right-hand tree from Figure \ref{fig:eurocast:gar}) and
+the maximal number of occurrences is $3$ of the nodes is $3$ (which is the number of the occurrences of the node
 in the tree from the left-hand side of the same figure).
 The same holds also for the leaf nodes  \emph{Material} and \emph{Count}.
 \begin{figure}[tb]
@@ -10695,7 +10695,7 @@ system after the series of event, the alphabet $\Sigma$ is obtained by
 transforming each event $\E_i=\evntind{i}$, where $1 \leq i \leq n$, to a unique symbol $a^{\E_i}$ by applying
 a~hashing function (particularly, we concatenate string
 representing the given values and call a hashing function over the resulting string) over $(\etyp_i,\esend_i,\erec_i)$, i.e., giving away $m_i$ and $\etime_i$,
-the set of initial states is $\calin=\{q_1\}$ (the state corresponding to the state ofthe  modeled system before the series of event starts)
+the set of initial states is $\calin=\{q_1\}$ (the state corresponding to the state of the  modeled system before the series of event starts)
 and the set of final states is $\calfi=\{q_{n+1}\}$.  Finally, $\forall 2 \leq i \leq n+1:
 (q_{i-1},a^{\E_i},\{q_{i}\})$ is added to $\caltr$.  
 %\tsf{What's hashing? (AS: now I'm ok with this)}
@@ -10737,9 +10737,9 @@ The messages between machines and MES are in the Listing~\ref{list:MMM} and the 
 terminals and MES are in the Listing~\ref{list:TERM}.
 
 Each event contains information as defined above.
-The messages are not included or shorthended for the sake of brevity.
+The messages are not included or shorthanded for the sake of brevity.
 The text \texttt{<XML>} or \texttt{<JSON>} means that the whole XML or JSON message would be included in an event.
-A type of event is determined by communication protocol and the types of XML and JSON messages are futher refined
+A type of event is determined by communication protocol and the types of XML and JSON messages are further refined
 by their class (we described concept of a class of a message in the previous section).
 In our example, we have types \texttt{REST-1} and \texttt{REST-2} which means that all messages with
 this are communicated via REST protocol but those with the first type are classified to the class $1$
@@ -10748,10 +10748,10 @@ and those with the second type are classified to the class $2$.
 In the next step, we convert the events to the symbols (of alphabet of an automaton) by dropping the message
 and timestamp as we described above. In this case, we obtain three different symbols\,--\,\texttt{a,b,c}.
 Then we create an automaton representing the event calendar.
-The automaton has seven states and trasition over the created symbols.
+The automaton has seven states and transition over the created symbols.
 Finally if we apply a trace abstraction up to length $3$ we get the automaton on the right-hand side of the figure.
 The states $1$ was merged with the state $4$, the state $2$ with the state $5$, and the state $3$ with state $6$.
-One loop was created in the resulting automaton and a language of the automaon is $(abc)^n$ for $n \geq 1$.
+One loop was created in the resulting automaton and a language of the automaton is $(abc)^n$ for $n \geq 1$.
 
 \begin{figure}[tb]
 \begin{center}
@@ -10779,7 +10779,7 @@ abstract representation.
 By default, we support exact replication of the seen communication, however, we
 provide also an experimental support for, e.g., generating syntactically,
 semantically similar messages, or creating a new event calendar (i.e., a new test scenario)
-from abstracted automatom as described in the previous section and proceed in the same way.
+from abstracted automaton as described in the previous section and proceed in the same way.
 However, we would need more support from our industry partner to more refine these methods
 which we unfortunately did not get.
 
@@ -10803,9 +10803,9 @@ in their names.
 %Implicitly we know that it was communicated using REST protocol.
 %
 Listing~\ref{list:MMM} shows the messages between a machine and the MES.
-The messages contains their timestemps. The semantics of message is that
+The messages contains their timestamps. The semantics of message is that
 the value of the node $0$ should be set to $99$ (and then to $100$ by the second message) in Machine $001$.
-Listing~\ref{list:TERM} shows an example of a log of communcation between terminal and MES consisting of two messages.
+Listing~\ref{list:TERM} shows an example of a log of communication between terminal and MES consisting of two messages.
 The messages have two sections.
 The first one is header which includes a timestamp, the identification numbers of a client and a communication, a type of message.
 The second part of a message are data in the JSON format.
@@ -10827,10 +10827,10 @@ The message contains data from the headers of the logged messages and the data i
 Note, that we can drop some information from the logged message such as id of communication since
 we get the fresh values of such variables in a simulation in digital twin.
 
-Then the orchestration continues with the similar three steps which different only in the agruments (and time).
+Then the orchestration continues with the similar three steps which different only in the arguments (and time).
 The fourth step is communication between ERP and MES containing the XML message from Listing~\ref{list:XML2}.
 The fifth step is a message from Machine 001 to MES setting the value of the node with path $0$ to the value $100$ (which is
-derived from the second message in the in Listing~\ref{list:MMM}), and finaly, the sixth step is
+derived from the second message in the in Listing~\ref{list:MMM}), and finally, the sixth step is
 a message from Terminal 001 to MES containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
 
 %
@@ -10974,20 +10974,20 @@ timestamps:
 \end{figure}
 
 %
-We tested our approach on captured communication provided by a~partner company that offers a~MES as their product. Particulary, we got the following logs:
+We tested our approach on captured communication provided by a~partner company that offers a~MES as their product. Particularly, we got the following logs:
 \begin{enumerate}
   \item communication between the MES and ERP consisting of $228$ XML files where each file is one message,
   \item communication between the MES and two machines consisting of $25,072$ messages between the first machine and MES and $20$ messages between the second machine and MES,
   \item communication between the MES and a terminal consisting of $5,970$ messages.
 \end{enumerate} That is a total of $31,290$ messages.
 
-We processed the logs using the Tyrant tool on a machine having a $3$ GHz Dual-Core Intel Core i5 CPU and $8$ GiB DDR3 RAM. We generated a scenario for the Cryton tool having $31,303$ steps, which corresponds to the mentioned $31,290$ messages with $13$ steps added for initialization of the communicatation between the MES and ERP. We generated the scenario in $22$ seconds.
+We processed the logs using the Tyrant tool on a machine having a $3$ GHz Dual-Core Intel Core i5 CPU and $8$ GiB DDR3 RAM. We generated a scenario for the Cryton tool having $31,303$ steps, which corresponds to the mentioned $31,290$ messages with $13$ steps added for initialization of the communication between the MES and ERP. We generated the scenario in $22$ seconds.
 
-We futher transformed the event calendar representing the above scenario to an automaton and applied abstraction over it. Before the abstraction, we obtained
+We further transformed the event calendar representing the above scenario to an automaton and applied abstraction over it. Before the abstraction, we obtained
 an automaton with $31,303$ states (which corresponds to the number of steps in the scenario). After the abstraction, we got an automaton with $3,568$ states
 and $17$ loops, and we were able to generate new scenarios using the abstracted automaton.
 
-Although the results of applying the abstraction look promising, this feature of Tyrant is still experimental, and to be fully aplicable for testing a particular
+Although the results of applying the abstraction look promising, this feature of Tyrant is still experimental, and to be fully applicable for testing a particular
 MES in a digital twin, it would need some fine-tuning. For instance, some sequences of messages (such as the initial ones) cannot be repeated more than
 once or some messages need to be kept in a particular order. Unfortunately, we did not manage to do this fine-tuning in cooperation with the partner company.
 
@@ -11006,7 +11006,7 @@ The main challenges of generating scenarios suitable for orchestrating digital
 twins is finding suitable models for (1) the communication in the systems and
 (2) the actual sent messages during the communications.
 %
-We proposed to use a simple approach: using event calendar (or evatually finite automaton)
+We proposed to use a simple approach: using event calendar (or eventually finite automaton)
 to represent (and generalize in the case of finite automaton) the communication and
 a simple abstract representation for individual messages within the communication.
 
@@ -11026,13 +11026,13 @@ environments remains an interesting subject of future work.
 
 \chapter{Conclusion and Further Work}
 \label{ch:concl}
-This thesis focused primarly on usage of finite automata in shape analysis
+This thesis focused primarily on usage of finite automata in shape analysis
 and automated testing.
-Our work utilizied the following strong sides of automata in the different contexts:
+Our work utilized the following strong sides of automata in the different contexts:
 \begin{enumerate*}
   \item expressivity (we are able to learn the different shape invariants using refinement of abstraction over forest automata),
   \item genericity (we proposed a new kind of automata able to represent graphs with bounded tree width),
-  \item flexibility (we used autmoata techniques in a different field, particularly in one part of our work on automated testing).
+  \item flexibility (we used automata techniques in a different field, particularly in one part of our work on automated testing).
 \end{enumerate*}
 To provide a different perspective and comparison to automata-based approaches,
 we also presented alternative approach to shape analysis based on SMT solving, on which development we participated.
@@ -11040,7 +11040,7 @@ we also presented alternative approach to shape analysis based on SMT solving, o
 The main achieved result in shape analysis is the proposed way of using backward symbolic
 execution on forest automata for checking spuriousness of potential counterexamples
 and counterexample-guided refinement (CEGAR) to shape analysis based forest automata.
-Backward symbolic exection enables distinguishing between real and spurious (caused by abstraction) counterexamples.
+Backward symbolic execution enables distinguishing between real and spurious (caused by abstraction) counterexamples.
 This made reporting of bugs found in programs through the forest-automata-based shape analysis
 reliable due to avoiding the possibility of reporting false alarms.
 The ability to detect spurious counterexamples is the first building block for a CEGAR loop.
@@ -11052,8 +11052,8 @@ unless the height is radically increased, which would have a detrimental effect 
 that the exclusion can be guaranteed using this blind refinement).
 On the other hand, predicate abstraction derives the new predicates from the detected spurious counterexample
 which prevents reaching the counterexample again.
-Moreoer, the refinement is informed (i.e., it refined the abstraction in a way needed to exclude
-the given counterexample, not blindy)
+Moreover, the refinement is informed (i.e., it refined the abstraction in a way needed to exclude
+the given counterexample, not blindly)
 enables verification of a new class of data structures
 where a set of predicates (derived during CEGAR) is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:asv}.
@@ -11067,7 +11067,7 @@ Indeed, \forester was able to soundly verify as the only tool in the competition
 such as programs over skip lists of the 2nd and 3rd level, various trees,
 and also data structures with relations between nodes (for which we derive predicates using CEGAR).
 
-Our futher result in automata-based shape analysis is introduction of automata over graphs
+Our further result in automata-based shape analysis is introduction of automata over graphs
 with a bounded tree width which are inspired by the Courcelle's theorem \cite{courcell_graph_2012}.
 These automata have expressivity higher than forest automata while keeping
 feasible algorithmic properties.
@@ -11093,7 +11093,7 @@ of a factory where the MES is deployed.
 We automatically create test scenarios for digital twins using the learnt models
 where the factory is emulated and the MES is deployed natively.
 Since we use finite automata to model the communication protocol, we can use abstraction to
-overapproximate their languages allowing us ot create new test cases.
+overapproximate their languages allowing us to create new test cases.
 We can test, e.g., a new version of the MES before it is deployed to a real factory using the described method.
 The results of this part of the thesis are mainly from the field of applied research.
 We implemented the procedure in the tool Tyrant \cite{ref_tyrant} which was supposed to applied
@@ -11101,7 +11101,7 @@ in the Unis company.
 The company provided us with logs of the real communication in their systems
 system which allowed us to developed a prototype version of the tool Tyrant.
 Unfortunately, the cooperation then stopped with the end of the project that
-supoprted it, and so it was not possible to make the real tests of the approach
+supported it, and so it was not possible to make the real tests of the approach
 in practice. 
 
 \section{Future Directions}
@@ -11128,7 +11128,7 @@ Various algorithms crucial for formal verification and automated reasoning,
 such as emptiness checking, language inclusion checking, or simulation based reduction
 have been also already implemented (together with various heuristics to make them computationally feasible).
 
-Another feauture of the library should be a user friendliness.
+Another feature of the library should be a user friendliness.
 The interface should be simple enough to be usable by anyone with basic
 programming skills and knowledge of automata theory.
 The source code therefore hides complicated heuristics and optimizations
@@ -11141,15 +11141,15 @@ The format supports finite automata and alternating finite automata with explici
 or bitvector alphabet as well as transducers with the mentioned alphabets.
 
 The library was already used for development of a new decision procedure for string solving
-published in \cite{FM13} where the library was used as the beckend for the tool Z3-noodler\cite{z3_noodler}.
-Another paper related to string solving, in which the library is used, was accpeted for publication in the OOPSLA 2023 conference.
+published in \cite{FM13} where the library was used as the back end for the tool Z3-noodler\cite{z3_noodler}.
+Another paper related to string solving, in which the library is used, was accepted for publication in the OOPSLA 2023 conference.
 
-In the field of automated testing of MES-controlled digitalized manufactoring systems,
+In the field of automated testing of MES-controlled digitalized manufacturing systems,
 one may consider more domain-specific abstractions
 over the proposed model of communication to enable generation of more useful tests automatically.
 In our experience, there are often domain-dependent particularities such as the order of messages sent
 in the system during initialization or special restrictions of parameters of some
-messages in real-life manufactoring systems.
+messages in real-life manufacturing systems.
 In the current approach, we do not take that in consideration which may lead to
 generating scenarios for the digital twin, which fail early not due to a found bug
 in the system under testing but because of, e.g., a wrong initialization of the MES.
@@ -11185,7 +11185,7 @@ The viability of the approach was shown by the second place of Symbiotic combine
 in the memory safety category of SV-COMP 2018.
 However, the first place was taken by Predator Hunting Party,
 a tool suite of different versions of Predator (one in the sound mode, several instances in
-a bug hunting mode) running with a GCC frontend, which was more mature than the LLVM frontend
+a bug hunting mode) running with a GCC front end, which was more mature than the LLVM fronted
 used in the integration of Predator with Symbiotic.
 The participation of the combination of Predator with Symbiotic in the SV-COMP competition
 was described in the short competition paper \cite{svcomp-symbiotic}.
@@ -11198,9 +11198,9 @@ Finally, the paper based on the library for finite automata described in the pre
 of the conference CADE 2023.
 The paper compares several new algorithms for deciding emptiness of Boolean combinations of regular languages and of languages of alternating automata (AFA).
 The comparison was done using a benchmark mostly originating in or related to practical problems from string constraint solving, analysing LTL properties, and regular model checking.
-Our finite automata library was used as the backend of the ENFA tool implementing one of the approaches under the comparison.
+Our finite automata library was used as the back end of the ENFA tool implementing one of the approaches under the comparison.
 The results showed that although some advanced algorithms are fast, such as antichain algorithms and reductions to IC3/PDR,
 they are not as overwhelmingly dominant as sometimes presented and there is no clear winner.
 The simplest NFA-based technology (such as ENFA) may be actually the best choice, depending on the problem source and implementation style.
-This confirms that a development of the library for finite automata focused on an effecient implementation is a reasonable path of research.
+This confirms that a development of the library for finite automata focused on an efficient implementation is a reasonable path of research.
 The findings of the paper should be highly relevant for development of the NFA-based techniques as well as for related fields such as string constraint solving.
