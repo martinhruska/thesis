@@ -601,7 +601,7 @@ of selector names.
 	  spuriousness of potenial counterexample traces, possibly followed by automated refinement
 	  of the employed abstraction. This is one of the problems we tackle in this thesis.
 	  Below, we characterize previous attempts on the problem and preparing grounds for its application
-          to forest-automata-based shape analysis described in the Section \ref{subsec:armc}.
+          to forest-automata-based shape analysis described in the Section \ref{subsection:armc}.
 
 	  A well-known approach to refinement of abstraction is the \emph{counterexample-guided
 	  refinement (CEGAR)} principle \cite{CEGAR} which works as follows:
@@ -9041,7 +9041,7 @@ Finally, for edition 2017 we extended the backward run and abstraction refinemen
 (described in Section \ref{sec:boxes}).
 The hirearchical structuring complicates the intersection of forest automata since the intersection needs to take the semantics of boxes into account.
 One possible solution would be some on-the-fly unfolding of boxes which would make the intersection algorithm complicated.
-Therefore, as described in Section \ref{sec:intersection}, we take another approach which keeps automata in forward and backward run in the so-called compatible form (Section \ref{sec:compatible}).
+Therefore, as described in Section \ref{sec:intersection}, we take another approach which keeps automata in forward and backward run in the so-called compatible form (Section \ref{sec:compatibility}).
 This form assures that the same heaps are represented in the same way.
 From a technical point of view, we needed to change the implementation of the abstract operations performed in the forward run and
 their reversion in the backward run.
