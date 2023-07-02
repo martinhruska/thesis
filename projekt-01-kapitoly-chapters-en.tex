@@ -4667,12 +4667,13 @@ abstraction and folding are performed alternately until a fixpoint is reached.
 The presented example should illustrate the main principles and give you some intuition,
 therefore it is imprecise in some details.
 We will first show the main principle on a concrete heap graph at first to build basic inuition
-and we are going to present the same computation done on forest automata.
+and then we are going to present the same example on forest automata.
 
 Consider the data structure allocated on the heap shown on the left-hand side of
 Figure~\ref{ref:fig-re1}.
-It is a doubly-linked list whose nodes are also the roots of trees whose all nodes contain pointers to the root.
-The shapes of trees differs in the colored nodes.
+It is a doubly-linked list whose nodes are also the roots of trees.
+All nodes of the trees contain pointers to the root nodes.
+The trees differ in the nodes which are in the figure highlighted by the different colors.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4685,29 +4686,29 @@ The shapes of trees differs in the colored nodes.
   \end{subfigure}
 }
 \end{center}
-\caption{On the left-hand side there is the studied data structure with highlighted parts which are going to be folded to a box. On~the right-hand side,
+\caption{On the left-hand side there is the studied data structure where the highlighted parts are going to be folded to a box. On~the right-hand side,
 the highlighted parts of the graph are folded and replaced by the box \emph{tree-rootptr}.}
 \label{ref:fig-re2}
 \end{figure}
 
 When the first abstraction is performed whose result is shown on the right-hand side
-of Figure \ref{ref:fig-re1} these differences are abstracted away.
+of Figure \ref{ref:fig-re1} the differences are abstracted away.
 The dotted lines represent a loop in the corresponding automaton created by the abstraction.
 In our example, we use the height abstraction with the height two.
-It merges all states whose height is greater than two to one leave node with the root pointer.
-In the figure, we illustrate this be removing the abstracted nodes but preserving the root pointers to illustrate
+It merges all states whose height is greater than two to one leaf node with the root pointer.
+In the figure, we illustrate this by removing the abstracted nodes but preserving the root pointers to illustrate
 the created cycle while keeping the figure understandable.
 The resulting automaton now represents a doubly-linked list
-whose nodes are roots of trees with the root pointer of arbitrary depth.
+whose nodes are roots of trees with the root pointers of arbitrary depth.
 We note again that the example does not reproduce the behaviour of the algorithm precisely but it should
-bring an intuition how the abstraction works, i.e., that it creates a loop in the automaton.
+bring an intuition how the abstraction works, i.e., it creates a loop in the automaton.
 
 Then the folding operation is performed once the first abstraction is finished.
-The folding algorithm finds suitable parts of heap graph to be folded.
-These parts of the graph are the trees with root pointers pointed by the nodes of the doubly-linked list as it is
-shown in Figure~\ref{ref:fig-re2}.
+The folding algorithm finds the suitable parts of heap graph to be folded.
+These parts of the graph (highlighted by the red areas on left-hand side of Figure~\ref{ref:fig-re2})
+are the trees with root pointers pointed by the nodes of the doubly-linked list.
 They are folded to a box called \emph{tree-rootprt} which is
-added to the edges leading from the nodes of the doubly-linked list as shown on the right-hand side of Figure \ref{ref:fig-re2}.
+added to the edges leading from the nodes of the doubly-linked list as shown on the right-hand side of Figure~\ref{ref:fig-re2}.
 
 \begin{figure}[bt]
 \begin{center}
@@ -4726,7 +4727,7 @@ On the right-hand side there is the resulting graph with the highlighted parts f
 \end{figure}
 
 The second abstraction is performed, but the abstraction algorithm finds nothing that could be abstracted.
-The second folding follows. It finds the suitable sub-graphs for folding which are highlighted by
+Then the second folding follows. It finds the suitable sub-graphs for folding which are highlighted by
 the blue color on the left-hand side of Figure \ref{ref:fig-re3}.
 These sub-graphs are segments of the doubly-linked list, i.e., the parts of the graph between two neighbouring DLL nodes.
 The algorithm folds the sub-graphs to the boxes called \emph{DLS}.
@@ -4748,7 +4749,7 @@ On the right-hand side there is the graph after the abstraction.}
 \label{ref:fig-re4}
 \end{figure}
 
-Now, another abstraction is performed which merges the nodes of the paragraph in such way that the automaton now represents
+Now, another abstraction is performed which merges the nodes of the graph in such way that the automaton now represents
 arbitrary doubly-linked lists of length at least two (which is a consequence
 of the fact that we used again the height abstraction with the height 2).
 The abstraction is shown in Figure \ref{ref:fig-re4}.
@@ -4784,7 +4785,7 @@ just one transition with the mentioned box.
 \caption{The forest automaton on the figure represents circular doubly-linked list whose nodes are root pointers of binary trees with root pointers.}
     \label{ref:fig-re6.1}
       \input{figs/running/complex_forest_abstr.tikz}
-\caption{The same forest automaton after abstraction is applied. Now the forest automaton represents the same structure but the trees can have arbitrary depth.}
+\caption{The same forest automaton after an abstraction is applied. Now the forest automaton represents the same structure but the trees can have arbitrary depth.}
      \label{ref:fig-re6.2}
 \end{center}
 \end{figure}
@@ -4798,32 +4799,32 @@ The transitions from the roots states are labeled by the selectors $\mathtt{p,l,
 where $\mathtt{n,p}$ correspond to the \emph{next, previous} selectors of doubly-linked list
 and $\mathtt{l,t,r}$ to the \emph{left, tail, right} selectors of binary tree with root (or tail) pointer.
 The remaining transition from non-root states contains only the selectors $\mathtt{l,t, r}$ (in this order),
-i.e., these states accepts the tree parts of represented heap graph.
+i.e., these states accept the tree parts of the represented heap graph.
 Futher, the overlined numbers in the colored boxes are the root refences to the root states.
 
 One can see that in every transition of a tree automaton, the selector $t$ leads to a root reference
-referencing a root state of the given tree automaton.
-This is consistent with the fact that in binary tree tree with root pointers, a root pointer always leads
-to a root of tree.
+referencing the root state of the given tree automaton.
+This is consistent with the fact that each node of binary tree has a root pointer.
 
 The last tree automaton references the first automaton over the selector $\mathtt{n}$ and
 the first tree automaton references the last automaton over the selector $\mathtt{p}$.
 That models the circularity of doubly-linked lists where the first and the last node are
-connected via \emph{next} and \emph{previous} selectors.
+connected via the \emph{next} and \emph{previous} selectors.
  
-For the sake of simplicity, the automaton is not drawn complete in the figure.
-The dotted lines mean that there are parts of automaton pointed by such lines which are not presented
+For the sake of simplicity, we have not drawn the complete automaton in the figure.
+The dotted lines points to the parts of automaton which are not presented
 here due to space limitations.
 
 Figure \ref{ref:fig-re6.2} contains the same automaton after the first abstraction has been applied.
-The abstraction merges states of automaton representing tree part of the heap graph and creates
-loops on the states under the root states.
+The abstraction merges states of automaton representing the tree parts of the heap graph and creates
+loops on the states which are under the root states.
 Now the automaton represents the binary trees with tree pointers of arbitrary length.
+Again, we use height abstraction with the height 2.
 
 \begin{figure}[bt]
 \begin{center}
       \input{figs/running/complex_forest_abstr_knots.tikz}
-\caption{The parts of forest automaton denoted by red lines are suitable for folding to boxes.}
+\caption{The parts of forest automaton denoted by red ovals are suitable for folding to boxes.}
 \label{ref:fig-re7.1}
       \input{figs/running/complex_forest_abstr_folded.tikz}
 \caption{The part of forest automaton representing trees from heap graph are folded to the box.}
@@ -4831,13 +4832,13 @@ Now the automaton represents the binary trees with tree pointers of arbitrary le
 \end{center}
 \end{figure}
 
-The procedure continues with first folding.
-It detects that parts of tree automata representing binary trees with roots pointers can be folded to a box.
-This is illustrated by red oval in Figure \ref{ref:fig-re7.1}.
+The procedure continues with the first folding.
+It detects that the parts of tree automata representing binary trees with roots pointers can be folded to a box.
+This is illustrated by the red ovals in Figure \ref{ref:fig-re7.1}.
 The resulting automaton after folding is performed is in Figure \ref{ref:fig-re7.2}.
 The transitions from the root states now contains only two selectors $\mathtt{p,n}$ corresponding to
 the selectors $\emph{next, previous}$ of the doubly-linked list and one box named $\mathtt{trp}$
-representing binary tree with root pointer.
+representing a binary tree with root pointers.
 
 
 \begin{figure}[bt]
@@ -4846,7 +4847,7 @@ representing binary tree with root pointer.
 \caption{The figure illustates box representing one segment of doubly-linked list.}
 \label{ref:fig-re8.1}
       \input{figs/running/complex_forest_dls_folded.tikz}
-\caption{The forest automaton after folding to the $\mathtt{dls}$ boxes is done.}
+\caption{The forest automaton after folding of the $\mathtt{dls}$ boxes is done.}
 \label{ref:fig-re8.2}
 \end{center}
 \end{figure}
@@ -4868,15 +4869,18 @@ The resulting automaton after another abstraction is in the right-hand figurewas
 Now the abstraction is performed again but there is nothing to abstract so we continue with another folding.
 The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containig two nodes
 referencing each other via the $\emph{next, previous}$ selectors.
-On the forest automata level, the pattern is illustrated two root states $\mathtt{b,c}$ and their references
-such that $\mathtt{b}$ references $\mathtt{c}$ via the $\mathtt{n}$ selector and and $\mathtt{c}$ references $\mathtt{b}$ via the $\mathtt{p}$ selector.
-It is shown in Figure~\ref{ref:fig-re8.1}.
+On the forest automata level, the pattern is illustrated (in Figure~\ref{ref:fig-re8.1} by the two root states $\mathtt{b,c}$ and their references
+such that the state~$\mathtt{b}$ references the~state~$\mathtt{c}$ via the~selector~$\mathtt{n}$ and the state~$\mathtt{c}$ references the~state~$\mathtt{b}$ via the selector~$\mathtt{p}$.
 
-When this pattern is folded to a box named $\mathtt{dls}$ and the corresponding parts of automaton are replaced by the box.
-The obtainws automaton is shown in the left-hand side of Figure~\ref{ref:fig-re8.2}.
+When this pattern is folded to a box named $\mathtt{dls}$, the corresponding parts of automaton are replaced by the box.
+The obtained automaton is shown in the Figure~\ref{ref:fig-re8.2}.
+Note that each transition is now labeled with two boxes (the $\mathtt{dls}$ and $\mathtt{trp}$ box).
+It corresponds to the fact that each transition represents a segment of the doubly-linked whose nodes are the roots of a binary tree with root pointers.
+More precise would be to draw each transition with two selectors, one labeled by the $\mathtt{dls}$ box and one labeled by the $\mathtt{dls}$ box, but
+we use the single line representation for the sake of simplicity. 
 
 After the folding we can merge the tree automata in the forest automaton to one tree automaton
-since the represented heap graph has no longer any cut-points (i.e., each node is pointed exatly once), shown in the left-hand side of Figure~\ref{ref:fig-re9}.
+since the represented heap graph has no longer any cut-points (i.e., each node is pointed exatly once) which is shown in the left-hand side of Figure~\ref{ref:fig-re9}.
 Finally, when the abstraction is applied to this automaton, we obtain an automaton representing circular
 doubly-linked list of arbitrary length as it is shown in the right-hand side of Figure~\ref{ref:fig-re9}.
 
