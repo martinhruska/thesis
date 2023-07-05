@@ -10182,7 +10182,7 @@ and machines to make autonomous decisions and control a part of production witho
 One of the main challenges of Industry 4.0 is to develop secure and
 bug-free components, especially in distributed manufacturing execution
 systems. These systems usually control an industrial production consisting of manufacturing machines paired with
-controlling terminals, industrial control systems (ICS), enterprise resource planning system.
+controlling terminals, industrial control systems (ICS), and enterprise resource planning system.
 Development and testing of such systems is quite complex because their
 components
 %
@@ -10257,7 +10257,7 @@ actual production, and manufacturing machines with their corresponding terminals
 used by human operators.  
 %
 We expect that the communication between the particular components uses
-different protocols and data structures, e.g.: \begin{inparaenum}[(1)]
+different protocols and data structures, i.e.: \begin{inparaenum}[(1)]
 %
 \item MES and ERP communicate using the REST protocol with XML data, 
 %
@@ -10270,7 +10270,7 @@ different protocols and data structures, e.g.: \begin{inparaenum}[(1)]
 \begin{figure}[bt]
   \centering
   \includegraphics[scale=0.8]{figs/eurocast-diagram.pdf}
-  \caption{A scheme of our solution for generating scenarios for orchestrating digital twins based on learning from logs of a real system.}
+  \caption{A scheme of our solution for generating scenarios for orchestrating digital twins based on learning from logs of a real system and then testing MES in an eviroment of digital twin.}
   \label{fig:tunis-diagram}
 \end{figure}
 
@@ -10388,7 +10388,7 @@ However, it is not suitable for our purposes since we want to learn the syntacti
 of logged messages, not to write their specification manually.
 The second approach is based on generating XML documents based on a given XML schema instance \cite{xmlscheme}
 which is closer to our needs.
-Moreover, it does not provide generalization of the same class of messages to one generic syntactic structure. 
+But it does not provide generalization of the same class of messages to one generic syntactic structure. 
 
 \section{Modelling Messages} \label{sec:messages} 
 
@@ -10435,7 +10435,7 @@ We assume two types of nodes: (1) A~leaf node is a~quadruple $n =
 \nodee{k}{l}{u}{V}$ where $k$ is a key associated with the node (e.g., as in
 JSON key-value pairs), $l$ (resp. $u$) is the minimum (resp. maximum) number of
 occurrences of the node with the key $k$ in the given part of the message, and $V$ is the set of all
-seen values for the node, (2) A~composite node is a quadruple $n =
+seen values for the node, (2) a~composite node is a quadruple $n =
 \nodee{k}{l}{u}{N}$ where $k$, $l$, and $u$ are defined the same as previously,
 and $N$ is a set of child nodes (either leaves or composite).
 %
@@ -10444,18 +10444,21 @@ and $N$ is a set of child nodes (either leaves or composite).
 %
 We illustrate a representation of an XML message by our model in the following example.
 Consider the XML messages from the Listing \ref{list:XML1} and \ref{list:XML2}.
-Both messages contains simplified description of components needed to create a product.
-For each component there is specified a material of component and a number of needed items of the given component for production.
-Beside a description of components needed a product production the XML messages contain also name of the product.
-The messages are sent from ERP to MES and they are stored in the files having the timestamps
-in their names (particularly, \texttt{20211207-125952.xml} and \texttt{20211207-125955.xml}) in the logs of communication.
+Both messages contains simplified description a product built in a hypothetical factory.
+A product is described within \texttt{Item} tags where a name of it is given together with a list of the components needed for production of the product.  
+For each component there is specified a material of the component and a number defining how many pieces of the given component is needed for production.
+This kind of messages is sent from ERP to MES and in the logs of communication, the messages are stored in the files having the timestamps
+as the file names (particularly, \texttt{20211207-125952.xml} and \texttt{20211207-125955.xml} in our example).
 
-An illustration of the models of the XML message are in Figure \ref{fig:eurocast:models}.
+An illustration of our models of the XML message are in Figure \ref{fig:eurocast:models}.
+The upper figure corresponds to the message from \texttt{20211207-125952.xml} and the bottom one to the \texttt{20211207-125952.xml}.
+As one can see the tree structures of the models in the figure corresponds to the structures of the XML messages.
 The pink nodes are composite nodes and the blue nodes are leaf nodes.
 The text inside nodes corresponds to the quadruples in the definition of both kinds of nodes. 
-Please note, that the children of the composite nodes are not explicitly in the text but are reflected by the tree
+Please note that the children of the composite nodes are not explicitly in the text but are reflected by the tree
 structure of the model.
-As one can see the tree structures of the models in the figure corresponds to the structures of the XML models.
+Generally, the various atomic values (occuring in XML and JSON messages) correspond to leaf nodes and composite values (lists,
+dictionaries, nested tags) correspond to composite nodes in our representation.
 
 \begin{figure}
 \begin{lstlisting}[caption={An XML message between ERP and MES. In the captured logs, it is stored in the file named 20211207-125952.xml containing timestamp in its name. The message describes of components needed for construction of a product.},frame=tlrb,label={list:XML1}]{EMM}
@@ -10506,22 +10509,23 @@ As one can see the tree structures of the models in the figure corresponds to th
 \end{figure}
 %
 Intuition behind minimum and maximum of node occurrences is that these values are
-computed when we use \emph{group and reduce} and \emph{merge} operations (which are defined later)
-over the nodes.
-The minimum and maximum values are later used during generation of the new messages from an
-abstract model of the seen messages.
+used when we merge the concrete messages of the same class to an abstract message representing the class.
+The minimum and maximum values keep information about a number of occurences of the given node in the concrete messages of the class
+what may be used later during a generation of messages from the abstract representation for testing.
 %
+
 Note that other types of nodes are special cases of the defined nodes, e.g., the attribute node used
 in the XML format, is a special case of leaf node.
 
-To create abstract models, we process the input log message by message (which are in
-the XML or JSON format). 
+To create abstract models of the different classes of the messages, we process the input log message by message (which are in
+the XML or JSON format), classify a message to a class and then apply the \emph{group and reduce} function to the message.
+The function group the same nodes w.r.t. a given property (usually it groups the nodes with the same keys) in the mesasge to one node what makes the message more concise.
+Then we appply the \emph{merge} function to the all messages in the given class which results to
+one abstract message representing the class.
+
 %
-Atomic values correspond to leaf nodes and composite values (lists,
-dictionaries, nested tags) correspond to composite nodes.
-%
-Further, we will work with unary predicates $c$ over nodes $n$ written as $c(n)$
-representing that the node $n$ has a specific key. We denote the set of
+In the following definitions, we will work with unary predicates $c$ over nodes $n$ written as $c(n)$
+representing that the node $n$ has a specific property. We denote the set of
 all possible predicates as $C$.
 
 We define the function \emph{reduce} over a~set of leaves $\{n_1,\ldots,n_m\}$
@@ -10533,9 +10537,9 @@ $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
 \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
 %
 Let us explain why the values $u_i$ and $l_i$ are sumed.
-If we reduce two nodes with key $a$, one with $30$ maximal occurrences (i.e., occurred in $30$ places)
-and the second with $20$ maximal occurrences (i.e., occurred in $20$ places),
-then the resulting node has $50$ occurrences maximally (i.e., represents nodes which occurred in $50$ places).
+If we reduce two nodes with key $a$, one with $30$ maximal occurrences (i.e., the node occurred in $30$ places)
+and the second with $20$ maximal occurrences (i.e., the node occurred in $20$ places),
+then the resulting node should has $50$ occurrences maximally beucase it represents nodes which occurred in $50$ places at the most.
 %
 Then, for composite nodes, we define the \emph{group and reduce} function as
 $\grpreduceop{\nodee{k}{l}{u}{N},\preds{c}{m}}$ $= \nodee{k}{l}{u}{N'}$, where
@@ -10546,17 +10550,17 @@ Basically, the operation groups the children nodes according to a given
 predicate (e.g., it groups children with the same key), merges their
 values, and aggregates their occurrences.
 
-We illustrate the \emph{group and reduce} function in the following example.
+We illustrate the \texttt{group and reduce} function in the following example.
 Consider the models of the messages from Figure \ref{fig:eurocast:models}.
-If we apply \emph{group and reduce} to the composite nodes of the models starting
+If we apply \texttt{group and reduce} to the composite nodes of the models starting
 from the root nodes and then proceeding in the breadth-first manner, we obtain
-the tree structure represented in Figure \ref{fig:eurocast:gar}.
+the tree structure shown in Figure \ref{fig:eurocast:gar}.
 We use predicate stating that only the nodes with the same children (i.e., their children have
 the same keys) can be grouped.
 As one can see the nodes with the key \emph{Component} are grouped to one node
 as well as their children nodes with the keys \emph{Material} and \emph{Count}.
-The number of occurrence of the nodes has also changed to $3$ in the left sub-figure 
-and to $2$ in the right sub-figure which reflect the number of grouped nodes.
+The number of minimal and maximal occurrences of the nodes has also changed to $3$ in the top sub-figure 
+and to $2$ in the bottom sub-figure which reflect the number of grouped nodes.
 
 \begin{figure}[tb]
 \begin{center}
@@ -10581,8 +10585,8 @@ N_2)\ \cup\ Copy(N_2, N_1)}$, where $Merged(N,$ $N')$ $= \{\mergeop{n}{n'}\ |\
 n \in N \wedge n' \in N' \wedge \exists c \in C: c(n) \wedge c(n')\}$
 and $Copied(N,$ $N') = \{n\ |\ n \in N \wedge \forall n' \in N'\,\forall c\in C: c(n) \wedge \neg c(n')\}$.
 %
-Intuitively, we choose values of minimal and maximal number of occurrences to cover both
-nodes.
+Let us provide an intuition for the operation.
+We choose values of minimal and maximal number of occurrences to cover both nodes.
 %
 In the composite nodes, we group the children satisfying the same criterion and
 recursively merge them.  If there is a child node from $N_1$ (resp. $N_2$) with
@@ -10597,14 +10601,14 @@ r_n$, we compute the final abstract node $n$ representing the class as $n =
 \mergeop{\grpreduceop{r_1,\preds{c}{m}}}{\mergeop{\ldots}{\grpreduceop{r_n,\preds{c}{m}}}}$.
 
 We illustrate the \emph{merge} operation by Figure \ref{fig:eurocast:merge}.
-The figure contains a result of application of the operation to the trees from Figure \ref{fig:eurocast:gar}.
+The figure contains the result of application of the operation to the trees from Figure \ref{fig:eurocast:gar}.
 The nodes with keys \emph{Name} and \emph{Component} from both trees were merged.
 The numbers defining minimal and maximal occurrences of nodes \emph{Name} are still $1$ since
 the node appears exactly once in the both reduced trees.
 The minimal number of occurrences of the node with the key \emph{Component} is now $2$ (since
-it has $2$ occurrences in the right-hand tree from Figure \ref{fig:eurocast:gar}) and
-the maximal number of occurrences is $3$ of the nodes is $3$ (which is the number of the occurrences of the node
-in the tree from the left-hand side of the same figure).
+it has $2$ occurrences in the bottom tree from Figure \ref{fig:eurocast:gar}) and
+the maximal number of occurrences is $3$ (which is the number of the occurrences of the node
+from the upper tree from Figure~\ref{fig:eurocast:gar}).
 The same holds also for the leaf nodes  \emph{Material} and \emph{Count}.
 \begin{figure}[tb]
 \begin{center}
@@ -10682,22 +10686,21 @@ such that $\forall 1 \leq i \leq n-1: \exists a\in \alp:
 \intrans{q_i}{a}{q_{i+1}}$.  A word $w=a_1,\ldots,a_n$ is accepted by the
 automaton $\A$
 %and belongs to its language $\langof{\A}$ 
-iff there is a run $\run=\runq{n+1}$ of $\A$ such that $\forall 1 \leq i \leq n:
-\intrans{q_i}{a_i}{q_{i+1}}$ and $q_{n+1}\in \final$.  The language $\langst{q}$ of
+iff there is a run $\run=\runq{n+1}$ of $\A$ such that $q_1 \in \init$ and $q_{n+1}\in \final$.  The language $\langst{q}$ of
 a state $q\in \states$ is a set $\{w=a_1,\ldots,a_n\,|\, w\emph{ is accepted by
-a run }\rho=q_1,\ldots,q_{n+1} \emph{ such that } q_1\in\init \wedge q_{n+1}\in
+a run }\rho=q\ldots,q_{n+1} \emph{ such that } q_{n+1}\in
 \final\}$.
 The language of of the automaton $\A$ is then $\langof{\A}=\{w\in\Sigma^*\,|\,w\in L_{q_i} \wedge q_i \in \init\}$.
 
 An event calendar $\C=\caldr{n}$ is transformed to a finite automaton
 $\calA=\calaut$ as follows: the set of states is
-$\calst=\{q_i\in \mathbb{N}\,|\, q_i = i \wedge \,1\leq i \leq n+1\}$\,--\,we create the state $q_i$ for each event $e_i$ corresponding to the state of the
+$\calst=\{q_i\in \mathbb{N}\,|\, q_i = i \wedge \,1\leq i \leq n+1\}$, i.e., we create the state $q_i$ for each event $e_i$ representing a state of the
 modeled system before this event happens and we also add the final state $q_{n+1}$ representing the state of
-system after the series of event, the alphabet $\Sigma$ is obtained by
+system after the last event of series. The alphabet $\Sigma$ is obtained by
 transforming each event $\E_i=\evntind{i}$, where $1 \leq i \leq n$, to a unique symbol $a^{\E_i}$ by applying
-a~hashing function (particularly, we concatenate string
-representing the given values and call a hashing function over the resulting string) over $(\etyp_i,\esend_i,\erec_i)$, i.e., giving away $m_i$ and $\etime_i$,
-the set of initial states is $\calin=\{q_1\}$ (the state corresponding to the state of the  modeled system before the series of event starts)
+a~hashing function over $(\etyp_i,\esend_i,\erec_i)$ (particularly, we concatenate string
+representing the given values and call a hashing function over the resulting string), i.e., giving away $m_i$ and $\etime_i$.
+The set of initial states is $\calin=\{q_1\}$ (the state corresponding to the state of the modeled system before the series of event starts)
 and the set of final states is $\calfi=\{q_{n+1}\}$.  Finally, $\forall 2 \leq i \leq n+1:
 (q_{i-1},a^{\E_i},\{q_{i}\})$ is added to $\caltr$.  
 %\tsf{What's hashing? (AS: now I'm ok with this)}
@@ -10713,7 +10716,7 @@ relation $\abstrln \subseteq \states\times \states$ such that $(p,p')\in
 We denote the equivalence class of $q\in\states$ w.r.t. $\abstrln$ by $\eqclasse{q}.$ The abstracted automaton
 $\abstrln(\A)=\abstraut$ is obtained using $\abstrln$ in the following way:
 $\abstrst=\{\eqclasse{q}\,|\,q\in\states\}$, for each $\intrans{p}{a}{q}$ there
-is $(\eqclasse{p}, a, \eqclasse{q}) \in \abstrtr$, and finally,
+is $\eqclasse{q}\in \abstrtr(\eqclasse{p},{a})$, and finally,
 $\abstrin=\{\eqclasse{q}\,|\,q\in I\}$ and $\abstrfi=\{\eqclasse{q}\,|\,q\in
 F\}$.
 
@@ -10741,7 +10744,7 @@ terminals and MES are in the Listing~\ref{list:TERM}.
 Each event contains information as defined above.
 The messages are not included or shorthanded for the sake of brevity.
 The text \texttt{<XML>} or \texttt{<JSON>} means that the whole XML or JSON message would be included in an event.
-A type of event is determined by communication protocol and the types of XML and JSON messages are further refined
+A type of event is determined by communication protocol and the types with the XML and JSON messages are further refined
 by their class (we described concept of a class of a message in the previous section).
 In our example, we have types \texttt{REST-1} and \texttt{REST-2} which means that all messages with
 this are communicated via REST protocol but those with the first type are classified to the class $1$
@@ -10751,7 +10754,7 @@ In the next step, we convert the events to the symbols (of alphabet of an automa
 and timestamp as we described above. In this case, we obtain three different symbols\,--\,\texttt{a,b,c}.
 Then we create an automaton representing the event calendar.
 The automaton has seven states and transition over the created symbols.
-Finally if we apply a trace abstraction up to length $3$ we get the automaton on the right-hand side of the figure.
+Finally if we apply a trace abstraction up to length $1$ we get the automaton on the right-hand side of the figure.
 The states $1$ was merged with the state $4$, the state $2$ with the state $5$, and the state $3$ with state $6$.
 One loop was created in the resulting automaton and a language of the automaton is $(abc)^n$ for $n \geq 1$.
 
@@ -10786,14 +10789,14 @@ However, we would need more support from our industry partner to more refine the
 which we unfortunately did not get.
 
 We implemented our framework in our tool \emph{Tyrant}~\cite{ref_tyrant} which
-generates scenarios for the orchestrating tool \emph{Cryton}.
+generates scenarios for the orchestrating tool \emph{Cryton} \cite{ref_cryton}.
 %
 Cryton uses as an input a~configuration for creating the digital twin (i.e., a
 description of components of the digital twin) and a~scenario generated by Tyrant in
 the YAML format.
 %
 
-In the following, we will illustrate the transformation of communication logs to a YAML scenario.
+In the following section, we will illustrate the transformation of communication logs to a YAML scenario.
 We remark that we consider a system consisting
 of an~ERP system, a~MES system, and manufacturing machines and their corresponding
 terminals used by human operators.
@@ -10802,42 +10805,6 @@ Consider again the XML messages from Listing~\ref{list:XML1}~and~\ref{list:XML2}
 As we said, these messages are sent between the~ERP and the~MES. The messages are
 stored in the file \texttt{20211207-125952.xml} and  \texttt{20211207-125955.xml} which have the timestamps encoded
 in their names. 
-%Implicitly we know that it was communicated using REST protocol.
-%
-Listing~\ref{list:MMM} shows the messages between a machine and the MES.
-The messages contains their timestamps. The semantics of message is that
-the value of the node $0$ should be set to $99$ (and then to $100$ by the second message) in Machine $001$.
-Listing~\ref{list:TERM} shows an example of a log of communication between terminal and MES consisting of two messages.
-The messages have two sections.
-The first one is header which includes a timestamp, the identification numbers of a client and a communication, a type of message.
-The second part of a message are data in the JSON format.
-% Again, we know that messages between the machines and MES are communicated
-% using OPC-UA protocol.
-%
-%
-
-Finally, Listing \ref{list:GS} and \ref{list:GS1} shows a~generated scenario consisting of two
-steps (Listing is splitted to two part because it length).  The first step is executed in (logical) time 0 hours, 0 minutes, 0
-seconds: the orchestrator will send a message from the ERP to the MES using the REST
-protocol. The message has the XML data attached.  The second step is executed
-one second after the first step (which corresponds to a difference between the times of the first and the second messages):
-the orchestrator will send another message from the MES to Machine 001 using the OPC-UA protocol.
-The message says that the value of the node with path $0$ should be set to $99$.
-The third messages is sent three seconds after the start of orchestration from Terminal 001
-to MES using REST protocol.
-The message contains data from the headers of the logged messages and the data in the JSON format.
-Note, that we can drop some information from the logged message such as id of communication since
-we get the fresh values of such variables in a simulation in digital twin.
-
-Then the orchestration continues with the similar three steps which different only in the arguments (and time).
-The fourth step is communication between ERP and MES containing the XML message from Listing~\ref{list:XML2}.
-The fifth step is a message from Machine 001 to MES setting the value of the node with path $0$ to the value $100$ (which is
-derived from the second message in the in Listing~\ref{list:MMM}), and finally, the sixth step is
-a message from Terminal 001 to MES containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
-
-%
-%The Cryton tool later uses scenario like this to precisely orchestrate a
-%digital twin.
 
 \begin{figure}
 \begin{lstlisting}[caption=A message between the MES and a machine,label={list:MMM},frame=tlrb]{MMM}
@@ -10974,9 +10941,46 @@ timestamps:
 \captionsetup{labelformat=empty}
 \caption{}
 \end{figure}
+%Implicitly we know that it was communicated using REST protocol.
+%
+Listing~\ref{list:MMM} shows the messages between a machine and the MES.
+The messages contains their timestamps. The semantics of message is that
+the value of the node $0$ should be set to $99$ (and then to $100$ by the second message) in Machine $001$.
+Listing~\ref{list:TERM} shows an example of a log of communication between terminal and MES consisting of two messages.
+The messages have two sections.
+The first one is header which includes a timestamp, the identification numbers of a client and a communication, and the type of message.
+The second part of a message are data in the JSON format.
+% Again, we know that messages between the machines and MES are communicated
+% using OPC-UA protocol.
+%
+%
+
+Finally, the listing \ref{list:GS} and \ref{list:GS1} shows a~generated scenario consisting of two
+steps (Listing is splitted to two part because it length).  The first step is executed in (logical) time 0 hours, 0 minutes, 0
+seconds: the orchestrator will sent a message from the ERP to the MES using the REST
+protocol. The message has the XML data attached.  The second step is executed
+one second after the first step (which corresponds to a difference between the times of the first and the second messages):
+the orchestrator will send another message from the MES to Machine 001 using the OPC-UA protocol.
+The message says that the value of the node with path $0$ should be set to $99$.
+The third messages is sent three seconds after the start of orchestration from Terminal 001
+to MES using REST protocol.
+The message contains data from the headers of the logged messages and the data in the JSON format.
+Note, that we can drop some information from the logged message such as the id of communication since
+we get the fresh values of such variables in a simulation in digital twin.
+
+Then the orchestration continues with the similar three steps which different only in the arguments (and time).
+The fourth step is communication between ERP and MES containing the XML message from Listing~\ref{list:XML2}.
+The fifth step is a message from Machine 001 to MES setting the value of the node with path $0$ to the value $100$ (which is
+derived from the second message in the in Listing~\ref{list:MMM}), and finally, the sixth step is
+a message from Terminal 001 to MES containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
 
 %
-We tested our approach on captured communication provided by a~partner company that offers a~MES as their product. Particularly, we got the following logs:
+%The Cryton tool later uses scenario like this to precisely orchestrate a
+%digital twin.
+
+
+%
+We tested our approach on a captured communication provided by a~partner company that offers a~MES as their product. Particularly, we got the following logs:
 \begin{enumerate}
   \item communication between the MES and ERP consisting of $228$ XML files where each file is one message,
   \item communication between the MES and two machines consisting of $25,072$ messages between the first machine and MES and $20$ messages between the second machine and MES,
