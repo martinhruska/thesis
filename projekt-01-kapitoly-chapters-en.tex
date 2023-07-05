@@ -9718,13 +9718,13 @@ In the long term plan, one could develop a shape analysis framework based on thi
 \chapter{Shape Analysis based on SMT Solving}
 \label{ch:fmcad}
 Apart from the automata-based approach as described in the previous chapters, the author of this thesis participated
-in also in development of a new shape analysis based on SMT solving \cite{fmcad18}.
+also on development of a new shape analysis based on SMT solving \cite{fmcad18}.
 Although the author of this thesis has a minor share on the work, it is presented
 here since it gives yet another perspective on shape analysis.
 However, we provide an overview of the approach only. For a full technical description please check \cite{fmcad18}.
 
 The verification method is based on representing the state space of the program being verified w.r.t. the property of interest
-using a first order formula over a suitable combination of SMT theories that represents both the program in SSA form, a set of
+using a first order formula over a suitable combination of SMT theories that represents the program in SSA form, a set of
 invariants based on predefined templates (proposed for various domains of data), and the property of interest.
 Templates manually crafted logic formulae to capture only certain aspects of an analysed program
 which makes the analyses computationally quite efficient.
@@ -9741,7 +9741,7 @@ in the $k$-th iteration.
 For each depth~$k$ of unwinding, there is inferred $k$-inductive invariant (using the templates described above).
 The invariant is added to a set of so far inferred invariants and the algorithm
 tries to prove safety of program using the invariants.
-If it cannot be proved, the algorithm tries to find counterexample in the current unwinding.
+If it cannot be proved, the algorithm tries to find counterexample in the current unwinding using bounded model checking.
 If the counterexample is found, it is reported to user, otherwise the unwinding $k$ is incremented and
 the algorithm continues.
 
@@ -9772,9 +9772,11 @@ analysis in whose design we participated.
 \section{Template-based Program Verification}
 
 In template-based program verification, 
-a set of program states is described using
-a formula built using suitable templates---states in the set are defined by models of the formula. Given a
-vector of variables $\vx$, let the formula $\fminit(\vx)$ describe
+a set of program states is described by
+a formula built using suitable templates---states in the set are defined by models of the formula.
+We are going to describe in this section how the formulas with templates are used in the template-based verification procedure.
+
+Given a vector of variables $\vx$, let the formula $\fminit(\vx)$ describes
 the initial states. Further, let $\fmtrans(\vx, \vxp)$ be a a describing the transition relation.
 Finally, let $Err(\vx)$ be a formula describing error states.
 
@@ -9826,7 +9828,7 @@ In this encoding, special variables called \emph{guards} are used to track the c
 in such way that for each program location~$i$ there is a~Boolean variable~$\ssag{i}$ whose value
 encodes whether the program location is reachable.
 
-To achieve acyclicity of the SSA, each the path is cutted coming from the end of some loops.
+To achieve acyclicity of the SSA, each the path coming from the end of some loops is cutted.
 The value of each variable $x$ at the loop head is then represented using a
 \emph{phi variable} $x^{phi}$ whose value is defined by a non-deterministic
 choice between the value coming from before the loop, say $x_0$, and the
@@ -9848,22 +9850,22 @@ The domain is particularly useful for programs with various kinds of lists as sh
 % the end of the loop to the loop head.
 %
 Since we are interested in describing shapes of heaps,
-we limit our shape domain to the set $\ptrlb$ of all \emph{loop-back pointers}. 
-%
-Let $L$ be the set of all loops in the program. 
+we limit our shape domain to the set $\ptrlb$ of all \emph{loop-back pointers}.
 %
 Since there is one loop-back pointer variable for each pointer variable and
-each loop, we define $\ptrlb = \ptr \times L$.
+each loop, we define $\ptrlb = \ptr \times L$ where $\ptr$ is the set of all pointers
+in program (either a pointer variable, or a pointer field of a memory object)
+and  $L$ is the set of all loops in the program.
 %
 We denote elements $(p, l) \in \ptrlb$ by $\ssaplb{i}$ where $i$ is the program
 location of the end of the loop $l$.
 %
 Intuitively, the value of $\ssaplb{i}$ is an abstraction of the value of the
-pointer $p$ coming from the end of the body of the loop $l$.
+pointer $p$ coming from the end of the body of the loop~$l$.
 %
 The property that our base shape domain describes is the
 \emph{may-point-to} relation between the set $\ptrlb$ and the set
-$\addr$ of memory addresses.
+$\addr$ of abstract memory addresses.
 
 The template of our base shape domain has the form of the formula:
 \begin{equation}\label{eq:templ_shape}
@@ -9880,7 +9882,7 @@ A template row $\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$ describes the
 may-point-to relation for the loop-back pointer $\ssaplb{i}$.
 %
 The parameter $d_{\ssaplb{i}} \subseteq \addr$ of the row (i.e., the
-\emph{abstract value of the row}) specifies the set of all addresses from the
+\emph{abstract value of the row}) specifies the set of all addresses from theNN
 set $\addr$ that $p$ may point to at the location $i$.
 %
 The template row can thus be expressed as the quantifier-free formula:
@@ -9892,8 +9894,8 @@ d_{\ssaplb{i}}} \ssaplb{i} = a).
 \end{equation}
   
 Abstract values of template rows corresponding to pointer fields of abstract
-dynamic objects allow the domain to describe unbounded linked paths in the heap,
-such as list segments.
+dynamic objects (e.g., the \texttt{next} fields of nodes of a singly-linked list)
+allow the domain to describe unbounded linked paths in the heap, such as list segments.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \lstset{language=C,
@@ -9934,20 +9936,20 @@ and this node is added to the list.
 %
 
 Our template domain will represent the shape invariants of the cycle from the example in the following way.
-Objects in the segment are linked through the pointer field \texttt{next}, and
-they are represented by the abstract dynamic objects $\dynobj{13}{1}$ and
-$\dynobj{13}{2}$.
-Please note that the \texttt{malloc} on Line~13 must be represented by two objects
+The memory objects allocated in the loop are represented by the abstract dynamic objects $\dynobj{13}{1}$ and
+$\dynobj{13}{2}$ and they are linked through the pointer field \texttt{next}.
+Please note that the \texttt{malloc} on Line~13 must be really represented by these two objects
 $\dynobj{13}{1}$ and $\dynobj{13}{2}$ as, e.g.\ on Line~14, variables
 \texttt{tail} and \texttt{p} may point to different concrete objects allocated
 by this \texttt{malloc} call.
 
 %
-The shape of this segment will be described by an
-invariant for the first loop, specifically by the two template rows for
+The shape of the heap will be described by an
+invariant for the loop, specifically by the two template rows for
+the pointer fields of the abstract objects
 $\ssalb{\dynobj{13}{1}.next}{16}$ and $\ssalb{\dynobj{13}{2}.next}{16}$.
 %
-They will give us the formula $\wedge_{l=1,2}
+The invariant is the formula $\wedge_{l=1,2}
 \templ^S_{\ssalb{\dynobj{13}{l}.next}{16}}(\{\&\dynobj{13}{1}, \&\dynobj{13}{2},
 \nullptr\})$ where the rows $\templ^S_{\ssalb{\dynobj{13}{l}.next}{16}}$ are the
 formulae $\ssalb{\dynobj{13}{l}.next}{16} = \&\dynobj{13}{1} \vee
@@ -9958,8 +9960,8 @@ These formulae say that the \texttt{next} fields of both $\dynobj{13}{1}$ and
 $\dynobj{13}{2}$ may either point to one of the objects themselves or to
 $\nullptr$.
 %
-This describes an unbounded linked path in the heap composed of
-objects abstracted by $\dynobj{13}{1}$ or $\dynobj{13}{2}$ and terminated by
+I.e., it describes an unbounded linked path in the heap composed of
+by abstract objects $\dynobj{13}{1}$, $\dynobj{13}{2}$ and terminated by
 $\nullptr$.
 
 
@@ -9971,7 +9973,7 @@ would produce very imprecise results since the abstract value would
 need to cover even states in which the loop-back edge was not taken.}.
 %
 We define a row of a \emph{guarded shape template}
-as the formula
+as the formula:
 \begin{equation}\label{eq:templ_row_guard}
 \begin{split}
 \templ^G_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv G_{\ssaplb{i}}
@@ -9981,7 +9983,7 @@ as the formula
 where $G_{\ssaplb{i}}$ is a conjunction of SSA guards associated with the definition of the variable
 $\ssaplb{i}$ and $\templ^S_{\ssaplb{i}}$ is as in the base shape domain.
 %
-If $G_{\ssaplb{i}}$ is true for a program run, the definition of $\ssaplb{i}$
+If $G_{\ssaplb{i}}$ is true for a program run, the definition of~$\ssaplb{i}$
 was reached in the run.
 %
 A shape template $\templ^G$ with guards is then a conjunction:
@@ -10024,7 +10026,7 @@ the SMT solver).
 
 We provide again an example provide more intuition about guards.
 Consider again the program from Listing~\ref{lst:example},
-the corresponding guards for the two template rows of that invariant are
+the corresponding guards for the two template row are
 $G_{\ssalb{\dynobj{13}{1}.next}{16}} = \ssag{10} \wedge \ssagls{16} \wedge
 (\ssag{13} \wedge \ssagos{13})$ and $G_{\ssalb{\dynobj{13}{2}.next}{16}} =
 \ssag{10} \wedge \ssagls{16} \wedge (\ssag{13} \wedge \neg \ssagos{13})$.
@@ -10052,12 +10054,13 @@ a program contains no \emph{absence of null pointer dereferences},
 \emph{free safety}, and \emph{absence of memory leaks}.
 For instance, to check absence of a $\nullptr$ pointer dereference on a pointer $p$, we verify the assertion
 $\ssa{p}{i} \neq \nullptr$ where $\ssa{p}{i}$ is the version of $p$
-valid at a program location $i$, for each expression $*p$ occurring at every $i$.
+valid at a program location $i$, for each expression $*p$ occurring at every~$i$.
+
 A detailed description of abstract memory operations or how all three memory safety properties are checked
 can be found in \cite{fmcad18}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table*}[t]
+\begin{table*}[bt]
 \captionsetup{font=small}
 \caption{Comparison of 2LS using the proposed method with the previous version of the tool over the SV-COMP benchmark.}
 \vspace*{-1mm}
@@ -10087,8 +10090,7 @@ where absence of invalid pointer dereference,
 invalid free, and memory leaks were checked.
 We used BenchExec~\cite{BLW15} to run the experiments with
 time limit set to $900$\,s and memory limit to $15$\,GB.
-We compared the implementation of the described method to the version of 2LS from SV-COMP'17 without
-the proposed shape analysis.
+We compared the implementation of the described method to the version of 2LS from SV-COMP'17 without it.
 
 The results are shown in Table \ref{tab:2ls-old}.
 As one can see the old version of 2LS had even a negative score due to
@@ -10105,7 +10107,7 @@ of our approach.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \newcolumntype{g}{>{\columncolor{LightCyan}}r}
-\begin{table*}[t]
+\begin{table*}[bt]
 \captionsetup{font=small}
 \caption{Comparison of 2LS with other tools on examples combining unbounded data structures and their stored data.}
 \vspace*{-1mm}
@@ -10157,7 +10159,7 @@ value properties. \emph{CPAChecker}~\cite{BK11} (in the
 \emph{CPA-Seq} configuration from SV-COMP'18) solved four tasks but
 times out on the rest.
 
-The empirical evaluation shows that our method has potential outperform the
+The empirical evaluation shows that our method has a potential outperform the
 state-of-the-art tools and it may be a promising direction in the field of shape
 analysis.
 As we mentioned before, the full description of the method can be found in \cite{fmcad18}
