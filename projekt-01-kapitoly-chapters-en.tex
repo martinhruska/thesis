@@ -556,7 +556,7 @@ of selector names.
           Finally, the instrumented and sliced code is given to symbolic execution.
 
           Symbiotic instruments code also with state machines describing bugs related to shape analysis, i.e.,
-          invalid dereferences, invalid frees, or memory leaks.
+          invalid dereferences, invalid frees, or memory leaks \cite{symbiotic-beyond}.
           Further, it uses a data-flow analysis (particularly, a pointer analysis) to prevent adding
           checks to the manipulations with pointers which are guaranteed to be safe by the pointer analysis
           and so do not need to be verify by computationally expensive symbolic execution.
@@ -10749,7 +10749,7 @@ terminals and MES are in Listing~\ref{list:TERM}.
 The content of the messages is described in a more detail in the next section.
 
 Each event contains information as defined above.
-The messages are not included or shorthanded for the sake of brevity.
+The messages are not included or abbreviated for the sake of brevity.
 The text \texttt{<XML>} or \texttt{<JSON>} means that the whole XML or JSON message would be included in an event.
 A type of event is determined by communication protocol and the types related with the XML and JSON messages are further refined
 by the class of a message (we described the concept of a class of a message in the previous section).
