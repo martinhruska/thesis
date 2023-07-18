@@ -196,7 +196,7 @@ The refined description is presented in this thesis and is accepted for publicat
 about state-of-the-art methods in software verification.
 
 We have also significantly improved implementation of the approach in the \forester tool.
-Consequently, Forester was able to seriously compete in international level.
+Consequently, \forester was able to seriously compete in international level.
 Particularly, it participated in software verification competition SV-COMP \cite{svcompweb} in the editions of years 2015, 2016, 2017, and 2018.
 Although \forester did not win a medal in any major category,
 we managed to support a non trivial subset of the C language needed for a reasonable
@@ -8836,7 +8836,7 @@ $\predset({A_i})$ only where $A_i$ is the $i$-th component of $\interp$ and $\la
 \section{Discussion and Future Work}
 %------------------------------------------------------------------------------
 
-The experiments with Forester were presented in the Section \ref{sec:exps} of the previous section and
+The experiments with \forester were presented in the Section \ref{sec:exps} of the previous section and
 we discuss them here from perspective of backward run and abstraction refinement.
 Both the described forward and backward symbolic execution are quite fast.
 % , and \forester{} scales well. 
@@ -10121,7 +10121,7 @@ of our approach.
 \def\arraystretch{1.2}
 \begin{tabular}{|l| g | r | r | r | r | r |}
 \hline
-& \textbf{2LS}  & \textbf{CPA-Seq } & \textbf{PredatorHP} & \textbf{Forester}  & \textbf{Symbiotic} & \textbf{UAutomizer}  \\\hline
+& \textbf{2LS}  & \textbf{CPA-Seq } & \textbf{PredatorHP} & \textbf{\forester}  & \textbf{Symbiotic} & \textbf{UAutomizer}  \\\hline
 Calendar          & 2.88   & timeout & false   & unknown  & timeout  & timeout  \\\hline
 Cart              & 23.70  & timeout & false   & unknown  & timeout  & timeout  \\\hline
 Hash Function     & 3.65   & 8.51    & unknown & unknown  & unknown  & timeout  \\\hline
@@ -10153,7 +10153,7 @@ The value \emph{unknown} means that a tool was not able to analyse
 the task.
 %
 
-The tools like \emph{Forester} and \emph{Predator}~\cite{dudka13sas} were
+The tools like \emph{\forester} and \emph{Predator}~\cite{dudka13sas} were
 limited by their inability to reason about the stored in the lists.
 On the other hand, more general tools such as \emph{Symbiotic}~\cite{CVS18} or
 \emph{Ultimate Automizer}~\cite{HCDGHLNM18} often timed out since they
@@ -10273,7 +10273,7 @@ different protocols and data structures, i.e.: \begin{inparaenum}[(1)]
 \begin{figure}[bt]
   \centering
   \includegraphics[scale=0.8]{figs/eurocast-diagram.pdf}
-  \caption{A scheme of our solution for generating scenarios for orchestrating digital twins based on learning from logs of a real system and then testing MES in an eviroment of digital twin.}
+  \caption{A scheme of our solution for generating scenarios for orchestrating digital twins based on learning from logs of a real system and then testing MES in an environment of digital twin.}
   \label{fig:tunis-diagram}
 \end{figure}
 
@@ -10460,7 +10460,7 @@ The pink nodes are composite nodes and the blue nodes are leaf nodes.
 The text inside nodes corresponds to the quadruples in the definition of both kinds of nodes. 
 Please note that the children of the composite nodes are not enumerated explicitly in the label of the nodes but are reflected by the tree
 structure of the model.
-Generally, the various atomic values (occuring in XML and JSON messages) correspond to leaf nodes and composite values (lists,
+Generally, the various atomic values (occurring in XML and JSON messages) correspond to leaf nodes and composite values (lists,
 dictionaries, nested tags) correspond to composite nodes in our representation.
 
 \begin{figure}
@@ -10513,7 +10513,7 @@ dictionaries, nested tags) correspond to composite nodes in our representation.
 %
 Intuition behind minimum and maximum of node occurrences is that these values are
 used when we merge the concrete messages of the same class to an abstract message representing the class.
-The minimum and maximum values keep information about a number of occurences of the given node in the concrete messages of the class
+The minimum and maximum values keep information about a number of occurrences of the given node in the concrete messages of the class
 what may be used later for a generation of messages from the abstract representation for the testing purposes.
 %
 
@@ -10523,7 +10523,7 @@ in the XML format, is a special case of leaf node.
 To create abstract models of the different classes of the messages, we process the input log message by message (which are in
 the XML or JSON format), classify a message to a class and then apply the \emph{group and reduce} function to a model of the message.
 The function groups the same nodes w.r.t. a given property (usually it groups the nodes with the same keys) to one node what makes the representation more concise and general.
-Then we appply the \emph{merge} function to the all messages in the given class which results to
+Then we apply the \emph{merge} function to the all messages in the given class which results to
 one abstract message representing the class.
 
 %
@@ -10539,10 +10539,10 @@ composite nodes $\{n_1,\ldots,n_m\}$ corresponding to a key $k$ as
 $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
 \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
 %
-Let us explain why the values $u_i$ and $l_i$ are sumed.
+Let us explain why the values $u_i$ and $l_i$ are summed.
 If we reduce two nodes with the key $a$, one with $30$ maximal occurrences (i.e., the node occurred in $30$ places)
 and the second with $20$ maximal occurrences (i.e., the node occurred in $20$ places),
-then the resulting node should has $50$ occurrences maximally beucase it represents nodes which occurred in $50$ places at the most.
+then the resulting node should has $50$ occurrences maximally because it represents nodes which occurred in $50$ places at the most.
 %
 
 Then, for composite nodes, we define the \emph{group and reduce} function as
