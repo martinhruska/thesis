@@ -68,7 +68,9 @@
 \csdoublequotesoff
 
 
-
+\newtheorem{lemma}{Lemma}
+\usepackage{chngcntr}
+\counterwithin{lemma}{chapter}
 \usepackage{url}
 \usepackage{comment}
 % =======================================================================
@@ -120,8 +122,8 @@
   year={2023},             % rok odevzdání / year of submission
   date=\today,             % datum odevzdání / submission date
   %Nazev prace / thesis title
-  title.cs={Od Automatů k Testovaní a Ještě Dál},  % název práce v češtině či slovenštině (dle zadání) / thesis title in czech language (according to assignment)
-  title.en={From Automata to Testing and Far Beyond}, % název práce v angličtině / thesis title in english
+  title.cs={Automaty ve Verifikaci a Testování Software},  % název práce v češtině či slovenštině (dle zadání) / thesis title in czech language (according to assignment)
+  title.en={Automata in Software Verification\\ and Testing}, % název práce v angličtině / thesis title in english
   %title.length={14.5cm}, % nastavení délky bloku s titulkem pro úpravu zalomení řádku (lze definovat zde nebo níže) / setting the length of a block with a thesis title for adjusting a line break (can be defined here or below)
   %sectitle.length={14.5cm}, % nastavení délky bloku s druhým titulkem pro úpravu zalomení řádku (lze definovat zde nebo níže) / setting the length of a block with a second thesis title for adjusting a line break (can be defined here or below)
   %dectitle.length={14.5cm}, % nastavení délky bloku s titulkem nad prohlášením pro úpravu zalomení řádku (lze definovat zde nebo níže) / setting the length of a block with a thesis title above declaration for adjusting a line break (can be defined here or below)
@@ -188,7 +190,7 @@ I also thank to all members of the VeriFIT research group for creating such a gr
 I would like to thank all my friends with whom I enjoyed the moments of leisure (and it was very often a great ride!).
 
 Na závěr bych rád poděkoval za podporu celé svojí rodině, především pak těm nějbližším, ségře, mámě a tátovi
-za to, že mi byli vždy nablízku, podporovali mě a umožnili mi tak plnit si moje sny (jedním z nichž je právě tato práce).
+za to, že mi byli vždy nablízku, podporovali mě a umožnili mi tak plnit si moje sny.
 },
   %acknowledgment={Here it is possible to express thanks to the supervisor and to the people which provided professional help
 %(external submitter, consultant, etc.).},

@@ -51,7 +51,8 @@ This class of methods also contains the relaxed versions of methods from formal 
 such as bounded model checking or different approaches to abstract interpretation which
 do not overapproximate the original semantics.
 The methods try to hit a sweet spot between mathematical rigour and plain bug hunting.
-They are easy to use, straightforward, often scale well but may detect many false alarms which can cause
+They are easy to use, straightforward, often scale well but they are not sound and
+some of them may detect many false alarms which can cause
 that they are ignored by developers completely.
 
 The last of the main approach is based on traditional testing by humans possible aided
@@ -117,7 +118,7 @@ Any bugs in them may affect many users and lead to expensive losses.
 Therefore they need strong safety guarantees which can be provided by the methods with formal basis.
 
 Our approach to shape analysis is based on forest automata and automata over graphs
-(both extensions of tree automata) with a bounded tree width.
+with a bounded tree width (both extensions of tree automata).
 Both formalisms are able to represent a quite wide class of data structures that can be
 allocated on the heap.
 We employ a verification procedure to compute shape invariants for each program location.
@@ -148,7 +149,7 @@ and enhance it by
 Further we want to study possible alternatives to shape analysis based on forest automata.
 We will focus mainly on the following topics:
 \begin{enumerate*}
-  \item an alternative automata-based representation with the aim of cover the class of graphs with bounded tree width (taking inspiration from Courcelle theorem \cite{Courcelle}),
+  \item an alternative automata-based representation with the aim to cover the class of graphs with bounded tree width (taking inspiration from Courcelle theorem \cite{Courcelle}),
   \item exploring possibilities of shape analysis based on predicate logic, templates-based invariants, abstract domains, and SMT solving.
 \end{enumerate*}
 
@@ -246,7 +247,7 @@ from the logs of communication in a real manufactory where an older version of t
 Then the new version is run in the digital twin, and it is checked that the new version has the same semantics
 as the older version where it is expected.
 
-Moreover, since we use finite automata to the model communication,
+Moreover, since we can use finite automata to the model communication,
 we are able to perform an abstraction over the learnt models and extrapolate the new test
 cases, which can be used for a more robust testing of the MES in the digital twin than just a reproduction
 of the previously seen runs.
@@ -279,7 +280,7 @@ of digital twins.
 This section provides a summary of the state-of-the-art methods for shape analysis.
 First, we give an overview of the formalisms for representing and analysing data structures allocated on the heap.
 Then the refinement techniques for abstraction over various formalisms are summarized, and
-finally, existing works on automata for graph languages are presented.
+finally, the existing works on automata for graph languages are presented.
 
 \section{Shape Analysis}
 As we mentioned, \emph{shape analysis} deals with analysis of dynamically linked data structures
@@ -380,7 +381,7 @@ of selector names.
           The recent work \cite{soa-biabduction} further extended separation logic by the low-level features of data structures
           manipulation such as pointer arithmetic, bit-masking on pointers,
           block operations with blocks of variable size, their splitting to fields of in-advance-not-fixed size,
-          merging such fields back, and reinterpreting them differently, etc..   
+          merging such fields back, and reinterpreting them differently, etc.   
 
           A main downside of the bi-abduction-based methods is their inability to provide a counterexample breaking
 	  the given specification.
@@ -480,7 +481,7 @@ of selector names.
           ARMC was applied on various kinds of parametric and infinite systems such push-down systems, systems with queues, parametrised networks of process,
           Petri nets.
           It was also used for verification of programs with dynamic data structures where words and trees are used
-          to represent reachable shapes of heap\cite{bhrv06a}.
+          to represent reachable shapes of heap~\cite{bhrv06a}.
 
 	  Abstraction over automata is used to overapproximate the set of reachable configurations,
           e.g., by collapsing automata states whose languages are same up to some bound or satisfy, i.e., intersect,
@@ -569,8 +570,8 @@ of selector names.
 	  assumed that the verification procedure used will be sound.
 	  However, when the requirement on soundness is relaxed, we will obtain a bug hunting method
 	  still able to detect many errors in program.
-	  One of such methods is \emph{bounded model checking (BMC)} whose applications achieved many achievements
-	  in the various editions of the SV-COMP competition.
+	  One of such methods is \emph{bounded model checking (BMC)} \cite{BMC} whose applications in the works such
+          as \cite{BK11, CBMC} achieved many achievements in the various editions of the SV-COMP competition.
 
 	  An exploration of the state space is limited up to some bound in BMC.
 	  The bound can be given, e.g., on the number of interleavings in a parallel program,
@@ -1510,7 +1511,7 @@ $\edgesymb = a^1 \cdots a^m$ such that $\runof{\node} = q$ and for all $1
 %
 %\end{itemize} 
 The \emph{language} of $\ta$ is defined as $\langof{\ta}= \{\tree
-\mid \mbox{there is a run of $\ta$ over $\tree$} \}$, and the language of a~state~$q \in Q$ as $\langof{A, q} = \langof{(Q, q, \Delta)}$.
+\mid \mbox{there is a run of $\ta$ over $\tree$} \}$, and the language of a~state~$q \in Q$ as $\langof{A, q} = \langof{Q, q, \Delta}$.
 
 %\begin{example} BSTs, such as the tree labeled by $\code{root}$ but without the variable $\code{x}$  in
 %Fig.~\ref{fig:bst-graph}(a), are accepted by the TA over
@@ -4482,7 +4483,7 @@ stored in the database.
 Furthermore, we can also consider language inclusion only to relax the requirement of
 equality when testing whether the two boxes match. This means that during the folding the
 given box can be potentially replaced by a~``bigger'' one that already exists in the
-database. As discussed later, this can in some cases drastically decrease the number of
+database. This can in some cases drastically decrease the number of
 boxes that are required and thus substantially increase the performance.
 
 %\ol{say that the discovered boxes are folded according to \secref{sec:box_folding}}
@@ -4658,7 +4659,7 @@ boxes that are required and thus substantially increase the performance.
 \label{ref:fig-re1}
 \end{figure}
 
-To illustrate the proposed application of FAs to shape analysis, this sections provides with a running example.
+To illustrate the proposed application of FAs to shape analysis, this sections provides a running example.
 We are going to show a computation of shape invariant in which
 abstraction and folding are performed alternately until a fixpoint is reached.
 The presented example should illustrate the main principles and give you some intuition,
@@ -4831,8 +4832,9 @@ Again, we use height abstraction with the height 2.
 
 The procedure continues with the first folding.
 It detects that the parts of tree automata representing binary trees with roots pointers can be folded to a box.
-This is illustrated by the red ovals in Figure \ref{ref:fig-re7.1}.
-The resulting automaton after folding is performed is in Figure \ref{ref:fig-re7.2}.
+Note that it is a folding of the cutpoint of type~1.
+This is illustrated by the red ovals in Figure~\ref{ref:fig-re7.1}.
+The resulting automaton after folding is performed is in Figure~\ref{ref:fig-re7.2}.
 The transitions from the root states now contains only two selectors $\mathtt{p,n}$ corresponding to
 the selectors $\emph{next, previous}$ of the doubly-linked list and one box named $\mathtt{trp}$
 representing a binary tree with root pointers.
@@ -4866,14 +4868,15 @@ The resulting automaton after another abstraction is in the right-hand figure wa
 Now the abstraction is performed again but there is nothing to abstract so we continue with another folding.
 The folding algorithm detects that it is possible to fold a sub-graph of doubly-linked list containing two nodes
 referencing each other via the $\emph{next, previous}$ selectors.
-On the forest automata level, the pattern is illustrated (in Figure~\ref{ref:fig-re8.1} by the two root states $\mathtt{b,c}$ and their references
+On the forest automata level, the pattern is illustrated in Figure~\ref{ref:fig-re8.1} by the two root states $\mathtt{b,c}$ and their references
 such that the state~$\mathtt{b}$ references the~state~$\mathtt{c}$ via the~selector~$\mathtt{n}$ and the state~$\mathtt{c}$ references the~state~$\mathtt{b}$ via the selector~$\mathtt{p}$.
+Note that is a folding of the cutpoint of type 3.
 
 When this pattern is folded to a box named $\mathtt{dls}$, the corresponding parts of automaton are replaced by the box.
 The obtained automaton is shown in the Figure~\ref{ref:fig-re8.2}.
 Note that each transition is now labeled with two boxes (the $\mathtt{dls}$ and $\mathtt{trp}$ box).
 It corresponds to the fact that each transition represents a segment of the doubly-linked list whose nodes are the roots of a binary tree with root pointers.
-More precise would be to draw each transition with two selectors, one labeled by the $\mathtt{dls}$ box and one labeled by the $\mathtt{dls}$ box, but
+More precise would be to draw each transition with two selectors, one labeled by the $\mathtt{dls}$ box and one labeled by the $\mathtt{trp}$ box, but
 we use the single line representation for the sake of simplicity. 
 
 After the folding we can merge the tree automata in the forest automaton to one tree automaton
@@ -4959,14 +4962,14 @@ The registers are used for auxiliary operations, e.g., whenever a memory
 location is to be modified, it is first (after the necessary splitting and
 cutting performed on the FA) loaded into a register, changed there, and then
 stored back into the FA.
-The registers can contain an arbitrary symbolic value, which can be, e.g.,
+The registers can contain an arbitrary symbolic value, e.g.,
 a~data value, a~reference to a~root in the FA (representing a~symbolic pointer),
 or contents of a~memory node (i.e., a~\texttt{struct} data type).
 The Virtual Machine performs the symbolic execution over the FAs (represented by
 the module \emph{Forest Automata}) as described in \secref{sec:verification},
 including automatic abstraction refinement and box discovery.
-The analysis can conclude either by finding an error or by inferring
-safe shape invariants (represented by FAs) for each line of the program.
+The analysis conclude either by finding an error or by inferring
+safe shape invariants (represented by FAs) for each program line.
 
 Efficient handling of FAs needs fast algorithms for performing operations and
 tests on tree automata, especially for operations with high worst-case
@@ -8879,7 +8882,7 @@ The following chapter describes development of the \forester tool \cite{forester
 for the international Software Verification Competition \cite{svcompweb} (SV-COMP), which is annually held within the TACAS conference.
 Tools competing in SV-COMP vary from sound abstract interpreters or formal verifiers through static analysers
 to unsoud tools like bounded model checkers.
-The tools compete in verification of C programs from the competition benchmark.
+The tools compete in verification of the C programs from the competition benchmark.
 The length of the programs varies usually from tens to hundreds lines of code.
 The verification tasks are separated to different categories, e.g., reachability,
 termination, or memory safety.
@@ -8915,7 +8918,7 @@ Although \forester{} has never won any medal, it was able to analyze
 some really tough test cases that have not been successfully verified by any
 other (sound) tool.
 Examples of these programs are programs with skip lists (of the second and the
-third level) and some test cases from~\cite{vmcai17} (described in Section\ref{sec:testcases}, which were included into the
+third level) and some test cases from~\cite{vmcai17} (described in Section~\ref{sec:testcases}), which were included into the
 category \emph{MemSafety-LinkedLists} in~SV-COMP 2017.
 The former cases are hard to analyse because a~tool needs to derive
 complicated shape invariants which \forester{} can do thanks to the automated
@@ -9038,7 +9041,7 @@ The backward run and abstraction refinement were implemented in the standard CEG
 We used the already existing forward run and added it to a loop where a (potentially) found counterexample
 is analysed by the new backward run. If the potential counterexample is a spurious one, we perform a refinement of the abstraction, either
 by increasing the height for the height abstraction or by deriving new predicates for the predicate abstraction
-which was newly implemented.
+which was also newly implemented.
 Particularly, the new predicates are forest automaton from backward run.
 Once the abstraction is refined, \forester can recover from the phase of detection of a spurious counterexample and restart the analysis.
 
@@ -9052,7 +9055,7 @@ From a technical point of view, we needed to change the implementation of the ab
 their reversion in the backward run.
 As it is was described in the previous chapter, the most challenging operations to revert in the backward run
 w.r.t. the compatible form are the operations of folding (creating a box from a forest automaton), unfolding (reverted folding),
-and normalization (i.e., the operation of removing redundant cut-points and connecting associated tree automata).
+and splitting, merging, and reordering (i.e., the operations of removing redundant cut-points and connecting associated tree automata).
 
 \section{Strengths and Weaknesses}
 
@@ -9060,16 +9063,16 @@ The main strength of the \forester tool in the competition came from the general
 verification procedure.
 Forest automata as a domain are able to represent many different data structures,
 ranging from doubly linked lists to different kinds of trees.
-Indeed, \forester was the only tool able to soundly verify correctness of the implementation of skip lists
+From the first participation in the competition, \forester was the only tool able to soundly verify correctness of the implementation of skip lists
 of the second and the third level.
-The newly implemented backward run and abstraction refinement moreover gave \forester
+Then the futher development extended the set of programs verified only by \forester.
+Particularly, the newly implemented backward run and abstraction refinement gave \forester
 an ability to learn more sophisticated invariants.
 An example of such an invariant is alternation of two kinds of nodes in a singly or doubly linked list.
-Verification tasks using this class of data structure were verified by \forester only too.
 \forester also benefits from using an efficient implementation of the state-of-the-art algorithms
-for tree automata (in the VATA library) what makes it quiet efficient.
+for tree automata (in the VATA library) what makes it quite efficient.
 
-The main weaknesses of \forester came from that it is still a technical immature of the tool.
+As we already dicussed, the main weaknesses of \forester came from that it is still a technical immature of the tool.
 It did not support the whole C syntax, and therefore it reported
 unknown on many tasks from the SV-COMP benchmark as we already mentioned.
 We did not have the manpower to add all needed features to \forester, which is still a prototype and
@@ -9140,7 +9143,7 @@ It is, however, very sensitive to how the code is written (since it is, in a sen
 %together with abstraction/generalization methods capable of inferring inductive predicates.
 
 Outside separation logic, especially the approach based on forest automata \cite{forester11,forester12,holik_boxes_2013,vmcai17} (described in Section \ref{ch:asv})
-has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning and has potential to be efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{svcomp15-forester} with counterexample guided refinement loop. The formalism, however, suffers from some deficiencies as that the classes of shape graphs it can handle are relatively rich but still with limitations
+has been shown viable \cite{svcomp15-forester,holik_run_2016,holik_forester_2017}. It allows for some degree of local reasoning and has potential to be efficient as it allows to utilise advanced algorithms for tree automata (such as simulation reduction or antichain language inclusion). The main distinguishing advantage is its compatibility with abstraction schemes from abstract regular model checking \cite{vmcai17} with counterexample guided refinement loop. The formalism, however, suffers from some deficiencies as that the classes of shape graphs it can handle are relatively rich but still with limitations
 and that it is not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computing).
 
 We discuss here our work on developing a new graph formalism in the spirit of forest automata that would remedy their weaknesses.
@@ -9241,11 +9244,11 @@ We believe that this new formalism can eventually combine local reasoning of sep
 \caption{Figure shows circular doubly-linked list and its tree decompositions (from left to right we refer to them as a, b, c, d). In the decompositions (a),
         the variables $v,x,y,z$ represent the nodes $1,2,3,4$ (in this order) of the list.
         The figure shows that it is possible to transform the first decomposition (a) to the second decomposition (b) one using transformations shown in (c) and (d).
-        Sub-figure~(c) illustrates the reconnection operation. It shows the decomposition obtained by reconnection applied to the right-handed side decomposition of (b)
+        Sub-figure~(c) illustrates the reconnection operation. It shows the decomposition obtained by reconnection applied to the decomposition of (b)
         where the bag $b_0$ is reconnected below the bag $b_0'$.
         The~figure also shows the primed variables introduced by the reconnection to prevent inference of reconnected pipes
         with pipes along the reconnection path.
-        Analogously, (d) show result of rotation applied to (c) where the bags $b_1$ and $b_1'$ were rotated.
+        Analogously, (d) shows a result of rotation applied to (c) where the bags $b_1$ and $b_1'$ were rotated.
         The operation changes orientation of edge between them and also introduces the new primed variables for each existing variable,
         e.g., $(x')'$ for $x'$ and since $x'$ already exists, $x''$ is created for $x$.}
 \label{fig:decomps}
@@ -9299,7 +9302,7 @@ where the nodes $\vrts^\dect$ are the equivalence classes of~$\sim$, called \emp
 and $\edgs^\dect = \{([(x,\bag)]_{\sim},a,[(x',\bag)]_{\sim}) \mid (x,a,x') \text{ is an edge of the graph } \bag\in \bubbles\}$ (that is, every edge $(x,a,x')$ of every graph $\bag\in \bubbles$ gives rise to\linebreak an edge $([(x,\bag)]_{\sim},a,[(x',\bag)]_{\sim})$ of the represented graph $\gr^\dect$).
 %
 
-An example of a graph (representing circular doubly-linked list data structure) and its tree decomposition is shown in Figure \ref{fig:decomps} (a) and (b).
+An example of a graph (representing circular doubly-linked list data structure) and its tree decomposition is shown in Figure \ref{fig:decomps}.
 
 
 We will work with the following restrictions of graphs and tree decompositions.
@@ -9440,8 +9443,8 @@ Last, replace the edge leading to $\bag$ by $(\bag',\rho_1',\bag)$ where $\rho_1
 %
 This makes $\bag$ a child of $\bag'$ and connects the new primed pipes to the corresponding original pipes of $\bag$.
 
-An example of the operation is shown in Figure \ref{fig:decomps} (c)
-where the right-handed side decomposition $\dect_0$ from Figure \ref{fig:decomps} (b) is rotated by $\chr(b_0,b_0',\dect_0)$.
+An example of the operation is shown in Figure \ref{fig:decomps}
+where the decomposition (b) is transformed to the decomposition (c) by rotation $\chr(b_0,b_0',\dect_0)$.
 %\paragraph{Complex reconnection.} 
 %\item[Complex reconnection.] 
 %It is a variant of the reconnection where $\bag$ and $\bag'$ can be on the same branch. The normal reconnection on $\bag$ and $\bag'$ would in such case introduce a cycle,
@@ -9453,18 +9456,19 @@ where the right-handed side decomposition $\dect_0$ from Figure \ref{fig:decomps
 The rotation operation is parameterised by two bags $\bag$ and $\bag'$ of the decomposition. The operation inverts the edges in the path $\pi$ between $\bag$ and $\bag'$.
 Then it redirects the incoming edge of $\bag$ to $\bag'$.
 Intuitively, it takes a subtree with the root $\bag$, changes the root to $\bag'$ and inverts the edges in the subtree. 
-It yields an equivalent tree decomposition with respect to child relation which is inverted between pipes allocated in the nodes of the path $\pi$.
+It yields an equivalent tree decomposition with respect to \emph{child} relation which is inverted between pipes allocated in the nodes of the path $\pi$.
 
 The operation is implemented as a function $\rot(\bag,\bag',\dect)$. At the tree level, it works as follows.
 Consider the path $\pi:\bag=\bag_1,\ldots,\bag_n=\bag'$. Remove each edge $(\bag_i,\rho,\bag_{i+1})$, where $1\leq i \leq n$, between nodes in $\pi$
 from $\edgs$ and add $(\bag_{i+1},\rho,\bag_i)$ to $\edgs$.
-Moreover, we replace the edge $(m,\rho,\bag)\in\edgs$ by the edge $(m,\rho,\bag')$ to $\edgs$.
+Moreover, we replace each edge $(m,\rho,\bag)\in\edgs$ by the edge $(m,\rho,\bag')$ in $\edgs$.
 The labels along the rotated path are changed in the following way.
 Replace the label $\rho_1$ of the edge $(m,\rho_1,\bag')$ by $\rho_1 = \{x\mapsto x'\mid x \in \dom(\rho_1)\}$.
 Replace each label $\rho_i$ in the path $\pi$ by $\rho_i=\rho_i\cup \{x'\mapsto x'\mid x' \in \img(\rho_1')\}$ for $2 \leq i \leq \bag$.
 Finally, replace the label $\rho_\bag$ over the edge leading to $\bag$ by $\rho_\bag'=\rho_\bag\cup\{x'\mapsto x\mid x' \in \img(\rho_1')\}$.
 
-An example of the operation is shown in Figure \ref{fig:decomps} (d) where the decomposition $\dect_1$ from Figure \ref{fig:decomps} (c) is rotated by $\rot(b_1,b_1',\dect_1)$.
+An example of the operation is shown in Figure \ref{fig:decomps} where the decomposition (c) is rotated by the operation $\rot(b_1,b_1',\dect_1)$
+resulting to the decomposition (d).
 
 %\paragraph{Phase.}
 \item[Phase.]
@@ -9557,7 +9561,7 @@ The implementation of a tree automata phase at most doubles the number of variab
 
 Based on Conjecture 1 and 2, the saturation of a tree automata representation with all decompositions until a fixed tree-width $t$ can be done in a time that is polynomial (when the $t$ is fixed).
 %
-Recall that deciding entailment between two TA representations, we saturate both of them up to the maximum tree-width $t$ (in fact, it is enough to use the maximum tree with of the automaton that is supposed to entail),
+Recall that deciding entailment between two TA representations, we saturate both of them up to the maximum tree-width $t$ (in fact, it is enough to use the maximum tree width of the automaton that is supposed to entail),
 and then we compute language inclusion between the saturated automata.
 %
 Since language inclusion of tree automata is EXPTIME-complete, Conjectures 1 and 2 give an entailment algorithm singly exponential, assuming a fixed maximum tree-width $t$.
@@ -9748,7 +9752,7 @@ If the counterexample is found, it is reported to user, otherwise the unwinding 
 the algorithm continues.
 
 The verification method using template-based representation of program state space and $k$I$k$I algorithm is
-implemented in the 2LS tool.
+implemented in the 2LS tool \cite{2lsweb}.
 
 
 The main contributions of this work are:
@@ -9845,7 +9849,7 @@ and later constrained by the derived candidate loop invariants.
 
 \section{Template domain for Shape Analysis}
 In \cite{fmcad18}, we design a template domain which is used in the described framework to
-derive \emph{loop invariants} of the programs with dynamic pointer -linked data structures.
+derive \emph{loop invariants} of the programs with dynamic pointer-linked data structures.
 The domain is particularly useful for programs with various kinds of lists as shown in our experiments.
 % Templates are also used to constrain values of the \emph{loop-back variables} that are
 % used in the SSA-based program encoding to over-approximate values returning from
@@ -9946,7 +9950,6 @@ $\dynobj{13}{1}$ and $\dynobj{13}{2}$ as, e.g.\ on Line~14, variables
 by this \texttt{malloc} call.
 
 %
-Let return back to the general description of template domain.
 The shape of the heap will be described by an
 invariant for the loop, specifically by the two template rows for
 the pointer fields of the abstract objects
@@ -9968,6 +9971,7 @@ by abstract objects $\dynobj{13}{1}$, $\dynobj{13}{2}$ and terminated by
 $\nullptr$.
 
 
+Let return back to the general description of template domain.
 In order to use the base shape domain within the 2LS approach, we have to augment it
 with information about the guard variables that encode the program's control
 flow in the SSA. The guards express when an appropriate loop-back control edge
@@ -10446,9 +10450,9 @@ and $N$ is a set of child nodes (either leaves or composite).
 % $root$ key.
 %
 We illustrate a representation of an XML message by our model in the following example.
-Consider the XML messages from the Listing \ref{list:XML1} and \ref{list:XML2}.
+Consider the XML messages from the Listings \ref{list:XML1} and \ref{list:XML2}.
 Both messages contains simplified description of a product built in a hypothetical factory.
-A product is described within \texttt{Item} tags where a name of it is given together with a list of the components needed for a production of the product.  
+A product is described within \texttt{Item} tags where a name of it is given together with a list of the components needed for production of the product.  
 For each component there is specified a material of the component and a number defining how many pieces of the given component is needed for the production.
 This kind of messages is sent from ERP to MES and in the logs of communication, the messages are stored in the files having the timestamps
 as the file names (particularly, \texttt{20211207-125952.xml} and \texttt{20211207-125955.xml} in our example).
@@ -10520,6 +10524,9 @@ what may be used later for a generation of messages from the abstract representa
 Note that other types of nodes are special cases of the defined nodes, e.g., the attribute node used
 in the XML format, is a special case of leaf node.
 
+Now we provide a description how to obtain a abstract representation of messages which can be later used
+to generate the new test cases.
+We start with an intution and later formalise the described method.
 To create abstract models of the different classes of the messages, we process the input log message by message (which are in
 the XML or JSON format), classify a message to a class and then apply the \emph{group and reduce} function to a model of the message.
 The function groups the same nodes w.r.t. a given property (usually it groups the nodes with the same keys) to one node what makes the representation more concise and general.
@@ -10540,9 +10547,9 @@ $\reduceop{\{ \nodee{k}{l_1}{u_1}{N_1}, \ldots, \nodee{k}{l_n}{u_n}{N_n}\}} =
 \nodee{k}{\sum_{i=1}^n l_i}{\sum_{i=1}^n u_i}{\bigcup_{i=1}^n N_i}$.  
 %
 Let us explain why the values $u_i$ and $l_i$ are summed.
-If we reduce two nodes with the key $a$, one with $30$ maximal occurrences (i.e., the node occurred in $30$ places)
-and the second with $20$ maximal occurrences (i.e., the node occurred in $20$ places),
-then the resulting node should has $50$ occurrences maximally because it represents nodes which occurred in $50$ places at the most.
+If we reduce two nodes with the key $a$, one with $30$ maximal occurrences
+and the second with $20$ maximal occurrences,
+then the resulting node should has $50$ at most occurrences maximally because it represents nodes which occurred in $50$ places at the most.
 %
 
 Then, for composite nodes, we define the \emph{group and reduce} function as
@@ -10559,7 +10566,7 @@ Consider the models of the messages from Figure \ref{fig:eurocast:models}.
 If we apply \texttt{group and reduce} to the composite nodes of the models starting
 from the root nodes and then proceeding in the breadth-first manner, we obtain
 the tree structure shown in Figure \ref{fig:eurocast:gar}.
-We use predicate stating that only the nodes with the same children (i.e., their children having
+We use predicate stating that only the nodes with the same children (i.e., their children have
 the same keys) can be grouped.
 As one can see the nodes with the key \emph{Component} are grouped to one node
 as well as their children nodes with the keys \emph{Material} and \emph{Count}.
@@ -10743,7 +10750,7 @@ It contains six messages, two between ERP and MES (communicated using the REST p
 two between terminal and MES (communicated using the REST protocol),
 and two between machines and MES (communicated using the OPC-UA protocol).
 The messages between ERP and MES corresponds to the XML messages from Listing~\ref{list:XML1}~and~\ref{list:XML2}
-as one can from the timestamps (which are the same as the timestamps in the names of files with XML messages).
+as one can see from the timestamps (which corresponds to the timestamps in the names of files with XML messages).
 The messages between machines and MES are in Listing~\ref{list:MMM} and the messages between
 terminals and MES are in Listing~\ref{list:TERM}.
 The content of the messages is described in a more detail in the next section.
@@ -10753,9 +10760,9 @@ The messages are not included or abbreviated for the sake of brevity.
 The text \texttt{<XML>} or \texttt{<JSON>} means that the whole XML or JSON message would be included in an event.
 A type of event is determined by communication protocol and the types related with the XML and JSON messages are further refined
 by the class of a message (we described the concept of a class of a message in the previous section).
-In our example, we have types \texttt{REST-1} and \texttt{REST-2} which means that all messages of this type
-are communicated via REST protocol but those of the first type are classified to the class $1$
-and those of the second type are classified to the class $2$.
+In our example, we have types \texttt{REST-1} and \texttt{REST-2} which means that all messages of these types
+are communicated via REST protocol but those of the type \texttt{REST-1} are classified to the class $1$
+and those of the type \texttt{REST-2} are classified to the class $2$.
 
 In the next step, we convert the events to the symbols (of alphabet of an automaton) by dropping the message
 and timestamp as we described above. In this case, we obtain three different symbols\,--\,\texttt{a,b,c}.
@@ -10763,7 +10770,7 @@ Then we create an automaton representing the event calendar.
 The automaton has seven states and transition over the created symbols.
 Finally if we apply a trace abstraction up to length $1$ we get the automaton on the right-hand side of the figure.
 The states $1$ was merged with the state $4$, the state $2$ with the state $5$, and the state $3$ with the state $6$.
-One loop was created in the resulting automaton and a language of the automaton is $(abc)^n$ for $n \geq 1$.
+One loop was created in the resulting automaton and the language of the automaton is $(abc)^n$ for $n \geq 1$.
 
 \begin{figure}[tb]
 \begin{center}
@@ -10804,6 +10811,7 @@ the YAML format.
 %
 
 In the following section, we will illustrate the transformation of communication logs to a YAML scenario.
+For simplicity we present a generation of scenario corresponding directly to the collected logs without any abstraction inlcuded.
 We remark that we consider a system consisting
 of an~ERP system, a~MES system, and manufacturing machines and their corresponding
 terminals used by human operators.
@@ -10998,7 +11006,7 @@ We processed the logs using the Tyrant tool on a machine having a $3$ GHz Dual-C
 
 We further transformed the event calendar representing the above scenario to an automaton and applied abstraction over it. Before the abstraction, we obtained
 an automaton with $31,303$ states (which corresponds to the number of steps in the scenario). After the abstraction, we got an automaton with $3,568$ states
-and $17$ loops, and we were able to generate new scenarios using the abstracted automaton.
+and $17$ loops, and we were able to generate the new scenarios using the abstracted automaton.
 
 Although the results of applying the abstraction look promising, this feature of Tyrant is still experimental, and to be fully applicable for testing a particular
 MES in a digital twin, it would need some fine-tuning. For instance, some sequences of messages (such as the initial ones) cannot be repeated more than
@@ -11059,15 +11067,14 @@ reliable due to avoiding the possibility of reporting false alarms.
 The ability to detect spurious counterexamples is the first building block for a CEGAR loop.
 The second one is a way of applying of predicate abstraction to the domain of forest automata which makes precise refinements possible
 (quite uniquely in the domain of shape analysis).
-Although the height abstraction originally used in shape analysis based on forest automata can be refined too, it does not guarantee
-an exact exclusion of spurious counterexamples and therefore does not guarantee termination of the verification procedure
-unless the height is radically increased, which would have a detrimental effect on the efficiency (note, however,
-that the exclusion can be guaranteed using this blind refinement).
+Although the height abstraction originally used in shape analysis based on forest automata can be refined too, it does not perform
+an exact exclusion of spurious counterexamples and therefore could guarantee termination of the verification procedure
+only when the height is radically increased, which would have a detrimental effect on the efficiency.
 On the other hand, predicate abstraction derives the new predicates from the detected spurious counterexample
 which prevents reaching the counterexample again.
-Moreover, the refinement is informed (i.e., it refined the abstraction in a way needed to exclude
+Since the refinement is informed (i.e., it refined the abstraction in a way needed to exclude
 the given counterexample, not blindly)
-enables verification of a new class of data structures
+it enables verification of a new class of data structures
 where a set of predicates (derived during CEGAR) is needed to describe their invariants.
 The concrete examples were described in Chapter \ref{ch:asv}.
 
@@ -11154,7 +11161,7 @@ The format supports finite automata and alternating finite automata with explici
 or bitvector alphabet as well as transducers with the mentioned alphabets.
 
 The library was already used for development of a new decision procedure for string solving
-published in \cite{fm23} where the library was used as the back end for the tool Z3-noodler\cite{ref_z3noodler}.
+published in \cite{fm23} where the library was used as the back end for the tool Z3-noodler \cite{ref_z3noodler}.
 Another paper related to string solving, in which the library is used, was accepted for publication in the OOPSLA 2023 conference.
 
 In the field of automated testing of MES-controlled digitalized manufacturing systems,
@@ -11173,7 +11180,7 @@ The work described in this thesis was published in the following papers.
 The backward symbolic execution and counterexample-guided refinement
 over forest automata used in shape analysis was published in \cite{vmcai17}.
 A chapter describing the whole shape analysis based on forest automata
-was accepted for publication in a book about state-of-the-art verification tools,
+was accepted for publication in a book about the state-of-the-art verification tools,
 that participated in the SV-COMP competition.
 The book should be published by the end the year 2023.
 The participations of \forester in the SV-COMP competition was described
@@ -11209,7 +11216,7 @@ for Predator as mature as the GCC one which helped Symbiotic to win in the Memor
 The presented work on automated testing was published in the proceedings of the conference EUROCAST 2022 \cite{eurocast22}.
 
 Finally, the paper based on the new library for finite automata described in the previous section was accepted for a publication in the proceedings
-of the conference CADE 2023.
+of the conference CADE 2023 \cite{cade23}.
 The paper compares several new algorithms for deciding emptiness of Boolean combinations of regular languages and of languages of alternating automata (AFA).
 The comparison was done using a benchmark mostly originating in or related to practical problems from string constraint solving, analysing LTL properties, and regular model checking.
 Our finite automata library was used as the back end of the ENFA tool implementing one of the approaches under the comparison.
