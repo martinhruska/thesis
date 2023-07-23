@@ -206,7 +206,7 @@ other tools, often developed by large teams.
 The tool also verified soundly some test cases such as programs manipulating skip-lists of level 3 or
 variants of trees which were not analysable by any other tool.\footnote{to the best of our knowledge,
 even today there is no tool in SV-COMP that would be capable of handling these programs in sound way.
-Some of the programs could be handled by the S2 tool\cite{locle:secondorder} whose abstraction is, however, rather fragile,
+Some of the programs could be handled by the S2 tool \cite{locle:secondorder} whose abstraction is, however, rather fragile,
 allowing it to handle complex programs on one hand, but failing on simple ones on the other hand according to our experiments with the tool. See also related work section.}
 Although \forester stayed at the state of a prototype and a lot of engineering work would be needed to make
 it a mature tool, we were able to show that a shape analysis based on automata
@@ -10891,7 +10891,6 @@ timestamps:
       ClientId: ExampleHost
       Command: ResponseCommand
       MessageType: Response
-      CommunicationId: 00000075-54f6-6fc3-84b6-0037d241d36b
       json: |-
         {
           "user": "username",
@@ -10978,8 +10977,8 @@ protocol. The message has the XML data attached.  The second step is executed
 one second after the first step (which corresponds to a difference between the times of the first and the second messages):
 the orchestrator will send another message from the MES to Machine 001 using the OPC-UA protocol.
 The message says that the value of the node with path $0$ should be set to $99$.
-The third messages is sent three seconds after the start of orchestration from Terminal 001
-to MES using REST protocol.
+The third messages is sent three seconds after the start of orchestration from MES to Terminal 001
+using REST protocol.
 The message contains data from the headers of the logged messages and the data in the JSON format.
 Note, that we can drop some information from the logged message such as a id of communication since
 we get the fresh values of such variables in a simulation in digital twin.
@@ -10988,7 +10987,7 @@ Then the orchestration continues with the similar three steps which differs only
 Particularly, the fourth step is communication between ERP and MES containing the XML message from Listing~\ref{list:XML2}.
 The fifth step is a message from Machine 001 to MES setting the value of the node with path $0$ to the value $100$
 (as it is in the second message in the in Listing~\ref{list:MMM}), and finally, the sixth step is
-a message from Terminal 001 to MES containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
+a message from MES to Terminal 001 containing the JSON message corresponding to the second message in Listing~\ref{list:TERM}.
 
 %
 %The Cryton tool later uses scenario like this to precisely orchestrate a
@@ -11062,7 +11061,7 @@ we also presented alternative approach to shape analysis based on SMT solving, o
 The main achieved result in shape analysis is the proposed way of using backward symbolic
 execution on forest automata for checking spuriousness of potential counterexamples
 and counterexample-guided refinement (CEGAR) to shape analysis based forest automata.
-Backward symbolic execution, what enables distinguishing between real and spurious (caused by abstraction) counterexamples.
+Backward symbolic execution enables distinguishing between real and spurious (caused by abstraction) counterexamples.
 This made reporting of bugs found in programs through the forest-automata-based shape analysis
 reliable due to avoiding the possibility of reporting false alarms.
 The ability to detect spurious counterexamples is the first building block for a CEGAR loop.
@@ -11114,7 +11113,7 @@ of a factory where the MES is deployed.
 We automatically create the test scenarios from the learnt models for digital twins in
 which the factory is emulated and the MES is deployed natively.
 We can test, e.g., a new version of the MES before it is deployed to a real factory using the described method.
-Since we use finite automata to model the communication protocol, we can use abstraction to
+Since we can use finite automata to model the communication protocol, we may use abstraction to
 overapproximate their languages allowing us to create new test cases.
 The results of this part of the thesis are mainly from the field of applied research.
 We implemented the procedure in the tool Tyrant \cite{ref_tyrant} which was supposed to be applied
@@ -11162,7 +11161,7 @@ The format supports finite automata and alternating finite automata with explici
 or bitvector alphabet as well as transducers with the mentioned alphabets.
 
 The library was already used for development of a new decision procedure for string solving
-published in \cite{fm23} where the library was used as the back end for the tool Z3-noodler \cite{ref_z3noodler}.
+published in~\cite{fm23} where the library was used as the back end for the tool Z3-noodler~\cite{ref_z3noodler}.
 Another paper related to string solving, in which the library is used, was accepted for publication in the OOPSLA 2023 conference.
 
 In the field of automated testing of MES-controlled digitalized manufacturing systems,
