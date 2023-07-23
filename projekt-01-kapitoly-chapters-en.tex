@@ -2678,7 +2678,7 @@ manipulations with transitions and states of FAs.
 %rules and states of FAs. 
 %since it is not important for this paper; instead,
 %we refer the reader to~\cite{forester12,jiri:diza} for details.
-We refer the reader to~\cite{forester11,jiri:diza} for the
+We refer the reader to~\cite{forester11,jiri:diza,martin:dp} for the
 details.
 
 We note that when we talk about removing a~component or inserting a~component
@@ -5118,7 +5118,8 @@ library~\cite{libvata}.
 \subsection{\forester Microcode}\label{sec:microinstr}
 %*******************************************************************************
 
-In this section, we provide an example of \forester microcode.
+In this section, we provide an example of \forester microcode (a~detailed
+description can be found in \cite{martin:dp}).
 Consider the following data structure implementing a~singly-linked list:
 %
 \begin{quote}
@@ -9065,14 +9066,14 @@ Forest automata as a domain are able to represent many different data structures
 ranging from doubly linked lists to different kinds of trees.
 From the first participation in the competition, \forester was the only tool able to soundly verify correctness of the implementation of skip lists
 of the second and the third level.
-Then the futher development extended the set of programs verified only by \forester.
+Then the further development extended the set of programs verified only by \forester.
 Particularly, the newly implemented backward run and abstraction refinement gave \forester
 an ability to learn more sophisticated invariants.
 An example of such an invariant is alternation of two kinds of nodes in a singly or doubly linked list.
 \forester also benefits from using an efficient implementation of the state-of-the-art algorithms
 for tree automata (in the VATA library) what makes it quite efficient.
 
-As we already dicussed, the main weaknesses of \forester came from that it is still a technical immature of the tool.
+As we already discussed, the main weaknesses of \forester came from that it is still a technical immature of the tool.
 It did not support the whole C syntax, and therefore it reported
 unknown on many tasks from the SV-COMP benchmark as we already mentioned.
 We did not have the manpower to add all needed features to \forester, which is still a prototype and
@@ -10142,7 +10143,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 \end{table*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
-However, the main comparative advatenge of our work is combining different analysis,
+However, the main comparative advantage of our work is combining different analysis,
 particularly we can combine value and shape analysis.
 We created a benchmark consisting of $10$ program in the C language.
 These programs manipulates unbounded dynamic data structure and the verification tools also need to
@@ -10526,7 +10527,7 @@ in the XML format, is a special case of leaf node.
 
 Now we provide a description how to obtain a abstract representation of messages which can be later used
 to generate the new test cases.
-We start with an intution and later formalise the described method.
+We start with an intuition and later formalise the described method.
 To create abstract models of the different classes of the messages, we process the input log message by message (which are in
 the XML or JSON format), classify a message to a class and then apply the \emph{group and reduce} function to a model of the message.
 The function groups the same nodes w.r.t. a given property (usually it groups the nodes with the same keys) to one node what makes the representation more concise and general.
@@ -10811,7 +10812,7 @@ the YAML format.
 %
 
 In the following section, we will illustrate the transformation of communication logs to a YAML scenario.
-For simplicity we present a generation of scenario corresponding directly to the collected logs without any abstraction inlcuded.
+For simplicity we present a generation of scenario corresponding directly to the collected logs without any abstraction included.
 We remark that we consider a system consisting
 of an~ERP system, a~MES system, and manufacturing machines and their corresponding
 terminals used by human operators.

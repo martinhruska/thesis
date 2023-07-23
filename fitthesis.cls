@@ -31,7 +31,7 @@
 \DeclareOption{english}{\let\ifenglish\iftrue\let\ifczech\iffalse\let\ifczechslovak\iffalse}
 \DeclareOption{slovak}{\let\ifslovak\iftrue\let\ifczech\iffalse}
 \DeclareOption{enslovak}{\let\ifenslovak\iftrue}
-\DeclareOption{cover}{\let\ifcover\iftrue}
+%\DeclareOption{cover}{\let\ifcover\iftrue}
 \DeclareOption{print}{\let\ifWis\iffalse \let\ifPrint\iftrue}
 \DeclareOption{cprint}{\let\ifWis\iffalse \let\ifPrint\iftrue \let\ifBarLogo\iftrue}
 \DeclareOption{zadani}{\let\ifzadani\iftrue}
@@ -940,7 +940,7 @@ Management}{\@fit@EN}%
       \mkuctxtt{9}{\ifslovak\@title@EN\else\ifczech\@title@EN\else\@title@CS\fi\fi}
     }
   }{
-    \mkuctxtt{16}{\ifslovak\@title@CS\else\ifczech\@title@CS\else\@title@EN\fi\fi}
+    \mkuctxtt{16}{\ifslovak\@title@CS\else\ifczech\@title@CS\else asd\fi\fi}
     \mkuctxtt{9}{\ifslovak\@title@EN\else\ifczech\@title@EN\else\@title@CS\fi\fi}
   }
   \vfill
@@ -989,7 +989,7 @@ Management}{\@fit@EN}%
       \mkuctxtt{10}{\ifslovak\@title@EN\else\ifczech\@title@EN\else\@title@CS\fi\fi}
     }
   }{
-    \mkuctxtt{18}{\ifslovak\@title@CS\else\ifczech\@title@CS\else\@title@EN\fi\fi}
+    \mkuctxtt{18}{\ifslovak\@title@CS\else\ifczech\@title@CS\else Automata in Software Verification\\and Testing\fi\fi}
     \mkuctxtt{10}{\ifslovak\@title@EN\else\ifczech\@title@EN\else\@title@CS\fi\fi}
   }
   \vfill
