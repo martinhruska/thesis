@@ -44,7 +44,7 @@ On the other hand, the programming languages of this kind have a slow learning c
 and can be even unusable for certain programmers.
 Moreover, only a limited set of program properties is encodable to type systems.
 
-The third approach to software quality are lightweight automated methods
+The fourth approach to software quality are lightweight automated methods
 such as automated testing, unsound static analysis based, e.g., on error pattern matching, symbolic execution,
 or extrapolating dynamic analysis.
 This class of methods also contains the relaxed versions of methods from formal verification
@@ -55,7 +55,7 @@ They are easy to use, straightforward, often scale well but they are not sound a
 some of them may detect many false alarms which can cause
 that they are ignored by developers completely.
 
-The last of the main approach is based on traditional testing by humans possible aided
+The last of the main approaches is based on traditional testing by humans possible aided
 by automated test execution, continuous integration, and the like.
 It may be developers writing unit tests or the whole tester teams implementing the complex integration tests.
 It is mostly known and time-tested approach, but it costs a lot of human resources and
@@ -101,7 +101,7 @@ of two finite automata, testing emptiness of language of automaton or complement
 All these properties are decidable but some of them have a high complexity,
 e.g., complement has exponential complexity w.r.t. number of states of automaton, language inclusion and equivalence are PSACE-complete
 (or even EXPTIME-c for nondeterministic tree automata).
-Fortunately, efficient heuristics \cite{tacas10,bonchi_checking_2013} for the mentioned operations were introduced making
+Fortunately, efficient heuristics (e.g., \cite{tacas10,bonchi_checking_2013}) for the mentioned operations were introduced making
 them computationally feasible in many practical cases.
 
 As we mentioned above, we focus on applications of automata to two different fields.
@@ -112,7 +112,7 @@ as linked lists or trees, and verifying the operations properties such as absenc
 dereference, invalid memory free, or memory leaks.
 Programs using dynamic data structures are a great fit for methods of formal verification since 
 they are prone to the mentioned bugs and are written in programming
-languages with manual memory management as C or C++ where memory management is fully within user's control.
+languages with manual memory management such as C or C++ where memory management is fully within user's control.
 At the same time, these programs are used in critical software such as kernels of operating systems.
 Any bugs in them may affect many users and lead to expensive losses.
 Therefore they need strong safety guarantees which can be provided by the methods with formal basis.
@@ -268,7 +268,7 @@ of the software verification competition SV-COMP.
 Chapter \ref{ch:netys} introduces automata over graphs with a bounded tree width together
 with their crucial properties.
 Chapter \ref{ch:fmcad} discuss an approach to shape analysis based on predicate logic, templates-based invariants, abstract domains, and SMT solving
-implemented in 2LS framework \cite{2ls:tacas}
+implemented in 2LS framework.
 
 Finally, Chapter \ref{ch:eurocast} describes our methods for testing MES in the environment
 of digital twins.
@@ -11116,7 +11116,7 @@ We can test, e.g., a new version of the MES before it is deployed to a real fact
 Since we can use finite automata to model the communication protocol, we may use abstraction to
 overapproximate their languages allowing us to create new test cases.
 The results of this part of the thesis are mainly from the field of applied research.
-We implemented the procedure in the tool Tyrant \cite{ref_tyrant} which was supposed to be applied
+We implemented the procedure in the tool Tyrant which was supposed to be applied
 in the Unis company.
 The company provided us with logs of the real communication in their systems
 system which allowed us to developed a prototype version of the tool Tyrant.
@@ -11162,7 +11162,6 @@ or bitvector alphabet as well as transducers with the mentioned alphabets.
 
 The library was already used for development of a new decision procedure for string solving
 published in~\cite{fm23} where the library was used as the back end for the tool Z3-noodler~\cite{ref_z3noodler}.
-Another paper related to string solving, in which the library is used, was accepted for publication in the OOPSLA 2023 conference.
 
 In the field of automated testing of MES-controlled digitalized manufacturing systems,
 one may consider more domain-specific abstractions
