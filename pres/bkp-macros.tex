@@ -1,0 +1,88 @@
+\newcommand{\graphsof}[2]{\mathbb{G}(#1,#2)}
+\newcommand{\run}{\rho}
+\newcommand{\aut}{A}
+\newcommand{\td}{T}
+
+\newcommand{\vargraph}[2]{\llbracket #1,#2 \rrbracket}
+\newcommand{\vargraphj}[3]{\llbracket #1,#2,#3 \rrbracket}
+\newcommand{\jmp}{\leadsto}
+
+
+
+% some Macros from ws1s TACAS'15 
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\lang}{\mathcal{L}}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\powersetof}[1]{2^{#1}}
+\newcommand{\rank}[1][]{\#{#1}}
+\newcommand{\dom}{\mathit{dom}}
+\newcommand{\alltreesof}[2]{T^{#1}_{#2}}
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\compl}[1]{\overline{#1}}
+\newcommand{\eqdef}{\stackrel{\mathrm{def}}{=}}
+\newcommand{\iffdef}{\stackrel{\mathrm{def}}{\iff}}
+\newcommand{\true}{\ensuremath{\mathsf{\mathbf{true}}}}
+\newcommand{\false}{\ensuremath{\mathsf{\mathbf{false}}}}
+\newcommand{\asgn}{\ensuremath{:=\,}}
+\newcommand{\sym}[1]{\langle {#1}\rangle}
+\newcommand{\ssym}{\circ}
+\newcommand{\csign}{\circ}
+\newcommand{\cstate}[1]{#1^\csign}
+\newcommand{\jvar}[3][]{%
+	\ifthenelse{\equal{#1}{}}{#2^{#3}}{{#2}^{#3}_{#1}}}
+\newcommand{\refs}[1]{\overline{#1}}
+\newcommand{\vars}{\mathit{Vars}}
+\newcommand{\sels}{Sels}
+\newcommand{\tagal}{\Sigma_{\vars}}
+\newcommand{\transta}{\delta_{T}}
+\newcommand{\nul}{\bot}
+\newcommand{\alnul}{\Sigma_{\nul}}
+\newcommand{\varsq}{2^{\vars}}
+\newcommand{\vrts}{V}
+\newcommand{\edgs}{E}
+\newcommand{\dec}{t}
+\newcommand{\edgsdec}{\edgs_\dec}
+\newcommand{\edgsgra}{\edgs_g}
+\newcommand{\edgsnog}{\edgs_n}
+\newcommand{\vqa}{V}
+%\newcommand{\va}{W}
+\newcommand{\va}{v}
+\newcommand{\na}{n}
+\newcommand{\pa}{N}
+\newcommand{\sa}{J}
+\newcommand{\opnds}{\beta}
+\newcommand{\lab}{\ell}
+\newcommand{\bag}{b}
+
+\newcommand{\trans}[3]{#1\xrightarrow{#2}(#3)}
+\newcommand{\gr}{g}
+
+\newcommand{\ga}{\mathcal{A}}
+\newcommand{\fta}{\mathcal{T}}
+\newcommand{\img}{\mathit{img}}
+
+\newcommand{\tds}{\tau}
+\newcommand{\automat}{A}
+\newcommand{\auto}{\automat_{orig}}
+\newcommand{\autn}{\automat_{jump}}
+\newcommand{\omark}{\bullet}
+
+\newcommand{\chr}{\mathit{reconnect}}
+\newcommand{\rot}{\mathit{rotation}}
+\newcommand{\cht}{ro}
+\newcommand{\chv}{pr}
+\newcommand{\vs}{vs}
+\newcommand{\prim}{polar}
+\newcommand{\recon}{recon}
+\newcommand{\addng}{addng}
+\newcommand{\delng}{delng}
+
+\newcommand{\bubbles}{B}
+\newcommand{\treewidth}[1]{\mathit{tw}(#1)}
+
+\newcommand{\ar}[1]{\textcolor{blue}{\ifmmode \text{[AR: #1]}\else [#1]\fi}}
+\newcommand{\tv}[1]{\textcolor{magenta}{\ifmmode \text{[TV: #1]}\else [TV: #1]\fi}}
+\newcommand{\mh}[1]{\textcolor{cyan}{\ifmmode \text{[MH: #1]}\else [MH: #1]\fi}}
+\newcommand{\lh}[1]{\textcolor{green}{\ifmmode \text{[LH: #1]}\else [LH: #1]\fi}}
+\newcommand{\ol}[1]{\textcolor{red}{\ifmmode \text{[OL: #1]}\else [#1]\fi}}
+

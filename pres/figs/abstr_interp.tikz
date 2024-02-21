@@ -1,0 +1,28 @@
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\begin{tikzpicture}[
+  >=stealth',
+	scale=0.8,
+	transform shape
+]
+
+  \tikzstyle{greynote}=[fill=lightgray]
+
+  \coordinate (sets of graphs) at (0mm,0mm);
+  \coordinate (sets of fas) at (40mm,0mm);
+  \coordinate (spline offset) at (0mm,12mm);
+
+  \node[draw,shape=ellipse,fill=red!30] (p) at (sets of graphs) {Sets of \textcolor{blue}{\textbf{graphs}}};
+  \node[draw,shape=ellipse,fill=blue!20] (q) at (sets of fas) {Sets of \textcolor{blue}{\textbf{FAs}}};
+
+  \draw[->,thick] (p) .. controls ($(p) + 0.25*(q) - 0.25*(p) + (spline offset)$) and ($(p) + 0.75*(q) - 0.75*(p) + (spline offset)$) .. node (alpha) [greynote,yshift=4mm] {abstraction} (q);
+  \draw[->,thick] (q) .. controls ($(q) + 0.25*(p) - 0.25*(q) - (spline offset)$) and ($(q) + 0.75*(p) - 0.75*(q) - (spline offset)$) .. node (gamma) [greynote,below,yshift=-1mm] {concretization} (p);
+
+  \node (ap) [greynote, xshift=-8mm] at ($(sets of graphs) + (-19mm,5mm)$) {concrete domain};
+  \node (aq) [greynote, xshift= 8mm] at ($(sets of fas) + (19mm,5mm)$) {abstract domain};
+%  \node (aalpha) [greynote,above of=alpha, yshift=-2mm] {abstraction};
+%  \node (agamma) [greynote,below of=gamma, yshift= 2mm] {concretization};
+
+%  \draw[->] (aalpha) edge[color=red] (alpha);
+%  \draw[->] (agamma) edge[color=red] (gamma);
+
+\end{tikzpicture}

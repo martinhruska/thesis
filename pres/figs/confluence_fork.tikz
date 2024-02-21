@@ -1,0 +1,37 @@
+\usetikzlibrary{arrows,backgrounds,fit,shapes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[
+  node distance=5mm,
+  thick,
+  ->,
+  >=stealth',
+  level/.style={sibling distance = 12mm/#1,level distance = 7mm}
+]
+
+  \tikzstyle{vertex}=[circle,draw,inner sep=0.5mm]
+  \tikzstyle{invisib}=[circle,inner sep=0.5mm]
+
+%  \node (1b) [vertex] {} edge [loop above,thick] coordinate (l1) () ;
+  \node (1b) [invisib] {};
+  \node (3b) [vertex,below of=1b,yshift=0mm] {};
+  \node (4b) [vertex,below left of=3b,yshift=+0mm] {};
+  \node (6b) [vertex,below right of=3b,yshift=-0mm] {};
+%  \node (5b) [vertex,left of=1b] {};
+  \node (7b) [vertex,below of=4b,yshift=-1mm] {};
+  \node (8b) [vertex,below of=6b,yshift=-1mm] {};
+  \node (9b) [vertex,below of=3b,yshift=-7mm] {};
+
+%  \draw [->] (1b) to (3b);
+  \draw [->] (3b) to (4b);
+  \draw [->] (3b) to (6b);
+  \draw [->,dotted] (4b) to (7b);
+  \draw [->,dotted] (6b) to (8b);
+  \draw [->] (7b) to (9b);
+  \draw [->] (8b) to (9b);
+%  \draw [->] (5b) to (1b);
+
+%\begin{pgfonlayer}{background}
+%\node[draw,ellipse,fill=red!20,draw=black,rounded corners=3pt,inner sep=2pt,fit=(1b) (l1)] (b) {};
+%\end{pgfonlayer}
+
+\end{tikzpicture}

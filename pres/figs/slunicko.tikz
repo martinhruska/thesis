@@ -1,0 +1,84 @@
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\begin{tikzpicture}[
+  scale=0.8,
+  transform shape,
+  node distance=18mm
+]
+
+%  \path[use as bounding box] (-8mm,-4mm) rectangle (60mm,9mm);
+
+  \tikzstyle{memnode}=[draw,rectangle,fill=lightgray,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodeblue}=[draw,rectangle,fill=blue!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodepink}=[draw,rectangle,fill=red!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodegreen}=[draw,rectangle,fill=green!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+
+  \tikzstyle{nullnode}=[node distance=18mm,label=center:$\bot$]
+  \tikzstyle{varnode}=[font=\tt]
+  \tikzstyle{refnode}=[fill=lightgray!40,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+  \tikzstyle{ptrlab}=[above,font=\tt]
+  \tikzstyle{nextptr}=[]%[label={[label distance=0mm,font=\tt]-90:next}]
+  \tikzstyle{tailptr}=[]%[label={[label distance=0mm,font=\tt,very near start]90:tail}]
+
+  \tikzstyle{hledge}=[very thick]
+
+%  \draw[fill=green!60,rounded corners,draw,dashed] (32mm,-4mm) rectangle +(26mm,8mm);
+
+
+
+  % nodes
+  \node[memnode] (x1) at (0mm,0mm) {};
+  \node[memnode] (x2) [right of=x1,xshift=5mm] {};
+  \node[memnode] (x3) [right of=x2,xshift=7mm] {};
+  \node[memnode] (x1a) [below of=x1,yshift=7mm] {};
+  \node[memnode] (x2a) [below of=x2,yshift=7mm] {};
+  \node[memnode] (x3a) [below of=x3,yshift=7mm] {};
+
+  \node (x7) [above left of=x1,node distance=11mm] {};
+
+%  \node[memnode] (x3) [right of=x2] {}; 
+%  \node[memnode] (x4) [right of=x3] {};
+%  \node[memnode] (x5) [right of=x4] {};
+
+
+
+%  \node[nullnode] (x5null) [right of=x5] {};
+%  \node (x5null) [right of=x5] {\dots};
+
+%  \node[varnode,node distance=5mm] (x) [left of=x1] {x:};
+
+  % pointers
+  \draw[pointer,hledge] (x1)    edge node[nextptr] (next)   {} (x2);
+  \draw[pointer,hledge] (x2)    edge node[nextptr] (prev)  {} (x3);
+  \draw[pointer,hledge] (x3)    -| node (righthigh) {} (54mm,6mm) -| node (lefthigh) {} (-8mm,6mm) |- (x1);
+  \draw[pointer,red] (x1)    edge node[nextptr]   {} (x1a);
+  \draw[pointer,red] (x2)    edge node[nextptr]   {} (x2a);
+  \draw[pointer,red] (x3)    edge node[nextptr]   {} (x3a);
+
+%  \draw[pointer] (x2)    edge node[nextptr]   {} (x3);
+%  \draw[pointer,hledge] (x3)    edge node[nextptr]   {} (x4);
+
+%  \draw[pointer,bend left] (x1)    edge node[tailptr]   {} (x4);
+%  \draw[pointer,bend left] (x2)    edge node[tailptr]   {} (x4);
+%  \draw[pointer,bend left,hledge] (x3)    edge node[tailptr]   {} (x4);
+
+%  \draw[pointer] (x4)    edge node[nextptr]   {} (x5);
+%  \draw[pointer] (x5)    edge node[nextptr]   {} (x5null);
+
+  \begin{pgfonlayer}{background}
+    \node[draw,dashed,fill=red!30,rectangle,rounded corners,inner sep=2.5mm,fit=(x1) (x3) (righthigh) (lefthigh) (x1a)] (tail1) {};
+    \node[draw,dashed,fill=blue!30,rectangle,rounded corners,fit=(x1) (x3) (righthigh) (lefthigh)] (tail1) {};
+  \end{pgfonlayer}
+
+%  \node[draw,rectangle,fill=green!60,below of=x4,yshift=5mm] (tail1box) {B1};
+%  \draw[black!60] (tail1) -- (tail1box);
+
+
+%  \draw[pointer] (x2)    edge node[prevptr]   {} (x1);
+%  \draw[pointer] (x3)    edge node[prevptr]   {} (x2);
+%  \draw[pointer] (x4)    edge node[prevptr]   {} (x3);
+%  \draw[pointer] (x5)    edge node[prevptr]   {} (x4);
+%  \draw[pointer] (x5null)    edge node[prevptr]   {} (x5);
+
+\end{tikzpicture}

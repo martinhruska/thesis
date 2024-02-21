@@ -1,0 +1,51 @@
+\begin{tikzpicture}[
+  scale=0.8,
+  transform shape,
+  node distance=18mm
+]
+
+  \tikzstyle{memnode}=[draw,rectangle,fill=lightgray,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodeblue}=[draw,rectangle,fill=blue!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodepink}=[draw,rectangle,fill=red!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodegreen}=[draw,rectangle,fill=green!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+
+  \tikzstyle{nullnode}=[node distance=18mm,label=center:$\bot$]
+  \tikzstyle{varnode}=[font=\tt]
+  \tikzstyle{refnode}=[fill=green!20,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+  \tikzstyle{ptrlab}=[above,font=\tt]
+
+  % nodes
+  \node[memnodeblue] (x1)  at (0mm,0mm) {1};
+  \node[memnodeblue] (x2) [right of=x1] {};
+  \node[memnodeblue] (x3) [right of=x2] {};
+
+  \node[memnodepink] (y1) [below of=x1, yshift=7mm] {3};
+  \node[memnodepink] (y2) [right of=y1] {};
+
+  \node[refnode] (joinsbst1) [right of=x3] {\=2};
+  \node[refnode] (joinsbst2) [right of=y2] {\=2};
+
+  \node[memnodegreen] (join) [below of=y1, yshift=7mm] {2};
+  \node[memnodegreen] (j2) [right of=join] {};
+  \node[nullnode] (j2null) [right of=j2] {};
+
+  \node[varnode,node distance=5mm] (x) [left of=x1] {x:};
+  \node[varnode,node distance=5mm] (x) [left of=y1] {y:};
+  
+  \node (placeholder) [right of=joinsbst1] {};
+  
+
+  % pointers
+  \draw[pointer] (x1)    -- node[ptrlab]   {next} (x2);
+  \draw[pointer] (x2)    -- node[ptrlab]   {next} (x3);
+  \draw[pointer] (x3)    -- node[ptrlab]   {next} (joinsbst1);
+
+  \draw[pointer] (y1)    -- node[ptrlab]   {next} (y2);
+  \draw[pointer] (y2)    -- node[ptrlab]   {next} (joinsbst2);
+
+  \draw[pointer] (join)  -- node[ptrlab]   {next} (j2);
+  \draw[pointer] (j2)    -- node[ptrlab]   {next} (j2null);
+
+\end{tikzpicture}

@@ -1,0 +1,60 @@
+\newcommand{\confluencediagram}{
+%  \path[use as bounding box] (-8mm,-16mm) rectangle (60mm,10mm);
+
+  \tikzstyle{memnode}=[draw,rectangle,fill=lightgray,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+  \tikzstyle{ptrlab}=[above,font=\tt]
+
+  % nodes
+  \node[memnode] (x1) at (0mm,0mm) {};
+  \node[memnode] (x2) [above right of=x1,yshift=-6mm] {};
+  \node[memnode] (x3) [below right of=x1,yshift=6mm] {};
+  \node[memnode] (x4) [below right of=x2,yshift=6mm] {};
+  \node[memnode] (x5) [below of=x4] {};
+  \node[memnode] (x6) [below of=x1] {};
+  \node (x1above) [above of=x1,yshift=-8mm] {\vdots};
+  \node (x5right) [right of=x5,xshift=-8mm] {\dots};
+
+
+%  \begin{pgfonlayer}{background}
+    \node[fill=blue!60,opacity=0.5,rectangle,rotate fit=30,inner sep=1mm,fit=(x1) (x2)] {};
+    \node[fill=blue!60,opacity=0.5,rectangle,rotate fit=-30,inner sep=1mm,fit=(x1) (x3)] {};
+    \node[fill=blue!60,opacity=0.5,rectangle,rotate fit=-30,inner sep=1mm,fit=(x2) (x4)] {};
+    \node[fill=blue!60,opacity=0.5,rectangle,rotate fit=30,inner sep=1mm,fit=(x3) (x4)] {};
+
+    \node[fill=red!60,opacity=0.5,rectangle,rotate fit=-30,inner sep=1mm,fit=(x1) (x3)] {};
+    \node[fill=red!60,opacity=0.5,rectangle,rotate fit=30,inner sep=1mm,fit=(x3) (x4)] {};
+
+
+
+  % pointers
+  \draw[pointer] (x1)    edge (x2);
+  \draw[pointer] (x1)    edge (x3);
+  \draw[pointer] (x2)    edge (x4);
+  \draw[pointer] (x3)    edge (x4);
+  \draw[pointer] (x4)    edge (x5);
+  \draw[pointer] (x5)    edge (x6);
+  \draw[pointer] (x6)    edge (x1);
+  \draw[pointer] (x5right)    edge (x5);
+  \draw[pointer] (x1above)    edge (x1);
+
+
+
+
+%    \node[draw,dashed,fill=red!60,opacity=0.5,ellipse,inner sep=0,fit=(x1) (x2) (x3) (x6) (bend2)] {};
+%  \end{pgfonlayer}
+}
+
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\begin{tikzpicture}[
+  scale=1.0,
+  transform shape,
+  node distance=18mm
+]
+
+\confluencediagram
+
+
+
+\end{tikzpicture}

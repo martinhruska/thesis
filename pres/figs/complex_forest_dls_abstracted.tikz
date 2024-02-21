@@ -1,0 +1,52 @@
+\usetikzlibrary{arrows,fit}
+\begin{tikzpicture}
+[
+	scale=0.85,
+	transform shape
+%	edge from parent/.style={draw,->,>=stealth'}
+]
+
+\path[use as bounding box] (-30mm,7mm) rectangle (111mm,-44mm);
+
+\definecolor{ref1col}{rgb}{0.6,0.6,1.0}
+\definecolor{ref2col}{rgb}{1.0,0.7,0.7}
+\definecolor{ref3col}{rgb}{0.3,1.0,0.3}
+\definecolor{ref4col}{rgb}{1.0,0.3,1.0}
+\definecolor{trpcol}{rgb}{0.0,0.8, 0.8}
+\definecolor{dlscol}{rgb}{0.7,0.3,0.7}
+
+\tikzstyle{state}=[draw,circle]
+\tikzstyle{trans}=[draw,->,>=stealth']
+\tikzstyle{abstr}=[draw,dotted,thick]
+\tikzstyle{ref}=[rectangle,inner sep=0.5mm]
+\tikzstyle{sepline}=[draw=black!40,thick,dashdotted]
+\tikzstyle{trpbox}=[thick,draw=black,fill=trpcol]
+\tikzstyle{dlsbox}=[above,yshift=1mm,thick,draw=black,fill=dlscol]
+
+% Automaton 1
+\node[state] (q1) at (0mm,0mm) {};
+\node[] (r4) [below of=q1] {};
+\node[node distance=6mm] (r5) [right of=r4] {};
+\node[state,node distance=6mm] (r2) [right of=r5] {};
+
+\draw (q1) edge[trans] node[dlsbox,rotate=-40] {dls} (r2);
+
+\node[trpbox,below of=q1,yshift=3mm]  {trp};
+
+\node[anchor=south,ref,fill=ref1col] at (q1.north) {1};
+
+%%%%%
+
+\draw[trans] (r2) .. controls +(25mm,10mm) and +(10mm,25mm) .. node[near start,dlsbox,rotate=50,below,yshift=-2mm] {dls} node[near end,trpbox,rotate=50,above,yshift=2mm] {trp} (r2);
+
+
+% Automaton 4
+\node[] (dr4) [below of=r2] {};
+\node[] (dr5) [node distance=6mm,right of=dr4] {};
+\node[ref,fill=ref1col] (dr2) [node distance=6mm,right of=dr5] {$\overline{1}$};
+
+\draw (r2) edge[trans] node[dlsbox,rotate=-40] {dls} (dr2);
+
+\node[trpbox,below of=r2,yshift=3mm]  {trp};
+
+\end{tikzpicture}

@@ -1,0 +1,143 @@
+\usetikzlibrary{arrows,fit}
+\begin{tikzpicture}
+[
+	scale=0.85,
+	transform shape
+%	edge from parent/.style={draw,->,>=stealth'}
+]
+
+\path[use as bounding box] (-30mm,7mm) rectangle (111mm,-40mm);
+
+\definecolor{ref1col}{rgb}{0.6,0.6,1.0}
+\definecolor{ref2col}{rgb}{1.0,0.7,0.7}
+\definecolor{ref3col}{rgb}{0.3,1.0,0.3}
+\definecolor{ref4col}{rgb}{1.0,0.3,1.0}
+
+\tikzstyle{state}=[draw,circle]
+\tikzstyle{trans}=[draw,->,>=stealth']
+\tikzstyle{abstr}=[draw,dotted,thick]
+\tikzstyle{ref}=[rectangle,inner sep=0.5mm]
+\tikzstyle{sepline}=[draw=black!40,thick,dashdotted]
+
+% Automaton 1
+\node[state] (q1) at (0mm,0mm) {};
+\node[ref,fill=ref1col] (r4) [below of=q1] {$\overline{1}$};
+\node[state,node distance=14mm] (r3) [left of=r4] {};
+\node[ref,fill=ref4col,node distance=7mm] (r1) [left of=r3] {$\overline{4}$};
+\node[] (r5) [right of=r4] {};
+\node[ref,fill=ref2col,node distance=7mm] (r2) [right of=r5] {$\overline{2}$};
+
+\draw (q1) edge[trans] node[near start,label={above:p}] (r1mid) {} (r1);
+\draw (q1) edge[trans] node[near start,label={above:n}] (r2mid) {} (r2);
+\draw (q1) edge[trans] node[label={below left:l}] {} (r3);
+\draw (q1) edge[trans] node[near start,label={below right:t}] (r4mid) {} (r4);
+\draw (q1) edge[trans,out=260,in=0] node[near start,label={[label distance=-0.8mm]below left:r}] (r5mid) {} (r3);
+\draw (r1mid.center) to[out=-45,in=225] (r2mid.center);
+
+\node[anchor=south,ref,fill=ref1col] at (q1.north) {1};
+
+\node[inner sep=0] (s2) [below of=r3] {};
+\node[ref,fill=ref1col,yshift=-2.5mm] (s2p) at (s2.south) {$\overline{1}$};
+
+\draw[trans] (r3) .. controls +(-5mm,-10mm) and +(-7mm,-3mm) .. node[very near start,label={left:l}] (s1mid) {} (r3);
+\draw (r3) edge[trans] node[label={[label distance=-1mm]below right:t}] {} (s2);
+\draw[trans] (r3) .. controls +(5mm,-10mm) and +(7mm,-3mm) .. node[very near start,label={right:r}] (s3mid) {} (r3);
+\draw (s1mid.center) to[out=-45,in=225] (s3mid.center);
+
+\node (adfdfds) [right of=q1,xshift=11mm] {};
+\node (adfdfds2) [below of=adfdfds,yshift=-30mm] {};
+\draw[sepline] (adfdfds) edge (adfdfds2);
+
+% Automaton 2
+\node[state] (bq1) [right of=q1,xshift=26mm] {};
+\node[ref,fill=ref2col] (br4) [below of=bq1] {$\overline{2}$};
+\node[state] (br3) [node distance=6mm,left of=br4] {};
+\node[ref,fill=ref1col] (br1) [node distance=6mm,left of=br3] {$\overline{1}$};
+\node[] (br5) [node distance=6mm,right of=br4] {};
+\node[ref,fill=ref3col] (br2) [node distance=6mm,right of=br5] {$\overline{3}$};
+
+\draw (bq1) edge[trans] node[near start,label={above:p}] (br1mid) {} (br1);
+\draw (bq1) edge[trans] node[near start,label={above:n}] (br2mid) {} (br2);
+\draw (bq1) edge[trans] node[label={below left:l}] {} (br3);
+\draw (bq1) edge[trans] node[near start,label={below right:t}] (br4mid) {} (br4);
+\draw (bq1) edge[trans,out=260,in=0] node[near start,label={[label distance=-0.8mm]left:r}] (br5mid) {} (br3);
+\draw (br1mid.center) to[out=-45,in=225] (br2mid.center);
+
+\node[anchor=south,ref,fill=ref2col] at (bq1.north) {2};
+
+\node[inner sep=0] (bs2) [below of=br3] {};
+\node[ref,fill=ref2col,yshift=-2.5mm] (bs2p) at (bs2.south) {$\overline{2}$};
+
+\draw[trans] (br3) .. controls +(-5mm,-10mm) and +(-7mm,-3mm) .. node[very near start,label={left:l}] (bs1mid) {} (br3);
+\draw (br3) edge[trans] node[label={[label distance=-1mm]below right:t}] {} (bs2);
+\draw[trans] (br3) .. controls +(5mm,-10mm) and +(7mm,-3mm) .. node[very near start,label={right:r}] (bs3mid) {} (br3);
+\draw (bs1mid.center) to[out=-45,in=225] (bs3mid.center);
+
+
+\node (badfdfds) [right of=bq1,xshift=5mm] {};
+\node (badfdfds2) [below of=badfdfds,yshift=-30mm] {};
+\draw[sepline] (badfdfds) edge (badfdfds2);
+
+
+% Automaton 3
+\node[state] (cq1) [right of=bq1,xshift=20mm] {};
+\node[ref,fill=ref3col] (cr4) [below of=cq1] {$\overline{3}$};
+\node[state] (cr3) [node distance=6mm,left of=cr4] {};
+\node[ref,fill=ref2col] (cr1) [node distance=6mm,left of=cr3] {$\overline{2}$};
+\node[] (cr5) [node distance=6mm,right of=cr4] {};
+\node[ref,fill=ref4col] (cr2) [node distance=6mm,right of=cr5] {$\overline{4}$};
+
+\draw (cq1) edge[trans] node[near start,label={above:p}] (cr1mid) {} (cr1);
+\draw (cq1) edge[trans] node[near start,label={above:n}] (cr2mid) {} (cr2);
+\draw (cq1) edge[trans] node[label={below left:l}] {} (cr3);
+\draw (cq1) edge[trans] node[near start,label={below right:t}] (cr4mid) {} (cr4);
+\draw (cq1) edge[trans,out=260,in=0] node[near start,label={[label distance=-0.8mm]left:r}] (cr5mid) {} (cr3);
+\draw (cr1mid.center) to[out=-45,in=225] (cr2mid.center);
+
+\node[anchor=south,ref,fill=ref3col] at (cq1.north) {3};
+
+\node[inner sep=0] (cs2) [below of=cr3] {};
+\node[ref,fill=ref3col,yshift=-2.5mm] (cs2p) at (cs2.south) {$\overline{3}$};
+
+\draw[trans] (cr3) .. controls +(-5mm,-10mm) and +(-7mm,-3mm) .. node[very near start,label={left:l}] (cs1mid) {} (cr3);
+\draw (cr3) edge[trans] node[label={[label distance=-1mm]below right:t}] {} (cs2);
+\draw[trans] (cr3) .. controls +(5mm,-10mm) and +(7mm,-3mm) .. node[very near start,label={right:r}] (cs3mid) {} (cr3);
+\draw (cs1mid.center) to[out=-45,in=225] (cs3mid.center);
+
+\node (cadfdfds) [right of=cq1,xshift=5mm] {};
+\node (cadfdfds2) [below of=cadfdfds,yshift=-30mm] {};
+\draw[sepline] (cadfdfds) edge (cadfdfds2);
+
+
+
+% Automaton 4
+\node[state] (dq1) [right of=cq1,xshift=20mm] {};
+\node[ref,fill=ref4col] (dr4) [below of=dq1] {$\overline{4}$};
+\node[state] (dr3) [node distance=6mm,left of=dr4] {};
+\node[ref,fill=ref3col] (dr1) [node distance=6mm,left of=dr3] {$\overline{3}$};
+\node[] (dr5) [node distance=6mm,right of=dr4] {};
+\node[ref,fill=ref1col] (dr2) [node distance=6mm,right of=dr5] {$\overline{1}$};
+
+\draw (dq1) edge[trans] node[near start,label={above:p}] (dr1mid) {} (dr1);
+\draw (dq1) edge[trans] node[near start,label={above:n}] (dr2mid) {} (dr2);
+\draw (dq1) edge[trans] node[label={below left:l}] {} (dr3);
+\draw (dq1) edge[trans] node[near start,label={below right:t}] (dr4mid) {} (dr4);
+\draw (dq1) edge[trans,out=260,in=0] node[near start,label={[label distance=-0.8mm]left:r}] (dr5mid) {} (dr3);
+\draw (dr1mid.center) to[out=-45,in=225] (dr2mid.center);
+
+\node[anchor=south,ref,fill=ref4col] at (dq1.north) {4};
+
+\node[inner sep=0] (ds2) [below of=dr3] {};
+\node[ref,fill=ref4col,yshift=-2.5mm] (ds2p) at (ds2.south) {$\overline{4}$};
+
+\draw[trans] (dr3) .. controls +(-5mm,-10mm) and +(-7mm,-3mm) .. node[very near start,label={left:l}] (ds1mid) {} (dr3);
+\draw (dr3) edge[trans] node[label={[label distance=-1mm]below right:t}] {} (ds2);
+\draw[trans] (dr3) .. controls +(5mm,-10mm) and +(7mm,-3mm) .. node[very near start,label={right:r}] (ds3mid) {} (dr3);
+\draw (ds1mid.center) to[out=-45,in=225] (ds3mid.center);
+
+\node[thick,fit=(q1.east) (r3) (r4) (s2p),rounded corners,draw=red] {};
+\node[thick,fit=(bq1.east) (br3) (br4) (bs2p),rounded corners,draw=red] {};
+\node[thick,fit=(cq1.east) (cr3) (cr4) (cs2p),rounded corners,draw=red] {};
+\node[thick,fit=(dq1.east) (dr3) (dr4) (ds2p),rounded corners,draw=red] {};
+
+\end{tikzpicture}

@@ -1,0 +1,36 @@
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\begin{tikzpicture}[
+  scale=1.0,
+  transform shape,
+  node distance=14mm
+]
+
+%  \path[use as bounding box] (-8mm,-16mm) rectangle (60mm,10mm);
+
+  \tikzstyle{memnode}=[draw,rectangle,fill=lightgray,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+  \tikzstyle{ptrlab}=[above,font=\tt]
+
+  % nodes
+  \node[memnode] (x1) at (0mm,0mm) {};
+  \node[memnode] (x2) [below of=x1,yshift=4mm] {};
+  \node[memnode] (x3) [below right of=x2,yshift=4mm] {};
+  \node[memnode] (x4) [below left of=x2,yshift=4mm] {};
+  \node[memnode] (x5) [above left of=x1,yshift=-4mm] {};
+  \node[memnode] (x6) [above right of=x1,yshift=-4mm] {};
+
+  % pointers
+  \draw[pointer] (x1)    edge (x2);
+  \draw[pointer] (x2)    edge (x3);
+  \draw[pointer] (x2)    edge (x4);
+  \draw[pointer] (x5)    edge (x1);
+  \draw[pointer] (x6)    edge (x1);
+  \draw[pointer,bend right]   (x5)    edge coordinate (bend1) (x4);
+  \draw[pointer,bend left]    (x6)    edge coordinate (bend2) (x3);
+
+  \begin{pgfonlayer}{background}
+    \node[draw,dashed,fill=blue!60,opacity=0.5,ellipse,inner sep=0,fit=(x1) (x2) (x4) (x5) (bend1)] {};
+    \node[draw,dashed,fill=red!60,opacity=0.5,ellipse,inner sep=0,fit=(x1) (x2) (x3) (x6) (bend2)] {};
+  \end{pgfonlayer}
+\end{tikzpicture}

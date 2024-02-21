@@ -1,0 +1,56 @@
+\usetikzlibrary{arrows,fit}
+\begin{tikzpicture}
+[
+	scale=0.85,
+	transform shape
+%	edge from parent/.style={draw,->,>=stealth'}
+]
+
+%\path[use as bounding box] (-30mm,7mm) rectangle (111mm,-40mm);
+
+\definecolor{ref1col}{rgb}{0.6,0.6,1.0}
+\definecolor{ref2col}{rgb}{1.0,0.7,0.7}
+\definecolor{ref3col}{rgb}{0.3,1.0,0.3}
+\definecolor{ref4col}{rgb}{1.0,0.3,1.0}
+\definecolor{tprcol}{rgb}{0.0,0.8, 0.8}
+
+\tikzstyle{state}=[draw,circle]
+\tikzstyle{trans}=[draw,->,>=stealth']
+\tikzstyle{abstr}=[draw,dotted,thick]
+\tikzstyle{ref}=[minimum height=4mm,rectangle,inner sep=0.5mm]
+\tikzstyle{sepline}=[draw=black!40,thick,dashdotted]
+\tikzstyle{tprbox}=[thick,draw=black,fill=tprcol,yshift=-4mm]
+
+
+% Automaton 2
+\node[state] (bq1) {};
+\node[] (br4) [below of=bq1] {};
+\node[] (br3) [node distance=6mm,left of=br4] {};
+\node[] (br5) [node distance=6mm,right of=br4] {};
+\node[ref,fill=ref3col] (br2) [node distance=6mm,right of=br5] {$\overline{c}$};
+
+\draw (bq1) edge[trans] node[near start,label={above:n}] (br2mid) {} (br2);
+
+\node[anchor=south,ref,fill=ref2col] at (bq1.north) {$b$};
+
+\node (badfdfds) [right of=bq1,xshift=5mm] {};
+\node (badfdfds2) [below of=badfdfds,yshift=-6mm] {};
+\draw[sepline] (badfdfds) edge (badfdfds2);
+
+
+% Automaton 3
+\node[state] (cq1) [right of=bq1,xshift=20mm] {};
+\node[] (cr4) [below of=cq1] {};
+\node[] (cr3) [node distance=6mm,left of=cr4] {};
+\node[ref,fill=ref2col] (cr1) [node distance=6mm,left of=cr3] {$\overline{b}$};
+\node[] (cr5) [node distance=6mm,right of=cr4] {};
+
+\draw (cq1) edge[trans] node[near start,label={above:p}] (cr1mid) {} (cr1);
+
+\node[anchor=south,ref,fill=ref3col] at (cq1.north) {$c$};
+
+
+% knots
+\draw[thick,red,rounded corners] (br2.south west) -- (bq1.south) -- (bq1.north east) -- (cq1.north west) -- (cq1.south) -- (cr1.south east) -- cycle;
+
+\end{tikzpicture}

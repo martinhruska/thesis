@@ -1,0 +1,745 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \todo,remark
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\td}[1]{\textcolor{blue}{[#1]}} 
+% \newcommand{\td}[1]{} 
+\newcommand{\rem}[1]{\textcolor{green}{[NOTE: #1]}}
+\newcommand{\fixme}[1]{\textcolor{red}{[FIXME: #1]}}
+\newcommand{\achtung}[1]{{\centering \textcolor{red}{!!!ACHTUNG!!!\\{\centering #1}\linebreak\hfill!!!ACHTUNG!!!\\}}}
+\newcommand{\drop}[1]{\textcolor{red}{#1}}
+\newcommand{\chk}[1]{\textcolor{blue}{#1}}
+
+%%%%%%%%%%%%%%%% SOA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\mw}{{-\!\!\ast}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% radustyle comments 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+
+%\renewcommand{\td}[1]{} 
+%\renewcommand{\rem}[1]{}
+%\renewcommand{\fixme}[1]{}
+%\renewcommand{\achtung}[1]{}
+%\renewcommand{\drop}[1]{}
+%\renewcommand{\chk}[1]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\figswitch[1]{Figure}%
+\newcommand\figswitch[1]{#1}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% MOVED from projekt-01.*.tex
+\newcommand{\rig}[1]{\bigstar(#1)}
+\newcommand{\cut}{\rhd}
+\newcommand{\filter}[1]{\mathord\Phi_{#1}}
+\newcommand{\cpp}{C\nolinebreak\hspace{-.03em}\raisebox{.3ex}{+}\nolinebreak\hspace{-.07em}\raisebox{.3ex}{+}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current paper
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\lerr}{\preceq_{rr}}
+\newcommand{\lera}{\preceq_{ra}}
+\newcommand{\lear}{\preceq_{ar}}
+\newcommand{\leaa}{\preceq_{aa}}
+
+\newcommand{\gerr}{\succeq_{rr}}
+\newcommand{\gera}{\succeq_{ra}}
+\newcommand{\gear}{\succeq_{ar}}
+
+\newcommand{\lrr}{\prec_{rr}}
+\newcommand{\lra}{\prec_{ra}}
+\newcommand{\lar}{\prec_{ar}}
+\newcommand{\laa}{\prec_{aa}}
+
+\newcommand{\grr}{\succ_{rr}}
+\newcommand{\gra}{\succ_{ra}}
+\newcommand{\gar}{\succ_{ar}}
+\newcommand{\gaa}{\succ_{aa}}
+\newcommand{\rank}{\sharp}
+\newcommand{\rankof}[1]{\rank{#1}}
+\newcommand{\ltr}[1]{\mathrel{\stackrel{\!\!#1}{\raisebox{0pt}[0.50ex][0pt]{\ensuremath{\rightarrow}}}}}
+%\newcommand{\edgeof}[3]{#1\ltr{#2} #3} % please do not 
+\newcommand{\edgeof}[3]{(#2,#1,#3)}  
+%\newcommand{\edgeof}[3]{#1\to(#2,#3)}
+\newcommand{\nset}[1]{\{1,\ldots,#1\}}
+\newcommand{\partialto}{\rightharpoonup}
+\newcommand{\selmapof}[1]{\text{\textsl{next\/}}_{#1}}
+\newcommand{\symselof}[2]{#1_{#2}}
+\newcommand{\selof}[1]{\symselof{a}{#1}}
+%\newcommand{\nset}[1]{\intof 1 #1}
+%\newcommand{\nset}[1]{\langle#1\rangle}
+\newcommand{\constr}{\varphi}
+\newcommand{\denotationof}[1]{\semof{#1}}
+\newcommand{\fa}{F}
+\newcommand{\ta}{A}
+\newcommand{\forest}{f}
+%\newcommand{\oforest}{(\forest,\fports)}
+\newcommand{\tree}{t}
+\newcommand{\graph}{g}
+% \newcommand{\graph}{h}
+\newcommand{\graphprime}{\graph'}
+\newcommand{\graphprimeprime}{\graph''}
+\newcommand{\hgraph}{h}
+\newcommand{\fports}{\pi} %ports of a forest (aut)
+\newcommand{\gports}{\phi} %ports of a graph
+%\newcommand{\rrefof}[1]{\mathit{ref}(#1)}
+\newcommand{\rootof}[1]{\mathit{root}(#1)}
+%\newcommand{\rrlof}[1]{\mathit{rrl}(#1)}
+\newcommand{\strlabof}[1]{#1^{\mathit{str}}}
+\newcommand{\lang}{L}
+\newcommand{\langof}[1]{\lang({#1})}
+\newcommand{\flangof}[1]{\lang_f(#1)}
+\newcommand{\smap}{S}
+\newcommand{\node}{v}
+\newcommand{\nodep}{u}
+\newcommand{\nodepp}{w}
+\newcommand{\nodesof}[1]{V_{#1}}
+\newcommand{\datmapof}[1]{\lambda_{#1}}
+\newcommand{\edge}{e}
+\newcommand{\sorderof}[1]{\sqsubset_#1}
+\newcommand{\sordereqof}[1]{\sqsubseteq_#1}
+\newcommand{\trees}{t_1\cdots t_n}
+\newcommand{\treesprime}{t_1'\cdots t_n'}
+%\newcommand{\fport}{\iota}
+\newcommand{\fport}{\fports}
+\newcommand{\gport}{\gports}
+\newcommand{\run}{\rho}
+\newcommand{\runof}[1]{\run(#1)}
+%\newcommand{\tas}{\bar \ta}
+\newcommand{\tas}{\ta_1\cdots \ta_n}
+\newcommand{\tasprime}{\ta'_1\cdots \ta'_n}
+\newcommand{\tasencoded}{\encof{\ta_1} \ldots \encof{\ta_n}}
+\newcommand{\tasin}[1]{\ta^{#1}_1\cdots \ta^{#1}_n}
+\newcommand{\subst}[2]{[#1/#2]} %co, za co
+\newcommand{\fas}{\mathbb{F}}
+\newcommand{\img}{\mathit{img}}
+\newcommand{\dom}{\mathit{dom}}
+\newcommand{\Img}{\mathit{Img}}
+\newcommand{\imgof}[1]{\mathit{img}(#1)}
+\newcommand{\domof}[1]{\mathit{dom}(#1)}
+\newcommand{\knot}{k}
+\newcommand{\knotprime}{\knot'}
+\newcommand{\knotprimeprime}{\knot''}
+\newcommand{\knots}{K}
+\newcommand{\knotwithjingles}{b}
+\newcommand{\subgrapheq}{\trianglelefteq}
+\newcommand{\subgraph}{\triangleleft}
+\newcommand{\cp}{c}
+\newcommand{\cpsof}[1]{\mathit{cps}(#1)}
+\newcommand{\optof}[3]{\lozenge(#1,#2,#3)}
+\newcommand{\join}{j}
+\newcommand{\joinsof}[1]{\mathit{joins}(#1)}
+\newcommand{\fork}{f}
+%\newcommand{\entryof}[3]{#2\Yleft_{#1} #3}
+\newcommand{\forkof}[2]{\mathit{fork}(#1,#2)}
+\newcommand{\reachesin}[1]{\Longrightarrow_{#1}}
+\newcommand{\edgesof}[1]{e_{#1}}
+\newcommand{\edgesofnode}[2]{\edgesof{#1}(#2)}
+\newcommand{\gsedgesof}[1]{\mathit{SE}(#1)}
+\newcommand{\vsedgesof}[2]{\mathit{SE}(#1,#2)}
+\newcommand{\sedgeof}[3]{#1 \rightarrow (#2,#3)}
+\newcommand{\sedge}{e}
+%% \newcommand{\edgesymb}{\alpha}
+\newcommand{\edgesymb}{\overline{a}}
+\newcommand{\edgesymbp}[1]{\edgesymb_{#1}}
+\newcommand{\transover}[3]{#1\rightarrow #2(#3)}
+\newcommand{\trans}[2]{\transover{#1}{\edgesymb}{#2}}
+% \newcommand{\pth}{p}
+\newcommand{\cheaper}{\preceq}
+\newcommand{\igsymb}{\mathit{ig}}
+\newcommand{\igraphof}[2]{\igsymb(#1,#2)}
+\newcommand{\jigraphof}[1]{\mathit{jig}(#1)}
+\newcommand{\cigof}[1]{\dagger#1}
+%\newcommand{\cigof}[1]{\mathit{skelet}(#1)}
+\newcommand{\rgraphof}[1]{\igsymb(#1)}
+\newcommand{\spanof}[2]{\mathit{span}(#1,#2)}
+%\newcommand{\reachof}[3]{#2\triangleleft_{#1}#3}
+\newcommand{\qspanof}[1]{\mathit{span}(#1)}
+\newcommand{\unfold}[0]{\leadsto}
+\newcommand{\unfoldof}[2]{\unfold_{{#1}/{#2}}}
+% \newcommand{\unfoldof}[2]{\xrightarrow[{#1/#2}]{}}
+% \newcommand{\unfoldof}[2]{\xrightarrow{{#1/#2}}}
+%\newcommand{\unfoldofi}[1]{\unfoldof{(\botox_{#1}, u_{#1}, v_{#1})}{\heap_{\botox_{#1}}}}
+\newcommand{\unfoldofi}[1]{\unfoldof{(\botox_{#1}, u_{#1}, v_{#1})}{g_{#1}}}
+% \newcommand{\unfoldofi}[1]{\unfoldof{(\botox_{#1}, u_{#1}, v_{#1})}{\graph_{#1}}}
+\newcommand{\borderof}[2]{\mathit{border}(#1,#2)}
+%\renewcommand{\rule}{\delta}
+\newcommand{\iof}[1]{f(#1)}
+% \newcommand{\semof}[1]{\llbracket #1 \rrbracket}
+\newcommand{\semof}[1]{\left\llbracket #1 \right\rrbracket}    % semantics of
+% \newcommand{\nat}{\mathbb{N}}
+\newcommand{\etermof}[2]{\alpha(#1,#2)}
+\newcommand{\Sel}{\mathit{Sel}}
+\newcommand{\boxes}{\mathcal{B}}
+\newcommand{\boxalph}{\boxes_\sharp}
+\newcommand{\boxesprime}{\boxes'}
+\newcommand{\ptrsel}{\mathit{PSel}}
+\newcommand{\eql}{\approx}
+\newcommand{\datasel}{\mathit{DSel}}
+\newcommand{\kset}{K}
+\newcommand{\false}{\ensuremath{\mathit{false}}}
+\newcommand{\true}{\ensuremath{\mathit{true}}}
+\newcommand{\st}{\,|\,}
+\newcommand{\operation}{\code{op}}
+\newcommand{\abstrans}{\tau}
+\newcommand{\abstransof}[1]{\abstrans(#1)}
+% \newcommand{\abstrans}{\tau_{\operation}}
+\newcommand{\sel}{\mathit{Sel}}
+\newcommand{\code}[1]{\ensuremath{\mathtt{#1}}}
+\newcommand{\unef}{\mathtt{undef}}
+\newcommand{\nil}{\mathtt{null}} 
+\newcommand{\reachbysels}{\mathit{reachBySels}}
+\newcommand{\stackframe}{\mathtt{sf}}
+\newcommand{\compat}{\mathit{compat}}
+\newcommand{\height}{\mathit{height}}
+\newcommand{\length}[1]{\mathit{length}(#1)}
+\newcommand{\branch}{\mathit{branch}}
+\newcommand{\splitof}[2]{\mathit{split}(#1,#2)}
+%\newcommand{\iographof}[2]{(#1, #2)}
+\newcommand{\iographof}[1]{#1_{\mathit{io}}}
+\newcommand{\ioforestof}[1]{(#1)_{\mathit{io}}}
+\newcommand{\iograph}{\iographof \graph \gports}
+\newcommand{\gportsprime}{\psi}
+\newcommand{\iographprime}{\iographof \graphprime \gportsprime}
+\newcommand{\figtext}[1]{\small{#1}}
+\newcommand{\sigof}[1]{\mathit{sig}(#1)}
+\newcommand{\minochechule}[2]{\mathit{minskel}_{#1}(#2)}
+\newcommand{\knotsof}[1]{\mathit{wursts}(#1)}
+\newcommand{\sourceof}[1]{\mathit{source}(#1)}
+%\newcommand{\ithedgeof}[1]{\edge(#1)}
+\newcommand{\ithedgeof}[1]{\edge\langle#1\rangle}
+\newcommand{\ithrtermof}[1]{\rule\langle#1\rangle}
+\newcommand{\stripof}[2]{\mathit{strip}(#1,#2)}
+\newcommand{\cpof}[2]{#1\langle #2 \rangle}
+\newcommand{\core}{c}
+\newcommand{\coreprime}{z}
+\newcommand{\coreof}[1]{\mathit{core}(#1)}
+\newcommand{\trace}{t}
+
+\newcommand{\nextd}{\mathrm{NEXT}}
+\newcommand{\nextr}[2]{\mathrm{NEXT}(#1,#2)}
+
+%% Macros about program statements
+\newcommand{\keyword}[1]{\mbox{\bf #1}}
+\newcommand{\dobegin}{\keyword{do}\ \lbrace}
+\newcommand{\ifbegin}{\keyword{if}\ }
+\newcommand{\eitherbegin}{\keyword{either}\ \lbrace}
+\newcommand{\orbetween}{\rbrace \ \keyword{or}\ \lbrace}
+\newcommand{\skipstmt}{\keyword{skip}}
+\newcommand{\assume}[1]{\lbrace\!\lbrace #1 \rbrace\!\rbrace}
+%% \newcommand{\assume}[1]{\mbox{\bf \lbrace} #1 \mbox{\bf \rbrace}}
+\newcommand{\longassume}[1]{{\tt assume(#1)}}
+\newcommand{\assert}[1]{{\tt assert(#1)}}
+\newcommand{\newstmt}[1]{\keyword{new}(#1)}
+\newcommand{\freestmt}[1]{\keyword{free}(#1)}
+\newcommand{\cascmd}[3]{\mbox{CAS}(#1,#2,#3)}
+\newcommand{\declare}{{\it D}}
+\newcommand{\mname}{{\it m}}
+%% \newcommand{\mname}{{\it meth}}
+\newcommand{\eitheror}[2]{\keyword{either}\ \openbrace#1\closebrace\ \keyword{or}\ \openbrace#2\closebrace}
+\newcommand{\dowhile}[2]{\keyword{do}\ \openbrace#1\closebrace%\   \keyword{while}\ #2
+}
+
+\newcommand{\selector}{\mbox{\sl sel}}
+\newcommand{\selectors}{\mbox{\sl Sel}}
+%\newcommand{\nullconst}{{\tt null}}
+\newcommand{\nullconst}{\bot}
+\newcommand{\dset}{\mathbb{D}}
+\newcommand{\pcstate}{\pi}
+\newcommand{\valuation}{\sigma}
+\newcommand{\svaluation}{\sigma}
+\newcommand{\valuationof}[1]{\valuation(#1)}
+% \newcommand{\heap}{H}
+\newcommand{\heap}{h}
+\newcommand{\heapp}{\heap'}
+\newcommand{\heapprime}{\heapp}
+\newcommand{\xvar}{\ensuremath{x}}
+% \newcommand{\pvars}{\ensuremath{\mathbb{V}}}
+% \newcommand{\vars}{\ensuremath{\mathbb{V}}}
+\newcommand{\vars}{\gvars}
+\newcommand{\pvars}{\gvars}
+
+
+\newcommand{\seq}[1]{\langle  #1 \rangle}
+\newcommand{\set}[1]{\{ #1 \}}
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+\newcommand{\setcomp}[2]{\{ #1 \ \mid \ #2 \}}
+
+\newcommand{\propagate}[1]{\ \stackrel{[#1]}{\Longrightarrow} \ }
+\newcommand{\uppropagate}[1]{\ \stackrel{[#1]}{\longrightarrow} \ }
+\newcommand{\datarel}{\sim}
+\newcommand{\datareleq}{\simeq}
+\newcommand{\leaflab}{\Omega}
+\newcommand{\leaflabprime}{\Psi}
+\newcommand{\abcd}{\Gamma}
+\newcommand{\abcdprime}{\Upsilon}
+\newcommand{\states}{Q}
+\newcommand{\rstates}{R}
+\newcommand{\rstate}{q_0}
+\newcommand{\bstsym}{\mathtt{left},\mathtt{right}}
+\newcommand{\slsym}{\mathtt{sl}}
+\newcommand{\compositionoperator}{\otimes}
+\newcommand{\graphof}[1]{\compositionoperator#1}
+\newcommand{\iport}{\mathtt{in}}
+\newcommand{\iportof}[1]{\iport(#1)}
+\newcommand{\oport}{\mathtt{out}}
+\newcommand{\oportof}[1]{\oport(#1)}
+\newcommand{\fabox}{\fa_\Box}
+\newcommand{\encof}[1]{#1^E}
+\newcommand{\decof}[1]{#1^D}
+\newcommand{\abseq}[1]{=_#1}
+\newcommand{\allconstraints}{\mathbb C}
+\newcommand{\boxlangof}[1]{\lang_{\mathit{io}}(#1)}
+\newcommand{\FAorCFA}{FA}
+\newcommand{\FAorCFAs}{FAs}
+\newcommand{\xta}{\ta_{\valuation(\code{x})}}
+\newcommand{\postxta}{\ta_{\valuation^{\mathit{post}}(\code{x})}}
+\newcommand{\postyta}{\ta_{\valuation^{\mathit{post}}(\code{y})}}
+\newcommand{\prexta}{\ta_{\valuation^{\mathit{pre}}(\code{x})}}
+\newcommand{\preyta}{\ta_{\valuation^{\mathit{pre}}(\code{y})}}
+\newcommand{\yta}{\ta_{\valuation(\code{y})}}
+\newcommand{\xroot}{q_{\code{x}}}
+\newcommand{\yroot}{q_{\code{y}}}
+\newcommand{\rr}[1]{\overline{#1}}                 % root reference
+\newcommand{\rrs}[0]{\{\rr 1, \ldots, \rr n\}}     % vector of root references
+
+\newcommand{\eprime}[1]{#1'}
+\newcommand{\finalstate}[1]{\underline{#1}}
+
+%martin
+% \newcommand{\vata}[0]{the VATA library}
+\newcommand{\vata}[0]{\textsc{Vata}\xspace}
+% \newcommand{\Vata}[0]{The VATA library}
+\newcommand{\instrset}[0]{\mathbb{I}}
+\newcommand{\regs}[0]{\mathbb{G}}
+\newcommand{\regsset}[0]{\{r_1, \ldots, r_m\}}
+\newcommand{\regssub}[2]{\regs [#1 := #2]}
+\newcommand{\regssubmin}[3]{\regs \setminus \{#3\} [#1 := #2]}
+\newcommand{\symstate}[3]{(#1, #2, #3)}
+\newcommand{\stdsym}[0]{\symstate{F}{\regs}{I}}
+\newcommand{\natnum}[0]{\mathbb{N}}
+%\newcommand{\lang}[0]{\mathcal{L}}
+\newcommand{\abp}[0]{\mathit{ABP}}
+\newcommand{\glb}[0]{\mathit{GLOB}}
+\newcommand{\nodelab}[0]{\mathit{NL}}
+\newcommand{\rootref}[0]{\mathit{RR}}
+\newcommand{\rootit}[0]{\mathit{ROOT}}
+\newcommand{\displ}[0]{\mathit{DISPL}}
+\newcommand{\pred}[0]{P}
+\newcommand{\predset}[0]{\mathcal{P}}
+\newcommand{\predaut}[0]{A^\mathcal{P}}
+\newcommand{\predauti}[1]{A^\mathcal{P}_{#1}}
+\newcommand{\peqrel}[0]{\sim_\predset}
+\newcommand{\concrop}[1]{f_{\texttt{op}}(g_{#1})}
+\newcommand{\eqrel}[0]{\sim}
+\newcommand{\eqstates}[0]{Q/_{\eqrel}}
+\newcommand{\eqclass}[2]{[#1]_{\eqrel{#2}}}
+\newcommand{\heqrel}[1]{\sim^h}
+\newcommand{\defarrow}[0]{\Leftrightarrow}
+\newcommand{\langlen}[2]{L^{\leq h}(#1,#2)}
+\newcommand{\abstr}[0]{\tau_{op}}
+\newcommand{\rabstr}[0]{\tau_{-op}}
+\newcommand{\abs}[0]{\alpha}
+\newcommand{\pabs}[0]{\alpha_{\predset}}
+\newcommand{\femp}[0]{F_\mathit{Empty}}
+\newcommand{\fbad}[0]{F_\mathit{BAD}}
+\newcommand{\langstate}[2]{L(#1,#2)}
+\newcommand{\A}[0]{\mathcal{A}}
+\newcommand{\B}[0]{\mathcal{B}}
+\newcommand{\CC}[0]{\mathcal{C}}
+\newcommand{\F}[0]{\mathcal{F}}
+\newcommand{\X}[0]{\mathcal{X}}
+
+\newcommand{\symset}[0]{\mathbb{S}}
+\newcommand{\lstate}[0]{\mathit{lhs.state}}
+\newcommand{\post}[2]{\mathit{post}_{#1}(#2)}
+\newcommand{\sbwd}[0]{S^{B}_{i}}
+\newcommand{\sbwdp}[1]{S^{B}_{#1}}
+\newcommand{\isfwd}[0]{I^{F}}
+\newcommand{\isfwdp}[1]{I_{#1}^{F}}
+\newcommand{\sfwd}[0]{S^{F}_{i}}
+\newcommand{\sfwdp}[1]{S^{F}_{#1}}
+\newcommand{\ftraceseq}[0]{S^{F}_0, \ldots, S^{F}_n}
+\newcommand{\ftrace}[0]{\mathit{FT}}
+\newcommand{\btraceseq}[1]{S^{B}_0, \ldots, S^{B}_#1}
+\newcommand{\btrace}[0]{\mathit{BT}}
+%\newcommand{\isbwd}[0]{I^{B}}
+\newcommand{\isbwd}[0]{I^{B}}
+\newcommand{\isbwdp}[1]{I^{B}_{#1}}
+\newcommand{\ipred}[0]{I_{P}}
+\newcommand{\ipredb}[0]{\isbwd_{P}}
+\newcommand{\bstdsym}[0]{\symstate{F}{\regs}{\isbwd}}
+\newcommand{\grev}[0]{g}
+\newcommand{\grevinter}[0]{\symset \times \instrset \rightarrow \symset}
+\newcommand{\ffwd}[0]{F^{F}}
+\newcommand{\fbwd}[0]{F^{B}}
+\newcommand{\ddispl}[0]{Displ}
+
+\newcommand{\droot}[0]{Root}
+\newcommand{\rref}[0]{RR=(\droot,\ddispl)}
+\newcommand{\rreftuple}[2]{(#1,#2)}
+\newcommand{\rrefreg}[1]{#1=(\droot,\ddispl)}
+\newcommand{\ddata}[0]{D = (T,S,V,MB)}
+\newcommand{\fclass}[0]{\mathcal{F}}
+\newcommand{\fpabs}[0]{\alpha_{\predset}^{\fclass}}
+\newcommand{\port}{\phi}
+\newcommand{\portind}[1]{\port_{#1}}
+\newcommand{\portof}[2]{\port_{#1}^{#2}}
+\newcommand{\portoff}[1]{\port^{#1}}
+\newcommand{\portseq}[2]{\port_{#1}^{#2} \cdots \port_{#1}^{#2}}
+\newcommand{\bexmp}[0]{\vspace{0.2pt}\noindent\rule{\textwidth}{0.4pt}\begin{example}}
+\newcommand{\eexmp}[0]{\end{example}\noindent\rule{\textwidth}{0.6pt}}
+\newcommand{\codix}[1]{\code{#1}}
+
+\newcommand{\pth}[0]{\pi}                  % paths
+\newcommand{\locs}[0]{\mathbb{L}}          % program locations
+\newcommand{\loc}[0]{\ell}                 % one program location
+\newcommand{\initloc}{\loc_{\mathsf{init}}}   % intial program location
+\newcommand{\errorloc}{\loc_{\mathsf{err}}}% error program location
+\newcommand{\stmts}[0]{\mathbb{S}}         % program statements
+\newcommand{\prog}[0]{p}                   % program
+\newcommand{\progof}[1]{\prog(#1)}         % statement between locations
+\newcommand{\src}[0]{\mathit{src}}         % source of statement
+\newcommand{\srcof}[1]{\src(#1)}           % dtto
+\newcommand{\tgt}[0]{\mathit{tgt}}         % target of statement
+\newcommand{\tgtof}[1]{\tgt(#1)}           % dtto
+\newcommand{\frun}[0]{\omega}              % abstract forward run
+\newcommand{\fwrun}[0]{\frun}              % abstract forward run
+\newcommand{\bwrun}[0]{\overline\fwrun}         % backward run
+\newcommand{\crun}[0]{\chi}                % concrete forward run
+\newcommand{\frunof}[1]{\frun_{#1}}        % dtto
+\newcommand{\biject}[0]{\leftrightarrow}   % bijection
+\newcommand{\abstransfs}[0]{\mathbb{T}}    % abstract transformers
+\newcommand{\transfs}[0]{\mathbb{T}}       % transformers
+\newcommand{\transf}[0]{\tau}              % one transformer
+\newcommand{\transfof}[1]{\transf(#1)}     % one transformer
+\newcommand{\stransfs}[0]{\transfs^\sharp} % symbolic transformers
+\newcommand{\stransf}[0]{\transf^\sharp}   % one symbolic transformers
+\newcommand{\vals}[0]{\mathbb{V}}          % valuations
+\newcommand{\confs}[0]{\mathbb{H}}         % configurations
+\newcommand{\sconf}[0]{\fa}     % one symbolic configuration
+\newcommand{\sconfother}[0]{\confother^\sharp}     % one symbolic configuration
+% \newcommand{\bwsconf}[0]{{\bar\conf^\sharp}} % backward symbolic configuration
+\newcommand{\bwsconf}[0]{{\overline\sconf}} % backward symbolic configuration
+\newcommand{\sconfs}[0]{\fas}     % one symbolic configuration
+\newcommand{\conf}[0]{h}                   % one concrete configuration
+\newcommand{\confother}[0]{{h'}}                   % one concrete configuration
+\newcommand{\initconf}{\conf_{\mathsf{init}}} % initial concrete configuration
+\newcommand{\initsconf}{\sconf_{\mathsf{init}}}% initial symbolic configuration
+\newcommand{\badconf}{\fbad}                  % bad configurations
+\newcommand{\interp}[0]{I}                 % interpolant
+\newcommand{\sop}[0]{o}             % one symbolic operation
+\newcommand{\invsop}[0]{\bar o^\sharp}          % one symbolic operation
+\newcommand{\sopother}[0]{p^\sharp}   % other symbolic operation
+\newcommand{\lop}[0]{o^\mathsf{L}}         % one language operation
+\newcommand{\op}[0]{o}                     % one concrete operation
+\newcommand{\sops}[0]{\mathbb{O}}          % symbolic operations
+\newcommand{\prefix}[2]{#1_{#2}}             % prefix of an abstract run
+\newcommand{\suffix}[2]{{_{#2}}#1}           % suffix of an abstract run
+
+\newcommand{\entryof}[1]{\mathit{entry}(#1)}  % entry point of a program
+\newcommand{\asgn}[0]{\sigma}                 % assignment of variables
+\newcommand{\asgnheap}[0]{\asgn_{\heap}}      % assignment of variables
+\newcommand{\asgnof}[1]{\asgn(#1)}            % assignment of variables
+\newcommand{\asgnheapof}[1]{\asgnheap(#1)}    % assignment of variables
+\newcommand{\asgnforest}[0]{\asgn_{f}}        % assignment of variables
+\newcommand{\asgnforestof}[1]{\asgnforest(#1)}% assignment of variables
+% \newcommand{\asgnbox}[0]{\asgn_{\Box}}        % assignment of variables
+\newcommand{\asgnbox}[0]{\asgn_B}        % assignment of variables
+\newcommand{\asgnboxof}[1]{\asgnbox(#1)}      % assignment of variables
+\newcommand{\gvars}[0]{\mathbb{X}}            % graph variables
+\newcommand{\pc}[0]{\mathsf{pc}}              % pc
+\newcommand{\psels}{\Gamma}                   % program selectors
+\newcommand{\botox}{B}                        % box
+\newcommand{\botoxi}[1]{B_{(#1)}}                        % box
+\newcommand{\refs}[1]{[\bar #1]}              % references
+\newcommand{\symbolic}[1]{\mathit{fo}[#1]}    % folding operations
+\newcommand{\syminter}{\cap_s}    % folding operations
+%\newcommand{\folding}[1]{\mathit{fold}[#1]}   % folding operations
+\newcommand{\folding}[1]{\mathit{fold}[#1]}   % folding operations
+\newcommand{\unfolding}[1]{\mathit{unfold}[#1]}% unfolding operations
+\newcommand{\cutting}[1]{\mathit{cut}[#1]}    % cutting operations
+\newcommand{\connecting}[1]{\mathit{connect}[#1]}    % cutting operations
+\newcommand{\swapping}[1]{\mathit{swap}[#1]}    % cutting operations
+\newcommand{\splitting}{\mathit{split}}    % split operations
+\newcommand{\removing}[1]{\mathit{remove}[#1]}    % remove component operations
+\newcommand{\forester}[0]{\textsc{Forester}\xspace}    % Forester
+\newcommand{\predator}[0]{\textsc{Predator}\xspace}    % Predator
+\newcommand{\spaceinvader}[0]{\textsc{Space Invader}\xspace}
+\newcommand{\codelistener}[0]{\textsc{Code Listener}\xspace}
+\newcommand{\gcc}[0]{\texttt{gcc}\xspace}
+\newcommand{\slayer}[0]{\textsc{SLAyer}\xspace}
+%\newcommand{\decompositions}[1]{\mathsf{PRDEL}(#1)}    % decompositions
+\newcommand{\decsof}[1]{\mathit{Dec}(#1)}    % decompositions
+\newcommand{\dec}{d}    % decomposition
+\newcommand{\decs}{D}    % decomposition
+\newcommand{\rootvar}{\mathsf{root}}    % distinguished components
+\newcommand{\semcompof}[1]{\mathit{Comp}(#1)}    % distinguished components
+\newcommand{\isbij}[0]{\sim_{\cap}}           % bijection of root references
+\newcommand{\capbox}[0]{\cap_{\Box}}          % intersection of boxes
+\newcommand{\reachcp}[0]{\mathit{reach}}    % reaches cutpoints
+\newcommand{\reachcpof}[1]{\reachcp(#1)}    % reaches cutpoints
+\newcommand{\order}[0]{o}                   % order of cut-points
+\newcommand{\orderof}[1]{\order(#1)}        % order of cut-point x
+\newcommand{\isectfa}[0]{\sqcap}            % intersection of FAs
+\newcommand{\isectta}[0]{\sqcap}            % intersection of TAs
+% \newcommand{\semofcd}[1]{\semof{#1}_{\mathit{C}}}      % component decomposition semantics
+\newcommand{\semofcd}[1]{\semof{#1}}      % component decomposition semantics
+% \newcommand{\boxtas}[0]{\ta_\iport \ta_2 \cdots \ta_{n-1} \ta_\oport}   % box components
+\newcommand{\boxtas}[0]{\ta_\iport \ta_2 \cdots \ta_{n-k} \ta_{\oport_1} \cdots \ta_{\oport_k}}   % box components
+% \newcommand{\boxtasin}[0]{\ta_\iport^\botox \ta_2 \cdots \ta_{n-1} \ta_\oport^\botox}   % box components
+\newcommand{\boxtasin}[0]{\ta_\iport^\botox \ta_2 \cdots \ta_{n-k} \ta^\botox_{\oport_1} \cdots \ta^\botox_{\oport_k}}   % box components
+\newcommand{\calS}[0]{\mathcal{S}}
+% \newcommand{\sopex}[0]{\sop^{\#}}          % exact semantics
+\newcommand{\sopex}[0]{\hat\sop}          % exact semantics
+\newcommand{\sopexi}[0]{\sopex_i}         % exact semantics
+\newcommand{\sopexof}[1]{\sopex(#1)}       % exact semantics
+\newcommand{\sopexiof}[1]{\sopexi(#1)}       % exact semantics
+\newcommand{\sopexiinvof}[1]{\sopexi^{-1}(#1)}       % exact semantics
+\newcommand{\perm}[0]{\pi}       % permutation 
+\newcommand{\repre}[0]{\mathit{repre}}       % representation 
+\newcommand{\repres}[0]{R}       % representation 
+\newcommand{\represof}[1]{\mathit{Repre}(#1)}       % representation 
+\newcommand{\nestedcap}[0]{\sqcap}       % permutation 
+\newcommand{\ourbigcup}[0]{\bigcup}
+\definecolor{rowgray}{gray}{0.85}
+
+\newcommand{\abstra}[0]{\alpha}              % abstraction
+\newcommand{\abstraof}[1]{\abstra(#1)}              % abstraction
+\newcommand{\predabstra}[1]{\abstra{\scriptstyle[#1]}}     % pred-language abstraction
+\newcommand{\predabstraof}[2]{\predabstra{#1}(#2)}     % pred-language abstraction
+
+% for the table
+\newcommand{\safe}[0]{safe}
+\newcommand{\unsafe}[0]{error}
+
+\newcommand\vect[3]{[#1]_{i=#2}^#3}
+
+\newcommand{\kseq}[1]{{
+	\newcommand{\fn}[1]{#1}
+	\fn{1},\ldots,\fn{k}
+}}
+
+\newcommand{\kword}[1]{{
+	\newcommand{\fn}[1]{#1}
+	\fn{1}\cdots\fn{k}
+}}
+
+\newcommand\compw{\sqsubseteq}
+\newcommand{\pick}[0]{\mathit{pick}}
+\newcommand{\pickof}[2]{\mathit{pick}(#1,#2)}
+\newcommand{\joinfun}[0]{\mathit{join}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\secsref}[1]{Sections~\ref{#1}}
+\newcommand{\exptime}[0]{\textsc{ExpTime}\xspace}
+
+% \newtheorem{lemma}{Lemma}
+%\newtheorem{sublemma}{Lemma}{[lemma]}
+
+
+%%%%%%%%% NETYS %%%%%%%%%%%%%%
+\newcommand{\vrts}{V}
+\newcommand{\edgs}{E}
+\newcommand{\dect}{t}
+\newcommand{\edgsdec}{\edgs_\dec}
+\newcommand{\edgsgra}{\edgs_g}
+\newcommand{\edgsnog}{\edgs_n}
+\newcommand{\vqa}{V}
+%\newcommand{\va}{W}
+\newcommand{\va}{v}
+\newcommand{\na}{n}
+\newcommand{\pa}{N}
+\newcommand{\sa}{J}
+\newcommand{\opnds}{\beta}
+\newcommand{\lab}{\ell}
+\newcommand{\bag}{b}
+
+\newcommand{\gtrans}[3]{#1\xrightarrow{#2}(#3)}
+\newcommand{\gr}{g}
+
+\newcommand{\ga}{\mathcal{G}}
+\newcommand{\fta}{\mathcal{T}}
+
+\newcommand{\tds}{\tau}
+\newcommand{\automat}{A}
+\newcommand{\auto}{\automat_{orig}}
+\newcommand{\autn}{\automat_{jump}}
+\newcommand{\omark}{\bullet}
+
+\newcommand{\chr}{\mathit{reconnect}}
+\newcommand{\rot}{\mathit{rotation}}
+\newcommand{\cht}{ro}
+\newcommand{\chv}{pr}
+\newcommand{\vs}{vs}
+\newcommand{\prim}{polar}
+\newcommand{\recon}{recon}
+\newcommand{\addng}{addng}
+\newcommand{\delng}{delng}
+
+\newcommand{\bubbles}{B}
+\newcommand{\treewidth}[1]{\mathit{tw}(#1)}
+
+\newcommand{\CCP}{C\nolinebreak\hspace{-.03em}\raisebox{.15ex}{+}\nolinebreak\hspace{-.03em}\raisebox{.15ex}{+}}
+
+\newcommand\sepimp{\mathrel{-\mkern-6mu*}}
+
+% FMCAD 2018
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+%scalars
+\newcommand{\x}{{x}} %variable
+\newcommand{\xv}{{\chi}} %value
+\newcommand{\xp}{{\x'}}
+\newcommand{\xpv}{{\xv'}}
+\newcommand{\xin}{{\x^{in}}}
+\newcommand{\xout}{{\x^{out}}}
+\newcommand{\xargin}{{\x^{p\_in}}}
+\newcommand{\xargout}{{\x^{p\_out}}}
+%vectors
+\newcommand{\vx}{{\vec{\x}}}
+\newcommand{\vxp}{{\vec{\x}'}}
+\newcommand{\vxpp}{{\vec{\x}''}}
+\newcommand{\vxppp}{{\vec{\x}'''}}
+\newcommand{\vxv}{{\vec{\xv}}}
+\newcommand{\vxpv}{{\vec{\xv}'}}
+\newcommand{\vxin}{{\vx^{in}}}
+\newcommand{\vxinv}{{\vxv^{in}}}
+\newcommand{\vxout}{{\vx^{out}}}
+\newcommand{\vxargin}{{\vx^{p\_in}}}
+\newcommand{\vxargout}{{\vx^{p\_out}}}
+\newcommand{\vdelta}{{\vec{\delta}}}
+\newcommand{\vd}{{\vec{d}}}
+\newcommand{\vglob}{{\vec{glob}}}
+\newcommand{\vglobin}{{\vglob^{in}}}
+\newcommand{\vglobout}{{\vglob^{out}}}
+\newcommand{\vglobargin}{{\vglob^{p\_in}}}
+\newcommand{\vglobargout}{{\vglob^{p\_out}}}
+\newcommand{\vheap}{{\vec{heap}}}
+\newcommand{\vheapin}{{\vheap^{in}}}
+\newcommand{\vheapout}{{\vheap^{out}}}
+\newcommand{\vheapargin}{{\vheap^{p\_in}}}
+\newcommand{\vheapargout}{{\vheap^{p\_out}}}
+\newcommand{\vparam}{{\vec{param}}}
+\newcommand{\varg}{{\vec{arg}}}
+
+\newcommand{\fmtrans}{\mathit{Trans}}
+\newcommand{\inv}{\mathit{Inv}}
+\newcommand{\invs}{\mathit{Invs}}
+\newcommand{\ttrans}{\mathit{TTrans}}
+\newcommand{\fminit}{\mathit{Init}}
+\newcommand{\fout}{\mathit{Out}}
+\newcommand{\prop}{\mathit{Prop}}
+\newcommand{\props}{\mathit{Props}}
+\newcommand{\err}{\mathit{Err}}
+
+\newcommand{\precond}{\mathit{Precond}}
+\newcommand{\preconditions}{\mathit{Preconds}}
+\newcommand{\summary}{\mathit{Sum}}
+\newcommand{\inlinesumms}{\mathit{InlineSums}}
+\newcommand{\inlinesum}{\mathit{InlineSum}}
+\newcommand{\summaries}{\mathit{Sums}}
+\newcommand{\nasummaries}{\mathit{noAssertSums}}
+\newcommand{\asummaries}{\mathit{assertSums}}
+\newcommand{\callctx}{\mathit{CallCtx}}
+\newcommand{\assertions}{\mathit{Assertions}}
+\newcommand{\assumptions}{\mathit{Assumptions}}
+\newcommand{\termconditions}{\mathit{termConds}}
+\newcommand{\func}{\mathit{fn}}
+
+\newcommand{\templ}{\mathcal{T}}
+
+% mathematical notation for SSA variables
+% \ssavar{name}{kind}{location number}
+\newcommand{\ssavar}[3]{#1^{#2}_{#3}}
+\newcommand{\ssa}[2]{\ssavar{#1}{}{#2}}
+\newcommand{\ssaphi}[2]{\ssavar{#1}{\mathit{phi}}{#2}}
+\newcommand{\ssalb}[2]{\ssavar{#1}{\mathit{lb}}{#2}}
+\newcommand{\ssals}[2]{\ssavar{#1}{\mathit{ls}}{#2}}
+\newcommand{\ssax}[1]{\ssa{x}{#1}}
+\newcommand{\ssag}[1]{\ssa{g}{#1}}
+\newcommand{\ssaxphi}[1]{\ssaphi{x}{#1}}
+\newcommand{\ssaxlb}[1]{\ssalb{x}{#1}}
+\newcommand{\ssaplb}[1]{\ssalb{p}{#1}}
+\newcommand{\ssagls}[1]{\ssals{g}{#1}}
+\newcommand{\ssagos}[1]{\ssavar{g}{os}{#1}}
+\newcommand{\ssagfree}[1]{\ssavar{g}{fr}{#1}}
+\newcommand{\ssagosij}[2]{\ssavar{g}{os}{#1,#2}}
+\newcommand{\ssaobj}[2]{\ssavar{#1}{obj}{#2}}
+
+\newcommand{\drfvar}[3]{dr\hspace*{-0.5mm}f(#1).#2_{#3}}
+
+\newcommand{\dynobj}[2]{ao_{#1}^{#2}}
+\newcommand{\dynobjset}[1]{AO_{#1}}
+\newcommand{\unkobj}{o_\perp}
+\newcommand{\nullptr}{\mathsf{null}}
+
+\newcommand{\obj}{\mathit{Obj}}
+\newcommand{\dobj}{\mathit{AO}}
+\newcommand{\ptr}{\mathit{Ptr}}
+\newcommand{\var}{\mathit{Var}}
+\newcommand{\pvar}{\mathit{PVar}}
+\newcommand{\svar}{\mathit{SVar}}
+\newcommand{\fld}{\mathit{Fld}}
+\newcommand{\pfld}{\mathit{PFld}}
+
+\newcommand{\addr}{\mathit{Addr}}
+\newcommand{\ptrlb}{\ptr^{lb}}
+
+\newcommand{\freevar}{\mathit{fr}}
+
+\newcommand{\hide}[1]{}
+
+% EUROCAST 2022
+\newcommand{\runq}[1]{(q_1,\ldots,q_{#1})}
+\newcommand{\langst}[1]{\lang_{#1}}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\powersetof}[1]{2^{#1}}
+\newcommand{\alp}{\Sigma}
+\newcommand{\transe}{\delta}
+\newcommand{\init}{I}
+\newcommand{\final}{F}
+\newcommand{\aut}{(\states,\alp,\transe,\init,\final)}
+\newcommand{\intrans}[3]{#3 \in \transe(#1,#2)}
+\newcommand{\K}{k}
+\newcommand{\abstrel}{\alpha}
+\newcommand{\abstrln}{\alpha^\K}
+\newcommand{\class}{\equiv_{\abstrel}}
+\newcommand{\eqclasse}[1]{\llbracket#1\rrbracket}
+
+\newcommand{\C}{c}
+\newcommand{\E}{e}
+\newcommand{\caldr}[1]{(\E_1,\ldots,\E_{#1})}
+\newcommand{\etyp}{t}
+\newcommand{\esend}{s}
+\newcommand{\erec}{r}
+\newcommand{\etime}{\emph{time}}
+\newcommand{\emsg}{m}
+\newcommand{\evnt}{(\etyp,\esend,\erec,\etime,\emsg)}
+\newcommand{\evntind}[1]{(\etyp_#1,\esend_#1,\erec_#1,\etime_#1,\emsg_#1)}
+
+\newcommand{\abstrA}{\A_\abstrel}
+\newcommand{\abstrst}{\states_\abstrel}
+\newcommand{\abstrtr}{\transe_\abstrel}
+\newcommand{\abstrin}{\init_\abstrel}
+\newcommand{\abstrfi}{\final_\abstrel}
+\newcommand{\abstraut}{(\abstrst,\alp,\abstrtr,\abstrin,\abstrfi)}
+\newcommand{\langstabs}[2]{\lang^{#2}_{#1}}
+
+\newcommand{\calA}{\A_\C}
+\newcommand{\calst}{\states^\C}
+\newcommand{\calal}{\alp^\C}
+\newcommand{\caltr}{\transe^\C}
+\newcommand{\calin}{\init^\C}
+\newcommand{\calfi}{\final^\C}
+\newcommand{\calaut}{(\calst,\alp,\caltr,\calin,\calfi)}
+
+% bacha, pouzito 1x primo bez makra (kvuli preteceni radku)
+\newcommand{\nodee}[4]{\ensuremath{\langle{}#1, #2, #3, #4\rangle{}}}
+\newcommand{\mergeop}[2]{\ensuremath{#1 \circ #2}}
+\newcommand{\reduceop}[1]{\ensuremath{reduce(#1)}}
+\newcommand{\grpreduceop}[1]{\ensuremath{grpreduce(#1)}}
+\newcommand{\preds}[2]{\ensuremath{\langle#1_1,\ldots,#1_#2}\rangle}

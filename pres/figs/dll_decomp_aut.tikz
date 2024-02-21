@@ -1,0 +1,44 @@
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\begin{tikzpicture}[
+  scale=0.8,
+  transform shape,
+  node distance=18mm
+]
+
+  \path[use as bounding box] (-8mm,-4mm) rectangle (93mm,18mm);
+
+  \tikzstyle{memnode}=[draw,circle,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodeblue}=[draw,rectangle,fill=blue!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodepink}=[draw,rectangle,fill=red!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodegreen}=[draw,rectangle,fill=green!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+
+  \tikzstyle{nullnode}=[node distance=18mm,label=center:$\bot$]
+  \tikzstyle{varnode}=[font=\tt]
+  \tikzstyle{refnode}=[fill=lightgray!40,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+  \tikzstyle{ptrlab}=[above,font=\tt]
+  \tikzstyle{nextptr}=[label={[draw,fill=blue!30,label distance=1mm]90:DLS }]
+  \tikzstyle{prevptr}=[label={[label distance=0mm,font=\tt]-90:prev}]
+
+
+  % nodes
+  \node[memnode] (x1) at (0mm,0mm) {$q_1$};
+  \node[memnode] (x2) [right of=x1] {$q_2$};
+  \node[memnode] (x3) [right of=x2] {$q_3$};
+  \node[memnode] (x4) [right of=x3] {$q_4$};
+  \node[memnode] (x5) [right of=x4] {$q_5$};
+
+%  \node[nullnode] (x5null) [right of=x5] {};
+  \node (x5null) [right of=x5] {\dots};
+
+%  \node[varnode,node distance=5mm] (x) [left of=x1] {x:};
+
+  % pointers
+  \draw[pointer] (x1)    edge node[nextptr]   {} (x2);
+  \draw[pointer] (x2)    edge node[nextptr]   {} (x3);
+  \draw[pointer] (x3)    edge node[nextptr]   {} (x4);
+  \draw[pointer] (x4)    edge node[nextptr]   {} (x5);
+  \draw[pointer] (x5)    edge node[nextptr]   {} (x5null);
+
+\end{tikzpicture}

@@ -1,0 +1,99 @@
+\usetikzlibrary{arrows}
+\begin{tikzpicture}
+[
+	scale=0.85,
+	transform shape
+%	edge from parent/.style={draw,->,>=stealth'}
+]
+
+\path[use as bounding box] (-30mm,7mm) rectangle (111mm,-40mm);
+
+\definecolor{ref1col}{rgb}{0.6,0.6,1.0}
+\definecolor{ref2col}{rgb}{1.0,0.7,0.7}
+\definecolor{ref3col}{rgb}{0.3,1.0,0.3}
+\definecolor{ref4col}{rgb}{1.0,0.3,1.0}
+\definecolor{trpcol}{rgb}{0.0,0.8, 0.8}
+
+\tikzstyle{state}=[draw,circle]
+\tikzstyle{trans}=[draw,->,>=stealth']
+\tikzstyle{abstr}=[draw,dotted,thick]
+\tikzstyle{ref}=[rectangle,inner sep=0.5mm]
+\tikzstyle{sepline}=[draw=black!40,thick,dashdotted]
+\tikzstyle{trpbox}=[thick,draw=black,fill=trpcol,yshift=-4mm]
+
+% Automaton 1
+\node[state] (q1) at (0mm,0mm) {};
+\node[] (r4) [below of=q1] {};
+\node[node distance=14mm] (r3) [left of=r4] {};
+\node[ref,fill=ref4col,node distance=7mm] (r1) [left of=r3] {$\overline{4}$};
+\node[] (r5) [right of=r4] {};
+\node[ref,fill=ref2col,node distance=7mm] (r2) [right of=r5] {$\overline{2}$};
+
+\draw (q1) edge[trans] node[near start,label={above:p}] (r1mid) {} (r1);
+\draw (q1) edge[trans] node[near start,label={above:n}] (r2mid) {} (r2);
+%\draw (q1) edge[trans] node[near start,label={below right:t}] (r4mid) {} (r4);
+\draw (r1mid.center) to[out=-45,in=225] node[trpbox] {trp} (r2mid.center);
+
+\node[anchor=south,ref,fill=ref1col] at (q1.north) {1};
+
+\node (adfdfds) [right of=q1,xshift=11mm] {};
+\node (adfdfds2) [below of=adfdfds,yshift=-30mm] {};
+\draw[sepline] (adfdfds) edge (adfdfds2);
+
+% Automaton 2
+\node[state] (bq1) [right of=q1,xshift=26mm] {};
+\node[] (br4) [below of=bq1] {};
+\node[] (br3) [node distance=6mm,left of=br4] {};
+\node[ref,fill=ref1col] (br1) [node distance=6mm,left of=br3] {$\overline{1}$};
+\node[] (br5) [node distance=6mm,right of=br4] {};
+\node[ref,fill=ref3col] (br2) [node distance=6mm,right of=br5] {$\overline{3}$};
+
+\draw (bq1) edge[trans] node[near start,label={above:p}] (br1mid) {} (br1);
+\draw (bq1) edge[trans] node[near start,label={above:n}] (br2mid) {} (br2);
+%\draw (bq1) edge[trans] node[near start,label={below right:t}] (br4mid) {} (br4);
+\draw (br1mid.center) to[out=-45,in=225] node[trpbox] {trp} (br2mid.center);
+
+\node[anchor=south,ref,fill=ref2col] at (bq1.north) {2};
+
+\node (badfdfds) [right of=bq1,xshift=5mm] {};
+\node (badfdfds2) [below of=badfdfds,yshift=-30mm] {};
+\draw[sepline] (badfdfds) edge (badfdfds2);
+
+
+% Automaton 3
+\node[state] (cq1) [right of=bq1,xshift=20mm] {};
+\node[] (cr4) [below of=cq1] {};
+\node[] (cr3) [node distance=6mm,left of=cr4] {};
+\node[ref,fill=ref2col] (cr1) [node distance=6mm,left of=cr3] {$\overline{2}$};
+\node[] (cr5) [node distance=6mm,right of=cr4] {};
+\node[ref,fill=ref4col] (cr2) [node distance=6mm,right of=cr5] {$\overline{4}$};
+
+\draw (cq1) edge[trans] node[near start,label={above:p}] (cr1mid) {} (cr1);
+\draw (cq1) edge[trans] node[near start,label={above:n}] (cr2mid) {} (cr2);
+%\draw (cq1) edge[trans] node[near start,label={below right:t}] (cr4mid) {} (cr4);
+\draw (cr1mid.center) to[out=-45,in=225] node[trpbox] {trp} (cr2mid.center);
+
+\node[anchor=south,ref,fill=ref3col] at (cq1.north) {3};
+
+\node (cadfdfds) [right of=cq1,xshift=5mm] {};
+\node (cadfdfds2) [below of=cadfdfds,yshift=-30mm] {};
+\draw[sepline] (cadfdfds) edge (cadfdfds2);
+
+
+
+% Automaton 4
+\node[state] (dq1) [right of=cq1,xshift=20mm] {};
+\node[] (dr4) [below of=dq1] {};
+\node[] (dr3) [node distance=6mm,left of=dr4] {};
+\node[ref,fill=ref3col] (dr1) [node distance=6mm,left of=dr3] {$\overline{3}$};
+\node[] (dr5) [node distance=6mm,right of=dr4] {};
+\node[ref,fill=ref1col] (dr2) [node distance=6mm,right of=dr5] {$\overline{1}$};
+
+\draw (dq1) edge[trans] node[near start,label={above:p}] (dr1mid) {} (dr1);
+\draw (dq1) edge[trans] node[near start,label={above:n}] (dr2mid) {} (dr2);
+%\draw (dq1) edge[trans] node[near start,label={below right:t}] (dr4mid) {} (dr4);
+\draw (dr1mid.center) to[out=-45,in=225] node[trpbox] {trp} (dr2mid.center);
+
+\node[anchor=south,ref,fill=ref4col] at (dq1.north) {4};
+
+\end{tikzpicture}

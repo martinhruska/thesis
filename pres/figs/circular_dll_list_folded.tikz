@@ -1,0 +1,131 @@
+\usetikzlibrary{calc,matrix,backgrounds,fit,shapes,arrows}
+\newcommand{\circulardlllistfolded}[1]{
+\begin{tikzpicture}[
+  scale=1.0,
+  transform shape,
+  node distance=18mm,
+%  >=stealth',
+  >=latex,
+  grow=up,
+  edge from parent/.style={draw,->},
+  edge from parent path={(\tikzparentnode.north) -- (\tikzchildnode.south)},
+  level distance=18mm,
+  level 1/.style={sibling distance=10mm},
+  level 2/.style={sibling distance=6mm},
+]
+
+  \path[use as bounding box] (-38mm,-38mm) rectangle (38mm,38mm);
+
+  \tikzstyle{memnode}=[draw,rectangle,fill=lightgray,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{smallmemnode}=[draw,rectangle,fill=lightgray,thick,minimum height=2.5mm, minimum width=2.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodeblue}=[draw,rectangle,fill=blue!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodepink}=[draw,rectangle,fill=red!30,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodegreen}=[draw,rectangle,fill=green!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodepurple}=[draw,rectangle,fill=purple!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+  \tikzstyle{memnodeorange}=[draw,rectangle,fill=orange!60,thick,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,node distance=18mm,font=\tt]
+
+  % number of nodes on the circular list
+  \def \n {#1}
+
+
+  \tikzstyle{nullnode}=[node distance=18mm,label=center:$\bot$]
+  \tikzstyle{varnode}=[font=\tt]
+  \tikzstyle{refnode}=[fill=lightgray!40,minimum height=4.5mm, minimum width=4.5mm,inner sep=1mm,font=\tt]
+
+  \tikzstyle{pointer}=[draw,->,>=latex]
+
+  \node[draw,fill=green!60,inner sep=0.5mm] at(0,0) {\begin{tabular}{c}circular-DLL-of\\-trees-rootptr\end{tabular}};
+
+%  \fill[green!60] (0mm,0mm) circle (32mm);
+%  \fill[white] (0mm,0mm) circle (10mm);
+%
+%  \foreach \x in {1, ..., \n}
+%  {
+%    \begin{scope}
+%    [
+%      rotate=360/\n*(\x-2)
+%    ]
+%
+%%    \fill[red!30] plot[dashed,fill=black,smooth cycle] coordinates{(0mm,9mm) (10mm,28mm) (-10mm,28mm)};
+%
+%    \ifnum\x<4
+%    \node[memnode] (q \x) at (0mm,14mm) {}
+%     child {node {}
+%%       child {node {} edge from parent[dotted]}
+%%       child {node {} edge from parent[dotted]} 
+%%     }
+%%     child {node[smallmemnode] {}
+%%       child {node {} edge from parent[dotted]}
+%%       child {node {} edge from parent[dotted]} 
+%    };
+%    \node[fill=red!30,draw,inner sep=1mm,rotate=90,anchor=west] at(-4mm,18mm) {tree-rootptr};
+%    \else
+%    \node (q \x) at (0mm,14mm) {};
+%    \fi
+%
+%%    \draw[pointer,bend left] (q \x-1) edge (q \x);
+%%    \draw[pointer,bend left=45] (q \x-1-1) edge (q \x);
+%%    \draw[pointer] (q \x-1-2) edge (q \x);
+%
+%%    \draw[pointer,bend right] (q \x-2) edge (q \x);
+%%    \draw[pointer,bend right=45] (q \x-2-2) edge (q \x);
+%%    \draw[pointer] (q \x-2-1) edge (q \x);
+%
+%%	\pgfmathparse{int(mod(\x,4))}
+%%    \ifnum\pgfmathresult=0
+%%		\node[smallmemnode,above right of=q \x-1-2,node distance=8mm,xshift=-3mm] (q \x add) {};
+%%        \draw[pointer] (q \x-1-1) -- (q \x add);
+%%        \draw[pointer,bend right=15] (q \x add) edge (q \x);
+%%    \fi
+%%    \ifnum\pgfmathresult=1
+%%		\node[smallmemnode,above right of=q \x-1-1,node distance=8mm,xshift=-3mm] (q \x add) {};
+%%        \draw[pointer] (q \x-1-1) -- (q \x add);
+%%        \draw[pointer,bend right=15] (q \x add) edge (q \x);
+%%    \fi
+%%    \ifnum\pgfmathresult=2
+%%		\node[smallmemnode,above right of=q \x-2-1,node distance=8mm,xshift=-3mm] (q \x add) {};
+%%        \draw[pointer] (q \x-2-1) -- (q \x add);
+%%        \draw[pointer,bend right=5] (q \x add) edge (q \x);
+%%    \fi
+%%    \ifnum\pgfmathresult=3
+%%		\node[smallmemnode,above left of=q \x-2-1,node distance=8mm,xshift=3mm] (q \x add1) {};
+%%        \draw[pointer] (q \x-2-1) -- (q \x add1);
+%%		\node[smallmemnode,above right of=q \x-1-2,node distance=8mm,xshift=-3mm] (q \x add2) {};
+%%        \draw[pointer] (q \x-1-2) -- (q \x add2);
+%%        \draw[pointer,bend right=5] (q \x add1) edge (q \x);
+%%        \draw[pointer,bend left=5] (q \x add2) edge (q \x);
+%%    \fi
+%
+%
+%
+%
+%    %\node[smallmemnode] at (0mm,30mm) {};
+%    %\draw (q \x) -- +(0mm,10mm);
+%    \end{scope}
+%  }
+%
+%  \foreach \x [evaluate=\x as \xprev using int(\x-1)] in {1, ..., \n}
+%  {
+%    \ifnum\x<4
+%    \ifnum\x>1
+%      \begin{pgfonlayer}{background}
+%%        \node[fill=blue!60,opacity=0.5,rounded corners,rotate fit=(360/\n*(\x))-(180/\n),fit=(q \xprev) (q \x)] {};
+%      \end{pgfonlayer}
+%      \draw[pointer,bend left] (q \x) edge node[draw,fill=blue!30,above,node distance=5mm,rotate=(360/\n*(\x-2))-(180/\n)] {DLS} (q \xprev);
+%%      \draw[pointer,bend left] (q \xprev) edge (q \x);
+%    \else
+%      \begin{pgfonlayer}{background}
+%%        \node[fill=blue!60,opacity=0.5,rounded corners,rotate fit=(360/\n*(\x))-(180/\n),fit=(q \x) (q \n)] {};
+%      \end{pgfonlayer}
+%      \draw[pointer,bend left,dotted] (q \x) edge (q \n);
+%%      \draw[pointer,bend left] (q \n) edge (q \x);
+%    \fi
+%    \else
+%      \draw[pointer,bend left,dotted] (q \x) edge (q \xprev);
+%
+%    \fi
+%  }
+
+\end{tikzpicture}}
+
+%\circulardlllistfolded{5}
