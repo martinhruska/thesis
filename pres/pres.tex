@@ -158,17 +158,17 @@
                            \item Automated software testing (described later).
 			\end{itemize}
                 \pause
-		\item \hlgr{Shape analysis}\,---\,formal verification of programs with dynamic data structures.
-		\item Goal of shape analysis: \hlbl{Derive reachable shapes of dynamic data structures}.
-			\begin{itemize}
-				\item Can be used to find bugs such as invalid memory dereferences, invalid frees, memory leaks.
-			\end{itemize}
-		\item When an error is found, the method should provide a \hlbl{counterexample}.
-		\item Have to to deal with \hlbl{infinite state spaces}.
-	\end{itemize}
-	\hlrd{Application}
-	\begin{itemize}
-		\item Proving correctness of critical software systems (e.g., operating system kernel).
+		\item \hlrd{Shape analysis}
+	        \begin{itemize}
+                  \item Formal verification of programs with dynamic data structures.
+                \pause
+		  \item Goal: \hlbl{Derive reachable shapes of dynamic data structures}.
+		  \item Can be used to find bugs such as invalid memory dereferences, invalid frees, memory leaks.
+		  \item When an error is found, the method should provide a \hlbl{counterexample}.
+		  \item Have to to deal with \hlbl{infinite state spaces}.
+                \pause
+	          \item \hlbl{Application:} Proving correctness of critical software systems (e.g., operating system kernel).
+	        \end{itemize}
 	\end{itemize}
 }
 
@@ -185,36 +185,17 @@
 		\end{itemize}
 		\item Applied in \hlbl{Abstract Regular Tree Model Checking (ARTMC)}.
 	\end{itemize}
-	\hlrd{Advantages}
-	
+
+        \pause
+
+	\hlrd{Advantages}	
 	\begin{itemize}
 		\item Existing \hlbl{efficient algorithms} for handling finite automata.
-		\item \hlbl{Flexibility} to represent various kinds of data structures.
+		\item \hlbl{Generality} to represent various kinds of data structures.
 	\end{itemize}
 }
 %*******************************************************************************
 
-%*******************************************************************************
-\frame{\frametitle{Automata Theory in Shape Analysis}
-	\begin{itemize}
-		\item Data structures can be viewed as graphs.
-		\item Graphs can be accepted by automata.
-		\item An automaton can represent a set of graphs.
-		\item \hlbl{Goal of analysis:} Derive an automaton for each program location representing
-			all possible shapes of data structures at the location,
-		\begin{itemize}
-			\item So called \hlbl{shape invariant}.
-		\end{itemize}
-		\item Applied in \hlbl{Abstract Regular Tree Model Checking (ARTMC)}.
-	\end{itemize}
-	\hlrd{Advantages}
-	
-	\begin{itemize}
-		\item Existing \hlbl{efficient algorithms} for handling finite automata.
-		\item \hlbl{Flexibility} to represent various kinds of data structures.
-	\end{itemize}
-}
-%*******************************************************************************
 
 %*******************************************************************************
 %\frame{\frametitle{Related Work}
@@ -334,24 +315,11 @@
 			\footnote{\tiny{\textit{E.M. Clarke, O. Grumberg, S. Jha, Y. Lu, H. Veith: Counterexample-guided abstraction refinement for symbolic model checking. J. ACM 50(5), 752–794 (2003)}}}
 		\begin{itemize}
 			\item Sets of heap configurations are represented by automata.
-	%		\item Starts with an automaton representing initial configuration
-	%		\item Applying a transducer modelling behaviour of system until a fixpoint is reached
 			\item Employs \hlbl{abstraction} over automata to overapproximate the set of~reachable configurations (allowing termination on $\infty$ state spaces).
-	%			checks emptiness of its language
 		\end{itemize}
-	%	\pause
-	%   \item Employs \hlbl{CEGAR} to refine abstraction over automata
-	%	   \begin{itemize}
-	%		    \item Forward run with abstraction
-	%		    \item Backward run for validation of counterexample (CE)
-	%			\item Refinement of abstraction to avoid spurious CE
-	%	   \end{itemize}
-	%	\pause
+	   \pause
 	   \vspace{0.2cm}
 	   \includegraphics[scale=0.26]{artmc.png}
-	%	   \pause
-	%   \item CEGAR applied to ARTMC, but not to FA
-	%	   based shape analysis $\rightarrow$ \hlrd{contribution of this work}
   \end{itemize}
 \end{frame}
 %*******************************************************************************
@@ -467,7 +435,9 @@
 %*******************************************************************************
 \begin{frame}
 \frametitle{Experimental Evaluation}
-
+    \begin{itemize}
+        \item Shape analysis based on Forest automata implemented in the \hlrd{Forester} tool
+    \end{itemize}
 	\begin{center}
 	\begin{adjustbox}{max height=\textheight, max width=\textwidth}
 	%\tiny
@@ -549,20 +519,20 @@
 	  \item<1-> Forester competed in SV-COMP in years 2015-2018 in the \hlbl{categories related to memory safety} (\emph{MemSafety, HeapReach}).
           \item<2-> \hlrd{2015}
 	  \begin{itemize}
-            \item Using VATA as backend.
+            \item Using the VATA library for tree automata as backend.
             \item Counterxample witness generation. 
 	  \end{itemize}
           \item<3-> \hlrd{2016}
 	  \begin{itemize}
             \item Added support to run Forester using Benchexec.
-            \item Counterexample analysis and abstraction analysis for basic forest automata.
+            \item Counterexample analysis and abstraction refinement for basic forest automata.
 	  \end{itemize}
           \item<4-> \hlrd{2017}
 	  \begin{itemize}
-            \item Generating correctness witness. In our case, printing forest automaton representing shape invariant for each line.
-            \item Counterexample analysis and abstraction analysis for hierarchical forest automata.
+            \item Generating correctness witness (forest automaton representing shape invariants of program).
+            \item Counterexample analysis and abstraction refinement for hierarchical forest automata.
 	  \end{itemize}
-          \item<4-> Forester has never won any medal, but was able verify difficult data structures (skip-lists, or trees) which were not solved by any other tool.
+          \item<4-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists, or various trees) which were not solved by any other tool.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -574,79 +544,115 @@
 
 		\vspace{1cm}
 
-		\tiny{Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.} NETYS'21.}
+		\small{Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.} NETYS'21.}
 	\end{center}
 }
 %*******************************************************************************
 
 %*******************************************************************************
-\frame{\frametitle{Towards Efficient Shape Analysis with Tree Automata}
+\frame{\frametitle{Towards Efficient Shape Analysis with Tree Automata (TA)}
 	\begin{itemize}
 	  \item Forest Automata have their limits:
 	  \begin{itemize}
-	    \item Can't represent data structures such as grid.
-            \item Are not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computing).
+	    \item Can't represent data structures such as grid (unbounded number of cut-points).
+            \item Are not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computation).
 	\end{itemize}
         \pause
         \item We proposed a new automata capable of representing \hlbl{graphs with bounded tree-width}.
-        \item These automata also need \hlbl{efficient algorithm for entailment} to be usable in shape analysis.
+        \item We sketched \hlbl{efficient algorithm for entailment} for these automata.
+        \item The new automata are based on tree automata but we work with single TA instead of tuple of TA (like in FA).  
         \end{itemize}
 }
 %*******************************************************************************
 
+
 %*******************************************************************************
-\frame{\frametitle{Towards Efficient Shape Analysis with Tree Automata}
+\frame{\frametitle{Tree Decomposition with Variables}
 	\begin{itemize}
-          \item A \emph{tree decomposition} of a labeled graph $g$ over a finite set of variables $\vars$ and alphabet $\Sigma$ is a~tree $\dec=(\bubbles,\edgs)$.
-            Nodes $\bubbles$ of $t$ are $\Sigma$-labeled graphs called \emph{bags}. Nodes of a bag are variables from $\vars$.
-            Edges of $\dec$ are labelled by partial mappings $\rho:\vars\rightarrow\vars$ called \emph{parameter assignments}.
+          \item How to represent a graph with bounded tree-width by a tree automaton? By tree decompositions with \hlbl{variables}.
 	\end{itemize}
- 	\begin{center}
-       \includegraphics[scale=0.2]{figs/netys/tree_decomp.png}
+        \begin{center}
+          \includegraphics[scale=0.18]{figs/netys/tree_decomp.png}
  	\end{center}
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Automata over Graphs with Bounded Tree-width}
+        \vspace{-1em}
+        \pause
 	\begin{itemize}
-          \item Reconnection - moving the bag $b_0$ under the bag $b_1$.
-	\end{itemize}
- 	\begin{center}
- 	\begin{figure*}
- 		\includegraphics[scale=0.3]{figs/netys/decomp1.png}
- 	\end{figure*}
- 	\end{center}
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Automata over Graphs with Bounded Tree-width}
-	\begin{itemize}
-          \item Rotation - changing orientation of the edge between $b_1$ and $b_1'$
-	\end{itemize}
- 	\begin{center}
- 	\begin{figure*}
- 		\includegraphics[scale=0.25]{figs/netys/decomp2.png}
- 	\end{figure*}
- 	\end{center}
-}
-%*******************************************************************************
-
-
-%*******************************************************************************
-\frame{\frametitle{Towards entailment}
+        \item Two operations needed to transform one decomposition to another:
+        \pause
 	  \begin{itemize}
-            \item<1-> \hlrd{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
-            \item<2-> One phase at most doubles the number of variables.
-            \item<3-> An equivalent decomposition $t$ can be obtained from $t'$ in a number of phases that depends only on $max(tw(t),tw(t))$ where $tw$ is a tree width of decomposition.
+            \item \hlbl{Reconnection} - moving the node $b_0$ under the node $b_0'$.
+            \item \hlbl{Rotation} - changing orientation of the edges between two nodes.
+	  \end{itemize}
+	\end{itemize}
+}
+%*******************************************************************************
+
+%*******************************************************************************
+\frame{\frametitle{Towards Entailment}
+	  \begin{itemize}
+            \item<1-> \hlbl{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
             \vspace{1em}
-            \item<4-> Tree decompositions can be represented as language of \hlrd{tree automaton}.
-            \item<5-> The implementation of a \hlbl{tree automata phase at most doubles the number of variables} and leads to \hlbl{an automaton that is of a polynomial size assuming a fixed tree-width} of the original automaton.
+            \item<2-> The implementation of a \hlbl{tree automata phase at most doubles the number of variables} and leads to \hlbl{an automaton that is of a polynomial size assuming a fixed tree-width} of the original automaton.
             \vspace{1em}
-            \item<6-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
+            \item<3-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
 	  \end{itemize}
 }
+%*******************************************************************************
+
+%*******************************************************************************
+% \frame{\frametitle{Towards Efficient Shape Analysis with Tree Automata}
+% 	\begin{itemize}
+%           \item A \emph{tree decomposition} of a labeled graph $g$ over a finite set of variables $\vars$ and alphabet $\Sigma$ is a~tree $\dec=(\bubbles,\edgs)$.
+%             Nodes $\bubbles$ of $t$ are $\Sigma$-labeled graphs called \emph{bags}. Nodes of a bag are variables from $\vars$.
+%             Edges of $\dec$ are labelled by partial mappings $\rho:\vars\rightarrow\vars$ called \emph{parameter assignments}.
+% 	\end{itemize}
+%  	\begin{center}
+%        \includegraphics[scale=0.2]{figs/netys/tree_decomp.png}
+%  	\end{center}
+% }
+% %*******************************************************************************
+% 
+% %*******************************************************************************
+% \frame{\frametitle{Automata over Graphs with Bounded Tree-width}
+% 	\begin{itemize}
+%           \item Reconnection - moving the bag $b_0$ under the bag $b_0'$.
+% 	\end{itemize}
+%  	\begin{center}
+%  	\begin{figure*}
+%  		\includegraphics[scale=0.3]{figs/netys/decomp1.png}
+%  	\end{figure*}
+%  	\end{center}
+% }
+% %*******************************************************************************
+% 
+% %*******************************************************************************
+% \frame{\frametitle{Automata over Graphs with Bounded Tree-width}
+% 	\begin{itemize}
+%           \item Rotation - changing orientation of the edge between $b_1$ and $b_1'$
+% 	\end{itemize}
+%  	\begin{center}
+%  	\begin{figure*}
+%  		\includegraphics[scale=0.25]{figs/netys/decomp2.png}
+%  	\end{figure*}
+%  	\end{center}
+% }
+%*******************************************************************************
+
+
+%*******************************************************************************
+%\frame{\frametitle{Towards entailment}
+%	  \begin{itemize}
+%            \item<1-> \hlbl{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
+%            \item<2-> One phase at most doubles the number of variables.
+%            \item<3-> \hlbl{An equivalent decomposition $t$ can be obtained from $t'$} in a number of phases that depends only on \hlbl{$max(tw(t),tw(t'))$} where $tw$ is a tree width of decomposition.
+%            \vspace{1em}
+%            \item<4-> Tree decompositions can be represented by language of \hlbl{tree automaton}.
+%            \item<5-> Rotation and reconnection can be performed also on tree automata (e.g., using tree transducer).
+%            \item<6-> The implementation of a \hlbl{tree automata phase at most doubles the number of variables} and leads to \hlbl{an automaton that is of a polynomial size assuming a fixed tree-width} of the original automaton.
+%            \vspace{1em}
+%            \item<7-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
+%	  \end{itemize}
+%}
 %*******************************************************************************
 
 %*******************************************************************************
@@ -656,7 +662,7 @@
 
 		\vspace{1cm}
 
-		\tiny{Mal{\'{\i}}k, V., \hlbl{Hru\v{s}ka, M.}, Schrammel P., Vojnar T. FMCAD'18.}
+		\small{Mal{\'{\i}}k, V., \hlbl{Hru\v{s}ka, M.}, Schrammel P., Vojnar T. FMCAD'18.}
 	\end{center}
 }
 %*******************************************************************************
@@ -664,14 +670,14 @@
 %*******************************************************************************
 \frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
 	\begin{itemize}
-          \item Shape analysis using \hlbl{SMT solving} to compute the points-to relation between pointers and memory dynamically allocated (represented by abstract objects).
-          \item Domain designed for \hlbl{representation of linked-lists} (therefore more straightforward than the automata-based approaches).
-          \item Implemented within 2LS framework for program analysis.
+          \item Shape analysis using \hlbl{SMT solving} to compute the points-to relation between pointers and (abstract) memory addresses.
+          \item Domain designed for \hlbl{representation of linked-lists}.
+          \item Therefore more straightforward than the automata-based approaches, but lacks generality of automata based approaches.
           \pause
+          \item Implemented within \hlbl{the 2LS framework} for program analysis.
 	  \begin{itemize}
             \item Combination with other domains in the framework, e.g., the numerical domain.
 	  \end{itemize}
-          \item Lacks generality of automata based approaches.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -681,35 +687,42 @@
         \begin{itemize}
           \item Verification procedure takes:
 	  \begin{itemize}
-            \item A first order formula over combination of SMT theories that represents the program in SSA form.
-            \item A set of invariants based on predefined templates (proposed for various domains).
-            \item The property of interest.
+            \item A \hlbl{first order formula over combination of SMT theories} that represents the program in SSA form (i.e., transition relation).
+            \item A \hlbl{set of invariants based on predefined templates} (proposed for various domains).
+            \item \hlbl{The property of interest} (e.g., memory safety properties).
 	  \end{itemize}
           \pause
-           \item And verifies that there is no reachable counterexample violating the invariants.
+           \item And verifies that there is no reachable invariants violate the properties of interest.
+	\end{itemize}
+}
+%*******************************************************************************
+
+%*******************************************************************************
+\frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
+	\begin{itemize}
            \item Technically, unsatisfiability of this formula:
 	  \begin{itemize}
             \item $\exists \vx, \vxp .\; \neg (\fminit(\vx) \Longrightarrow \templ(\vx, \vd)) \; \vee \neg (\templ(\vx, \vd) \wedge \fmtrans(\vx,\vxp) \Longrightarrow \templ(\vxp, \vd))$
-           \item  where $\fminit(\vx)$ is an initial state of variables, $\templ$ represents program properties of interest and negation of their invariants, $\fmtrans$ formula representing program
+           \item  where $\fminit(\vx)$ is an initial state of variables, $\templ$ is a set of invariants based on templates, $\fmtrans$ formula representing program
 	  \end{itemize}
           \pause
           \item The template for shape analysis is: $\templ^S \equiv \bigwedge_{\ssaplb{i} \in \ptrlb} = \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$,
 	    \begin{itemize}
-              \item where $\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv (\bigvee_{a \in d_{\ssaplb{i}}} \ssaplb{i} = a)$.
-              \item Basically, it describes the points-to relation between a pointer ($\ssaplb{i}$) and addresses (abstract value $d_{\ssaplb{i}}$) that the pointer may point to.
+              \item where \hlbl{$\templ^S_{\ssaplb{i}}(d_{\ssaplb{i}}) \equiv (\bigvee_{a \in d_{\ssaplb{i}}} \ssaplb{i} = a)$}.
+              \item Basically, it describes the points-to relation between a pointer ($\ssaplb{i}$) and addresses $a$ that the pointer may point to.
 	    \end{itemize}
 	\end{itemize}
 }
 %*******************************************************************************
 
 %*******************************************************************************
-\frame[shrink=5]{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
+\frame[shrink=5]{\frametitle{Experimental Evaluation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \newcolumntype{g}{>{\columncolor{LightCyan}}r}
 \begin{table}[bt]
 \small
 \captionsetup{font=small}
-\caption{Comparison of 2LS with other tools on examples combining unbounded data structures and their stored data.}
+\caption{Comparison of 2LS with other tools on examples needing reasoning about unbounded data structures and their stored data.}
 \vspace*{-1mm}
 \label{tab:others}
 \centering
@@ -744,7 +757,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 
 		\vspace{1cm}
 
-		\tiny{Fiedor, T., \hlbl{Hru\v{s}ka, M.}}, \hlbl{Smr\v{c}ka, A. EUROCAST'22.}
+		\small{Fiedor, T., \hlbl{Hru\v{s}ka, M.}, Smr\v{c}ka, A. EUROCAST'22.}
 	\end{center}
 }
 %*******************************************************************************
@@ -754,57 +767,72 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
   \begin{itemize}
     \item \hlrd{Manufacturing Execution System (MES)}
     \begin{itemize}
-      \item Software managing production in manufactory.
-      \item MES tasks are:
+      \item Software managing production in factory.
+      \item This includes communication with information system, machines, etc.
+      \item Difficult to test:
       \begin{itemize}
-        \item Communication with Enterprise Resource Planning (ERP) systems such as SAP, e.g., checking quantity of material in stocks.
-        \item Scheduling production over the machines.
-        \item Controlling and communicating with machines during production.
-        \item Processes inputs by human workers operating machines.
+         \item Distributed nature of manufacturing, different communication protocols, different formats of structured data.
+     %   \item Distributed nature of manufacturing, different communication protocols, different formats structured data.
+       % \item Communication with Enterprise Resource Planning (ERP) systems such as SAP, e.g., checking quantity of material in stocks.
+       % \item Scheduling production over the machines.
+       % \item Controlling and communicating with machines during production.
+       % \item Processes inputs by human workers operating machines.
       \end{itemize}
-      \pause
-     \item Testing of MES is difficult because:
-       \item \hlbl{Distributed nature of manufacturing}, \hlbl{different communication protocols}, \hlbl{different formats structured data}.
-       \item Nondeterministic factors\,---\,human workers and their interactions with machines, physical aspects of machines.
-      \end{itemize}
-    \end{itemize}
   \end{itemize}
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Introduction\,---\,Digital Twin}
-  \begin{itemize}
+      \pause
     \item \hlrd{Digital twin}
     \begin{itemize}
       \item Generally, digital copy of a cyber-physical system\,---\,simulation of reality on computer, often with graphical interface.
       \item Not everything needs to be simulated, some software may be used in digital twin natively.
       \pause
-      \item In our case, digital copy of a manufactory simulated in command line.
-      \item Particularly, machines, ERP, or human workers are simulated, MES is executed natively.
-      \item Can be orchestrated (deployed and controlled) by an input scenario (step by step).
     \end{itemize}
-  \end{itemize}
+     % \item \hlbl{Testing of MES is difficult because}:
+     %  \begin{itemize}
+     %   \item Distributed nature of manufacturing, different communication protocols, different formats structured data.
+     %   \item Nondeterministic factors\,---\,human workers and their interactions with machines, physical aspects of machines.
+     %  \end{itemize}
+      \pause
+    \item Project solved with the Unis company (\hlbl{MES Pharis}) and Masaryk University (\hlbl{Cryton} for orchestrating digital twin)
+    \end{itemize}
 }
 %*******************************************************************************
 
-%*******************************************************************************
-\frame{\frametitle{Context of the Project}
-  \begin{itemize}
-	  \item In collaboration with \hlbl{Masaryk University} and \hlbl{UNIS, a.s.} company
-          \item The goal of project was to develop digital twin of systems controlled by MES \hlbl{Pharis }developed by UNIS company
-          \item The presented talk is about learning models of communication and generating scenarios for orchestrating digital twin
-          \item Digital twin was implemented by Masaryk University (\hlbl{the Cryton tool})
-  \end{itemize}
-}
-%*******************************************************************************
+% %*******************************************************************************
+% \frame{\frametitle{Introduction\,---\,Digital Twin}
+%   \begin{itemize}
+%     \item \hlrd{Digital twin}
+%     \begin{itemize}
+%       \item Generally, digital copy of a cyber-physical system\,---\,simulation of reality on computer, often with graphical interface.
+%       \item Not everything needs to be simulated, some software may be used in digital twin natively.
+%       \pause
+%     \end{itemize}
+%     \item \hlrd{Our use case}
+%     \begin{itemize}
+%       \item Particularly, machines, ERP, or human workers are simulated.
+%       \item MES is executed natively.
+%       \item Can be orchestrated (deployed and controlled) by an input scenario (step by step).
+%     \end{itemize}
+%   \end{itemize}
+% }
+% %*******************************************************************************
+% 
+% %*******************************************************************************
+% \frame{\frametitle{Context of the Project}
+%   \begin{itemize}
+% 	  \item In collaboration with \hlbl{Masaryk University} and \hlbl{UNIS, a.s.} company
+%           \item The goal of project was to develop digital twin of systems controlled by MES \hlbl{Pharis }developed by UNIS company
+%           \item The presented talk is about learning models of communication and generating scenarios for orchestrating digital twin
+%           \item Digital twin was implemented by Masaryk University (\hlbl{the Cryton tool})
+%   \end{itemize}
+% }
+% %*******************************************************************************
 
 %*******************************************************************************
-\frame{\frametitle{Real System}
-    \begin{center}
-     \includegraphics[scale=0.23]{figs/eurocast/real-system.png}
-    \end{center}
-}
+% \frame{\frametitle{Real System}
+%     \begin{center}
+%      \includegraphics[scale=0.23]{figs/eurocast/real-system.png}
+%     \end{center}
+% }
 %*******************************************************************************
 
 %*******************************************************************************
@@ -815,68 +843,83 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 }
 %*******************************************************************************
 
-
 %*******************************************************************************
 \frame{\frametitle{Our Solution}
 \begin{itemize}
-  \item Representing messages with structured data
-  \begin{itemize}
-    \item Different formats of messages\,---\,JSON and XML
-    \item Generic representation and unified manipulation using \hlbl{Trie} structure (prefix tree)
-    \item We classify messages \hlbl{based on structural similarity to different classes} and create an abstract representation of each class.
-    \item Can automatically generate new messages from abstract representation.
-  \end{itemize}
+  \item Messages in different formant (XML, or JSON)\,---\,use format indepedent \hlbl{Trie} structure (prefix tree)
     \pause
-  \item Representing model of communication:
+  \item Representing communication using \hlbl{event calendar}.
   \begin{itemize}
-    \item Representing communication in system using \hlbl{event calendar}.
-    \item There is created an event in calendar for each message (containing sender, receiver, type of message, etc.).
-    \item Later serialized to a YAML scenario used for orchestrating digital twin.
+    \item Direct generation of scenario for digital twin.
+    \item Can be transformed to finite automaton\,---\,application of abstraction to overapproximate langauge.
+    \item New strings in overapproximated langauge $\Rightarrow$ new series of events $\Rightarrow$ new scenario $\Rightarrow$ \hlbl{new test case}.
   \end{itemize}
-    \pause
-  \item Implemented in the \hlbl{Tyrant} tool.
-\end{itemize}
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Automata Abstraction to Generate New Tests Cases}
-\begin{itemize}
-  \item Function for transforming event calendar to \hlbl{finite automaton}\,---\,set of events is used as alphabet of automaton
-  \item Runs of modeled system (which are basically series of events) are strings in language of automaton
-\end{itemize}
-\vspace{1em}
-\pause
-\begin{itemize}
-  \item \hlbl{Length abstraction of automaton}\,---\,merges states of automaton with the same prefix language w.r.t. a given length
-  \item Abstraction overapproximates language of automaton $\Rightarrow$ language of abstracted automaton may contain strings which are not in the original one
-  \item Such new strings could be converted back to \hlbl{series of events $\Rightarrow$ new scenario $\Rightarrow$ new test case}
-\end{itemize}
-% \vspace{1em}
-%\pause
-% \begin{itemize}
-%  \item We considered other formalisms (communicating FA, process mining, probability automata)
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Evaluation}
-\begin{itemize}
-    \item We test and run our tools in UNIS company.
-    \item We \hlbl{automatically} generated a valid scenario for Cryton (so far, the scenarios were created \hlbl{manually} by a human tester only).
-    \item We made experiments with automatic new scenarios generation:
-    \begin{itemize}
-      \item Abstraction only in certain types of communication (Primarily, between MES and machines).
-      \item Communication between terminals and MES is not suitable for abstraction (need to preserve sequences of messages).
-    \end{itemize}
   \pause
-    \item \hlbl{Future Work}
-    \begin{itemize}
-      \item Deploy our tools in industry settings of UNIS company.
-      \item Tune automata abstraction and new messages generation for Pharis.
-    \end{itemize}
+  \item Implemented in the \hlbl{Tyrant} tool.
+  \begin{itemize}
+    \item Generated valid scenarios for orchestration of digital twin with deployed Pharis. 
+    \item More engineering work needed to be deployed in production. 
+  \end{itemize}
 \end{itemize}
 }
+%*******************************************************************************
+
+%*******************************************************************************
+% \frame{\frametitle{Our Solution}
+% \begin{itemize}
+%   \item Representing messages with structured data
+%   \begin{itemize}
+%     \item Different formats of messages\,---\,JSON and XML
+%     \item Generic representation and unified manipulation using \hlbl{Trie} structure (prefix tree)
+%     \item We classify messages \hlbl{based on structural similarity to different classes} and create an abstract representation of each class.
+%     \item Can automatically generate new messages from abstract representation.
+%   \end{itemize}
+%     \pause
+%   \item Representing model of communication:
+%   \begin{itemize}
+%     \item Representing communication in system using \hlbl{event calendar}.
+%     \item There is created an event in calendar for each message (containing sender, receiver, type of message, etc.).
+%     \item Later serialized to a YAML scenario used for orchestrating digital twin.
+%   \end{itemize}
+%     \pause
+%   \item Implemented in the \hlbl{Tyrant} tool.
+% \end{itemize}
+% }
+% %*******************************************************************************
+% 
+% %*******************************************************************************
+% \frame{\frametitle{Automata Abstraction to Generate New Tests Cases}
+% \begin{itemize}
+%   \item Transform event calendar to \hlbl{finite automaton}\,---\,set of events is used as alphabet of automaton.
+%   \item Use \hlbl{length abstraction of automaton} to overapproximates language of automaton (merges states of automaton with the same prefix language w.r.t. a given length)
+%   \item A language of abstracted automaton may contain strings which are not in the original one.
+%   \item Such new strings could be converted back to \hlbl{series of events $\Rightarrow$ new scenario $\Rightarrow$ new test case}.
+% \end{itemize}
+% % \vspace{1em}
+% %\pause
+% % \begin{itemize}
+% %  \item We considered other formalisms (communicating FA, process mining, probability automata)
+% }
+%*******************************************************************************
+
+%*******************************************************************************
+% \frame{\frametitle{Evaluation}
+% \begin{itemize}
+%     \item We test and run our tools in UNIS company.
+%     \item We \hlbl{automatically} generated a valid scenario for Cryton (so far, the scenarios were created \hlbl{manually} by a human tester only).
+%     \item We made experiments with automatic new scenarios generation:
+%     \begin{itemize}
+%       \item Abstraction only in certain types of communication (Primarily, between MES and machines).
+%       \item Communication between terminals and MES is not suitable for abstraction (need to preserve sequences of messages).
+%     \end{itemize}
+%   \pause
+%  %    \item \hlbl{Future Work}
+%  %    \begin{itemize}
+%  %      \item Deploy our tools in industry settings of UNIS company.
+%  %      \item Tune automata abstraction and new messages generation for Pharis.
+%  %    \end{itemize}
+% \end{itemize}
+% }
 %*******************************************************************************
 
 %*******************************************************************************
@@ -911,7 +954,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 
 \frame{\frametitle{Publications}
         \begin{itemize}
-          \tiny{\item Chocholatý D., Fiedor T., Havlena V., Holík L., \hlbl{Hruska M.}, Lengál, O., Síč J.: \emph{Mata: A Fast and Simple Finite Automata Library.} In Proc. of TACAS'24.}
+          \tiny{\item Chocholatý D., Fiedor T., Havlena V., Holík L., \hlbl{Hruška M.}, Lengál, O., Síč J.: \emph{Mata: A Fast and Simple Finite Automata Library.} In Proc. of TACAS'24.}
           \tiny{\item Holík L., Fiedor T., Rogalewicz A., Vargovčík P., \hlbl{Hruška M.}, Síč J.,: \emph{Reasoning about Regular Properties: A Comparative Study.} In Proc. of CADE'23.}
           \tiny{\item Habermehl P., Holík L., \hlbl{Hruška M.}, Lengál O., Rogalewicz A., Šimáček J., Vojnar T. \emph{Forester: Tree Automata in Shape Analysis}. Accepted for publication in the book ASV on the State-of-the-art Tools for Software Verification.}
           \tiny{\item Fiedor T., \hlbl{Hruška M.}, Smrčka A. \emph{Orchestrating Digital Twins for Distributed Manufacturing Execution Systems.} In Proc. of EUROCAST'22.}
@@ -920,7 +963,6 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	       \tiny{\item  Mal{\'{\i}}k, V., \hlbl{Hru\v{s}ka, M.}, Schrammel, P.,
 			Vojnar, T.: \emph{Template-Based Verification of Heap-Manipulating Programs.}
 			In \emph{Proc.\ of FMCAD'18}, 2018.}
-                        \tiny{\item Participation at SV-COMP'19 with the 2LS tool (in collaboration with Viktor Malík)}	
 		\tiny{\item  Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.}, Leng\'{a}l, O., Rogalewicz, A.,
 			Vojnar, T.: \emph{Counterexample Validation and Interpolation-Based Refinement for Forest Automata.}
 			In \emph{Proc.\ of VMCAI'17}, LNCS 10145, Springer, 2017.}
