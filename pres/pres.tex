@@ -162,7 +162,8 @@
 	        \begin{itemize}
                   \item Formal verification of programs with dynamic data structures.
                 \pause
-		  \item Goal: \hlbl{Derive reachable shapes of dynamic data structures}.
+		  \item Goal: \hlbl{Derive reachable shapes of dynamic data structures} (so called \hlbl{shape invariant}).
+                \pause
 		  \item Can be used to find bugs such as invalid memory dereferences, invalid frees, memory leaks.
 		  \item When an error is found, the method should provide a \hlbl{counterexample}.
 		  \item Have to to deal with \hlbl{infinite state spaces}.
@@ -180,9 +181,6 @@
 		\item An automaton can represent a set of graphs.
 		\item \hlbl{Goal of analysis:} Derive an automaton for each program location representing
 			all possible shapes of data structures at the location,
-		\begin{itemize}
-			\item So called \hlbl{shape invariant}.
-		\end{itemize}
 		\item Applied in \hlbl{Abstract Regular Tree Model Checking (ARTMC)}.
 	\end{itemize}
 
@@ -191,7 +189,7 @@
 	\hlrd{Advantages}	
 	\begin{itemize}
 		\item Existing \hlbl{efficient algorithms} for handling finite automata.
-		\item \hlbl{Generality} to represent various kinds of data structures.
+		\item \hlbl{Genericity}\,---\,can represent various kinds of data structures.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -846,7 +844,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 %*******************************************************************************
 \frame{\frametitle{Our Solution}
 \begin{itemize}
-  \item Messages in different formant (XML, or JSON)\,---\,use format indepedent \hlbl{Trie} structure (prefix tree)
+  \item Representing messages in different formats (XML, or JSON) using \hlbl{Trie} structure (prefix tree)
     \pause
   \item Representing communication using \hlbl{event calendar}.
   \begin{itemize}
@@ -936,8 +934,8 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
           \item Work presented in the thesis:
 	  \begin{itemize}
             \item Counterexample analysis and abstraction refinement for Forest automata.
-            \item Competing in SV-COMP, edition $2015$-$2018$.
-            \item Chapter on forest automata in book on software verification with refined presentation of the approach.
+            \item Forester participation in SV-COMP, editions $2015$-$2018$.
+            \item A chapter on forest automata in book on software verification with refined presentation of the approach.
             \item Automata over graphs with bounded tree-width.
             \item Shape analysis based on SMT solving.
             \item Automated testing of distributed manufacturing execution systems.
@@ -992,26 +990,56 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 }
 %*******************************************************************************
 
+%*******************************************************************************
+\begin{frame}[noframenumbering]
+	\frametitle{The Questions of Reviewers}
+	\begin{itemize}
+	  \item \hlgr{Is a user-non-friendlines of library for finite automata a problem if it used as backend of verification tool?}
+	  \begin{itemize}
+            \item Context: In conclusion of my thesis I proposed that one of the future directions is to design a new efficient, simple, and user-friendly automata library.
+            \item Depends on definition of user-friendliness.
+            \item In general, if you work in small team with limited amount of resources you want library that has a clear interface and predicatable behaviour, which is a kind of user friendliness.
+	  \end{itemize}
+	\end{itemize}
+\end{frame}
+%*******************************************************************************
 
 %*******************************************************************************
 \begin{frame}[noframenumbering]
-	\frametitle{The Definition of Graph Tree Width}
+	\frametitle{The Questions of Reviewers}
 	\begin{itemize}
-		\item A tree decomposition of a graph $G=(V_G,E_G)$ is a tree $T=(V_T,E_T)$, such that:
+	  \item \hlgr{When generating abstract messages, could the abstraction lead to generation of messages that really do not make sense in practice? Is it still worth to examine the behaviour of the system after transferring such mesages?}
+	  \begin{itemize}
+            \item Context: In work on testing MES we proposed methods for generating new test cases using abstraction over messages and communication models.
+            \item Yes, it can lead to messages or seqeunces of messages that does not make sense but the system under testing should fail when these messages.
+            \item From practical point of view, it is necessary to tune the abstractions to avoid generating such things.
+	  \end{itemize}
+	\end{itemize}
+\end{frame}
+%*******************************************************************************
+
+
+
+\begin{comment}
+
+%*******************************************************************************
+\begin{frame}[noframenumbering]
+	\frametitle{the definition of graph tree width}
+	\begin{itemize}
+		\item a tree decomposition of a graph $g=(v_g,e_g)$ is a tree $t=(v_t,e_t)$, such that:
 			\begin{itemize}
-				\item $V_T \subseteq 2^{V_G}$
-				\item $\forall v_G \in V_G\,\exists v_T \in V_T: v_G \in v_T$
-				\item $\forall (u,v) \in E_G\,\exists v_T \in V_T: u,v \in v_T$
-				\item $\forall v_G \in V_G: $ The set $\{v_t \in V_T\,|\, v_G \in v_T\}$ induces connected subtree
+				\item $v_t \subseteq 2^{v_g}$
+				\item $\forall v_g \in v_g\,\exists v_t \in v_t: v_g \in v_t$
+				\item $\forall (u,v) \in e_g\,\exists v_t \in v_t: u,v \in v_t$
+				\item $\forall v_g \in v_g: $ the set $\{v_t \in v_t\,|\, v_g \in v_t\}$ induces connected subtree
 			\end{itemize}
-		\item A width of the given decomposition is the maximal cardinality of the nodes of the decomposition minus one.
-		\item A tree width of the given graph is a minimal width of all possible tree decompositions of the given graph.
+		\item a width of the given decomposition is the maximal cardinality of the nodes of the decomposition minus one.
+		\item a tree width of the given graph is a minimal width of all possible tree decompositions of the given graph.
 	\end{itemize}
 \end{frame}
 
 %*******************************************************************************
 
-\begin{comment}
 
 %*******************************************************************************
  \begin{frame}[noframenumbering]
