@@ -549,16 +549,17 @@
 
 %*******************************************************************************
 \frame{\frametitle{Towards Efficient Shape Analysis with Tree Automata (TA)}
+	% \begin{itemize}
+	%   \item Forest Automata have their limits:
+	%   \begin{itemize}
+	%     \item Can't represent data structures such as grid (unbounded number of cut-points).
+        %     \item Are not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computation).
+	% \end{itemize}
+        % \pause
 	\begin{itemize}
-	  \item Forest Automata have their limits:
-	  \begin{itemize}
-	    \item Can't represent data structures such as grid (unbounded number of cut-points).
-            \item Are not closed under union (which complicates their manipulation during verification procedure, e.g., a fixpoint computation).
-	\end{itemize}
-        \pause
-        \item We proposed a new automata capable of representing \hlbl{graphs with bounded tree-width}.
+        \item We proposed new automata able to represent \hlbl{graphs with bounded tree-width}.
+        \item They are based on tree automata but we work with single TA instead of tuple of TA (like in FA).  
         \item We sketched \hlbl{efficient algorithm for entailment} for these automata.
-        \item The new automata are based on tree automata but we work with single TA instead of tuple of TA (like in FA).  
         \end{itemize}
 }
 %*******************************************************************************
@@ -573,26 +574,21 @@
           \includegraphics[scale=0.18]{figs/netys/tree_decomp.png}
  	\end{center}
         \vspace{-1em}
-        \pause
-	\begin{itemize}
-        \item Two operations needed to transform one decomposition to another:
-        \pause
-	  \begin{itemize}
-            \item \hlbl{Reconnection} - moving the node $b_0$ under the node $b_0'$.
-            \item \hlbl{Rotation} - changing orientation of the edges between two nodes.
-	  \end{itemize}
-	\end{itemize}
 }
 %*******************************************************************************
 
 %*******************************************************************************
 \frame{\frametitle{Towards Entailment}
 	  \begin{itemize}
-            \item<1-> \hlbl{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
-            \vspace{1em}
-            \item<2-> The implementation of a \hlbl{tree automata phase at most doubles the number of variables} and leads to \hlbl{an automaton that is of a polynomial size assuming a fixed tree-width} of the original automaton.
-            \vspace{1em}
+            \item<1-> A graph may have more decompositions and we want a TA to represent all of them (\hlbl{shape invariant}).
+            \item<2-> We can create TA representing all tree decompositions that is of a \hlbl{polynomial size assuming a fixed tree-width} of the original automaton.
             \item<3-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
+            % \item<2-> We need two operations, \hlbl{rotation} and \hlbl{reconnection}, over TA to be able to do that.
+            % \item<3-> \hlbl{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
+            % \vspace{1em}
+            % \item<4-> The implementation of a \hlbl{tree automata phase at most doubles the number of variables} and leads to \hlbl{an automaton that is of a polynomial size assuming a fixed tree-width} of the original automaton.
+            % \vspace{1em}
+            % \item<5-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
 	  \end{itemize}
 }
 %*******************************************************************************
