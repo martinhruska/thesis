@@ -666,7 +666,7 @@
 	\begin{itemize}
           \item Shape analysis using \hlbl{SMT solving} to compute the points-to relation between pointers and (abstract) memory addresses.
           \item Domain designed for \hlbl{representation of linked-lists}.
-          \item Therefore more straightforward than the automata-based approaches, but lacks generality of automata based approaches.
+          \item Therefore more straightforward than the automata-based approaches, but lacks thier generality.
           \pause
           \item Implemented within \hlbl{the 2LS framework} for program analysis.
 	  \begin{itemize}
@@ -687,18 +687,6 @@
 	  \end{itemize}
           \pause
            \item And verifies that there is no reachable invariants violate the properties of interest.
-	\end{itemize}
-}
-%*******************************************************************************
-
-%*******************************************************************************
-\frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
-	\begin{itemize}
-           \item Technically, unsatisfiability of this formula:
-	  \begin{itemize}
-            \item $\exists \vx, \vxp .\; \neg (\fminit(\vx) \Longrightarrow \templ(\vx, \vd)) \; \vee \neg (\templ(\vx, \vd) \wedge \fmtrans(\vx,\vxp) \Longrightarrow \templ(\vxp, \vd))$
-           \item  where $\fminit(\vx)$ is an initial state of variables, $\templ$ is a set of invariants based on templates, $\fmtrans$ formula representing program
-	  \end{itemize}
           \pause
           \item The template for shape analysis is: $\templ^S \equiv \bigwedge_{\ssaplb{i} \in \ptrlb} = \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$,
 	    \begin{itemize}
@@ -707,6 +695,19 @@
 	    \end{itemize}
 	\end{itemize}
 }
+%*******************************************************************************
+
+%*******************************************************************************
+% \frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
+% 	\begin{itemize}
+%            \item Technically, unsatisfiability of this formula:
+% 	  \begin{itemize}
+%             \item $\exists \vx, \vxp .\; \neg (\fminit(\vx) \Longrightarrow \templ(\vx, \vd)) \; \vee \neg (\templ(\vx, \vd) \wedge \fmtrans(\vx,\vxp) \Longrightarrow \templ(\vxp, \vd))$
+%            \item  where $\fminit(\vx)$ is an initial state of variables, $\templ$ is a set of invariants based on templates, $\fmtrans$ formula representing program
+% 	  \end{itemize}
+%           \pause
+%           	\end{itemize}
+% }
 %*******************************************************************************
 
 %*******************************************************************************
@@ -1007,7 +1008,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	  \item \hlgr{When generating abstract messages, could the abstraction lead to generation of messages that really do not make sense in practice? Is it still worth to examine the behaviour of the system after transferring such mesages?}
 	  \begin{itemize}
             \item Context: In work on testing MES we proposed methods for generating new test cases using abstraction over messages and communication models.
-            \item Yes, it can lead to messages or seqeunces of messages that does not make sense but the system under testing should fail when these messages.
+            \item Yes, it can lead to messages or seqeunces of messages that does not make sense but the system under testing should not fail when these messages.
             \item From practical point of view, it is necessary to tune the abstractions to avoid generating such things.
 	  \end{itemize}
 	\end{itemize}
