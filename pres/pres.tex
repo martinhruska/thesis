@@ -763,10 +763,10 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
     \item \hlrd{Manufacturing Execution System (MES)}
     \begin{itemize}
       \item Software managing production in factory.
-      \item This includes communication with information system, machines, etc.
+      \item Communicates with information system, machines, and other components.
       \item Difficult to test:
       \begin{itemize}
-         \item Distributed nature of manufacturing, different communication protocols, different formats of structured data.
+         \item Distributed nature of manufacturing, different communication protocols, different formats of messages.
      %   \item Distributed nature of manufacturing, different communication protocols, different formats structured data.
        % \item Communication with Enterprise Resource Planning (ERP) systems such as SAP, e.g., checking quantity of material in stocks.
        % \item Scheduling production over the machines.
@@ -779,7 +779,6 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
     \begin{itemize}
       \item Generally, digital copy of a cyber-physical system\,---\,simulation of reality on computer, often with graphical interface.
       \item Not everything needs to be simulated, some software may be used in digital twin natively.
-      \pause
     \end{itemize}
      % \item \hlbl{Testing of MES is difficult because}:
      %  \begin{itemize}
@@ -846,13 +845,13 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
   \item Representing communication using \hlbl{event calendar}.
   \begin{itemize}
     \item Direct generation of scenario for digital twin.
-    \item Can be transformed to finite automaton\,---\,application of abstraction to overapproximate langauge.
+    \item Transformation to finite automaton\,---\,application of abstraction to overapproximate langauge.
     \item New strings in overapproximated langauge $\Rightarrow$ new series of events $\Rightarrow$ new scenario $\Rightarrow$ \hlbl{new test case}.
   \end{itemize}
   \pause
   \item Implemented in the \hlbl{Tyrant} tool.
   \begin{itemize}
-    \item Generated valid scenarios for orchestration of digital twin with deployed Pharis. 
+    \item Generated valid scenarios for testing MES Pharis. 
     \item More engineering work needed to be deployed in production. 
   \end{itemize}
 \end{itemize}
