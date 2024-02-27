@@ -180,7 +180,7 @@
 		\item Graphs can be accepted by automata.
 		\item An automaton can represent a set of graphs.
 		\item \hlbl{Goal of analysis:} Derive an automaton for each program location representing
-			all possible shapes of data structures at the location,
+			all possible shapes of data structures at the location.
 		\item Applied in \hlbl{Abstract Regular Tree Model Checking (ARTMC)}.
 	\end{itemize}
 
@@ -233,13 +233,12 @@
 %*******************************************************************************
 \frame{\frametitle{ }
 	\begin{center}
-    	\large \hlgr{Counterexample Validation and Abstraction Refinement for Shape Analysis based on Forest Automata}
+	\large \hlgr{Counterexample Validation and Interpolation-Based Refinement for Forest Automata}
 
 		\vspace{1cm}
 
-		\tiny{Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.}, Leng\'{a}l, O., Rogalewicz, A.,
-			Vojnar, T.: Counterexample Validation and Interpolation-Based Refinement for Forest Automata.
-			In \emph{Proc.\ of VMCAI'17}, LNCS 10145, Springer, 2017.}
+		\small{Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.}, Leng\'{a}l, O., Rogalewicz, A.,
+			Vojnar, T. In \emph{Proc.\ of VMCAI'17}.}
 	\end{center}
 }
 %*******************************************************************************
@@ -290,8 +289,8 @@
 \begin{itemize}
 		\item \hlbl{Boxes} are used to extend the expressive power of FA.
 		\item A box is an FA that can be used as a symbol of another FA.
-		\item A box represents repeating subgraphs of a heap.
 		\item FA having boxes in the alphabet are called \hlbl{hierarchical}.
+		\item A box represents repeating subgraphs of a heap.
 	\end{itemize}
 		\vspace{-0.8cm}
 		\centering \input{figs/dll_decomp2.tikz}\\
@@ -530,7 +529,7 @@
             \item Generating correctness witness (forest automaton representing shape invariants of program).
             \item Counterexample analysis and abstraction refinement for hierarchical forest automata.
 	  \end{itemize}
-          \item<4-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists, or various trees) which were not solved by any other tool.
+          \item<4-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists or various trees) which were not solved by any other tool.
 	\end{itemize}
 }
 %*******************************************************************************
