@@ -326,25 +326,25 @@
 \frametitle{Abstraction}
 
 	\begin{itemize}
-		\item Overapproximates reachable configurations and accelerates analysis
-		\item Collapses states in the same equivalence class of \hlrd{a relation $\sim$}
-		\item \hlgr{Height Abstraction}
-		\begin{itemize}
-			\item Equivalence $\sim_H$ is defined as
-				\hlrd{$$q_1 \sim_H q_2 \stackrel{DEF}{\equiv} L^n(q_1) = L^n(q_2)$$}\noindent where
-				\hlrd{$L^n(q)$} is the~language of prefixes of trees accepted from $L(q)$ with height up to $n$
-			\item \hlbl{Refinement}: By increasing the height
-			\item \hlbl{Not informed refinement} $\Rightarrow$ state explosion
-		\end{itemize}
+		\item Overapproximates reachable configurations and accelerates analysis.
+		\item Collapses states in the same equivalence class of \hlrd{a relation $\sim$}.
+		% \item \hlgr{Height Abstraction}
+		% \begin{itemize}
+		% 	\item Equivalence $\sim_H$ is defined as:
+		% 		\hlrd{$$q_1 \sim_H q_2 \stackrel{DEF}{\equiv} L^n(q_1) = L^n(q_2)$$}\noindent where
+		% 		\hlrd{$L^n(q)$} is the~language of prefixes of trees accepted from $L(q)$ with height up to $n$.
+		% 	\item \hlbl{Refinement}: By increasing the height.
+		% 	\item \hlbl{Not informed refinement} $\Rightarrow$ state explosion.
+		% \end{itemize}
 
-		\pause
+		% \pause
 	    \item \hlgr{Predicate Language Abstraction}
 		\begin{itemize}
 			\item Given a set of predicate languages $P=\{p_1,\ldots,p_n\}$,
 				equivalence~$\sim_P$ is defined as
-				\hlrd{$$q_1 \sim_P q_2 \stackrel{DEF}{\equiv} \forall p\in P: L(q_1) \cap p \neq \emptyset \Leftrightarrow L(q_2) \cap p \neq \emptyset$$}
-			\item \hlbl{Refinement}: Interpolating languages from counterexamples
-			\item \hlbl{Informed refinement} 
+				\hlrd{$$q_1 \sim_P q_2 \stackrel{DEF}{\equiv} \forall p\in P: L(q_1) \cap p \neq \emptyset \Leftrightarrow L(q_2) \cap p \neq \emptyset$$}.
+			\item \hlbl{Refinement}: Interpolating languages from counterexamples.
+			\item \hlbl{Informed refinement.} 
 		\end{itemize}
 	\end{itemize}
 
@@ -386,6 +386,46 @@
 
 \end{frame}
 
+%*******************************************************************************
+
+%*******************************************************************************
+\begin{frame}
+\frametitle{Backward run with Hierarchical Forest Automata}
+	
+		   	\begin{itemize}
+				\item To enable component-wise hierarchical FA intersection,
+					so called \hlbl{compatible form} of FA is needed:
+				\begin{itemize}
+					\item They have same number of TA.
+					\item \hlbl{The same subgraphs are folded into the same boxes}.
+				\end{itemize}
+				\item Compatible form is preserved during backward run.
+			\end{itemize}
+
+	\begin{center}
+		\includegraphics[scale=0.4]{figs/vmcai/cp.pdf}
+	\end{center}
+
+\end{frame}
+%*******************************************************************************
+
+%*******************************************************************************
+\begin{frame}
+\frametitle{Intersection with Hierarchical Forest Automata}
+
+  	\begin{itemize}
+	\item \hlbl{Intersection of FA} is done:
+		  	\begin{itemize}
+				\item Component-wise using TA intersection.
+				\item When TA intersection reaches boxes in the transitions of both automata it calls the whole
+					procedure for \hlbl{FA intersection recursively on the boxes} and uses its results as a new box.
+			\end{itemize}
+	\end{itemize}
+	\begin{center}
+		\includegraphics[scale=0.4]{figs/vmcai/is.pdf}
+	\end{center}
+
+\end{frame}
 %*******************************************************************************
 
 %*******************************************************************************
@@ -514,22 +554,7 @@
 \frame{\frametitle{Forester in SV-COMP}
 	\begin{itemize}
 	  \item<1-> Forester competed in SV-COMP in years 2015-2018 in the \hlbl{categories related to memory safety} (\emph{MemSafety, HeapReach}).
-          \item<2-> \hlrd{2015}
-	  \begin{itemize}
-            \item Using the VATA library for tree automata as backend.
-            \item Counterexample witness generation. 
-	  \end{itemize}
-          \item<3-> \hlrd{2016}
-	  \begin{itemize}
-            \item Added support to run Forester using Benchexec.
-            \item Counterexample analysis and abstraction refinement for basic forest automata.
-	  \end{itemize}
-          \item<4-> \hlrd{2017}
-	  \begin{itemize}
-            \item Generating correctness witness (forest automaton representing shape invariants of program).
-            \item Counterexample analysis and abstraction refinement for hierarchical forest automata.
-	  \end{itemize}
-          \item<4-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists or various trees) which were not solved by any other tool.
+          \item<2-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists or various trees) which were not solved by any other tool.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -556,9 +581,9 @@
 	% \end{itemize}
         % \pause
 	\begin{itemize}
-        \item We proposed new automata able to represent \hlbl{graphs with bounded tree-width}.
-        \item They are based on tree automata but we work with single TA instead of tuple of TA (like in FA).  
-        \item We sketched \hlbl{efficient algorithm for entailment} for these automata.
+        \item We proposed new automata able to represent \hlbl{graphs with a bounded tree-width}.
+        \item They are based on tree automata but we work with a single TA instead of tuple of TA (like in FA).  
+        \item We sketched \hlbl{an efficient algorithm for entailment} for these automata.
         \end{itemize}
 }
 %*******************************************************************************
@@ -570,9 +595,8 @@
           \item How to represent a graph with bounded tree-width by a tree automaton? By tree decompositions with \hlbl{variables}.
 	\end{itemize}
         \begin{center}
-          \includegraphics[scale=0.18]{figs/netys/tree_decomp.png}
+          \includegraphics[scale=0.2]{figs/netys/tree_decomp.png}
  	\end{center}
-        \vspace{-1em}
 }
 %*******************************************************************************
 
@@ -580,8 +604,8 @@
 \frame{\frametitle{Towards Entailment}
 	  \begin{itemize}
             \item<1-> A graph may have more decompositions and we want a TA to represent all of them (\hlbl{shape invariant}).
-            \item<2-> We can create TA representing all tree decompositions that is of a \hlbl{polynomial size assuming a fixed tree-width} of the original automaton.
-            \item<3-> Since automata inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
+            \item<2-> We can create a TA representing all tree decompositions that is of \hlbl{a~polynomial size assuming a fixed tree-width} of the original automaton.
+            \item<3-> Since automata TA inclusion is EXPTIME-complete, we have entailment which is \hlbl{singly exponential} (assuming a fixed maximum tree width).
             % \item<2-> We need two operations, \hlbl{rotation} and \hlbl{reconnection}, over TA to be able to do that.
             % \item<3-> \hlbl{Phase} is a set of all operations that could be performed at once (they don’t interfere with each other).
             % \vspace{1em}
@@ -664,7 +688,7 @@
 \frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
 	\begin{itemize}
           \item Shape analysis using \hlbl{SMT solving} to compute the points-to relation between pointers and (abstract) memory addresses.
-          \item Domain designed for \hlbl{representation of linked-lists}.
+          \item A domain designed for \hlbl{representation of linked-lists}.
           \item Therefore more straightforward than the automata-based approaches, but lacks thier generality.
           \pause
           \item Implemented within \hlbl{the 2LS framework} for program analysis.
@@ -678,14 +702,14 @@
 %*******************************************************************************
 \frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
         \begin{itemize}
-          \item Verification procedure takes:
+          \item The verification procedure takes:
 	  \begin{itemize}
             \item A \hlbl{first order formula over combination of SMT theories} that represents the program in SSA form (i.e., transition relation).
             \item A \hlbl{set of invariants based on predefined templates} (proposed for various domains).
             \item \hlbl{The property of interest} (e.g., memory safety properties).
 	  \end{itemize}
           \pause
-           \item And verifies that there is no reachable invariants violate the properties of interest.
+           \item And verifies that no reachable invariants violate the properties of interest.
           \pause
           \item The template for shape analysis is: $\templ^S \equiv \bigwedge_{\ssaplb{i} \in \ptrlb} = \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$,
 	    \begin{itemize}
@@ -716,7 +740,7 @@
 \begin{table}[bt]
 \small
 \captionsetup{font=small}
-\caption{Comparison of 2LS with other tools on examples that need reasoning about unbounded data structures and their stored data.}
+\caption{Comparison of 2LS with other tools on examples that combine reasoning about unbounded data structures and their stored data.}
 \vspace*{-1mm}
 \label{tab:others}
 \centering
@@ -761,7 +785,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
   \begin{itemize}
     \item \hlrd{Manufacturing Execution System (MES)}
     \begin{itemize}
-      \item Software managing production in factory.
+      \item A software managing production in factory.
       \item Communicates with information system, machines, and other parts of factory.
       \item Difficult to test:
       \begin{itemize}
@@ -776,7 +800,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
       \pause
     \item \hlrd{Digital twin}
     \begin{itemize}
-      \item Generally, digital copy of a cyber-physical system\,---\,simulation of reality on computer, often with graphical interface.
+      \item Generally, a digital copy of a cyber-physical system\,---\,simulation of reality on computer, often with a graphical interface.
       \item Not everything needs to be simulated, some software may be used in digital twin natively.
     \end{itemize}
      % \item \hlbl{Testing of MES is difficult because}:
@@ -785,7 +809,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
      %   \item Nondeterministic factors\,---\,human workers and their interactions with machines, physical aspects of machines.
      %  \end{itemize}
       \pause
-    \item Project solved with the Unis company (\hlbl{MES Pharis}) and Masaryk University (\hlbl{Cryton} for orchestrating digital twin)
+    \item The project solved with the Unis company (\hlbl{MES Pharis}) and Masaryk University (\hlbl{Cryton} for orchestrating digital twin)
     \end{itemize}
 }
 %*******************************************************************************
@@ -839,11 +863,11 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 %*******************************************************************************
 \frame{\frametitle{Our Solution}
 \begin{itemize}
-  \item Representing messages in different formats (XML, or JSON) using \hlbl{Trie} structure (prefix tree)
+  \item Representing messages in the different formats (XML, or JSON) using \hlbl{Trie} structure (prefix tree)
     \pause
   \item Representing communication using \hlbl{event calendar}.
   \begin{itemize}
-    \item Direct generation of scenario for digital twin.
+    \item Direct generation of a scenario for digital twin.
     \item Transformation to finite automaton\,-\,apply abstraction to overapproximate langauge.
     \item New strings in overapproximated langauge $\Rightarrow$ new series of events $\Rightarrow$ new scenario $\Rightarrow$ \hlbl{new test case}.
   \end{itemize}
@@ -1006,8 +1030,8 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	  \item \hlgr{When generating abstract messages, could the abstraction lead to generation of messages that really do not make sense in practice? Is it still worth to examine the behaviour of the system after transferring such mesages?}
 	  \begin{itemize}
             \item Context: In work on testing MES we proposed methods for generating new test cases using abstraction over messages and communication models.
-            \item Yes, it can lead to messages or seqeunces of messages that does not make sense but the system under testing should not fail when these messages.
-            \item From practical point of view, it is necessary to tune the abstractions to avoid generating such things.
+            \item Yes, it can lead to messages or seqeunces of messages that do not make sense but the system under testing should not fail when these messages.
+            \item From practical point of view, it is necessary to tune the abstractions to avoid generating such things (common scenario. interesting if CEGAR can be used)
 	  \end{itemize}
 	\end{itemize}
 \end{frame}
