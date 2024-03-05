@@ -189,7 +189,7 @@
 	\hlrd{Advantages}	
 	\begin{itemize}
 		\item Existing \hlbl{efficient algorithms} for handling finite automata.
-		\item \hlbl{Genericity}\,-\,can represent various kinds of data structures.
+		\item \hlbl{Genericity}\,--\,can represent various kinds of data structures.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -371,7 +371,6 @@
 					intersection is done \hlgr{component-wise} using TA intersection, i.e.,
 					$F_1 \cap F_2 = (TA_1^1 \cap TA_1^2,\ldots,TA_n^1 \cap TA_n^2)$.
 			\end{itemize}
-		\item Precise reversion of folding and unfolding of boxes $\Rightarrow$ \hlrd{compatible form}.
 		\end{itemize}
 		\pause
 		\item \hlgr{Ingredients for predicate language abstraction}:
@@ -390,7 +389,7 @@
 
 %*******************************************************************************
 \begin{frame}
-\frametitle{Backward run with Hierarchical Forest Automata}
+\frametitle{Compatible Form of Hierarchical Forest Automaton}
 	
 		   	\begin{itemize}
 				\item To enable component-wise hierarchical FA intersection,
@@ -399,7 +398,7 @@
 					\item They have same number of TA.
 					\item \hlbl{The same subgraphs are folded into the same boxes}.
 				\end{itemize}
-				\item Compatible form is preserved during backward run.
+				\item Need to be preserved during backward run.
 			\end{itemize}
 
 	\begin{center}
@@ -411,10 +410,10 @@
 
 %*******************************************************************************
 \begin{frame}
-\frametitle{Intersection with Hierarchical Forest Automata}
+\frametitle{Intersection of Hierarchical Forest Automata}
 
   	\begin{itemize}
-	\item \hlbl{Intersection of FA} is done:
+	\item Intersection of \hlbl{hierarchical} FA is done:
 		  	\begin{itemize}
 				\item Component-wise using TA intersection.
 				\item When TA intersection reaches boxes in the transitions of both automata it calls the whole
@@ -473,7 +472,7 @@
 \begin{frame}
 \frametitle{Experimental Evaluation}
     \begin{itemize}
-        \item Shape analysis based on Forest automata implemented in the \hlrd{Forester} tool
+        \item Shape analysis based on forest automata implemented in the \hlrd{Forester} tool
     \end{itemize}
 	\begin{center}
 	\begin{adjustbox}{max height=\textheight, max width=\textwidth}
@@ -554,7 +553,7 @@
 \frame{\frametitle{Forester in SV-COMP}
 	\begin{itemize}
 	  \item<1-> Forester competed in SV-COMP in years 2015-2018 in the \hlbl{categories related to memory safety} (\emph{MemSafety, HeapReach}).
-          \item<2-> Forester has never won any medal, but was able to verify difficult data structures (skip-lists or various trees) which were not solved by any other tool.
+          \item<2-> Forester has never won any medal, but was able to verify tasks with difficult data structures (skip-lists or various trees) which were not solved by any other tool.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -582,7 +581,7 @@
         % \pause
 	\begin{itemize}
         \item We proposed new automata able to represent \hlbl{graphs with a bounded tree-width}.
-        \item They are based on tree automata but we work with a single TA instead of tuple of TA (like in FA).  
+        \item They are based on tree automata but we work with a single tree automaton instead of tuple of TA (like in forest automata).  
         \item We sketched \hlbl{an efficient algorithm for entailment} for these automata.
         \end{itemize}
 }
@@ -687,9 +686,9 @@
 %*******************************************************************************
 \frame{\frametitle{Shape Analysis based on SMT Solving in 2LS Framework}
 	\begin{itemize}
-          \item Shape analysis using \hlbl{SMT solving} to compute the points-to relation between pointers and (abstract) memory addresses.
+          \item Shape analysis uses \hlbl{SMT solving} to compute the points-to relation between pointers and (abstract) memory addresses.
           \item A domain designed for \hlbl{representation of linked-lists}.
-          \item Therefore more straightforward than the automata-based approaches, but lacks thier generality.
+          \item Therefore more straightforward than the automata-based approaches, but lacks their generality.
           \pause
           \item Implemented within \hlbl{the 2LS framework} for program analysis.
 	  \begin{itemize}
@@ -709,7 +708,8 @@
             \item \hlbl{The property of interest} (e.g., memory safety properties).
 	  \end{itemize}
           \pause
-           \item And verifies that no reachable invariants violate the properties of interest.
+           \item And verifies that there is not a reachable violation of the properties of interest.
+           % \item And verifies that no reachable invariants violate the properties of interest.
           \pause
           \item The template for shape analysis is: $\templ^S \equiv \bigwedge_{\ssaplb{i} \in \ptrlb} = \templ^S_{\ssaplb{i}}(d_{\ssaplb{i}})$,
 	    \begin{itemize}
@@ -853,7 +853,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 %*******************************************************************************
 
 %*******************************************************************************
-\frame{\frametitle{Our Solution}
+\frame{\frametitle{Overview of the Testing Method}
     \begin{center}
       \includegraphics[scale=0.3]{figs/eurocast/tunis-diagram.jpg}
     \end{center}
@@ -861,15 +861,15 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 %*******************************************************************************
 
 %*******************************************************************************
-\frame{\frametitle{Our Solution}
+\frame{\frametitle{The Tyrant Tool}
 \begin{itemize}
-  \item Representing messages in the different formats (XML, or JSON) using \hlbl{Trie} structure (prefix tree)
+  \item Representing messages in the different formats (XML, or JSON) using \hlbl{tree-like data structure}
     \pause
   \item Representing communication using \hlbl{event calendar}.
   \begin{itemize}
     \item Direct generation of a scenario for digital twin.
-    \item Transformation to finite automaton\,-\,apply abstraction to overapproximate langauge.
-    \item New strings in overapproximated langauge $\Rightarrow$ new series of events $\Rightarrow$ new scenario $\Rightarrow$ \hlbl{new test case}.
+    \item Transform to finite automaton and apply abstraction to overapproximate language.
+    \item New strings in overapproximated language $\Rightarrow$ new series of events $\Rightarrow$ new scenario $\Rightarrow$ \hlbl{new test case}.
   \end{itemize}
   \pause
   \item Implemented in the \hlbl{Tyrant} tool.
@@ -952,18 +952,18 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	\begin{itemize}
           \item Work presented in the thesis:
 	  \begin{itemize}
-            \item Counterexample analysis and abstraction refinement for Forest automata.
+            \item Counterexample analysis and abstraction refinement for forest automata.
             \item Forester participation in SV-COMP, editions $2015$-$2018$.
-            \item A chapter on forest automata in book on software verification with refined presentation of the approach.
+            \item A chapter on forest automata in book on software verification \hlbl{with refined presentation of the approach}.
             \item Automata over graphs with bounded tree-width.
             \item Shape analysis based on SMT solving.
             \item Automated testing of distributed manufacturing execution systems.
 	  \end{itemize}
         \pause
-          \item Work not presented and only mildly mentioned in the thesis:
+          \item Works not presented and only mildly mentioned in the thesis:
 	  \begin{itemize}
             \item Connection of Predator and Symbiotic participating in \hlbl{SV-COMP'20}.
-            \item The design and implementation of efficient automata library called MATA (\hlbl{TACAS'24}).
+            \item The design and implementation of a new efficient automata library called MATA (\hlbl{TACAS'24}).
 	  \end{itemize}
 	\end{itemize}
 }
@@ -983,7 +983,6 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 		\tiny{\item  Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.}, Leng\'{a}l, O., Rogalewicz, A.,
 			Vojnar, T.: \emph{Counterexample Validation and Interpolation-Based Refinement for Forest Automata.}
 			In \emph{Proc.\ of VMCAI'17}, LNCS 10145, Springer, 2017.}
-			\vspace{0.2cm}	
 		\item \tiny{Hol{\'{\i}}k, L., \hlbl{Hru\v{s}ka, M.}, Leng\'{a}l, O., Rogalewicz, A., \v{S}im{\'{a}}\v{c}ek, J., Vojnar, T.:
 			\emph{Forester: From Heap Shapes to Automata Predicates (Competition Contribution).} To Apper \emph{Proc. of TACAS'17}, Springer, 2017.}
 
@@ -1004,7 +1003,7 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
           \item Chocholatý D., Fiedor T., Havlena V., Holík L., \hlbl{Hruška M.}, Lengál, O., Síč J.: \emph{Mata: A Finite Automata Library.} 2024.
           \item Fiedor T., \hlbl{Hruška M.}, Smrčka A., Švéda M., Hradský T. \emph{Analyser of Metrics Measured in Monitoring Center.} 2022.
           \item Fiedor T., \hlbl{Hruška M.}, Smrčka A., \emph{Software for measurement and evaluation of performance parameters.} 2021.
-          \item Fiedor T., \hlbl{Hruška M.}, Smrčka A., Panov S., Rozsival M., Tureček D., Čeleda P., Pospíšil L. \emph{Tyrant: The Ruler of Digital Twins.} 2021.
+          \item Fiedor T., \hlbl{Hruška M.}, Smrčka A., Panov S., Rozsíval M., Tureček D., Čeleda P., Pospíšil L. \emph{Tyrant: The Ruler of Digital Twins.} 2021.
 	\end{itemize}
 }
 %*******************************************************************************
@@ -1015,9 +1014,10 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	\begin{itemize}
 	  \item \hlgr{Is a user-non-friendlines of library for finite automata a problem if it used as backend of verification tool?}
 	  \begin{itemize}
-            \item Context: In conclusion of my thesis I proposed that one of the future directions is to design a new efficient, simple, and user-friendly automata library.
+            \item Context: In conclusion of my thesis, I proposed that one of the future directions is to design an efficient, simple, and user-friendly automata library.
             \item Depends on definition of user-friendliness.
-            \item In general, if you work in small team with limited amount of resources you want library that has a clear interface and predicatable behaviour, which is a kind of user friendliness.
+            \item In general, if you work in a small team with limited amount of resources you want a library that has a clear interface and predicatable behaviour, which is a kind of user friendliness.
+            \item For someone wanting to prototype, transparent data structures and algorithms implemented similarly to the textbook presentation are user friendliness.
 	  \end{itemize}
 	\end{itemize}
 \end{frame}
@@ -1029,9 +1029,9 @@ SM2               & 0.55   & 5.41    & false   & false    & timeout  & 14.50    
 	\begin{itemize}
 	  \item \hlgr{When generating abstract messages, could the abstraction lead to generation of messages that really do not make sense in practice? Is it still worth to examine the behaviour of the system after transferring such mesages?}
 	  \begin{itemize}
-            \item Context: In work on testing MES we proposed methods for generating new test cases using abstraction over messages and communication models.
-            \item Yes, it can lead to messages or seqeunces of messages that do not make sense but the system under testing should not fail when these messages.
-            \item From practical point of view, it is necessary to tune the abstractions to avoid generating such things (common scenario. interesting if CEGAR can be used)
+            \item Context: In work on testing MES, we proposed methods for generating new test cases using abstraction over messages and communication models.
+            \item Yes, it can lead to messages or seqeunces of messages that do not make sense but the system under testing should not fail when they are generated.
+            \item From a practical point of view, it is good to tune abstraction to avoid preventable cases.
 	  \end{itemize}
 	\end{itemize}
 \end{frame}
